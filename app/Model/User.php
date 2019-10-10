@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -45,6 +45,10 @@ class User extends Authenticatable
     }
     public function character()
     {
-        return $this->hasOne('App\Character','id','character_id');
+        return $this->hasOne('App\Model\Character','id','character_id');
+    }
+    public function skills()
+    {
+        return $this->belongsToMany('App\Model\Skill','user_skills','user_id','skill_id');
     }
 }

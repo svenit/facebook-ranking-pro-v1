@@ -33,44 +33,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="row row-sm">
-                    <div class="col-4 d-flex">
-                        <div class="card flex">
-                            <div class="card-body"><small>Profile complete: <strong
-                                        class="text-primary">65%</strong></small>
-                                <div class="progress my-3 circle" style="height:6px">
-                                    <div class="progress-bar circle gd-primary"
-                                        data-toggle="tooltip" title="65%" style="width: 65%">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4 d-flex">
-                        <div class="card flex">
-                            <div class="card-body"><small>Payment process: <strong
-                                        class="text-primary">25%</strong></small>
-                                <div class="progress my-3 circle" style="height:6px">
-                                    <div class="progress-bar circle gd-warning"
-                                        data-toggle="tooltip" title="25%" style="width: 25%">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4 d-flex">
-                        <div class="card flex">
-                            <div class="card-body"><small>Payment process: <strong
-                                        class="text-primary">25%</strong></small>
-                                <div class="progress my-3 circle" style="height:6px">
-                                    <div class="progress-bar circle gd-danger"
-                                        data-toggle="tooltip" title="25%" style="width: 25%">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

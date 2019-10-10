@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\User\Character;
 
-use App\User;
-use App\Character;
+use App\Model\User;
+use App\Model\Character;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;

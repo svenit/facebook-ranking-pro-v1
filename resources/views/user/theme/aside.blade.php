@@ -1,3 +1,77 @@
+@auth
+<div id="modal-left" class="modal fade" data-backdrop="true">
+    <div style="overflow:auto" class="modal-dialog modal-left w-xl">
+        <div style="min-height:100vh" class="modal-content no-radius">
+            <div class="modal-header">
+                <div class="modal-title text-sm">Nhân Vật Của Bạn</div>
+                <button class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="p-4 text-center">
+                    <img width="80%" src="{{ $user->character()->avatar }}">
+                    <p>{{ $user->character()->name }}</p>
+                </div>
+                <div class="row row-sm">
+                    <div class="col-12 d-flex">
+                        <div class="flex">
+                            <div class="text-info"><small><i class="fas fa-heart"></i> Sinh Lực  <strong
+                                        class="text-info">{{ $user->totalNumeral('health_points') }}</strong></small>
+                                <div class="progress my-3 circle" style="height:6px">
+                                    <div  class="progress-bar circle gd-info"
+                                        data-toggle="tooltip" title="100%" style="width: 100%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex">
+                        <div class="flex">
+                            <div class="text-danger"><small><i class="fas fa-swords"></i> Sát Thương <strong
+                                        class="text-danger">{{ $user->totalNumeral('strength') }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex">
+                        <div class="flex">
+                            <div class="text-success"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
+                                        class="text-success">{{ $user->totalNumeral('intelligent') }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex mt-2">
+                        <div class="flex">
+                            <div class="text-primary"><small><i class="fas fa-bolt"></i> Nhanh Nhẹn <strong
+                                        class="text-primary">{{ $user->totalNumeral('agility') }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex mt-2">
+                        <div class="flex">
+                            <div class="text-warning"><small><i class="fas fa-stars"></i> May Mắn <strong
+                                        class="text-warning">{{ $user->totalNumeral('lucky') }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row row-sm">
+                    @foreach($user->skills() as $skill)
+                        <div style="margin-bottom:15px" class="col-3 d-flex">
+                            <div class="flex">
+                                <img data-toggle="tooltip" title="{{ $skill->description }}" style="border-radius:5px;width:100%" src="{{ $skill->image }}">
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light">Túi Đồ</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endauth
 <div id="aside-left" class="page-sidenav no-shrink bg-light nav-dropdown fade" aria-hidden="true">
     <div class="sidenav h-100 modal-dialog bg-light">
         <div class="navbar"><a href="index.html" class="navbar-brand"><svg width="32" height="32"

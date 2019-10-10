@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
-use App\Config;
+use App\Model\User;
+use App\Model\Config;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -53,7 +53,7 @@ class LoginController extends Controller
             ]);
         }
         return redirect()->route('oauth.show-confirm')->with([
-            'status' => 'info',
+            'status' => 'warning',
             'message' => 'Vui lòng xác thực tài khoản của bạn',
         ]);
     }

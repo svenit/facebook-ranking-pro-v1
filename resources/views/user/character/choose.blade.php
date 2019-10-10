@@ -8,10 +8,10 @@
     <div class="padding-x">
         <div class="row row-sm sr">
             @foreach($characters as $key => $character)
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card">
                         <div class="media media-4x4 gd-dark">
-                            <a class="media-content" style="background-image:url({{ $character->avatar }})"></a>
+                            <a class="media-content" style="background-image:url({{ $character->avatar }});background-size:50%"></a>
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">{{ $character->name }}</h5>

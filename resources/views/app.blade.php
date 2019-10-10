@@ -15,6 +15,7 @@
 
 <body class="layout-row">
 	@include('user.theme.aside')
+	{{-- <button class="btn btn-white btn-block mb-2" data-toggle="modal" data-target="#modal-left" data-toggle-class="modal-open-aside" data-target="body">Left</button> --}}
 	<div id="main" class="layout-column flex">
 		@include('user.theme.header')
 		<div id="content" class="flex">
@@ -30,7 +31,7 @@
 				@yield('content')
 			</div>
 		</div>
-		<div id="footer" style="background:#fff;margin-top:400px" class="page-footer">
+		<div id="footer" style="background:#fff;margin-top:0px" class="page-footer">
 			<div class="d-flex p-3"><span class="text-sm text-muted flex">&copy; Copyright {{ date('Y') }} Coded by <a href="https://facebook.com/sven307">Sven</a></span>
 				<div class="text-sm text-muted">Version 1.0.0</div>
 			</div>
@@ -42,6 +43,7 @@
 		};
 	</script>
 	<script src="{{ asset('assets/js/site.min.js') }}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.2/dist/sweetalert2.all.min.js"></script>
 	@yield('js')

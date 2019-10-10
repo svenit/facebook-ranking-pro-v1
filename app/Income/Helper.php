@@ -2,8 +2,9 @@
 
 namespace App\Income;
 
-use App\User;
-use App\Config;
+use stdClass;
+use App\Model\User;
+use App\Model\Config;
 use Illuminate\Support\Facades\Auth;
 
 class Helper
@@ -15,6 +16,34 @@ class Helper
     {
         $config = new Config();
         $this->config = $config->first();
+    }
+    public function character()
+    {
+        return User::find(Auth::id())->character;
+    }
+    public function skills()
+    {
+        return User::find(Auth::id())->skills;
+    }
+    public function numeralSkills($type)
+    {
+        return $this->skills()
+            ->where('type',$type)
+            ->where('value_type',0)
+            ->sum('value');
+    }
+    public function percentSkills($type)
+    {
+        return $this->skills()
+            ->where('type',$type)
+            ->where('value_type',1)
+            ->sum('value');
+    }
+    public function totalNumeral($type)
+    {
+        $number = $this->numeralSkills($type) + Auth::user()[$type];
+        $percent = $this->percentSkills($type);
+        return $number + (($number * $percent)/100);
     }
     public function coins() : float
     {
