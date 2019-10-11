@@ -31,7 +31,10 @@ class AppServiceProvider extends ServiceProvider
         {
             View::composer('*', function ($view) 
             {
-                $view->with('user', new Helper(Auth::id()));    
+                if(Auth::check())
+                {
+                    $view->with('user', new Helper(Auth::id()));    
+                }
             });
         }
     }
