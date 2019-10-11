@@ -2,28 +2,46 @@
 
 namespace App\Income;
 
-use stdClass;
 use App\Model\User;
 use App\Model\Config;
 use Illuminate\Support\Facades\Auth;
 
 class Helper
 {
-    private $rank = 1;
+    private $rankCoin = 1;
+    private $rankPower = 1;
     public $config;
+    private $userID;
 
-    public function __construct()
+    public function __construct($userID = null)
     {
         $config = new Config();
         $this->config = $config->first();
+        $this->userID = User::findOrFail($userID) ? $userID : 0;
     }
     public function character()
     {
-        return User::find(Auth::id())->character;
+        return User::find($this->userID)->character;
     }
     public function skills()
     {
-        return User::find(Auth::id())->skills;
+        return User::find($this->userID)->skills;
+    }
+    public function fullPower()
+    {
+        $properties = [
+            'strength' => 5,
+            'agility' => 3,
+            'intelligent' => 5,
+            'lucky' => 2,
+            'health_points' => 1.5
+        ];
+        $power = 0;
+        foreach($properties as $key => $property)
+        {
+            $power += $this->totalNumeral($key) * $property;
+        }
+        return $power;
     }
     public function numeralSkills($type)
     {
@@ -41,37 +59,52 @@ class Helper
     }
     public function totalNumeral($type)
     {
-        $number = $this->numeralSkills($type) + Auth::user()[$type];
+        $number = $this->numeralSkills($type) + User::find($this->userID)[$type];
         $percent = $this->percentSkills($type);
         return $number + (($number * $percent)/100);
     }
-    public function coins() : float
+    public function coins()
     {
-        return Auth::user()->coins + Auth::user()->income_coins;
+        return User::find($this->userID)->getCoins();
     }
-    public function coinsCustom($coins,$incomeCoins) : float
+    public function coinsCustom($coins,$incomeCoins)
     {
         return $coins + $incomeCoins;
     }
     public function demicalCoins()
     {
-        return number_format($this->coins(),2);
+        return number_format($this->coins());
     }
     public function gold()
     {
-        return Auth::user()->gold;
+        return User::find($this->userID)->gold;
     }
     public function demicalGold()
     {
-        return number_format($this->gold(),2);
+        return number_format($this->gold());
     }
-    public function rank() : int
+    public function rankCoin() : int
     {
-        foreach(User::all() as $user)
-        {
-            $this->coins() < $this->coinsCustom($user->coins,$user->income_coins) ? $this->rank++ : $this->rank; 
-        }
-        return $this->rank;
+        $userCompare = $this->coins();
+        User::where('character_id','!=',0)->chunkById(100,function($users) use($userCompare){
+            foreach($users as $user)
+            {
+                $userCompare < $this->coinsCustom($user->coins,$user->income_coins) ? $this->rankCoin++ : $this->rankCoin; 
+            }
+        });
+        return $this->rankCoin;
+    }
+    public function rankPower()
+    {
+        $userCompare = $this->fullPower();
+        User::where('character_id','!=',0)->chunkById(100,function($users) use($userCompare){
+            foreach($users as $user)
+            {
+                $this->userID = $user->id;
+                $userCompare < $this->fullPower() ? $this->rankPower++ : $this->rankPower; 
+            }
+        });
+        return $this->rankPower;
     }
     public function requestRaw($url)
     {

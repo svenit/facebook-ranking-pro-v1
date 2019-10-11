@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Model\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Income\Helper;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller

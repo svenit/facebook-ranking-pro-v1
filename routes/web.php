@@ -11,6 +11,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+use App\Income\Helper;
+
 Route::group(['prefix' => 'oauth','as' => 'oauth.'], function () {
     Route::get('login', 'Auth\LoginController@showLoginForm')->name('index');
     Route::get('logout','Auth\LoginController@logout')->name('logout');
@@ -19,7 +22,6 @@ Route::group(['prefix' => 'oauth','as' => 'oauth.'], function () {
     Route::get('facebook','Auth\LoginController@redirectToProvider')->name('login');
     Route::get('facebook/callback','Auth\LoginController@handleProviderCallback');
 });
-
 
 Route::group(['prefix' => 'character','as' => 'user.character.','namespace' => 'User\Character'], function () {
     Route::get('choose','CharacterController@choose')->name('choose');
@@ -32,8 +34,7 @@ Route::group(['prefix' => '/','as' => 'user.','namespace' => 'User','middleware'
 
 
     Route::group(['prefix' => 'top','as' => 'top.','namespace' => 'Top'], function () {
-        Route::get('/','TopRichestController@index')->name('richest');
-        Route::get('data','WheelController@data')->name('data');
+        Route::get('/','TopRichestController@power')->name('power');
     });
 
     Route::group(['prefix' => 'events','as' => 'events.','namespace' => 'Events'], function () {

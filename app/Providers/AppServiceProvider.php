@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Income\Helper;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -28,7 +29,10 @@ class AppServiceProvider extends ServiceProvider
     {
         if(Schema::hasTable('configs'))
         {
-            View::share('user', new Helper());
+            View::composer('*', function ($view) 
+            {
+                $view->with('user', new Helper(Auth::id()));    
+            });
         }
     }
 }

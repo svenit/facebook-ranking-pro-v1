@@ -7,8 +7,8 @@ use App\Http\Controllers\Controller;
 
 class TopRichestController extends Controller
 {
-    public function index()
+    public function power()
     {
-        return view('user.top.richest');
+        return view('user.top.power');
     }
 }

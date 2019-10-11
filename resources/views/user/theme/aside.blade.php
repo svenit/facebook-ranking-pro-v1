@@ -1,9 +1,8 @@
 @auth
 <div id="modal-left" class="modal fade" data-backdrop="true">
     <div style="overflow:auto" class="modal-dialog modal-left w-xl">
-        <div style="min-height:100vh" class="modal-content no-radius">
+        <div style="min-height:100vh;background:#111 !important" class="modal-content vip-bordered no-radius">
             <div class="modal-header">
-                <div class="modal-title text-sm">Nhân Vật Của Bạn</div>
                 <button class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -14,11 +13,10 @@
                 <div class="row row-sm">
                     <div class="col-12 d-flex">
                         <div class="flex">
-                            <div class="text-info"><small><i class="fas fa-heart"></i> Sinh Lực  <strong
-                                        class="text-info">{{ $user->totalNumeral('health_points') }}</strong></small>
+                                <div class="text-info">
                                 <div class="progress my-3 circle" style="height:6px">
                                     <div  class="progress-bar circle gd-info"
-                                        data-toggle="tooltip" title="100%" style="width: 100%">
+                                        data-toggle="tooltip" title="Kinh nghiệm" style="width: 63.9%">
                                     </div>
                                 </div>
                             </div>
@@ -26,12 +24,26 @@
                     </div>
                     <div class="col-6 d-flex">
                         <div class="flex">
+                            <div class="text-light"><small><i class="fas fa-angle-up"></i> Level <strong
+                                        class="text-light">{{ 65 }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex">
+                        <div class="flex">
+                            <div class="text-info"><small><i class="fas fa-heart"></i> Sinh Lực <strong
+                                        class="text-info">{{ $user->totalNumeral('health_points') }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex mt-2">
+                        <div class="flex">
                             <div class="text-danger"><small><i class="fas fa-swords"></i> Sát Thương <strong
                                         class="text-danger">{{ $user->totalNumeral('strength') }}</strong></small>
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 d-flex">
+                    <div class="col-6 d-flex mt-2">
                         <div class="flex">
                             <div class="text-success"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
                                         class="text-success">{{ $user->totalNumeral('intelligent') }}</strong></small>
@@ -54,6 +66,7 @@
                     </div>
                 </div>
                 <br>
+                
                 <div class="row row-sm">
                     @foreach($user->skills() as $skill)
                         <div style="margin-bottom:15px" class="col-3 d-flex">
@@ -65,15 +78,15 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light">Túi Đồ</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-dark">Kĩ Năng</button>
+                <button type="button" class="btn btn-dark">Túi Đồ</button>
             </div>
         </div>
     </div>
 </div>
 @endauth
 <div id="aside-left" class="page-sidenav no-shrink bg-light nav-dropdown fade" aria-hidden="true">
-    <div class="sidenav h-100 modal-dialog bg-light">
+    <div class="sidenav h-100 modal-dialog bg-light normal-bordered">
         <div class="navbar"><a href="index.html" class="navbar-brand"><svg width="32" height="32"
                     viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
                     <g class="loading-spin" style="transform-origin: 256px 256px">

@@ -43,6 +43,14 @@ class User extends Authenticatable
     {
         return $query->isAdmin == 1 ? TRUE : FALSE;
     }
+    public function getId()
+    {
+        return $this->id;
+    }
+    public function getCoins()
+    {
+        return $this->coins + $this->income_coins;
+    }
     public function character()
     {
         return $this->hasOne('App\Model\Character','id','character_id');

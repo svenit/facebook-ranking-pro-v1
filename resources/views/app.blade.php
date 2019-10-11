@@ -7,16 +7,18 @@
 	<meta name="description" content="Responsive, Bootstrap, BS4">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="{{ asset('assets/css/site.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 	<link href="{{ asset('cdn/css/all.min.css') }}" rel="stylesheet">
 	<meta name="csrf-token" content="{{ csrf_token() }}" />
 	<link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 	@yield('css')
 </head>
 
 <body class="layout-row">
 	@include('user.theme.aside')
 	{{-- <button class="btn btn-white btn-block mb-2" data-toggle="modal" data-target="#modal-left" data-toggle-class="modal-open-aside" data-target="body">Left</button> --}}
-	<div id="main" class="layout-column flex">
+	<div id="main" style="background: url(https://darktown.itam.store/_nuxt/img/5442740.jpg);" class="layout-column flex">
 		@include('user.theme.header')
 		<div id="content" class="flex">
 			<div>
@@ -31,7 +33,7 @@
 				@yield('content')
 			</div>
 		</div>
-		<div id="footer" style="background:#fff;margin-top:0px" class="page-footer">
+		<div id="footer" style="margin-top:0px" class="page-footer">
 			<div class="d-flex p-3"><span class="text-sm text-muted flex">&copy; Copyright {{ date('Y') }} Coded by <a href="https://facebook.com/sven307">Sven</a></span>
 				<div class="text-sm text-muted">Version 1.0.0</div>
 			</div>
