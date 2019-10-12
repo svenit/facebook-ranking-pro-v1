@@ -87,3 +87,26 @@
 {
     color:#999184;
 }
+.swal2-popup{
+    background-color: #12141f !important;
+}
+.swal2-styled.swal2-confirm
+{
+    background: #2d2d2d !important;
+}
+#swal2-content
+{
+    color: #9de0f6 !important;
+}
+.swal2-styled:focus
+{
+    box-shadow: none !important;
+}
+tr:hover
+{
+    cursor: pointer;
+}
+img:hover
+{
+    cursor: pointer;
+}

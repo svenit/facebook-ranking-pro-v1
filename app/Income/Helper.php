@@ -2,7 +2,9 @@
 
 namespace App\Income;
 
+use stdClass;
 use App\Model\User;
+use App\Model\Level;
 use App\Model\Config;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,69 +21,80 @@ class Helper
         $this->config = $config->first();
         $this->userID = User::findOrFail($userID) ? $userID : 0;
     }
+    public function user()
+    {
+        return User::find($this->userID);
+    }
     public function character()
     {
-        return User::find($this->userID)->character;
+        return $this->user()->character;
     }
     public function skills()
     {
-        return User::find($this->userID)->skills;
+        return $this->user()->skills;
     }
-    public function fullPower()
+    public function usingSkills()
     {
-        $properties = [
-            'strength' => 5,
-            'agility' => 3,
-            'intelligent' => 5,
-            'lucky' => 2,
-            'health_points' => 1.5
-        ];
-        $power = 0;
-        foreach($properties as $key => $property)
+        return $this->user()->usingSkills();
+    }
+    public function gears()
+    {
+        return $this->user()->gears;
+    }
+    public function usingGears()
+    {
+        return $this->user()->usingGears();
+    }
+    public function power()
+    {
+        return $this->user()->power();
+    }
+    public function fullPower($id)
+    {
+        return $this->user()->fullPower($id);
+    }
+    public function updateFullPower()
+    {
+        $user = $this->user();
+        $user->full_power = $this->fullPower($user->id);
+        $user->save();
+    }
+    public function level()
+    {
+        $allLevel = Level::all();
+        for($i = $allLevel->count() - 1;$i >= 0;$i--)
         {
-            $power += $this->totalNumeral($key) * $property;
+            if($this->user()->exp >= $allLevel[$i]->exp_required)
+            {
+                $level = $allLevel[$i]->level;
+                break;
+            }
         }
-        return $power;
+        return isset($level) ? $level : 0;
     }
-    public function numeralSkills($type)
+    public function nextLevel()
     {
-        return $this->skills()
-            ->where('type',$type)
-            ->where('value_type',0)
-            ->sum('value');
-    }
-    public function percentSkills($type)
-    {
-        return $this->skills()
-            ->where('type',$type)
-            ->where('value_type',1)
-            ->sum('value');
-    }
-    public function totalNumeral($type)
-    {
-        $number = $this->numeralSkills($type) + User::find($this->userID)[$type];
-        $percent = $this->percentSkills($type);
-        return $number + (($number * $percent)/100);
+        $currentLevel = Level::findOrFail($this->level());
+        $nextLevel = Level::where('id', '>', $currentLevel->id)->first();
+        return [
+            'next_level' => isset($nextLevel) ? $nextLevel->level : 'MAX',
+            'next_level_exp' => isset($nextLevel) ? $nextLevel->exp_required : 0,
+            'current_level' => $currentLevel->level,
+            'current_user_exp' => (int)$this->user()->exp,
+            'percent' => isset($nextLevel) ? round(((int)$this->user()->exp/$nextLevel->exp_required)*100) : 100
+        ];
     }
     public function coins()
     {
-        return User::find($this->userID)->getCoins();
+        return $this->user()->getCoins();
     }
     public function coinsCustom($coins,$incomeCoins)
     {
         return $coins + $incomeCoins;
     }
-    public function demicalCoins()
-    {
-        return number_format($this->coins());
-    }
     public function gold()
     {
-        return User::find($this->userID)->gold;
-    }
-    public function demicalGold()
-    {
-        return number_format($this->gold());
+        return $this->user()->gold;
     }
     public function rankCoin() : int
     {
@@ -96,12 +109,11 @@ class Helper
     }
     public function rankPower()
     {
-        $userCompare = $this->fullPower();
-        User::where('character_id','!=',0)->chunkById(100,function($users) use($userCompare){
+        $userCompare = $this->user()->full_power;
+        User::where('character_id','!=',0)->whereNotNull('provider_id')->chunkById(1000,function($users) use($userCompare){
             foreach($users as $user)
             {
-                $this->userID = $user->id;
-                $userCompare < $this->fullPower() ? $this->rankPower++ : $this->rankPower; 
+                $userCompare < $user->full_power ? $this->rankPower++ : $this->rankPower; 
             }
         });
         return $this->rankPower;

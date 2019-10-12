@@ -113,9 +113,9 @@
 @endsection
 
 @section('js')
-@if(session('message'))
-<script>
-    Swal.fire('', "{{ session('message') }}", "{{ session('status') }}");
-</script>
-@endif
+    @if(session('message'))
+    <script>
+        Swal.fire('', "{{ session('message') }}", "{{ session('status') }}");
+    </script>
+    @endif
 @endsection

@@ -2,6 +2,8 @@
 
 namespace App\Model;
 
+use App\Income\Helper;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -57,6 +59,47 @@ class User extends Authenticatable
     }
     public function skills()
     {
-        return $this->belongsToMany('App\Model\Skill','user_skills','user_id','skill_id');
+        return $this->belongsToMany('App\Model\Skill','user_skills','user_id','skill_id')->withPivot('status');
+    }
+    public function gears()
+    {
+        return $this->belongsToMany('App\Model\Gear','user_gears','user_id','gear_id')->withPivot('status');
+    }
+    public function usingSkills()
+    {
+        return $this->skills->filter(function($status){
+            return $status->pivot->status == 1;
+        });
+    }
+    public function usingGears()
+    {
+        return $this->gears->filter(function($status){
+            return $status->pivot->status == 1;
+        });
+    }
+    public function power()
+    {
+        $collect = collect($this->usingGears())->groupBy('type')->map(function($collect,$key){
+            return $collect;
+        });
+        $properties = [
+            'strength' => 200,
+            'agility' => 150,
+            'intelligent' => 200,
+            'lucky' => 100,
+            'health_points' => 80
+        ];
+        $power = [];
+        foreach($properties as $key => $property)
+        {
+            $power[$key] = (isset($collect[$key][0]['value']) ? $collect[$key][0]['value'] : 0) + ($this[$key]);
+        }
+        
+        return collect($power);
+    }
+    public function fullPower($id)
+    {
+        $helper = new Helper($id);
+        return $this->power()->sum() * 11 * $helper->level();
     }
 }

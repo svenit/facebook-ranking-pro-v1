@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserSkillsTable extends Migration
+class CreateUserGearsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,21 @@ class CreateUserSkillsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_skills', function (Blueprint $table) {
+        Schema::create('user_gears', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id')->index();
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->unsignedBigInteger('skill_id')->index();
-            $table->foreign('skill_id')
+            $table->unsignedBigInteger('gear_id')->index();
+            $table->foreign('gear_id')
                 ->references('id')
-                ->on('skills')
+                ->on('gears')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table->tinyInteger('status');
-            $table->primary(['user_id','skill_id']);
+            $table->primary(['user_id','gear_id']);
             $table->timestamps();
         });
     }
@@ -39,6 +39,6 @@ class CreateUserSkillsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_skills');
+        Schema::dropIfExists('user_gears');
     }
 }

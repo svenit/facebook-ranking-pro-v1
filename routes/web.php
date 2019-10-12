@@ -34,7 +34,7 @@ Route::group(['prefix' => '/','as' => 'user.','namespace' => 'User','middleware'
 
 
     Route::group(['prefix' => 'top','as' => 'top.','namespace' => 'Top'], function () {
-        Route::get('/','TopRichestController@power')->name('power');
+        Route::get('/','TopController@power')->name('power');
     });
 
     Route::group(['prefix' => 'events','as' => 'events.','namespace' => 'Events'], function () {

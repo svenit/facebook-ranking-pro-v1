@@ -36,6 +36,7 @@ class CreateUsersTable extends Migration
             $table->integer('agility')->default(0);
             $table->integer('lucky')->default(0);
             $table->integer('health_points')->default(150);
+            $table->bigInteger('full_power')->default(0);
             $table->tinyInteger('isVip')->default(0);
             $table->tinyInteger('isAdmin')->default(0);
             $table->timestamp('email_verified_at')->nullable();

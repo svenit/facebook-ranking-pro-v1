@@ -78,7 +78,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="bootstrap-table">
+                <div class="bootstrap-table vip-bordered">
                     <div class="fixed-table-toolbar">
                         <div class="bs-bars float-left">
                             <div id="toolbar"></div>
