@@ -199,12 +199,13 @@
                 </ul>
                 <ul class="nav">
                     <li class="nav-header hidden-folded"><span class="text-muted">Hoạt Động</span></li>
-                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="award"></i></span> <span
+                    <li class=""><a href="#"><span class="nav-icon"><i data-feather="award"></i></span> <span
                         class="nav-text">BXH</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
                             <li><a href="{{ Route('user.top.power') }}" class=""><span class="nav-text">Lực Chiến</span></a></li>
-                            <li><a href="ui.alert.html" class=""><span class="nav-text">Đại Gia</span></a></li>
-                            <li><a href="ui.badge.html" class=""><span class="nav-text">Hoạt Động</span></a></li>
+                            <li><a href="{{ Route('user.top.coin') }}" class=""><span class="nav-text">Vàng</span></a></li>
+                            <li><a href="{{ Route('user.top.gold') }}" class=""><span class="nav-text">Kim Cương</span></a></li>
+                            <li><a href="{{ Route('user.top.activities') }}" class=""><span class="nav-text">Hoạt Động</span></a></li>
                         </ul>
                     </li>
                     <li><a href="#" class=""><span class="nav-icon"><i data-feather="calendar"></i></span> <span

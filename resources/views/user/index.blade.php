@@ -112,7 +112,7 @@
 </div>
 @endsection
 
-@section('js')
+@section('after-js')
     @if(session('message'))
     <script>
         Swal.fire('', "{{ session('message') }}", "{{ session('status') }}");

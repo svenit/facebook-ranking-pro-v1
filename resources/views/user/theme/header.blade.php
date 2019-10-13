@@ -24,11 +24,16 @@
                                     name="foldedAside"> <i></i> <small>Thu gọn phần bên</small></label><label
                                 class="ui-check ui-check-rounded my-1 d-block"><input type="checkbox"
                                     name="hideAside"> <i></i> <small>Ẩn phần bên</small></label></div>
-                        <div class="mb-2 text-muted"><strong>Chế độ :</strong></div>
-                        <div class="mb-2"><label class="radio radio-inline ui-check ui-check-md"><input
-                                    type="radio" name="bg" value=""> <i></i></label><label
+                        <div class="mb-2 text-muted"><strong>Giao diện :</strong></div>
+                        <div class="mb-2">
+                            <label class="radio radio-inline ui-check ui-check-md">
+                                <input
+                                    type="radio" name="bg" value=""> <i></i>
+                            </label>
+                            <label
                                 class="radio radio-inline ui-check ui-check-color ui-check-md"><input
-                                    type="radio" name="bg" value="bg-dark"> <i class="bg-dark"></i></label>
+                                    type="radio" name="bg" value="bg-dark"> <i class="bg-dark"></i>
+                                </label>
                         </div>
                     
                     </div>

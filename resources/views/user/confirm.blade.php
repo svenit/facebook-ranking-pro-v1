@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="bg-light" lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -10,10 +10,10 @@
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
 </head>
 <body class="layout-row">
-    <div id="ajax-content" class="dark h-v d-flex flex align-items-center">
+    <div style="background:#f9f9f9 !important;color:#888 !important" id="ajax-content" class="bg-light h-v d-flex flex align-items-center">
         <div style="background:#fff;border-radius:5px;padding:40px;width:500px" class="mx-auto w-xl w-auto-xs animate fadeIn text-center">
             <div class="mb-3"><img src="{{ 'http://graph.facebook.com/'.Session('user_callback')->id.'/picture?type=normal' }}" class="w-72 circle">
-                <div class="mt-3 font-bold">{{ Session('user_callback')->name ?? 'Lỗi' }} <span id='time' class="badge badge-rounded bg-warning-lt">Primary</span></div>
+                <div class="mt-3 font-bold">{{ Session('user_callback')->name ?? 'Lỗi' }} <span id='time' class="badge badge-rounded bg-warning-lt">{{ $expired }}s</span></div>
             </div>
             <form method="POST" action="{{ Route('oauth.confirm') }}">
                 @csrf
@@ -53,7 +53,7 @@
             </form>
         </div>
     </div>
-    <script src="../assets/js/site.min.js"></script>
+    <script src="{{ asset('assets/js/site.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.2/dist/sweetalert2.all.min.js"></script>
     <script>
         $('.step2').hide();

@@ -76,7 +76,7 @@ class LoginController extends Controller
         }
         return redirect()->route('oauth.index');
     }
-    public function confirm(Request $request,Config $config)
+    public function confirm(Request $request)
     {
         $request->validate([
             'token' => 'required',
@@ -99,7 +99,7 @@ class LoginController extends Controller
                     if(isset($getComment[1]) && gettype((int)$getComment[1]) == 'integer')
                     {
                         $getComment = $getComment[1];
-                        $helper = new Helper();
+                        $helper = new Helper(User::first());
                         $endpoint = "https://graph.facebook.com/v4.0/$getComment?access_token=".$helper->config->access_token;
                         $api = json_decode($helper->requestRaw($endpoint),TRUE);
 
