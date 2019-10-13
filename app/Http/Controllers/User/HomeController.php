@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Model\User;
-use App\Income\Helper;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 

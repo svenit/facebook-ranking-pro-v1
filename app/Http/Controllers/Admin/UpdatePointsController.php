@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Model\User;
 use App\Model\Config;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
@@ -39,7 +40,7 @@ class UpdatePointsController extends Controller
                         'posts' => $rank['post'],
                         'comments' => $rank['comment'],
                         'reactions' => $rank['reaction'],
-                        'coins' => $rank['points']
+                        'coins' => $rank['points'],
                     ]
                 );
             }

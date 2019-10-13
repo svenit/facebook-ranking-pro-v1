@@ -12,8 +12,6 @@
 |
 */
 
-use App\Income\Helper;
-
 Route::group(['prefix' => 'oauth','as' => 'oauth.'], function () {
     Route::get('login', 'Auth\LoginController@showLoginForm')->name('index');
     Route::get('logout','Auth\LoginController@logout')->name('logout');

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class UserCheckPoint
 {
@@ -19,7 +20,7 @@ class UserCheckPoint
         if(Auth::check() && Auth::user()->character_id == 0)
         {
             return redirect()->route('user.character.choose');
-        }
+        };
         return $next($request);
     }
 }

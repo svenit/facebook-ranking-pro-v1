@@ -48,7 +48,7 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('assets/css/wheel.css') }}">
 @endsection
-@section('js')
+@section('after-js')
     <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/utils/Draggable.min.js'></script>
     <script src="{{ asset('assets/js/wheel/ThrowPropsPlugin.min.js') }}"></script>
