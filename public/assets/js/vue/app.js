@@ -86,7 +86,7 @@ app = new Vue({
     },
     async created()
     {
-        this.token = await this.sha256($('#footer').attr('data-toggle'));
+        this.token = await this.sha256($('meta[name="csrf-token"]').attr('content'));
         this.index();
     },
     methods:{
