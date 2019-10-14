@@ -82,6 +82,15 @@ app = new Vue({
             },
             gears:[],
             skills:[]
+        },
+        pvp:{
+            isSearching:false,
+            timeOut:20,
+            status:'Tìm Đối Thủ <i class="fas fa-swords"></i>',
+            match:{
+                you:[],
+                enemy:[]
+            }
         }
     },
     async created()
@@ -127,6 +136,34 @@ app = new Vue({
             this.loading = false;
             $('#show-infor-user').click();
         },
+        async findEnemy(e)
+        {
+            if(this.pvp.isSearching)
+            {
+                Swal.fire('','Đang tìm kiếm đối thủ','warning');
+                return false;
+            }
+            else
+            {
+                this.pvp.isSearching = true;
+                var countDown = setInterval(() => {
+                    this.pvp.timeOut--;
+                    this.pvp.status = `Đang tìm..( ${this.pvp.timeOut}s )`;
+                    if(this.pvp.timeOut == 0)
+                    {
+                        this.pvp.status = 'Tìm Đối Thủ <i class="fas fa-swords"></i>';
+                        clearInterval(countDown);
+                        this.pvp.isSearching = false;
+                        this.pvp.timeOut = 20;
+                    }
+                },1000);
+                let res = await axios.post(`${config.root}/api/v1/pvp/find-enemy`,'',{
+                    headers:{
+                        pragma:this.token
+                    }
+                });
+            }
+        },
         async refreshToken(auth)
         {
             return this.token = await this.sha256(auth.headers.authorization);
@@ -135,7 +172,6 @@ app = new Vue({
         {
             message = (message+'VYDEPTRAI').split('').reverse().join('');
             message = this.encode(message);
-            console.log(message);
             const msgBuffer = new TextEncoder('utf-8').encode(message);                    
             const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
             const hashArray = Array.from(new Uint8Array(hashBuffer));              

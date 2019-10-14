@@ -47,6 +47,7 @@ class LoginController extends Controller
         if(isset($userAuthentication))
         {
             Auth::loginUsingId($userAuthentication->id,TRUE);
+            Auth::logoutOtherDevices('');
             return redirect()->route('user.index')->with([
                 'status' => 'success',
                 'message' => 'Đăng nhập thành công'

@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -11,6 +13,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('test',function(){
+    Auth::loginUsingId(11,1);
+});
 
 Route::group(['prefix' => 'oauth','as' => 'oauth.'], function () {
     Route::get('login', 'Auth\LoginController@showLoginForm')->name('index');
@@ -23,7 +28,7 @@ Route::group(['prefix' => 'oauth','as' => 'oauth.'], function () {
 
 Route::group(['prefix' => 'character','as' => 'user.character.','namespace' => 'User\Character'], function () {
     Route::get('choose','CharacterController@choose')->name('choose');
-    Route::get('/set/{id}','CharacterController@set')->name('set')->where('id','[1-9+]');
+    Route::get('set/{id}','CharacterController@set')->name('set')->where('id','[1-9+]');
 });
 
 Route::group(['prefix' => '/','as' => 'user.','namespace' => 'User','middleware' => 'user'], function () {
@@ -37,11 +42,15 @@ Route::group(['prefix' => '/','as' => 'user.','namespace' => 'User','middleware'
         Route::get('diamond','TopController@gold')->name('gold');
         Route::get('activities','TopController@activities')->name('activities');
     });
-
-    Route::group(['prefix' => 'events','as' => 'events.','namespace' => 'Events'], function () {
-        Route::group(['prefix' => 'wheel'], function () {
-            Route::get('/','WheelController@index')->name('wheel');
-            Route::get('data','WheelController@data')->name('data');
+    Route::group(['prefix' => '/','middleware' => 'auth'], function () {
+        Route::group(['prefix' => 'events','as' => 'events.','namespace' => 'Events'], function () {
+            Route::group(['prefix' => 'wheel'], function () {
+                Route::get('/','WheelController@index')->name('wheel');
+                Route::get('data','WheelController@data')->name('data');
+            });
+        });
+        Route::group(['prefix' => 'pvp','as' => 'pvp.','namespace' => 'PVP'], function () {
+            Route::get('/','PvPController@index')->name('index');
         });
     });
 });

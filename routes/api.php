@@ -18,5 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::group(['prefix' => 'v1','namespace' => 'Api\v1','middleware' => 'cors'], function () {
     Route::get('user/{param}','IndexController@userInfor');
-    Route::get('user/{param}/rank','IndexController@userRank');
+    Route::group(['prefix' => 'pvp'], function () {
+        Route::post('find-enemy','PvPController@findEnemy');
+    });
 });

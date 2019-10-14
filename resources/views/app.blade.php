@@ -44,7 +44,7 @@
 </body>
 <script>
 	config = {
-		root:'{{ url('/') }}',
+		root:'{{ url('/') }}'
 	};
 	</script>
 	<script src="{{ asset('assets/js/site.min.js') }}"></script>
