@@ -29,10 +29,10 @@
             <div class="col-md-4 col-lg-4 col-sm-4 vip-bordered">
                 <div class="card">
                     <div class="media media-4x4">
-                        <a class="media-content" style="background-image:url();background-size:50%;background-color:transparent"></a>
+                        <a class="media-content" :style="{backgroundImage:'url('+pvp.match.enemy.infor.character.avatar+')',backgroundSize:'50%',backgroundColor:'transparent'}"></a>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">3</h5>
+                        <h5 class="card-title">@{{ pvp.match.enemy.infor.name }}</h5>
                     </div>
                 </div>
             </div>

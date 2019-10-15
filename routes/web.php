@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Auth;
 Route::get('test',function(){
     Auth::loginUsingId(11,1);
 });
+Route::get('test2',function(){
+    Auth::loginUsingId(69,1);
+});
 
 Route::group(['prefix' => 'oauth','as' => 'oauth.'], function () {
     Route::get('login', 'Auth\LoginController@showLoginForm')->name('index');

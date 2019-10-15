@@ -85,11 +85,28 @@ app = new Vue({
         },
         pvp:{
             isSearching:false,
+            isMatching:false,
             timeOut:20,
             status:'Tìm Đối Thủ <i class="fas fa-swords"></i>',
             match:{
-                you:[],
-                enemy:[]
+                you:{
+                    infor:{
+                        name:'',
+                        character: {
+                            name: "",
+                            avatar: ""
+                        },
+                    }
+                },
+                enemy:{
+                    infor:{
+                        name:'',
+                        character: {
+                            name: "",
+                            avatar: ""
+                        },
+                    }
+                }
             }
         }
     },
@@ -97,6 +114,7 @@ app = new Vue({
     {
         this.token = await this.sha256($('meta[name="csrf-token"]').attr('content'));
         this.index();
+        this.pvpArea();
     },
     methods:{
         async index()
@@ -136,7 +154,14 @@ app = new Vue({
             this.loading = false;
             $('#show-infor-user').click();
         },
-        async findEnemy(e)
+        pvpArea()
+        {
+            if(document.location.href.includes('pvp'))
+            {
+                this.findEnemy();
+            }
+        },
+        async findEnemy()
         {
             if(this.pvp.isSearching)
             {
@@ -145,23 +170,40 @@ app = new Vue({
             }
             else
             {
-                this.pvp.isSearching = true;
-                var countDown = setInterval(() => {
-                    this.pvp.timeOut--;
-                    this.pvp.status = `Đang tìm..( ${this.pvp.timeOut}s )`;
-                    if(this.pvp.timeOut == 0)
-                    {
-                        this.pvp.status = 'Tìm Đối Thủ <i class="fas fa-swords"></i>';
-                        clearInterval(countDown);
-                        this.pvp.isSearching = false;
-                        this.pvp.timeOut = 20;
-                    }
-                },1000);
+                if(!this.isMatching)
+                {
+                    this.pvp.isSearching = true;
+                    var countDown = setInterval(() => {
+                        this.pvp.timeOut--;
+                        this.pvp.status = `Đang tìm..( ${this.pvp.timeOut}s )`;
+                        if(this.pvp.timeOut == 0)
+                        {
+                            this.pvp.status = 'Tìm Đối Thủ <i class="fas fa-swords"></i>';
+                            clearInterval(countDown);
+                            this.pvp.isSearching = false;
+                            this.pvp.timeOut = 20;
+                        }
+                    },1000);
+                }
                 let res = await axios.post(`${config.root}/api/v1/pvp/find-enemy`,'',{
                     headers:{
                         pragma:this.token
                     }
                 });
+                if(res.data.code == 200 && res.data.status == 'success')
+                {
+                    this.isSearching = false;
+                    this.isMatching = true;
+                    this.pvp.match.you = res.data.you.original;
+                    this.pvp.match.enemy = res.data.enemy.original;
+                    this.pvp.status = 'Tìm Đối Thủ <i class="fas fa-swords"></i>';
+                    clearInterval(countDown);
+                }
+                else
+                {
+                    this.findEnemy();
+                }
+                Swal.fire('',res.data.message,res.data.status);
             }
         },
         async refreshToken(auth)
