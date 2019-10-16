@@ -90,6 +90,7 @@ app = new Vue({
             status:'Tìm Đối Thủ <i class="fas fa-swords"></i>',
             match:{
                 you:{
+                    turn:'',
                     infor:{
                         name:'',
                         character: {
@@ -114,7 +115,49 @@ app = new Vue({
     {
         this.token = await this.sha256($('meta[name="csrf-token"]').attr('content'));
         this.index();
-        this.pvpArea();
+    },
+    watch: {
+        'pvp.match.you.turn'()
+        {
+            if(this.pvp.match.you.turn == 0)
+            {
+                this.pvp.timeOut = 15;
+                var countDown = setInterval(() => {
+                    this.pvp.timeOut--;
+                    this.pvp.status = `Lượt của bạn..( ${this.pvp.timeOut}s )`;
+                    if(this.pvp.timeOut == 0)
+                    {
+                        this.pvp.status = 'Hết giờ <i class="fas fa-swords"></i>';
+                        axios.post('api/v1/pvp/turn-time-out','',{
+                            headers:{
+                                pragma:this.token
+                            }
+                        }).then((res) => {
+                            this.pvp.match.you = res.data.you.basic.original;
+                            this.pvp.match.enemy = res.data.enemy.basic.original;
+                            this.pvp.match.you.turn = res.data.you.turn;
+                            this.pvp.timeOut = 15;
+                            clearInterval(countDown);
+                        });
+                    }
+                },1000);
+            }
+            else
+            {
+                this.pvp.status = `Đang đợi đối thủ...`;
+                axios.post('api/v1/pvp/listen-action','',{
+                    headers:{
+                        pragma:this.token
+                    }
+                }).then((res) => {
+                    this.pvp.match.you = res.data.you.basic.original;
+                    this.pvp.match.enemy = res.data.enemy.basic.original;
+                    this.pvp.match.you.turn = res.data.you.turn;
+                    this.pvp.timeOut = 15;
+                    clearInterval(countDown);
+                });
+            }
+        }
     },
     methods:{
         async index()
@@ -163,47 +206,55 @@ app = new Vue({
         },
         async findEnemy()
         {
-            if(this.pvp.isSearching)
+            if(this.pvp.isMatching)
             {
-                Swal.fire('','Đang tìm kiếm đối thủ','warning');
-                return false;
+                Swal.fire('','Bạn đang trong trận','warning');
             }
             else
             {
-                if(!this.isMatching)
+                if(this.pvp.isSearching)
                 {
-                    this.pvp.isSearching = true;
-                    var countDown = setInterval(() => {
-                        this.pvp.timeOut--;
-                        this.pvp.status = `Đang tìm..( ${this.pvp.timeOut}s )`;
-                        if(this.pvp.timeOut == 0)
-                        {
-                            this.pvp.status = 'Tìm Đối Thủ <i class="fas fa-swords"></i>';
-                            clearInterval(countDown);
-                            this.pvp.isSearching = false;
-                            this.pvp.timeOut = 20;
-                        }
-                    },1000);
-                }
-                let res = await axios.post(`${config.root}/api/v1/pvp/find-enemy`,'',{
-                    headers:{
-                        pragma:this.token
-                    }
-                });
-                if(res.data.code == 200 && res.data.status == 'success')
-                {
-                    this.isSearching = false;
-                    this.isMatching = true;
-                    this.pvp.match.you = res.data.you.original;
-                    this.pvp.match.enemy = res.data.enemy.original;
-                    this.pvp.status = 'Tìm Đối Thủ <i class="fas fa-swords"></i>';
-                    clearInterval(countDown);
+                    Swal.fire('','Đang tìm kiếm đối thủ','warning');
+                    return false;
                 }
                 else
                 {
-                    this.findEnemy();
+                    if(!this.isMatching)
+                    {
+                        this.pvp.isSearching = true;
+                        var countDown = setInterval(() => {
+                            this.pvp.timeOut--;
+                            this.pvp.status = `Đang tìm..( ${this.pvp.timeOut}s )`;
+                            if(this.pvp.timeOut == 0)
+                            {
+                                this.pvp.status = 'Tìm Đối Thủ <i class="fas fa-swords"></i>';
+                                clearInterval(countDown);
+                                this.pvp.isSearching = false;
+                                this.pvp.timeOut = 20;
+                            }
+                        },1000);
+                        this.isSearching = false;
+                    }
+                    let res = await axios.post(`${config.root}/api/v1/pvp/find-enemy`,'',{
+                        headers:{
+                            pragma:this.token
+                        }
+                    });
+                    Swal.fire('',res.data.message,res.data.status);
+                    if(res.data.code == 200 && res.data.status == 'success')
+                    {
+                        this.pvp.isSearching = false;
+                        this.pvp.isMatching = true;
+                        this.pvp.match.you = res.data.you.basic.original;
+                        this.pvp.match.enemy = res.data.enemy.basic.original;
+                        this.pvp.match.you.turn = res.data.you.turn;
+                        clearInterval(countDown);
+                    }
+                    else
+                    {
+                        return this.findEnemy();
+                    }
                 }
-                Swal.fire('',res.data.message,res.data.status);
             }
         },
         async refreshToken(auth)

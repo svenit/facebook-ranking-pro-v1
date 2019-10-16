@@ -256,7 +256,7 @@
                     <li><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
                         class="nav-text">PVP</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
-                            <li><a href="ui.alert.html" class=""><span class="nav-text">Khiêu Chiến</span></a></li>
+                            <li><a href="{{ Route('user.pvp.index') }}" class=""><span class="nav-text">Khiêu Chiến</span></a></li>
                         </ul>
                     </li>
                     <li class="nav-header hidden-folded"><span class="text-muted">Admin Cpanel</span></li>
@@ -296,6 +296,7 @@
         </div>
     </div>
 </div>
+@if(!request()->is('admin/*'))
 <div v-if="loading" id="modal-sm" class="modal fade show" data-backdrop="true" style="display: block;" aria-modal="true">
     <div class="modal-dialog modal-sm">
         <div style="background:transparent !important" class="modal-content">
@@ -307,3 +308,7 @@
         </div>
     </div>
 </div>
+@section('js')
+    <script src="{{ asset('assets/js/vue/app.js') }}"></script>
+@endsection
+@endif
