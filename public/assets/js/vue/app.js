@@ -97,7 +97,11 @@ app = new Vue({
                             name: "",
                             avatar: ""
                         },
-                    }
+                    },
+                    power:{
+                        hp:1
+                    },
+                    hp:1
                 },
                 enemy:{
                     infor:{
@@ -106,7 +110,11 @@ app = new Vue({
                             name: "",
                             avatar: ""
                         },
-                    }
+                    },
+                    power:{
+                        hp:1
+                    },
+                    hp:1
                 }
             }
         }
@@ -115,6 +123,7 @@ app = new Vue({
     {
         this.token = await this.sha256($('meta[name="csrf-token"]').attr('content'));
         this.index();
+        this.pvpArea();
     },
     watch: {
         'pvp.match.you.turn'()
@@ -122,39 +131,68 @@ app = new Vue({
             if(this.pvp.match.you.turn == 0)
             {
                 this.pvp.timeOut = 15;
-                var countDown = setInterval(() => {
-                    this.pvp.timeOut--;
-                    this.pvp.status = `Lượt của bạn..( ${this.pvp.timeOut}s )`;
-                    if(this.pvp.timeOut == 0)
+                countDown = setInterval(() => {
+                    if(this.pvp.match.you.turn == 0)
                     {
-                        this.pvp.status = 'Hết giờ <i class="fas fa-swords"></i>';
-                        axios.post('api/v1/pvp/turn-time-out','',{
-                            headers:{
-                                pragma:this.token
-                            }
-                        }).then((res) => {
-                            this.pvp.match.you = res.data.you.basic.original;
-                            this.pvp.match.enemy = res.data.enemy.basic.original;
-                            this.pvp.match.you.turn = res.data.you.turn;
-                            this.pvp.timeOut = 15;
-                            clearInterval(countDown);
-                        });
+                        this.pvp.timeOut--;
+                        this.pvp.status = `Lượt của bạn..( ${this.pvp.timeOut}s )`;
+                        if(this.pvp.timeOut == 0)
+                        {
+                            this.pvp.status = 'Hết giờ <i class="fas fa-swords"></i>';
+                            axios.post(`${config.root}/api/v1/pvp/turn-time-out`,'',{
+                                headers:{
+                                    pragma:this.token
+                                }
+                            }).then((res) => {
+                                switch(res.data.code)
+                                {
+                                    case 200:
+                                        this.pvp.match.you = res.data.you.basic.original;
+                                        this.pvp.match.you.hp = res.data.you.hp;
+                                        this.pvp.match.enemy = res.data.enemy.basic.original;
+                                        this.pvp.match.enemy.hp = res.data.enemy.hp;
+                                        this.pvp.match.you.turn = res.data.you.turn;
+                                        this.pvp.timeOut = 15;
+                                        clearInterval(countDown);
+                                    break;
+                                    case 404:
+                                        Swal.fire('',res.data.message,res.data.status);
+                                    break;
+                                    case 300:
+                                        location.reload();
+                                    break;
+                                }
+                            });
+                        }
                     }
                 },1000);
             }
             else
             {
-                this.pvp.status = `Đang đợi đối thủ...`;
-                axios.post('api/v1/pvp/listen-action','',{
+                this.pvp.status = `Đang đợi đối thủ ra đòn...( 15s )`;
+                axios.post(`${config.root}/api/v1/pvp/listen-action`,'',{
                     headers:{
                         pragma:this.token
                     }
                 }).then((res) => {
-                    this.pvp.match.you = res.data.you.basic.original;
-                    this.pvp.match.enemy = res.data.enemy.basic.original;
-                    this.pvp.match.you.turn = res.data.you.turn;
-                    this.pvp.timeOut = 15;
-                    clearInterval(countDown);
+                    switch(res.data.code)
+                    {
+                        case 200:
+                            this.pvp.match.you = res.data.you.basic.original;
+                            this.pvp.match.you.hp = res.data.you.hp;
+                            this.pvp.match.enemy = res.data.enemy.basic.original;
+                            this.pvp.match.enemy.hp = res.data.enemy.hp;
+                            this.pvp.match.you.turn = res.data.you.turn;
+                            this.pvp.timeOut = 15;
+                            clearInterval(countDown);
+                        break;
+                        case 404:
+                            Swal.fire('',res.data.message,res.data.status);
+                        break;
+                        case 300:
+                            location.reload();
+                        break;
+                    }
                 });
             }
         }
@@ -214,7 +252,7 @@ app = new Vue({
             {
                 if(this.pvp.isSearching)
                 {
-                    Swal.fire('','Đang tìm kiếm đối thủ','warning');
+                    Swal.fire('','Đang tìm kiếm trận','warning');
                     return false;
                 }
                 else
@@ -224,10 +262,10 @@ app = new Vue({
                         this.pvp.isSearching = true;
                         var countDown = setInterval(() => {
                             this.pvp.timeOut--;
-                            this.pvp.status = `Đang tìm..( ${this.pvp.timeOut}s )`;
+                            this.pvp.status = `Đang tìm trận..( ${this.pvp.timeOut}s )`;
                             if(this.pvp.timeOut == 0)
                             {
-                                this.pvp.status = 'Tìm Đối Thủ <i class="fas fa-swords"></i>';
+                                this.pvp.status = 'Tìm Trận <i class="fas fa-swords"></i>';
                                 clearInterval(countDown);
                                 this.pvp.isSearching = false;
                                 this.pvp.timeOut = 20;
@@ -241,21 +279,73 @@ app = new Vue({
                         }
                     });
                     Swal.fire('',res.data.message,res.data.status);
-                    if(res.data.code == 200 && res.data.status == 'success')
+                    switch(res.data.code)
                     {
-                        this.pvp.isSearching = false;
-                        this.pvp.isMatching = true;
-                        this.pvp.match.you = res.data.you.basic.original;
-                        this.pvp.match.enemy = res.data.enemy.basic.original;
-                        this.pvp.match.you.turn = res.data.you.turn;
-                        clearInterval(countDown);
-                    }
-                    else
-                    {
-                        return this.findEnemy();
+                        case 200:
+                            this.pvp.isSearching = false;
+                            this.pvp.isMatching = true;
+                            this.pvp.match.you = res.data.you.basic.original;
+                            this.pvp.match.you.hp = res.data.you.hp;
+                            this.pvp.match.enemy = res.data.enemy.basic.original;
+                            this.pvp.match.enemy.hp = res.data.enemy.hp;
+                            this.pvp.match.you.turn = res.data.you.turn;
+                            clearInterval(countDown);
+                        break;
+                        case 404:
+                            Swal.fire('',res.data.message,res.data.status);
+                            this.pvp.isSearching = false;
+                            clearInterval(countDown);
+                            this.findEnemy();
+                        break;
+                        case 300:
+                            location.reload();
+                        break;
+                        default:
+                            return this.findEnemy();
+                        break;
                     }
                 }
             }
+        },
+        async hit()
+        {
+            let res = await axios.post(`${config.root}/api/v1/pvp/hit`,'',{
+                headers:{
+                    pragma:this.token
+                }
+            });
+            switch(res.data.code)
+            {
+                case 200:
+                    this.pvp.match.you = res.data.you.basic.original;
+                    this.pvp.match.you.hp = res.data.you.hp;
+                    this.pvp.match.enemy = res.data.enemy.basic.original;
+                    this.pvp.match.enemy.hp = res.data.enemy.hp;
+                    this.pvp.match.you.turn = res.data.you.turn;
+                break;
+                case 404:
+                    Swal.fire('',res.data.message,res.data.status);
+                break;
+                case 300:
+                    location.reload();
+                break;
+                default:
+                    Swal.fire('','Đã có lỗi xảy ra xin vui lòng thử lại','error');
+                break;
+            }
+        },
+        async exitMatch()
+        {
+            let res = await axios.post(`${config.root}/api/v1/pvp/exit-match`,'',{
+                headers:{
+                    pragma:this.token
+                }
+            });
+            if(res.data.code == 200)
+            {
+                Swal.fire('',res.data.message,res.data.status);
+                window.location.href = config.root;
+            } 
         },
         async refreshToken(auth)
         {
@@ -286,3 +376,17 @@ app = new Vue({
         }
     },
 });
+if(document.location.href.includes('pvp'))
+{
+    window.onbeforeunload = function (e) {
+        e = e || window.event;
+
+        // For IE and Firefox prior to version 4
+        if (e) {
+            e.returnValue = 'Sure?';
+        }
+
+        // For Safari
+        return 'Sure?';
+    };
+}

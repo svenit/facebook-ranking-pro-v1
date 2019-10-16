@@ -27,6 +27,7 @@ class CreateUserSkillsTable extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table->tinyInteger('status');
+            $table->tinyInteger('duration')->default(0);
             $table->primary(['user_id','skill_id']);
             $table->timestamps();
         });

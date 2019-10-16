@@ -83,11 +83,11 @@ class User extends Authenticatable
             return $collect;
         });
         $properties = [
-            'strength' => 200,
-            'agility' => 150,
-            'intelligent' => 200,
-            'lucky' => 100,
-            'health_points' => 80
+            'strength' => 20,
+            'agility' => 15,
+            'intelligent' => 20,
+            'lucky' => 10,
+            'health_points' => 8
         ];
         $power = [];
         foreach($properties as $key => $property)
@@ -100,6 +100,6 @@ class User extends Authenticatable
     public function fullPower($id)
     {
         $helper = new Helper($id);
-        return $this->power()->sum() * 11 * $helper->level();
+        return $this->power()->sum() * $helper->level();
     }
 }

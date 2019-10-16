@@ -23,6 +23,7 @@ class CreateFightRoomsTable extends Migration
                 ->onUpdate('cascade');
             $table->integer('user_challenge_hp')->default(0);
             $table->integer('user_receive_challenge')->nullable();
+            $table->tinyInteger('turn')->default(0);
             $table->timestamps();
         });
     }
