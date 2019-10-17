@@ -108,7 +108,7 @@ app = new Vue({
                         name:'',
                         character: {
                             name: "",
-                            avatar: ""
+                            avatar: null
                         },
                     },
                     power:{
@@ -122,7 +122,7 @@ app = new Vue({
     async created()
     {
         this.token = await this.sha256($('meta[name="csrf-token"]').attr('content'));
-        this.index();
+        await this.index();
         this.pvpArea();
     },
     watch: {
@@ -143,7 +143,8 @@ app = new Vue({
                                 headers:{
                                     pragma:this.token
                                 }
-                            }).then((res) => {
+                            }).then(async (res) => {
+                                await this.refreshToken(res);
                                 switch(res.data.code)
                                 {
                                     case 200:
@@ -174,7 +175,8 @@ app = new Vue({
                     headers:{
                         pragma:this.token
                     }
-                }).then((res) => {
+                }).then(async (res) => {
+                    await this.refreshToken(res);
                     switch(res.data.code)
                     {
                         case 200:
@@ -208,8 +210,8 @@ app = new Vue({
                         pragma:this.token
                     }
                 });
+                await this.refreshToken(res);
                 this.data = res.data;
-                this.refreshToken(res);
                 this.loading = false;
             }
             catch(e)
@@ -230,8 +232,8 @@ app = new Vue({
                     pragma:this.token
                 }
             });
+            await this.refreshToken(res);
             this.user = res.data;
-            this.refreshToken(res);
             this.loading = false;
             $('#show-infor-user').click();
         },
@@ -279,6 +281,7 @@ app = new Vue({
                         }
                     });
                     Swal.fire('',res.data.message,res.data.status);
+                    await this.refreshToken(res);
                     switch(res.data.code)
                     {
                         case 200:
@@ -301,7 +304,8 @@ app = new Vue({
                             location.reload();
                         break;
                         default:
-                            return this.findEnemy();
+                            this.pvp.isSearching = false;
+                            clearInterval(countDown);
                         break;
                     }
                 }
@@ -314,6 +318,7 @@ app = new Vue({
                     pragma:this.token
                 }
             });
+            await this.refreshToken(res);
             switch(res.data.code)
             {
                 case 200:
@@ -341,6 +346,7 @@ app = new Vue({
                     pragma:this.token
                 }
             });
+            await this.refreshToken(res);
             if(res.data.code == 200)
             {
                 Swal.fire('',res.data.message,res.data.status);
@@ -351,15 +357,11 @@ app = new Vue({
         {
             return this.token = await this.sha256(auth.headers.authorization);
         },
-        async sha256(message) 
+        sha256(ascii) 
         {
-            message = (message+'VYDEPTRAI').split('').reverse().join('');
-            message = this.encode(message);
-            const msgBuffer = new TextEncoder('utf-8').encode(message);                    
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));              
-            const hashHex = hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('');
-            return hashHex;
+            ascii = (ascii+'VYDEPTRAI').split('').reverse().join('');
+            ascii = this.encode(ascii);
+            return sha256(ascii);
         },
         encode(message)
         {

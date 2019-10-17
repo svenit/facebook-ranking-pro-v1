@@ -16,7 +16,7 @@ class Cors
      */
     public function handle($request, Closure $next)
     {
-        if(!env('APP_DEBUG'))
+        if(!env('APP_PROTECTED_API'))
         {
             $token = hash('sha256',$this->encode(strrev(csrf_token().'VYDEPTRAI')));
             if($request->header('host') == env('APP_DOMAIN') && $request->header('pragma') == $token)

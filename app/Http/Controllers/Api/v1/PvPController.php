@@ -73,6 +73,7 @@ class PvPController extends Controller
                             }
                             else
                             {
+                                $time = 60;
                                 $response = [
                                     'code' => 404,
                                     'status' => 'error',
@@ -84,6 +85,12 @@ class PvPController extends Controller
                     }
                     else
                     {
+                        $time = 60;
+                        $response = [
+                            'code' => 200,
+                            'status' => 'success',
+                            'message' => 'Ghép trận thành công'
+                        ];
                         break;
                     }
                 }
@@ -167,6 +174,7 @@ class PvPController extends Controller
                 'status' => 'success',
                 'message' => 'Bạn đã tham gia PvP, xin vui lòng đợi trong giây lát !'
             ];
+            return response()->json($response,200);
         }
         return response()->json($response,200);
     }

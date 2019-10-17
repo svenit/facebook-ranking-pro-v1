@@ -43,8 +43,11 @@
             <div class="col-md-4 col-lg-4 col-sm-4">
                 <div class="">
                     <img v-if="pvp.match.you.turn != 0 && pvp.isMatching" style="position:absolute;width:100%" src="https://i.imgur.com/xjA4khR.gif">
-                    <div class="media media-4x4">
+                    <div v-if="!pvp.isSearching" class="media media-4x4">
                         <a class="media-content" :style="{backgroundImage:'url('+pvp.match.enemy.infor.character.avatar+')',backgroundSize:'50%',backgroundColor:'transparent'}"></a>
+                    </div>
+                    <div v-else class="media media-4x4">
+                        <a class="media-content" :style="{backgroundImage:'url(https://vignette.wikia.nocookie.net/crusadersquest/images/5/56/UnknownSkill.png/revision/latest?cb=20150102055528)',backgroundSize:'50%',backgroundColor:'transparent'}"></a>
                     </div>
                     <div v-if="pvp.isMatching">
                         <p class="card-title text-gold text-center">
