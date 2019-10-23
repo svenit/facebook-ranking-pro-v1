@@ -16,7 +16,7 @@ class Cors
      */
     public function handle($request, Closure $next)
     {
-        if(!env('APP_PROTECTED_API'))
+        if(env('APP_PROTECTED_API'))
         {
             $token = hash('sha256',$this->encode(strrev(csrf_token().'VYDEPTRAI')));
             if($request->header('host') == env('APP_DOMAIN') && $request->header('pragma') == $token)
@@ -24,7 +24,9 @@ class Cors
                 $newToken = str_random(50);
                 Session::forget('_token');
                 Session::put('_token',$newToken);
-                return $next($request)->header('Authorization',$newToken);
+                return $next($request)->header('Authorization',$newToken)
+                    ->header('Access-Control-Allow-Origin', env('APP_DOMAIN'))
+                    ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
             }
             return response()->json([
                 'status' => 'error',

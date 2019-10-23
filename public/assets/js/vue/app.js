@@ -98,6 +98,7 @@ app = new Vue({
                             avatar: ""
                         },
                     },
+                    duration:[],
                     power:{
                         hp:1
                     },
@@ -125,6 +126,19 @@ app = new Vue({
         await this.index();
         this.pvpArea();
     },
+    mounted() 
+    {
+        if(document.location.href.includes('pvp'))
+        {
+            window.onbeforeunload = function (e) {
+                e = e || window.event;
+                if (e) {
+                    e.returnValue = 'Sure?';
+                }
+                return 'Sure?';
+            };
+        }
+    },
     watch: {
         'pvp.match.you.turn'()
         {
@@ -150,9 +164,12 @@ app = new Vue({
                                     case 200:
                                         this.pvp.match.you = res.data.you.basic.original;
                                         this.pvp.match.you.hp = res.data.you.hp;
+                                        this.pvp.match.you.duration = res.data.you.duration;
+                                        this.pvp.match.you.turn = res.data.you.turn;
+                                        
                                         this.pvp.match.enemy = res.data.enemy.basic.original;
                                         this.pvp.match.enemy.hp = res.data.enemy.hp;
-                                        this.pvp.match.you.turn = res.data.you.turn;
+                                        this.pvp.match.enemy.duration = res.data.enemy.duration;
                                         this.pvp.timeOut = 15;
                                         clearInterval(countDown);
                                     break;
@@ -182,9 +199,12 @@ app = new Vue({
                         case 200:
                             this.pvp.match.you = res.data.you.basic.original;
                             this.pvp.match.you.hp = res.data.you.hp;
+                            this.pvp.match.you.duration = res.data.you.duration;
+                            this.pvp.match.you.turn = res.data.you.turn;
+
                             this.pvp.match.enemy = res.data.enemy.basic.original;
                             this.pvp.match.enemy.hp = res.data.enemy.hp;
-                            this.pvp.match.you.turn = res.data.you.turn;
+                            this.pvp.match.enemy.duration = res.data.enemy.duration;
                             this.pvp.timeOut = 15;
                             clearInterval(countDown);
                         break;
@@ -220,9 +240,17 @@ app = new Vue({
                 this.loading = false;
             }
         },
-        showDescription(description)
+        showGearsDescription(data)
         {
-            Swal.fire('',description,'info');
+            Swal.fire('',data,'info');
+        },
+        showSkillsDescription(data)
+        {
+            Swal.fire({
+                title:'',
+                type:'info',
+                html:`[ ${data.name} - ${data.passive == 1 ? 'Chủ động' : 'Bị động'} ] ${data.description} <br> Yêu cầu cấp độ : ${data.required_level} <br> Tỉ lệ thành công : ${data.success_rate}% `
+            });
         },
         async showUserInfor(id)
         {
@@ -285,13 +313,19 @@ app = new Vue({
                     switch(res.data.code)
                     {
                         case 200:
+                            const audio = new Audio(`${config.root}/assets/sound/found_enemy.mp3`);
+                            audio.play();
                             this.pvp.isSearching = false;
                             this.pvp.isMatching = true;
+                            
                             this.pvp.match.you = res.data.you.basic.original;
+                            this.pvp.match.you.duration = res.data.you.duration;
                             this.pvp.match.you.hp = res.data.you.hp;
+                            this.pvp.match.you.turn = res.data.you.turn;
+
                             this.pvp.match.enemy = res.data.enemy.basic.original;
                             this.pvp.match.enemy.hp = res.data.enemy.hp;
-                            this.pvp.match.you.turn = res.data.you.turn;
+                            this.pvp.match.enemy.duration = res.data.enemy.duration;
                             clearInterval(countDown);
                         break;
                         case 404:
@@ -324,9 +358,12 @@ app = new Vue({
                 case 200:
                     this.pvp.match.you = res.data.you.basic.original;
                     this.pvp.match.you.hp = res.data.you.hp;
+                    this.pvp.match.you.turn = res.data.you.turn;
+                    this.pvp.match.you.duration = res.data.you.duration;
+
                     this.pvp.match.enemy = res.data.enemy.basic.original;
                     this.pvp.match.enemy.hp = res.data.enemy.hp;
-                    this.pvp.match.you.turn = res.data.you.turn;
+                    this.pvp.match.enemy.duration = res.data.enemy.duration;
                 break;
                 case 404:
                     Swal.fire('',res.data.message,res.data.status);
@@ -339,28 +376,31 @@ app = new Vue({
                 break;
             }
         },
-        async exitMatch()
+        async exitSearchMatch()
         {
-            let res = await axios.post(`${config.root}/api/v1/pvp/exit-match`,'',{
-                headers:{
-                    pragma:this.token
-                }
-            });
-            await this.refreshToken(res);
-            if(res.data.code == 200)
+            if(confirm('Rời rận đấu ?'))
             {
-                Swal.fire('',res.data.message,res.data.status);
-                window.location.href = config.root;
-            } 
+                let res = await axios.post(`${config.root}/api/v1/pvp/exit-search-match`,'',{
+                    headers:{
+                        pragma:this.token
+                    }
+                });
+                await this.refreshToken(res);
+                if(res.data.code == 200)
+                {
+                    Swal.fire('',res.data.message,res.data.status);
+                    window.location.href = config.root;
+                } 
+            }
         },
         async refreshToken(auth)
         {
-            return this.token = await this.sha256(auth.headers.authorization);
+            this.token = await this.sha256(auth.headers.authorization);
         },
-        sha256(ascii) 
+        async sha256(ascii) 
         {
             ascii = (ascii+'VYDEPTRAI').split('').reverse().join('');
-            ascii = this.encode(ascii);
+            ascii = await this.encode(ascii);
             return sha256(ascii);
         },
         encode(message)
@@ -378,17 +418,3 @@ app = new Vue({
         }
     },
 });
-if(document.location.href.includes('pvp'))
-{
-    window.onbeforeunload = function (e) {
-        e = e || window.event;
-
-        // For IE and Firefox prior to version 4
-        if (e) {
-            e.returnValue = 'Sure?';
-        }
-
-        // For Safari
-        return 'Sure?';
-    };
-}

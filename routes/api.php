@@ -23,6 +23,6 @@ Route::group(['prefix' => 'v1','namespace' => 'Api\v1','middleware' => 'cors'], 
         Route::post('turn-time-out','PvPController@turnTimeOut');
         Route::post('listen-action','PvPController@listenAction');
         Route::post('hit','PvPController@hit');
-        Route::post('exit-match','PvPController@exitMatch');
+        Route::post('exit-search-match','PvPController@exitSearchMatch');
     });
 });

@@ -2,12 +2,9 @@
 
 namespace App\Income;
 
-use stdClass;
 use App\Model\User;
 use App\Model\Level;
 use App\Model\Config;
-use Illuminate\Support\Facades\Auth;
-
 class Helper
 {
     private $rankCoin = 1;

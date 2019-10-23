@@ -1,7 +1,6 @@
 .vip-bordered
 {
     position: relative;
-    width: 100%;
     margin: 0 auto;
     border: 10px solid;
     background: rgba(10,12,17,.65) !important;

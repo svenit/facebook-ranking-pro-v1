@@ -18,15 +18,15 @@ Route::get('test',function(){
 });
 Route::get('test2',function(){
     Auth::loginUsingId(69,1);
-});
+}); 
 
-Route::group(['prefix' => 'oauth','as' => 'oauth.'], function () {
-    Route::get('login', 'Auth\LoginController@showLoginForm')->name('index');
-    Route::get('logout','Auth\LoginController@logout')->name('logout');
-    Route::get('confirm','Auth\LoginController@showConfirm')->name('show-confirm');
-    Route::post('confirm','Auth\LoginController@confirm')->name('confirm');
-    Route::get('facebook','Auth\LoginController@redirectToProvider')->name('login');
-    Route::get('facebook/callback','Auth\LoginController@handleProviderCallback');
+Route::group(['prefix' => 'oauth','as' => 'oauth.','namespace' => 'Auth'], function () {
+    Route::get('login', 'LoginController@showLoginForm')->name('index');
+    Route::get('logout','LoginController@logout')->name('logout');
+    Route::get('confirm','LoginController@showConfirm')->name('show-confirm');
+    Route::post('confirm','LoginController@confirm')->name('confirm');
+    Route::get('facebook','LoginController@redirectToProvider')->name('login');
+    Route::get('facebook/callback','LoginController@handleProviderCallback');
 });
 
 Route::group(['prefix' => 'character','as' => 'user.character.','namespace' => 'User\Character'], function () {

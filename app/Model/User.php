@@ -59,7 +59,19 @@ class User extends Authenticatable
     }
     public function skills()
     {
-        return $this->belongsToMany('App\Model\Skill','user_skills','user_id','skill_id')->withPivot('status');
+        return $this->belongsToMany('App\Model\Skill','user_skills','user_id','skill_id')->withPivot(['status','duration']);
+    }
+    public function skillsDuration()
+    {
+        return $this->hasMany('App\Model\UserSkill','user_id','id');
+    }
+    public function getSkillDuration()
+    {
+        return collect($this->skillsDuration)->filter(function($status){
+            return $status->status == 1;
+        })->map(function($item,$key){
+            return collect($item)->except(['created_at', 'updated_at','status']);
+        });
     }
     public function gears()
     {

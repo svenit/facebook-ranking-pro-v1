@@ -8,7 +8,7 @@
     <div class="padding-x">
         @include('user.theme.parameter')
         <button id='fight-button' style="width:300px" @click="findEnemy()" class="vip-bordered" v-html="pvp.status">Tìm Đối Thủ</button>
-        <button id='fight-button' v-if="!pvp.isMatching" style="width:100px" @click="exitMatch()" class="vip-bordered">Thoát</button>
+        <button id='fight-button' v-if="!pvp.isMatching" style="width:100px" @click="exitSearchMatch()" class="vip-bordered">Thoát</button>
         <div class="row row-sm sr">
             <div class="col-md-4 col-lg-4 col-sm-4">
                 <div class="">
@@ -27,8 +27,11 @@
                         </div>
                         <div class="card-body vip-bordered">
                             <div class="row row-sm">
-                                <div @click="hit()" v-for="(skill,index) in pvp.match.you.skills" :key="index" class="col-3">
-                                    <img style="width:100%;border-radius:5px" :src="skill.image">
+                                <div v-for="(skill,index) in pvp.match.you.skills" :key="index" class="col-3">
+                                    <img @click="hit()" style="width:100%;border-radius:5px" :src="skill.image">
+                                    <span class="text-center" v-for="(duration,index) in pvp.match.you.duration" :key="index">
+                                        <a style="text-align:center" v-if="duration.skill_id == skill.id">@{{ duration.duration }}</a>
+                                    </span>
                                 </div>
                             </div>
                         </div>

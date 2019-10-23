@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Skill extends Model
 {
     protected $hidden = [
-        'character_id','value_type','type','value','pivot','required_level','level','created_at','updated_at'
+        'character_id','power_type','type','pivot','created_at','updated_at'
     ];
     public function users()
     {

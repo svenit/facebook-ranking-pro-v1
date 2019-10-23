@@ -28,26 +28,26 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
+    public function __construct()
+    {
+        $this->middleware('guest')->except(['handleProviderCallback','logout']);
+    }
     public function redirectToProvider()
     {
-        if(!Auth::check())
-        {
-            return Socialite::driver('facebook')->redirect();
-        }
-        return back();
+        return Socialite::driver('facebook')->redirect();
     }
     public function handleProviderCallback()
     {
         $callback = Socialite::driver('facebook')->user();
         $callback->expired = now()->addMinutes(5);
-        
+
         Session::put('user_callback',$callback);
         $userAuthentication = User::whereProviderId($callback->id)->first();
 
         if(isset($userAuthentication))
         {
             Auth::loginUsingId($userAuthentication->id,TRUE);
-            Auth::logoutOtherDevices('');
+            Auth::logoutOtherDevices($userAuthentication->password);
             return redirect()->route('user.index')->with([
                 'status' => 'success',
                 'message' => 'Đăng nhập thành công'
@@ -60,15 +60,11 @@ class LoginController extends Controller
     }
     public function showLoginForm()
     {
-        if(Auth::check())
-        {
-            return redirect()->route('user.index');
-        }
         return view('user.login');
     }
     public function showConfirm(Config $config)
     {
-        if(Session::has('user_callback') && !Auth::check() && Session('user_callback')->expired > now())
+        if(Session::has('user_callback') && Session('user_callback')->expired > now())
         {
             return view('user.confirm')->with([
                 'expired' => Carbon::parse(Session('user_callback')->expired)->diffInSeconds(),
@@ -165,7 +161,7 @@ class LoginController extends Controller
                 ]);
             }
         }
-        return back();
+        return redirect()->route('oauth.index');
     }
     public function logout()
     {
