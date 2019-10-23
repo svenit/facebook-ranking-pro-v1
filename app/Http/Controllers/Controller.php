@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Income\Helper;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;

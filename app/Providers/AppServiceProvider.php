@@ -27,15 +27,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if(Schema::hasTable('configs'))
-        {
-            View::composer('*', function ($view) 
-            {
-                if(Auth::check())
-                {
-                    $view->with('user', new Helper(Auth::id()));    
-                }
-            });
-        }
+        // if(Schema::hasTable('configs'))
+        // {
+        //     View::composer('*', function ($view) 
+        //     {
+        //         if(Auth::check())
+        //         {
+        //             $view->with('user', new Helper(Auth::id()));    
+        //         }
+        //     });
+        // }
     }
 }
