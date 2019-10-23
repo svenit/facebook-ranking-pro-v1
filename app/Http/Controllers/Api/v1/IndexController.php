@@ -37,7 +37,8 @@ class IndexController extends Controller
                         'comments' => (int)$findUser->comments,
                     ],
                     'facebook_id' => $findUser->user_id,
-                    'active' => isset($findUser->provider_id) ? 'Đã active' : 'Chưa active'
+                    'active' => isset($findUser->provider_id) ? true : false,
+                    'vip' => $findUser->isVip == 1 ? true : false
                 ],
                 'rank' => [
                     'power' => $helper->rankPower(),

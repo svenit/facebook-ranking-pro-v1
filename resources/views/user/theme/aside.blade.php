@@ -7,7 +7,7 @@
             </div>
             <div class="modal-body">
                 <div class="p-4 text-center">
-                    <img width="80%" :src="data.infor.character.avatar">
+                    <img width="80%" class="{{ Auth::user()->isVip == 1 ? 'vip-2' : '' }}" :src="data.infor.character.avatar">
                     <p style="margin-top:20px" class="text-gold">@{{ data.infor.name }} ( @{{ data.infor.character.name }})</p>
                 </div>
                 <div class="row row-sm">
@@ -98,7 +98,7 @@
             </div>
             <div class="modal-body">
                 <div class="p-4 text-center">
-                    <img width="80%" :src="user.infor.character.avatar">
+                    <img :class="user.infor.vip ? 'vip-2' : ''" width="80%" :src="user.infor.character.avatar">
                     <p style="margin-top:20px" class="text-gold">@{{ user.infor.name }} ( @{{ user.infor.character.name }})</p>
                 </div>
                 <div class="row row-sm">

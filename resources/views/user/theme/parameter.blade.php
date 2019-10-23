@@ -51,6 +51,6 @@
     </div>
 </div>
 <span class="ch ch1">
-    <a href="#my-character"><img @click="index()" title="Nhấp vào để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px" width="100px" alt="" src="{{ $user->character()->avatar }}" class="animated pulse infinite fast"></a>
+    <a href="#my-character"><img @click="index()" title="Nhấp vào để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px" width="100px" alt="" src="{{ $user->character()->avatar }}" class="{{ Auth::user()->isVip == 1 ? 'vip-2' : '' }} animated pulse infinite fast"></a>
 </span>
 @endauth

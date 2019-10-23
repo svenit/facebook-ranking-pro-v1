@@ -109,3 +109,15 @@ img:hover
 {
     cursor: pointer;
 }
+.vip-1
+{
+    background:url('../images/vip-1.gif');
+    background-position: center;
+    background-size: cover;
+}
+.vip-2
+{
+    background:url('../images/vip-2.gif');
+    background-position: center;
+    background-size: cover;
+}
