@@ -71,7 +71,7 @@ return [
             'database' => 'd30me83adrcndi',
             'username' => 'glexevzlmyfnlt',
             'password' => 'e8ee4f80950010ead3fcf684b003df3a5616393dced802ced6b985fc61b5766a',
-            'charset' => 'utf8mb4',
+            'charset' => '',
             'prefix' => '',
             'prefix_indexes' => true,
             'schema' => 'public',
