@@ -13,19 +13,19 @@ class CreateConfigsTable extends Migration
      */
     public function up()
     {
-        // Schema::create('configs', function (Blueprint $table) {
-        //     $table->bigIncrements('id');
-        //     $table->tinyInteger('maintaince');
-        //     $table->string('access_token');
-        //     $table->string('group_id');
-        //     $table->date('started_day');
-        //     $table->integer('per_post');
-        //     $table->integer('per_comment');
-        //     $table->integer('per_commented');
-        //     $table->integer('per_react');
-        //     $table->integer('per_reacted');
-        //     $table->timestamps();
-        // });
+        Schema::create('configs', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->tinyInteger('maintaince');
+            $table->string('access_token');
+            $table->string('group_id');
+            $table->date('started_day');
+            $table->integer('per_post');
+            $table->integer('per_comment');
+            $table->integer('per_commented');
+            $table->integer('per_react');
+            $table->integer('per_reacted');
+            $table->timestamps();
+        });
     }
 
     /**
