@@ -12,12 +12,12 @@ class Helper
     public $config;
     private $userID;
 
-    public function __construct($userID = null)
-    {
-        $config = new Config();
-        $this->config = $config->first();
-        $this->userID = User::findOrFail($userID) ? $userID : 0;
-    }
+    // public function __construct($userID = null)
+    // {
+    //     $config = new Config();
+    //     $this->config = $config->first();
+    //     $this->userID = User::findOrFail($userID) ? $userID : 0;
+    // }
     public function user()
     {
         return User::find($this->userID);

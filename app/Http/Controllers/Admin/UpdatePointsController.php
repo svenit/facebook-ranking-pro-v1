@@ -14,7 +14,10 @@ class UpdatePointsController extends Controller
 {
     private $config;
 
-    
+    // public function __construct(Config $config)
+    // {
+    //     $this->config = $config->first();
+    // }
     public function index()
     {
         $this->config->started_day = Carbon::parse($this->config->started_day)->diffInDays();
