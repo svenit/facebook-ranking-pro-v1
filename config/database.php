@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Str;
 
-$DATABASE_URL = parse_url('postgres://glexevzlmyfnlt:e8ee4f80950010ead3fcf684b003df3a5616393dced802ced6b985fc61b5766a@ec2-174-129-252-211.compute-1.amazonaws.com:5432/d30me83adrcndi');
-
 return [
 
     /*
@@ -67,15 +65,17 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => $DATABASE_URL["host"],
-            'port' => $DATABASE_URL["port"],
-            'database' => ltrim($DATABASE_URL["path"], "/"),
-            'username' => $DATABASE_URL["user"],
-            'password' => $DATABASE_URL["pass"],
+            'url' => 'postgres://glexevzlmyfnlt:e8ee4f80950010ead3fcf684b003df3a5616393dced802ced6b985fc61b5766a@ec2-174-129-252-211.compute-1.amazonaws.com:5432/d30me83adrcndi',
+            'host' => 'ec2-174-129-252-211.compute-1.amazonaws.com',
+            'port' => '5432',
+            'database' => 'd30me83adrcndi',
+            'username' => 'glexevzlmyfnlt',
+            'password' => 'e8ee4f80950010ead3fcf684b003df3a5616393dced802ced6b985fc61b5766a',
             'charset' => 'utf8',
             'prefix' => '',
+            'prefix_indexes' => true,
             'schema' => 'public',
-            'sslmode' => 'require',
+            'sslmode' => 'prefer',
         ],
 
         'sqlsrv' => [
