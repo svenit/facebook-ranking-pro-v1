@@ -14,7 +14,7 @@ class Helper
 
     public function __construct($userID = null)
     {
-        $config = 1;
+        $config = new Config();
         $this->config = $config->first();
         $this->userID = User::findOrFail($userID) ? $userID : 0;
     }
