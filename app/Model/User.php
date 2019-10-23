@@ -111,7 +111,7 @@ class User extends Authenticatable
     }
     public function fullPower($id)
     {
-        $helper = 1;
+        $helper = new Helper($id);
         return $this->power()->sum() * $helper->level();
     }
 }
