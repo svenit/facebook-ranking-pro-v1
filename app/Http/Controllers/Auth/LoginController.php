@@ -62,17 +62,17 @@ class LoginController extends Controller
     {
         return view('user.login');
     }
-    public function showConfirm(Config $config)
-    {
-        if(Session::has('user_callback') && Session('user_callback')->expired > now())
-        {
-            return view('user.confirm')->with([
-                'expired' => Carbon::parse(Session('user_callback')->expired)->diffInSeconds(),
-                'config' => $config->first()
-            ]);
-        }
-        return redirect()->route('oauth.index');
-    }
+    // public function showConfirm(Config $config)
+    // {
+    //     if(Session::has('user_callback') && Session('user_callback')->expired > now())
+    //     {
+    //         return view('user.confirm')->with([
+    //             'expired' => Carbon::parse(Session('user_callback')->expired)->diffInSeconds(),
+    //             'config' => $config->first()
+    //         ]);
+    //     }
+    //     return redirect()->route('oauth.index');
+    // }
     public function confirm(Request $request)
     {
         $request->validate([
