@@ -62,7 +62,7 @@ class LoginController extends Controller
     {
         return view('user.login');
     }
-    public function showConfirm(Config $config)
+    public function showConfirm()
     {
         if(Session::has('user_callback') && Session('user_callback')->expired > now())
         {
