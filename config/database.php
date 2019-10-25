@@ -65,7 +65,7 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'url' => 'postgres://glexevzlmyfnlt:e8ee4f80950010ead3fcf684b003df3a5616393dced802ced6b985fc61b5766a@ec2-174-129-252-211.compute-1.amazonaws.com:5432/d30me83adrcndi',
+            'url' => 'postgres://cgznanlrqpddhc:c5cb2b7b2b9682380e6036d859a701b5f52ba4541d7ffb0fd5424a6cb0f6950e@ec2-54-235-181-55.compute-1.amazonaws.com:5432/d6nfk1i9ibqhcf',
             'host' => 'ec2-174-129-252-211.compute-1.amazonaws.com',
             'port' => '5432',
             'database' => 'd30me83adrcndi',
@@ -73,7 +73,6 @@ return [
             'password' => 'e8ee4f80950010ead3fcf684b003df3a5616393dced802ced6b985fc61b5766a',
             'charset' => 'utf8',
             'prefix' => '',
-            'schema' => 'public',
         ],
 
         'sqlsrv' => [
