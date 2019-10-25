@@ -34,6 +34,7 @@ class CharacterController extends Controller
             $user->intelligent = $character->intelligent;
             $user->agility = $character->agility;
             $user->lucky = $character->lucky;
+            $user->health_points = $character->health_points;
             
             $user->save();
             return redirect()->route('user.index')->with([

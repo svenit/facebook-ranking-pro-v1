@@ -13,12 +13,10 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('test',function(){
-    Auth::loginUsingId(11,1);
+Route::get('test/{id}',function($id){
+    Auth::loginUsingId($id,1);
+    return redirect()->route('user.index');
 });
-Route::get('test2',function(){
-    Auth::loginUsingId(69,1);
-}); 
 
 Route::group(['prefix' => 'oauth','as' => 'oauth.','namespace' => 'Auth'], function () {
     Route::get('login', 'LoginController@showLoginForm')->name('index');

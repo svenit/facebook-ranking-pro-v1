@@ -47,7 +47,9 @@
                                             <td style=""><small class="text-muted">{{ $key + 1 }}</small></td>
                                             <td>
                                                 <a target="_blank" href="https://fb.com/{{ $rank->user_id }}">
-                                                    <span style="width:50px" class="avatar"><img class="profile-picture"
+                                                    <span style="width:50px" class="avatar">
+                                                        <span class="avatar-status {{ $rank->isOnline() ? 'on' : 'off' }} b-white avatar-right"></span>
+                                                        <img class="profile-picture"
                                                             src="https://graph.facebook.com/{{ $rank->user_id }}/picture"
                                                             alt="profile-picture" height="50">
                                                     </span>

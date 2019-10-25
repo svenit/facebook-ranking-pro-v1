@@ -52,6 +52,7 @@ class IndexController extends Controller
                     'agility' => $helper->power()['agility'],
                     'intelligent' => $helper->power()['intelligent'],
                     'lucky' => $helper->power()['lucky'],
+                    'energy' => $helper->character()->default_energy
                 ],
                 'gears' => $helper->usingGears(),
                 'skills' => $helper->usingSkills()

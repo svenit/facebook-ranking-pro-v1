@@ -98,11 +98,11 @@ app = new Vue({
                             avatar: ""
                         },
                     },
-                    duration:[],
                     power:{
                         hp:1
                     },
-                    hp:1
+                    hp:1,
+                    energy:1
                 },
                 enemy:{
                     infor:{
@@ -115,7 +115,8 @@ app = new Vue({
                     power:{
                         hp:1
                     },
-                    hp:1
+                    hp:1,
+                    energy:1
                 }
             }
         }
@@ -128,16 +129,7 @@ app = new Vue({
     },
     mounted() 
     {
-        if(document.location.href.includes('pvp'))
-        {
-            window.onbeforeunload = function (e) {
-                e = e || window.event;
-                if (e) {
-                    e.returnValue = 'Sure?';
-                }
-                return 'Sure?';
-            };
-        }
+        
     },
     watch: {
         'pvp.match.you.turn'()
@@ -164,12 +156,12 @@ app = new Vue({
                                     case 200:
                                         this.pvp.match.you = res.data.you.basic.original;
                                         this.pvp.match.you.hp = res.data.you.hp;
-                                        this.pvp.match.you.duration = res.data.you.duration;
+                                        this.pvp.match.you.energy = res.data.you.energy;
                                         this.pvp.match.you.turn = res.data.you.turn;
                                         
                                         this.pvp.match.enemy = res.data.enemy.basic.original;
                                         this.pvp.match.enemy.hp = res.data.enemy.hp;
-                                        this.pvp.match.enemy.duration = res.data.enemy.duration;
+                                        this.pvp.match.enemy.energy = res.data.enemy.energy;
                                         this.pvp.timeOut = 15;
                                         clearInterval(countDown);
                                     break;
@@ -177,7 +169,8 @@ app = new Vue({
                                         Swal.fire('',res.data.message,res.data.status);
                                     break;
                                     case 300:
-                                        location.reload();
+                                        Swal.fire('',res.data.message,res.data.status);
+                                        window.location.href = config.root;
                                     break;
                                 }
                             });
@@ -199,12 +192,12 @@ app = new Vue({
                         case 200:
                             this.pvp.match.you = res.data.you.basic.original;
                             this.pvp.match.you.hp = res.data.you.hp;
-                            this.pvp.match.you.duration = res.data.you.duration;
+                            this.pvp.match.you.energy = res.data.you.energy;
                             this.pvp.match.you.turn = res.data.you.turn;
 
                             this.pvp.match.enemy = res.data.enemy.basic.original;
                             this.pvp.match.enemy.hp = res.data.enemy.hp;
-                            this.pvp.match.enemy.duration = res.data.enemy.duration;
+                            this.pvp.match.enemy.energy = res.data.enemy.energy;
                             this.pvp.timeOut = 15;
                             clearInterval(countDown);
                         break;
@@ -212,7 +205,8 @@ app = new Vue({
                             Swal.fire('',res.data.message,res.data.status);
                         break;
                         case 300:
-                            location.reload();
+                            Swal.fire('',res.data.message,res.data.status);
+                            window.location.href = config.root;
                         break;
                     }
                 });
@@ -249,7 +243,7 @@ app = new Vue({
             Swal.fire({
                 title:'',
                 type:'info',
-                html:`[ ${data.name} - ${data.passive == 1 ? 'Chủ động' : 'Bị động'} ] ${data.description} <br> Yêu cầu cấp độ : ${data.required_level} <br> Tỉ lệ thành công : ${data.success_rate}% `
+                html:`[ ${data.name} - ${data.passive == 1 ? 'Bị động' : 'Chủ động'} ] ${data.description} <br> Yêu cầu cấp độ : ${data.required_level} <br> Tỉ lệ thành công : ${data.success_rate}% `
             });
         },
         async showUserInfor(id)
@@ -319,13 +313,13 @@ app = new Vue({
                             this.pvp.isMatching = true;
                             
                             this.pvp.match.you = res.data.you.basic.original;
-                            this.pvp.match.you.duration = res.data.you.duration;
                             this.pvp.match.you.hp = res.data.you.hp;
+                            this.pvp.match.you.energy = res.data.you.energy;
                             this.pvp.match.you.turn = res.data.you.turn;
 
                             this.pvp.match.enemy = res.data.enemy.basic.original;
                             this.pvp.match.enemy.hp = res.data.enemy.hp;
-                            this.pvp.match.enemy.duration = res.data.enemy.duration;
+                            this.pvp.match.enemy.energy = res.data.enemy.energy;
                             clearInterval(countDown);
                         break;
                         case 404:
@@ -335,7 +329,8 @@ app = new Vue({
                             this.findEnemy();
                         break;
                         case 300:
-                            location.reload();
+                            Swal.fire('',res.data.message,res.data.status);
+                            window.location.href = config.root;
                         break;
                         default:
                             this.pvp.isSearching = false;
@@ -345,9 +340,11 @@ app = new Vue({
                 }
             }
         },
-        async hit()
+        async hit(id)
         {
-            let res = await axios.post(`${config.root}/api/v1/pvp/hit`,'',{
+            let res = await axios.post(`${config.root}/api/v1/pvp/hit`,{
+                skill:id
+            },{
                 headers:{
                     pragma:this.token
                 }
@@ -358,18 +355,19 @@ app = new Vue({
                 case 200:
                     this.pvp.match.you = res.data.you.basic.original;
                     this.pvp.match.you.hp = res.data.you.hp;
+                    this.pvp.match.you.energy = res.data.you.energy;
                     this.pvp.match.you.turn = res.data.you.turn;
-                    this.pvp.match.you.duration = res.data.you.duration;
 
                     this.pvp.match.enemy = res.data.enemy.basic.original;
                     this.pvp.match.enemy.hp = res.data.enemy.hp;
-                    this.pvp.match.enemy.duration = res.data.enemy.duration;
+                    this.pvp.match.enemy.energy = res.data.enemy.energy;
                 break;
                 case 404:
                     Swal.fire('',res.data.message,res.data.status);
                 break;
                 case 300:
-                    location.reload();
+                    Swal.fire('',res.data.message,res.data.status);
+                    window.location.href = config.root;
                 break;
                 default:
                     Swal.fire('','Đã có lỗi xảy ra xin vui lòng thử lại','error');
