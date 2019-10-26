@@ -14,7 +14,7 @@
                 <div class="">
                     <div class="media media-4x4">
                         <img v-if="pvp.match.you.turn == 0 && pvp.isMatching" style="position:absolute;width:100%" src="https://i.imgur.com/xjA4khR.gif">
-                        <a class="media-content" style="background-image:url({{ $user->character()->avatar}});background-size:50%;background-color:transparent"></a>
+                        <a id="your-character" class="media-content your-character" style="background-image:url({{ $user->character()->avatar}});background-size:50%;background-color:transparent"></a>
                     </div>
                     <div v-if="pvp.isMatching">
                         <p class="card-title text-gold text-center">
