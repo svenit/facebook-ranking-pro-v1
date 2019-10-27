@@ -7,6 +7,7 @@ use App\Income\Helper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Cache;
 
 class IndexController extends Controller
 {
@@ -20,43 +21,45 @@ class IndexController extends Controller
 
         if(isset($findUser))
         {
-            $helper = new Helper($findUser->id);
-            return response()->json([
-                'infor' => [
-                    'name' => $helper->user()->name,
-                    'character' => [
-                        'name' => $helper->character()->name,
-                        'avatar' => $helper->character()->avatar
+            return Cache::remember("user.infor.$param", 5, function () use($findUser){
+                $helper = new Helper($findUser->id);
+                return response()->json([
+                    'infor' => [
+                        'name' => $helper->user()->name,
+                        'character' => [
+                            'name' => $helper->character()->name,
+                            'avatar' => $helper->character()->avatar
+                        ],
+                        'exp' => (int)$helper->user()->exp,
+                        'coins' => $helper->coins(),
+                        'gold' => $helper->gold(),
+                        'activities' => [
+                            'posts' => (int)$findUser->posts,
+                            'reactions' => (int)$findUser->reactions,
+                            'comments' => (int)$findUser->comments,
+                        ],
+                        'facebook_id' => $findUser->user_id,
+                        'active' => isset($findUser->provider_id) ? true : false,
+                        'vip' => $findUser->isVip == 1 ? true : false
                     ],
-                    'exp' => (int)$helper->user()->exp,
-                    'coins' => $helper->coins(),
-                    'gold' => $helper->gold(),
-                    'activities' => [
-                        'posts' => (int)$findUser->posts,
-                        'reactions' => (int)$findUser->reactions,
-                        'comments' => (int)$findUser->comments,
+                    'rank' => [
+                        'power' => $helper->rankPower(),
+                        'rich' => $helper->rankCoin()
                     ],
-                    'facebook_id' => $findUser->user_id,
-                    'active' => isset($findUser->provider_id) ? true : false,
-                    'vip' => $findUser->isVip == 1 ? true : false
-                ],
-                'rank' => [
-                    'power' => $helper->rankPower(),
-                    'rich' => $helper->rankCoin()
-                ],
-                'level' => $helper->nextLevel(),
-                'power' => [
-                    'total' => $helper->fullPower($findUser->id),
-                    'hp' => $helper->power()['health_points'],
-                    'strength' => $helper->power()['strength'],
-                    'agility' => $helper->power()['agility'],
-                    'intelligent' => $helper->power()['intelligent'],
-                    'lucky' => $helper->power()['lucky'],
-                    'energy' => $helper->character()->default_energy
-                ],
-                'gears' => $helper->usingGears(),
-                'skills' => $helper->usingSkills()
-            ],200);
+                    'level' => $helper->nextLevel(),
+                    'power' => [
+                        'total' => $helper->fullPower($findUser->id),
+                        'hp' => $helper->power()['health_points'],
+                        'strength' => $helper->power()['strength'],
+                        'agility' => $helper->power()['agility'],
+                        'intelligent' => $helper->power()['intelligent'],
+                        'lucky' => $helper->power()['lucky'],
+                        'energy' => $helper->character()->default_energy
+                    ],
+                    'gears' => $helper->usingGears(),
+                    'skills' => $helper->usingSkills()
+                ],200);
+            });
         }
         return response()->json([
             'keyword' => $param,
