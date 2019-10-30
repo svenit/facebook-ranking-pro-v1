@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\User;
-use App\Config;
+use App\Model\User;
+use App\Model\Config;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
@@ -24,7 +25,7 @@ class UpdatePointsController extends Controller
     }
     public function store(Request $request)
     {
-        if($request->has('data'))
+        if($request->has('data') && count($request->data) !== 0)
         {
             Storage::put('data.json',json_encode($request->data));
             foreach($request->data as $key => $rank)
@@ -39,10 +40,22 @@ class UpdatePointsController extends Controller
                         'posts' => $rank['post'],
                         'comments' => $rank['comment'],
                         'reactions' => $rank['reaction'],
-                        'coins' => $rank['points']
+                        'coins' => $rank['points'],
                     ]
                 );
             }
+            $response = [
+                'status' => 'success',
+                'message' => 'Cập nhật thành công'
+            ];
         }
+        else
+        {
+            $response = [
+                'status' => 'error',
+                'message' => 'Không có dữ liệu để cập nhật'
+            ];
+        }
+        return response()->json($response,200);
     }
 }

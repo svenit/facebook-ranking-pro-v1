@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Str;
 
+$postgresUrl = 'postgres://cgznanlrqpddhc:c5cb2b7b2b9682380e6036d859a701b5f52ba4541d7ffb0fd5424a6cb0f6950e@ec2-54-235-181-55.compute-1.amazonaws.com:5432/d6nfk1i9ibqhcf';
+$postgres = parse_url($postgresUrl);
+
 return [
 
     /*
@@ -56,7 +59,7 @@ return [
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
             'prefix_indexes' => true,
-            'strict' => true,
+            'strict' => false,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
@@ -65,17 +68,14 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'url' => $postgresUrl,
+            'host' => $postgres['host'],
+            'port' => $postgres['port'],
+            'database' => ltrim($postgres['path'],'/'),
+            'username' => $postgres['user'],
+            'password' => $postgres['pass'],
             'charset' => 'utf8',
             'prefix' => '',
-            'prefix_indexes' => true,
-            'schema' => 'public',
-            'sslmode' => 'prefer',
         ],
 
         'sqlsrv' => [

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
-use App\Config;
+use App\Model\User;
+use App\Model\Config;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -28,46 +28,43 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
+    public function __construct()
+    {
+        $this->middleware('guest')->except(['handleProviderCallback','logout']);
+    }
     public function redirectToProvider()
     {
-        if(!Auth::check())
-        {
-            return Socialite::driver('facebook')->redirect();
-        }
-        return back();
+        return Socialite::driver('facebook')->redirect();
     }
     public function handleProviderCallback()
     {
         $callback = Socialite::driver('facebook')->user();
         $callback->expired = now()->addMinutes(5);
-        
+
         Session::put('user_callback',$callback);
         $userAuthentication = User::whereProviderId($callback->id)->first();
 
         if(isset($userAuthentication))
         {
             Auth::loginUsingId($userAuthentication->id,TRUE);
+            Auth::logoutOtherDevices($userAuthentication->password);
             return redirect()->route('user.index')->with([
                 'status' => 'success',
                 'message' => 'Đăng nhập thành công'
             ]);
         }
         return redirect()->route('oauth.show-confirm')->with([
-            'status' => 'info',
+            'status' => 'warning',
             'message' => 'Vui lòng xác thực tài khoản của bạn',
         ]);
     }
     public function showLoginForm()
     {
-        if(Auth::check())
-        {
-            return redirect()->route('user.index');
-        }
         return view('user.login');
     }
     public function showConfirm(Config $config)
     {
-        if(Session::has('user_callback') && !Auth::check() && Session('user_callback')->expired > now())
+        if(Session::has('user_callback') && Session('user_callback')->expired > now())
         {
             return view('user.confirm')->with([
                 'expired' => Carbon::parse(Session('user_callback')->expired)->diffInSeconds(),
@@ -76,7 +73,7 @@ class LoginController extends Controller
         }
         return redirect()->route('oauth.index');
     }
-    public function confirm(Request $request,Config $config)
+    public function confirm(Request $request)
     {
         $request->validate([
             'token' => 'required',
@@ -99,7 +96,7 @@ class LoginController extends Controller
                     if(isset($getComment[1]) && gettype((int)$getComment[1]) == 'integer')
                     {
                         $getComment = $getComment[1];
-                        $helper = new Helper();
+                        $helper = new Helper(User::first());
                         $endpoint = "https://graph.facebook.com/v4.0/$getComment?access_token=".$helper->config->access_token;
                         $api = json_decode($helper->requestRaw($endpoint),TRUE);
 
@@ -164,7 +161,7 @@ class LoginController extends Controller
                 ]);
             }
         }
-        return back();
+        return redirect()->route('oauth.index');
     }
     public function logout()
     {

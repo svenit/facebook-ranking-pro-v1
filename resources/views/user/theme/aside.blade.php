@@ -1,5 +1,187 @@
+@auth
+<div v-if="data" class="modal fade modal-left" data-backdrop="true">
+    <div style="overflow:auto" class="modal-dialog modal-left w-xl">
+        <div style="min-height:100vh;background:#111 !important" class="modal-content vip-bordered no-radius">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="p-4 text-center">
+                    <img width="80%" class="{{ Auth::user()->isVip == 1 ? 'vip-2' : '' }}" :src="data.infor.character.avatar">
+                    <p style="margin-top:20px" class="text-gold">@{{ data.infor.name }} ( @{{ data.infor.character.name }})</p>
+                </div>
+                <div class="row row-sm">
+                    <div class="col-12 d-flex">
+                        <div class="flex">
+                                <div class="text-info">
+                                Level 
+                                @{{ data.level.current_level }} 
+                                <i class="fas fa-arrow-right"></i> 
+                                @{{ data.level.next_level }} 
+                                ( @{{ data.level.percent }} % )
+                                <div class="progress my-3 circle" style="height:6px">
+                                    <div class="progress-bar circle gd-info"
+                                        :title="'Người này cần '+ (data.level.next_level_exp - data.level.current_user_exp) +' kinh nghiệm nữa để lên cấp'" :style="{width:data.level.percent + '%'}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex">
+                        <div class="flex">
+                            <div class="text-light"><small><i class="fas fa-chevron-double-up"></i> Level <strong
+                                        class="text-light">@{{ data.level.current_level }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex">
+                        <div class="flex">
+                            <div class="text-info"><small><i class="fas fa-heart"></i> Sinh Lực <strong
+                                        class="text-info">@{{ data.power.hp }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex mt-2">
+                        <div class="flex">
+                            <div class="text-danger"><small><i class="fas fa-swords"></i> Sát Thương <strong
+                                        class="text-danger">@{{ data.power.strength }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex mt-2">
+                        <div class="flex">
+                            <div class="text-success"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
+                                        class="text-success">@{{ data.power.intelligent }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex mt-2">
+                        <div class="flex">
+                            <div class="text-primary"><small><i class="fas fa-bolt"></i> Nhanh Nhẹn <strong
+                                        class="text-primary">@{{ data.power.agility }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex mt-2">
+                        <div class="flex">
+                            <div class="text-warning"><small><i class="fas fa-stars"></i> May Mắn <strong
+                                        class="text-warning">@{{ data.power.lucky }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row row-sm">
+                    <div v-for="(gear,index) in data.gears" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
+                        <div class="flex">
+                            <img @click="showGearsDescription(gear,1)" style="border-radius:5px;width:100%" :src="gear.image">
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-sm">
+                    <div v-for="(skill,index) in data.skills" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
+                        <div class="flex">
+                            <img title @click="showSkillsDescription(skill,1)" data-toggle="tooltip" style="border-radius:5px;width:100%" :src="skill.image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endauth
+<div v-if="user" class="modal fade modal-right" data-backdrop="true">
+    <div style="overflow:auto" class="modal-dialog modal-right w-xl">
+        <div style="min-height:100vh;background:#111 !important" class="modal-content vip-bordered no-radius">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="p-4 text-center">
+                    <img :class="user.infor.vip ? 'vip-2' : ''" width="80%" :src="user.infor.character.avatar">
+                    <p style="margin-top:20px" class="text-gold">@{{ user.infor.name }} ( @{{ user.infor.character.name }})</p>
+                </div>
+                <div class="row row-sm">
+                    <div class="col-12 d-flex">
+                        <div class="flex">
+                                <div class="text-info">
+                                Level 
+                                @{{ user.level.current_level }} 
+                                <i class="fas fa-arrow-right"></i> 
+                                @{{ user.level.next_level }} 
+                                ( @{{ user.level.percent }} % )
+                                <div class="progress my-3 circle" style="height:6px">
+                                    <div class="progress-bar circle gd-info"
+                                        :title="'Người này cần '+ (user.level.next_level_exp - user.level.current_user_exp) +' kinh nghiệm nữa để lên cấp'" :style="{width:user.level.percent + '%'}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex">
+                        <div class="flex">
+                            <div class="text-light"><small><i class="fas fa-chevron-double-up"></i> Level <strong
+                                        class="text-light">@{{ user.level.current_level }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex">
+                        <div class="flex">
+                            <div class="text-info"><small><i class="fas fa-heart"></i> Sinh Lực <strong
+                                        class="text-info">@{{ user.power.hp }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex mt-2">
+                        <div class="flex">
+                            <div class="text-danger"><small><i class="fas fa-swords"></i> Sát Thương <strong
+                                        class="text-danger">@{{ user.power.strength }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex mt-2">
+                        <div class="flex">
+                            <div class="text-success"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
+                                        class="text-success">@{{ user.power.intelligent }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex mt-2">
+                        <div class="flex">
+                            <div class="text-primary"><small><i class="fas fa-bolt"></i> Nhanh Nhẹn <strong
+                                        class="text-primary">@{{ user.power.agility }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex mt-2">
+                        <div class="flex">
+                            <div class="text-warning"><small><i class="fas fa-stars"></i> May Mắn <strong
+                                        class="text-warning">@{{ user.power.lucky }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row row-sm">
+                    <div v-for="(gear,index) in user.gears" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
+                        <div class="flex">
+                            <img @click="showGearsDescription(gear,0)" style="border-radius:5px;width:100%" :src="gear.image">
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-sm">
+                    <div v-for="(skill,index) in user.skills" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
+                        <div class="flex">
+                            <img title @click="showSkillsDescription(skill,0)" data-toggle="tooltip" style="border-radius:5px;width:100%" :src="skill.image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="aside-left" class="page-sidenav no-shrink bg-light nav-dropdown fade" aria-hidden="true">
-    <div class="sidenav h-100 modal-dialog bg-light">
+    <div class="sidenav h-100 modal-dialog bg-light normal-bordered">
         <div class="navbar"><a href="index.html" class="navbar-brand"><svg width="32" height="32"
                     viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
                     <g class="loading-spin" style="transform-origin: 256px 256px">
@@ -17,11 +199,13 @@
                 </ul>
                 <ul class="nav">
                     <li class="nav-header hidden-folded"><span class="text-muted">Hoạt Động</span></li>
-                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="award"></i></span> <span
+                    <li class=""><a href="#"><span class="nav-icon"><i data-feather="award"></i></span> <span
                         class="nav-text">BXH</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
-                            <li><a href="ui.alert.html" class=""><span class="nav-text">Đại Gia</span></a></li>
-                            <li><a href="ui.badge.html" class=""><span class="nav-text">Hoạt Động</span></a></li>
+                            <li><a href="{{ Route('user.top.power') }}" class=""><span class="nav-text">Lực Chiến</span></a></li>
+                            <li><a href="{{ Route('user.top.coin') }}" class=""><span class="nav-text">Vàng</span></a></li>
+                            <li><a href="{{ Route('user.top.gold') }}" class=""><span class="nav-text">Kim Cương</span></a></li>
+                            <li><a href="{{ Route('user.top.activities') }}" class=""><span class="nav-text">Hoạt Động</span></a></li>
                         </ul>
                     </li>
                     <li><a href="#" class=""><span class="nav-icon"><i data-feather="calendar"></i></span> <span
@@ -72,7 +256,7 @@
                     <li><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
                         class="nav-text">PVP</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
-                            <li><a href="ui.alert.html" class=""><span class="nav-text">Khiêu Chiến</span></a></li>
+                            <li><a href="{{ Route('user.pvp.index') }}" class=""><span class="nav-text">Khiêu Chiến</span></a></li>
                         </ul>
                     </li>
                     <li class="nav-header hidden-folded"><span class="text-muted">Admin Cpanel</span></li>
@@ -95,102 +279,8 @@
                             <li><a href="ui.timeline.html" class=""><span class="nav-text">Timeline</span></a></li>
                             <li><a href="ui.tab.html" class=""><span class="nav-text">Tab &amp; Collpase</span></a>
                             </li>
-                            <li><a href="ui.tooltip.html" class=""><span class="nav-text">Tooltip &amp;
+                            <li><a href="ui.tooltip.html" class=""><span class="nav-text">&amp;
                                         Popover</span></a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-header hidden-folded"><span class="text-muted">UI elements</span></li>
-                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="grid"></i></span> <span
-                                class="nav-text">Components</span> <span class="nav-caret"></span></a>
-                        <ul class="nav-sub nav-mega">
-                            <li><a href="ui.alert.html" class=""><span class="nav-text">Xin chào</span></a></li>
-                            <li><a href="ui.badge.html" class=""><span class="nav-text">Badge</span></a></li>
-                            <li><a href="ui.button.html" class=""><span class="nav-text">Button</span></a></li>
-                            <li><a href="ui.card.html" class=""><span class="nav-text">Card</span></a></li>
-                            <li><a href="ui.carousel.html" class=""><span class="nav-text">Carousel</span></a></li>
-                            <li><a href="ui.color.html" class=""><span class="nav-text">Color</span></a></li>
-                            <li><a href="ui.dropdown.html" class=""><span class="nav-text">Dropdown</span></a></li>
-                            <li><a href="ui.grid.html" class=""><span class="nav-text">Grid</span></a></li>
-                            <li><a href="ui.icon.html" class=""><span class="nav-text">Icon</span></a></li>
-                            <li><a href="ui.list.html" class=""><span class="nav-text">List</span></a></li>
-                            <li><a href="ui.modal.html" class=""><span class="nav-text">Modal</span></a></li>
-                            <li><a href="ui.navbar.html" class=""><span class="nav-text">Navbar</span></a></li>
-                            <li><a href="ui.sidenav.html" class=""><span class="nav-text">Sidenav</span></a></li>
-                            <li><a href="ui.timeline.html" class=""><span class="nav-text">Timeline</span></a></li>
-                            <li><a href="ui.tab.html" class=""><span class="nav-text">Tab &amp; Collpase</span></a>
-                            </li>
-                            <li><a href="ui.tooltip.html" class=""><span class="nav-text">Tooltip &amp;
-                                        Popover</span></a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="box"></i></span> <span
-                                class="nav-text">Plugins</span> <span class="nav-caret"></span></a>
-                        <ul class="nav-sub nav-mega">
-                            <li><a href="ui.scroll.html" class=""><span class="nav-text">Infinite Scroll</span></a>
-                            </li>
-                            <li><a href="ui.sortable.html" class=""><span class="nav-text">Sortable</span></a></li>
-                            <li><a href="ui.map.html" class=""><span class="nav-text">Vector Map</span></a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="disc"></i></span> <span
-                                class="nav-text">Form</span> <span class="nav-caret"></span></a>
-                        <ul class="nav-sub nav-mega">
-                            <li><a href="form.element.html" class=""><span class="nav-text">Form Element</span></a>
-                            </li>
-                            <li><a href="form.layout.html" class=""><span class="nav-text">Form Layout</span></a>
-                            </li>
-                            <li><a href="form.validation.html" class=""><span class="nav-text">Form
-                                        Validation</span></a></li>
-                            <li><a href="form.editor.html" class=""><span class="nav-text">Editor</span></a></li>
-                            <li><a href="form.datepicker.html" class=""><span class="nav-text">Datepicker</span></a>
-                            </li>
-                            <li><a href="form.select.html" class=""><span class="nav-text">Select</span></a></li>
-                            <li><a href="form.wizard.html" class=""><span class="nav-text">Wizard</span></a></li>
-                            <li><a href="form.dropzone.html" class=""><span class="nav-text">File Upload</span></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="list"></i></span> <span
-                                class="nav-text">Tables</span> <span class="nav-caret"></span></a>
-                        <ul class="nav-sub nav-mega">
-                            <li><a href="table.style.html" class=""><span class="nav-text">Style</span></a></li>
-                            <li><a href="table.bootstrap.html" class=""><span class="nav-text">Bootstrap
-                                        Table</span></a></li>
-                            <li><a href="table.datatables.html" class=""><span
-                                        class="nav-text">Datatables</span></a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="pie-chart"></i></span> <span
-                                class="nav-text">Charts</span> <span class="nav-caret"></span></a>
-                        <ul class="nav-sub nav-mega">
-                            <li><a href="chart.chartist.html" class=""><span class="nav-text">Chartist</span></a>
-                            </li>
-                            <li><a href="chart.chartjs.html" class=""><span class="nav-text">Chartjs</span></a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-header hidden-folded"><span class="text-muted">Extra</span></li>
-                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="file"></i></span> <span
-                                class="nav-text">Pages</span> <span class="nav-caret"></span></a>
-                        <ul class="nav-sub nav-mega">
-                            <li><a href="page.profile.html" class=""><span class="nav-text">Profile</span></a></li>
-                            <li><a href="page.search.html" class=""><span class="nav-text">Search</span></a></li>
-                            <li><a href="page.invoice.html" class=""><span class="nav-text">Invoice</span></a></li>
-                            <li><a href="page.faq.html" class=""><span class="nav-text">FAQ</span></a></li>
-                            <li><a href="page.price.html" class=""><span class="nav-text">Price</span></a></li>
-                            <li><a href="page.setting.html" class=""><span class="nav-text">Setting</span></a></li>
-                            <li><a href="page.blank.html" class=""><span class="nav-text">Blank</span></a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="lock"></i></span> <span
-                                class="nav-text">Auth</span> <span class="nav-caret"></span></a>
-                        <ul class="nav-sub nav-mega">
-                            <li><a href="signin.1.html" class=""><span class="nav-text">Signin</span></a></li>
-                            <li><a href="signup.1.html" class=""><span class="nav-text">Signup</span></a></li>
-                            <li><a href="forgot-password.html" class=""><span class="nav-text">Forgot
-                                        Password</span></a></li>
-                            <li><a href="lockme.html" class=""><span class="nav-text">Lockme Screen</span></a></li>
-                            <li><a href="404.html" class=""><span class="nav-text">Error 404</span></a></li>
-                            <li><a href="505.html" class=""><span class="nav-text">Error 505</span></a></li>
                         </ul>
                     </li>
                 </ul>
@@ -206,3 +296,19 @@
         </div>
     </div>
 </div>
+@if(!request()->is('admin/*'))
+<div v-if="loading" id="modal-sm" class="modal fade show" data-backdrop="true" style="display: block;" aria-modal="true">
+    <div class="modal-dialog modal-sm">
+        <div style="background:transparent !important" class="modal-content">
+            <div class="modal-body">
+                <div class="text-center">
+                    <div style="margin:0 auto" class="loading"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section('js')
+    <script src="{{ asset('assets/js/vue/app.js') }}"></script>
+@endsection
+@endif

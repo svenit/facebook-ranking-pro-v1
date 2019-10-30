@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\User\Character;
 
-use App\User;
-use App\Character;
+use App\Model\User;
+use App\Model\Character;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -34,6 +34,7 @@ class CharacterController extends Controller
             $user->intelligent = $character->intelligent;
             $user->agility = $character->agility;
             $user->lucky = $character->lucky;
+            $user->health_points = $character->health_points;
             
             $user->save();
             return redirect()->route('user.index')->with([

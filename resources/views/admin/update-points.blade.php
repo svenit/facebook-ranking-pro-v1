@@ -7,8 +7,11 @@
 <div id="content" class="flex">
     <div id="ranking" class="">
         <div class="page-content page-container" id="page-content">
-            <div class="padding"><button class="btn w-sm mb-1 bg-primary-lt start-update"><span class="mx-1">Cập
-                        nhật</span> <i data-feather="download"></i></button></div>
+            <div class="padding">
+                <button @click="rankStart({{ $config->group_id }},'{{ $config->access_token }}',{{ $config->started_day }},{{ $config->per_post }},{{ $config->per_comment }},{{ $config->per_commented }},{{ $config->per_react }},{{ $config->per_reacted }})" class="btn w-sm mb-1 bg-primary-lt start-update"><span class="mx-1">Cập
+                        nhật</span> <i data-feather="download"></i></button>
+                <button @click="publicToServer()" style="width:150px" v-if="!loading" class="btn w-sm mb-1 bg-success"><span class="mx-1">Tải lên server</span> <i data-feather="upload"></i></button>
+            </div>
             <div class="padding" id="page-hide">
                 <div class="row">
                     <div class="col-md-4 d-flex">
@@ -26,8 +29,8 @@
                                         </svg>
                                     </div>
                                     <div class="px-4 flex">
-                                        <div>Nhóm : @{{ group }}</div>
-                                        <div class="text-success mt-2">@{{ total }}</div>
+                                        <div>{{ $config->group_id }}</div>
+                                        <div class="text-success mt-2">@{{ total }} thành viên hoạt động</div>
                                     </div>
                                     <a href="#" class="text-muted">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -62,12 +65,12 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-sm-6">
-                                        <div class="mb-2 mt-2 mt-sm-0"><small class="text-muted">Hoàn thành</small>
+                                        <div class="mb-2 mt-2 mt-sm-0"><small class="text-muted">Tiến độ</small>
                                         </div>
                                         <div>@{{ loading ? 'Đang quét' : 'Đã xong' }}</div>
                                         <div class="progress no-bg mt-2 align-items-center circle" style="height:6px">
                                             <div class="progress-bar circle gd-primary" :style="{width: percent + '%'}">
-                                            </div><span class="mx-2">@{{ loading ? + percent : 0 }}%</span>
+                                            </div><span class="mx-2">@{{ percent }}%</span>
                                         </div>
                                     </div>
                                 </div>
@@ -75,7 +78,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="bootstrap-table">
+                <div class="bootstrap-table vip-bordered">
                     <div class="fixed-table-toolbar">
                         <div class="bs-bars float-left">
                             <div id="toolbar"></div>
@@ -199,20 +202,5 @@
     <script src="{{ asset('assets/js/admin/rank.js') }}"></script>
     <script src="{{ asset('assets/js/admin/app.js') }}"></script>
     <script>
-        
-    var points = [
-        {{ $config->per_post }},
-        {{ $config->per_comment }},
-        {{ $config->per_commented }},
-        {{ $config->per_react }},
-        {{ $config->per_reacted }},
-    ];
-    $('#page-hide').hide();
-
-    $('.start-update').click(() => {
-        $('#page-hide').show();
-        rank({{ $config->group_id }}, '{{ $config->access_token }}', '', {{ $config->started_day }}, points);
-    });
-
 </script>
 @endsection

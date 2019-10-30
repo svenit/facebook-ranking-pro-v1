@@ -1,156 +1,88 @@
-function rank(id, token, secret, day, x) {
-    var rank = new Vue({
-        el: "#ranking",
-        data: {
-            ranks: [],
-            all: [],
-            gid: id,
-            token: token,
-            group: '',
-            loading: !1,
-            percent: 0,
-            total: 0,
-            page: 1,
-            maxPages: 0,
-            message: '',
-            ready: !1,
-            since: day,
-            perPage: 100
+new Vue({
+    el: "#ranking",
+    data: {
+        ranks: [],
+        all: [],
+        loading: true,
+        percent: 0,
+        total: 0,
+        page: 1,
+        maxPages: 0,
+        message: '',
+        perPage: 25
+    },
+    computed: {
+        next()
+        {
+            return this.page < this.maxPages
         },
-        mounted: function () {
-            this.checkGroup();
+        back()
+        {
+            return this.page > 1
         },
-        watch: {
-            gid: function () {
-                this.checkGroup();
-            }
-        },
-        updated: function () {
-
-        },
-        computed: {
-            next: function () {
-                return this.page < this.maxPages
-            },
-            back: function () {
-                return this.page > 1
-            },
-            gidClass: function () {
-                var _class = 'form-group';
-                if (this.message) {
-                    if (!this.ready) {
-                        _class += ' has-error';
-                    }
-                }
-                return _class;
-            }
-        },
-        methods: {
-            ranking: function rankStart() 
+    },
+    methods: {
+        rankStart(groupId,accessToken,day,perPost,perComment,perCommented,perReact,perReacted) 
+        {
+            try
             {
-                try
-                {
-                    var self = this;
-                    this.reset();
-                    this.loading = true;
-                    var ranking = new Ranking(this.gid, this.token, {
-                        points_per_post: x[0],
-                        points_per_comment: x[1],
-                        points_per_commented: x[2],
-                        points_per_reaction: x[3],
-                        points_per_reacted: x[4]
-                    });
-                    ranking.since(day).progress(function (completed, requests) {
-                        self.percent = (completed / requests * 100).toFixed(2);
-                    }).done(function (ranks) {
-                        self.all = ranks;
-                        self.total = self.all.length;
-                        self.maxPages = Math.ceil(self.total / self.perPage);
-                        self.loadPage(1);
-                        $.ajaxSetup({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            }
-                        });
-                        $.ajax({
-                            method: 'post',
-                            url: config.root + '/admin/update-points',
-                            data: {
-                                data: ranks
-                            },
-                            xhr: function () {
-                                var xhr = new window.XMLHttpRequest();
-                                xhr.upload.addEventListener("progress", function (e) {
-                                    if (e.lengthComputable) {
-                                        var percentComplete = (e.loaded || e.position) * 100 / e.total;
-                                        $("#progress").text(percentComplete + '%').html(parseFloat(Math.round(percentComplete * 100) / 100).toFixed(2) + '%');
-                                    }
-                                }, false);
-                                xhr.addEventListener('load', function (e) {});
-                                return xhr;
-                            },
-                            beforeSend: function () {
-                                $("#status").show();
-                            },
-                            success: function (rep) {
-                                $("#status").hide();
-                                console.log(rep);
-                            }
-                        });
-                    });
-                    this.percent = 0;
-                    ranking.get();
-                }
-                catch(e)
-                {
-                    alert('Đã có lỗi xảy ra ! : ' + e);
-                }
-            },
-            loadPage: function (page) {
-                if (page) {
-                    this.page = page;
-                }
-                this.page = Math.max(1, this.page);
-                var offset = (this.page - 1) * this.perPage;
-                this.ranks = this.all.slice(offset, offset + this.perPage);
-                this.loading = false;
-            },
-            goNext: function () {
-                this.page++;
-                this.loadPage();
-            },
-            goBack: function () {
-                this.page--;
-                this.loadPage();
-            },
-            checkGroup: function () {
-                var self = this;
-                self.ready = false;
-                self.message = '';
-                var facebook = new Facebook.Api(this.token);
-                facebook.get(this.gid, function (r) {
-                    if (r) {
-                        if (r.name) {
-                            self.group = r.name;
-                            self.ready = true;
-                        } else {
-                            self.message = 'Không thể xác định id nhóm (không tồn tại)';
-                        }
-                    } else {
-                        self.message = 'Không thể xác định id nhóm (không tồn tại)';
-                    }
+                const self = this;
+                this.loading = true;
+                var ranking = new Ranking(groupId, accessToken, {
+                    points_per_post: perPost,
+                    points_per_comment: perComment,
+                    points_per_commented: perCommented,
+                    points_per_reaction: perReact,
+                    points_per_reacted: perReacted
                 });
-            },
-            reset: function () {
+                ranking.since(day).progress(function (completed, requests) {
+                    self.percent = (completed / requests * 100).toFixed(2);
+                }).done((ranks) => {
+                    self.all = ranks;
+                    self.total = self.all.length;
+                    self.maxPages = Math.ceil(self.total / self.perPage);
+                    self.loadPage(1);
+                    self.percent = 0;
+                });
                 this.percent = 0;
-                this.all = [];
-                this.total = 0;
-                this.maxPages = 0;
-                this.loadPage(1);
+                ranking.get();
             }
-
-
-        }
-    });
-    rank.ranking();
-}
+            catch(e)
+            {
+                alert('Đã có lỗi xảy ra ! : ' + e);
+            }
+        },
+        async publicToServer()
+        {
+            const self = this;
+            let res = await axios.post(`${config.root}/admin/update-points`,{
+                data:this.all,
+            },{
+                onUploadProgress: progressEvent => {
+                    self.percent = Math.floor((progressEvent.loaded * 100) / progressEvent.total);
+                }
+            });
+            Swal.fire('',res.data.message,res.data.status);
+        },
+        loadPage(page) 
+        {
+            if (page) {
+                this.page = page;
+            }
+            this.page = Math.max(1, this.page);
+            var offset = (this.page - 1) * this.perPage;
+            this.ranks = this.all.slice(offset, offset + this.perPage);
+            this.loading = false;
+        },
+        goNext() 
+        {
+            this.page++;
+            this.loadPage();
+        },
+        goBack()
+        {
+            this.page--;
+            this.loadPage();
+        },
+    }
+});

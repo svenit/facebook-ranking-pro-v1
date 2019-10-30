@@ -18,9 +18,11 @@ class CreateCharactersTable extends Migration
             $table->string('name');
             $table->string('avatar');
             $table->integer('strength')->default(0);
+            $table->integer('health_points')->default(0);
             $table->integer('intelligent')->default(0);
             $table->integer('agility')->default(0);
             $table->integer('lucky')->default(0);
+            $table->integer('default_energy')->default(0);
             $table->timestamps();
         });
     }

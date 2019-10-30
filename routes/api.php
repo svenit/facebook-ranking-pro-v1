@@ -16,3 +16,13 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::group(['prefix' => 'v1','namespace' => 'Api\v1','middleware' => 'cors'], function () {
+    Route::get('user/{param}','IndexController@userInfor');
+    Route::group(['prefix' => 'pvp'], function () {
+        Route::post('find-enemy','PvPController@findEnemy');
+        Route::post('turn-time-out','PvPController@turnTimeOut');
+        Route::post('listen-action','PvPController@listenAction');
+        Route::post('hit','PvPController@hit');
+        Route::post('exit-match','PvPController@exitMatch');
+    });
+});

@@ -7,14 +7,6 @@
                     </path>
                 </g>
             </svg> <span class="hidden-folded d-inline l-s-n-1x d-lg-none">Game</span></a>
-        <div class="collapse navbar-collapse order-2 order-lg-1" id="navbarToggler">
-            <form class="input-group m-2 my-lg-0">
-                <div class="input-group-prepend"><button type="button" class="btn no-shadow no-bg px-0"><i
-                            data-feather="search"></i></button></div><input type="text"
-                    class="form-control no-border no-shadow no-bg typeahead" placeholder="Search components..."
-                    data-plugin="typeahead" data-api="../assets/api/menu.json">
-            </form>
-        </div>
         <ul class="nav navbar-menu order-1 order-lg-2">
             <li class="nav-item d-none d-sm-block"><a class="nav-link px-2" data-toggle="fullscreen"
                     data-plugin="fullscreen"><i data-feather="maximize"></i></a></li>
@@ -32,11 +24,16 @@
                                     name="foldedAside"> <i></i> <small>Thu gọn phần bên</small></label><label
                                 class="ui-check ui-check-rounded my-1 d-block"><input type="checkbox"
                                     name="hideAside"> <i></i> <small>Ẩn phần bên</small></label></div>
-                        <div class="mb-2 text-muted"><strong>Chế độ :</strong></div>
-                        <div class="mb-2"><label class="radio radio-inline ui-check ui-check-md"><input
-                                    type="radio" name="bg" value=""> <i></i></label><label
+                        <div class="mb-2 text-muted"><strong>Giao diện :</strong></div>
+                        <div class="mb-2">
+                            <label class="radio radio-inline ui-check ui-check-md">
+                                <input
+                                    type="radio" name="bg" value=""> <i></i>
+                            </label>
+                            <label
                                 class="radio radio-inline ui-check ui-check-color ui-check-md"><input
-                                    type="radio" name="bg" value="bg-dark"> <i class="bg-dark"></i></label>
+                                    type="radio" name="bg" value="bg-dark"> <i class="bg-dark"></i>
+                                </label>
                         </div>
                     
                     </div>
