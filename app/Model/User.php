@@ -81,9 +81,10 @@ class User extends Authenticatable
     }
     public function power()
     {
-        $collect = collect($this->usingGears())->groupBy('type')->map(function($collect,$key){
-            return $collect;
-        });
+        return $this->gearsPower();
+    }
+    public function gearsPower()
+    {
         $properties = [
             'strength' => 20,
             'agility' => 15,
@@ -94,9 +95,8 @@ class User extends Authenticatable
         $power = [];
         foreach($properties as $key => $property)
         {
-            $power[$key] = (isset($collect[$key][0]['value']) ? $collect[$key][0]['value'] : 0) + ($this[$key]);
+            $power[$key] =  collect($this->usingGears())->sum($key) + ($this[$key]);
         }
-        
         return collect($power);
     }
     public function fullPower($id)

@@ -74,14 +74,14 @@
                 <div class="row row-sm">
                     <div v-for="(gear,index) in data.gears" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
                         <div class="flex">
-                            <img @click="showGearsDescription(gear)" style="border-radius:5px;width:100%" :src="gear.image">
+                            <img @click="showGearsDescription(gear,1)" style="border-radius:5px;width:100%" :src="gear.image">
                         </div>
                     </div>
                 </div>
                 <div class="row row-sm">
                     <div v-for="(skill,index) in data.skills" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
                         <div class="flex">
-                            <img title @click="showSkillsDescription(skill)" data-toggle="tooltip" style="border-radius:5px;width:100%" :src="skill.image">
+                            <img title @click="showSkillsDescription(skill,1)" data-toggle="tooltip" style="border-radius:5px;width:100%" :src="skill.image">
                         </div>
                     </div>
                 </div>
@@ -165,14 +165,14 @@
                 <div class="row row-sm">
                     <div v-for="(gear,index) in user.gears" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
                         <div class="flex">
-                            <img @click="showDescription(gear.description)" style="border-radius:5px;width:100%" :src="gear.image">
+                            <img @click="showGearsDescription(gear,0)" style="border-radius:5px;width:100%" :src="gear.image">
                         </div>
                     </div>
                 </div>
                 <div class="row row-sm">
                     <div v-for="(skill,index) in user.skills" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
                         <div class="flex">
-                            <img title @click="showDescription(skill.description)" data-toggle="tooltip" style="border-radius:5px;width:100%" :src="skill.image">
+                            <img title @click="showSkillsDescription(skill,0)" data-toggle="tooltip" style="border-radius:5px;width:100%" :src="skill.image">
                         </div>
                     </div>
                 </div>

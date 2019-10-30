@@ -21,6 +21,7 @@ class PvPController extends Controller
     private $limitTimeStatus;
     private $limitTime;
     private $energyRecovery;
+    private $gameOver = [1,2];
 
     public function __construct(Config $config)
     {
@@ -46,6 +47,35 @@ class PvPController extends Controller
                     'message' => 'Đã hết thời gian chiến đấu',
                 ];
             }
+            elseif(collect($this->gameOver)->contains($findMatch->status))
+            {
+                switch($findMatch->status)
+                {
+                    case 1:
+                        $response = [
+                            'code' => 201,
+                            'win' => false,
+                            'status' => 'success',
+                            'message' => 'Thua'
+                        ];
+                    break;
+                    case 2:
+                        $response = [
+                            'code' => 201,
+                            'win' => true,
+                            'status' => 'success',
+                            'message' => 'Thắng'
+                        ];
+                    break;
+                    default;
+                        $response = [
+                            'code' => 300,
+                            'status' => 'error',
+                            'message' => 'Đã có lỗi xảy ra'
+                        ];
+                    break;
+                }
+            }
             else
             {
                 while($time < $timeLimit)
@@ -54,7 +84,7 @@ class PvPController extends Controller
                     {
                         sleep(1);
                         $time++;
-                        $findEnemy = FightRoom::whereNull('user_receive_challenge')->where('user_challenge','!=',Auth::id())->get();
+                        $findEnemy = FightRoom::whereNull('user_receive_challenge')->where('user_challenge','!=',Auth::id())->whereNotIn('status',$this->gameOver)->get();
                         if(isset($findEnemy))
                         {
                             foreach($findEnemy as $key => $enemy)
@@ -192,7 +222,7 @@ class PvPController extends Controller
         {
             FightRoom::create([
                 'user_challenge' => Auth::id(),
-                'user_challenge_hp' => Auth::user()->health_points,
+                'user_challenge_hp' => Auth::user()->power()['health_points'],
                 'user_challenge_energy' => Auth::user()->character->default_energy
             ]);
             $response = [
@@ -217,6 +247,35 @@ class PvPController extends Controller
                     'status' => 'warning',
                     'message' => 'Đã hết thời gian chiến đấu',
                 ];
+            }
+            elseif(collect($this->gameOver)->contains($findMatch->status))
+            {
+                switch($findMatch->status)
+                {
+                    case 1:
+                        $response = [
+                            'code' => 201,
+                            'win' => false,
+                            'status' => 'success',
+                            'message' => 'Thua'
+                        ];
+                    break;
+                    case 2:
+                        $response = [
+                            'code' => 201,
+                            'win' => true,
+                            'status' => 'success',
+                            'message' => 'Thắng'
+                        ];
+                    break;
+                    default;
+                        $response = [
+                            'code' => 300,
+                            'status' => 'error',
+                            'message' => 'Đã có lỗi xảy ra'
+                        ];
+                    break;
+                }
             }
             else
             {
@@ -324,6 +383,37 @@ class PvPController extends Controller
                         $enemy->update([
                             'turn' => 0
                         ]);
+                    }
+                    elseif(collect($this->gameOver)->contains(FightRoom::where('user_challenge',Auth::id())->first()->status))
+                    {
+                        switch(FightRoom::where('user_challenge',Auth::id())->first()->status)
+                        {
+                            case 1:
+                                $response = [
+                                    'code' => 201,
+                                    'win' => false,
+                                    'status' => 'success',
+                                    'message' => 'Thua'
+                                ];
+                            break;
+                            case 2:
+                                $response = [
+                                    'code' => 201,
+                                    'win' => true,
+                                    'status' => 'success',
+                                    'message' => 'Thắng'
+                                ];
+                            break;
+                            default;
+                                $response = [
+                                    'code' => 201,
+                                    'win' => false,
+                                    'status' => 'error',
+                                    'message' => 'Đã có lỗi xảy ra'
+                                ];
+                            break;
+                        }
+                        return response()->json($response,200);
                     }
                     else
                     {
@@ -513,18 +603,28 @@ class PvPController extends Controller
                                             $exp = 250;
                                             $coins = 2000;
                                             $pvpPoints = 50;
-                                            $youWin = Auth::user()->update([
-                                                'pvp_points' => DB::raw("pvp_points + $pvpPoints"),
-                                                'exp' => DB::raw("exp + $exp"),
-                                                'income_coins' => DB::raw("income_coins + $coins")
-                                            ]);
+
+                                            $youWin = Auth::user();
+
+                                            $youWin->increment('exp',$exp);
+                                            $youWin->increment('income_coins',$coins);
+                                            $youWin->increment('pvp_points',$pvpPoints);
+
                                             if(isset($youWin))
                                             {
-                                                FightRoom::whereIn('user_challenge',[Auth::id(),$enemy->first()->user_challenge])->delete();
+                                                FightRoom::where('user_challenge',Auth::id())->update([
+                                                    'user_receive_challenge' => null,
+                                                    'status' => 2
+                                                ]);
+                                                FightRoom::where('user_challenge',$enemy->first()->user_challenge)->update([
+                                                    'user_receive_challenge' => null,
+                                                    'status' => 1
+                                                ]);
                                                 $response = [
-                                                    'code' => 300,
+                                                    'code' => 201,
+                                                    'win' => true,
                                                     'status' => 'success',
-                                                    'message' => "Victory ! Bạn nhận được $exp EXP,$coins Vàng, $pvpPoints Điểm hạng ^^",
+                                                    'message' => "Thắng ! Bạn nhận được $exp EXP,$coins Vàng, $pvpPoints Điểm hạng",
                                                 ];
                                             }
                                         }
@@ -628,10 +728,10 @@ class PvPController extends Controller
             return response()->json($response,200);
         }
     }
-    public function exitSearchMatch()
+    public function exitMatch()
     {
         $findMatch = FightRoom::where('user_challenge',Auth::id());
-        if(isset($findMatch) && empty($findMatch->first()->user_receive_challenge))
+        if(isset($findMatch) && empty($findMatch->first()->user_receive_challenge) || collect($this->gameOver)->contains($findMatch->first()->status))
         {
             $findMatch->delete();
             $response = [

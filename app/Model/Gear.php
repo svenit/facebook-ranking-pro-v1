@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Gear extends Model
 {
     protected $hidden = [
-        'character_id','cate_gear_id','type','value','pivot','level_required','created_at','updated_at'
+        'character_id','cate_gear_id','status','pivot','created_at','updated_at'
     ];
     public function users()
     {

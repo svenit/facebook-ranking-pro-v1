@@ -85,6 +85,7 @@ app = new Vue({
         },
         pvp:{
             isSearching:false,
+            isEnding:false,
             isMatching:false,
             timeOut:20,
             status:'Tìm Đối Thủ <i class="fas fa-swords"></i>',
@@ -172,6 +173,21 @@ app = new Vue({
                                         Swal.fire('',res.data.message,res.data.status);
                                         window.location.href = config.root;
                                     break;
+                                    case 201:
+                                        Swal.fire({
+                                            title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
+                                            focusConfirm: true,
+                                            confirmButtonText:'Thoát',
+                                        }).then((result) => {
+                                            if(result.value)
+                                            {
+                                                this.exitMatch();
+                                            }
+                                        });
+                                        this.pvp.isSearching = false;
+                                        this.pvp.isEnding = true;
+                                        clearInterval(countDown);
+                                    break;
                                 }
                             });
                         }
@@ -208,6 +224,23 @@ app = new Vue({
                             Swal.fire('',res.data.message,res.data.status);
                             window.location.href = config.root;
                         break;
+                        case 201:
+                            Swal.fire({
+                                title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
+                                focusConfirm: true,
+                                confirmButtonText:'Thoát',
+                            }).then((result) => {
+                                if(result.value)
+                                {
+                                    this.exitMatch();
+                                }
+                            });
+                            this.pvp.isSearching = false;
+                            this.pvp.isEnding = true;
+                            this.pvp.isMatching = false;
+                            this.pvp.match.enemy = [];
+                            clearInterval(countDown);
+                        break;
                     }
                 });
             }
@@ -234,16 +267,36 @@ app = new Vue({
                 this.loading = false;
             }
         },
-        showGearsDescription(data)
-        {
-            Swal.fire('',data,'info');
-        },
-        showSkillsDescription(data)
+        showGearsDescription(data,permission)
         {
             Swal.fire({
-                title:'',
-                type:'info',
-                html:`[ ${data.name} - ${data.passive == 1 ? 'Bị động' : 'Chủ động'} ] ${data.description} <br> Yêu cầu cấp độ : ${data.required_level} <br> Tỉ lệ thành công : ${data.success_rate}% `
+                title:`<img style="width:80px" src="${data.image}">`,
+                type:'',
+                showConfirmButton:permission == 1 ? true : false,
+                confirmButtonText:permission == 1 ? 'Tháo trang bị' : '',
+                showCancelButton:true,
+                cancelButtonColor:'#333',
+                cancelButtonText:'Đóng',
+                html:`[ ${data.name} ] <br> ${data.description} 
+                    <br> Yêu cầu cấp độ : ${data.level_required} 
+                    <br>HP : +${data.health_points}
+                    <br> STVL : +${data.strength} 
+                    <br> STPT : +${data.intelligent}
+                    <br> Nhanh nhẹn : +${data.agility}
+                    <br> May mắn : +${data.lucky}`
+            }).then((result) => {
+                if(result.value)
+                {
+                    alert(1);
+                }
+            });
+        },
+        showSkillsDescription(data,role)
+        {
+            Swal.fire({
+                title:`<img style="width:80px" src="${data.image}">`,
+                type:'',
+                html:`[ ${data.name} - ${data.passive == 1 ? 'Bị động' : 'Chủ động'} ] <br/> ${data.description} <br> Yêu cầu cấp độ : ${data.required_level} <br> MP : ${data.energy} <br> Tỉ lệ thành công : ${data.success_rate}% `
             });
         },
         async showUserInfor(id)
@@ -302,11 +355,11 @@ app = new Vue({
                             pragma:this.token
                         }
                     });
-                    Swal.fire('',res.data.message,res.data.status);
                     await this.refreshToken(res);
                     switch(res.data.code)
                     {
                         case 200:
+                            Swal.fire('',res.data.message,res.data.status);
                             const audio = new Audio(`${config.root}/assets/sound/found_enemy.mp3`);
                             audio.play();
                             this.pvp.isSearching = false;
@@ -331,6 +384,21 @@ app = new Vue({
                         case 300:
                             Swal.fire('',res.data.message,res.data.status);
                             window.location.href = config.root;
+                        break;
+                        case 201:
+                            Swal.fire({
+                                title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
+                                focusConfirm: true,
+                                confirmButtonText:'Thoát',
+                            }).then((result) => {
+                                if(result.value)
+                                {
+                                    this.exitMatch();
+                                }
+                            });
+                            this.pvp.isSearching = false;
+                            this.pvp.isEnding = true;
+                            clearInterval(countDown);
                         break;
                         default:
                             this.pvp.isSearching = false;
@@ -369,16 +437,32 @@ app = new Vue({
                     Swal.fire('',res.data.message,res.data.status);
                     window.location.href = config.root;
                 break;
+                case 201:
+                    Swal.fire({
+                        title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
+                        text:res.data.message,
+                        focusConfirm: true,
+                        confirmButtonText:'Thoát',
+                    }).then((result) => {
+                        if(result.value)
+                        {
+                            this.exitMatch();
+                        }
+                    });
+                    this.pvp.isSearching = false;
+                    this.pvp.isEnding = true;
+                    clearInterval(countDown);
+                break;
                 default:
                     Swal.fire('','Đã có lỗi xảy ra xin vui lòng thử lại','error');
                 break;
             }
         },
-        async exitSearchMatch()
+        async exitMatch()
         {
             if(confirm('Rời rận đấu ?'))
             {
-                let res = await axios.post(`${config.root}/api/v1/pvp/exit-search-match`,'',{
+                let res = await axios.post(`${config.root}/api/v1/pvp/exit-match`,'',{
                     headers:{
                         pragma:this.token
                     }
