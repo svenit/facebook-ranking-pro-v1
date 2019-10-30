@@ -270,7 +270,7 @@ app = new Vue({
         showGearsDescription(data,permission)
         {
             Swal.fire({
-                title:`<img style="width:80px" src="${data.image}">`,
+                title:`<img style="width:80px;height:80px" src="${data.image}">`,
                 type:'',
                 showConfirmButton:permission == 1 ? true : false,
                 confirmButtonText:permission == 1 ? 'Tháo trang bị' : '',
@@ -294,7 +294,7 @@ app = new Vue({
         showSkillsDescription(data,role)
         {
             Swal.fire({
-                title:`<img style="width:80px" src="${data.image}">`,
+                title:`<img style="width:80px;height:80px" src="${data.image}">`,
                 type:'',
                 html:`[ ${data.name} - ${data.passive == 1 ? 'Bị động' : 'Chủ động'} ] <br/> ${data.description} <br> Yêu cầu cấp độ : ${data.required_level} <br> MP : ${data.energy} <br> Tỉ lệ thành công : ${data.success_rate}% `
             });
