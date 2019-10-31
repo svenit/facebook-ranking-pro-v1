@@ -1,7 +1,7 @@
 @extends('app')
 @section('content')
 
-@section('hero','Top Lực Chiến')
+@section('hero','Top Vàng')
 @section('sub_hero','Top vàng toàn server ')
 <button style="display:none" id="show-infor-user" data-toggle="modal" data-target=".modal-right" data-toggle-class="modal-open-aside" data-target="body"></button>
 <div class="page-content page-container" style="margin-bottom:400px" id="page-content">

@@ -514,6 +514,7 @@ class PvPController extends Controller
                                     {
                                         /* Your skill */
                                         $destroy = 0;
+                                        $effectTo = 0; 
                                         $yourUpdate = [
                                             'turn' => 0,
                                             'user_challenge_energy' => DB::raw("user_challenge_energy - $skill->energy")
@@ -533,7 +534,7 @@ class PvPController extends Controller
                                                 $message = "[ $skill->name ] Bạn đã gây $destroy sát thương chí mạng cho đối thủ";
                                             break;
                                             case 'half-hp':
-                                                $destroy = $enemy->first()->user_challenge_hp/2;
+                                                $destroy = (int)$enemy->first()->user_challenge_hp/2;
                                                 $message = "[ $skill->name ] Bạn đã gây $destroy sát thương tinh thần cho đối thủ";
                                             break;
                                             case 'health_points':
@@ -564,13 +565,21 @@ class PvPController extends Controller
                                                     ];
                                                     $message = "[ $skill->name ] Bạn đã được hồi 0 HP";
                                                 }
+                                                $effectTo = 1;
                                             break;
                                             default:
                                                 $destroy = 0;
-                                                $message = "[ $skill->name ] Bạn đã gây 0 sát thuong cho đối thủ";
+                                                $message = "[ $skill->name ] Bạn đã gây 0 sát thương cho đối thủ";
                                             break;
                                         }
-                                        $destroy *= $randomRate <= (Auth::user()->power()['lucky']/$allLucky) * 100 ? 1.5 : 1;
+                                        if($randomRate <= (Auth::user()->power()['lucky']/$allLucky) * 100)
+                                        {
+                                            if($effectTo == 0)
+                                            {
+                                                $destroy *= 1.5;
+                                                $message = "[ $skill->name ] Bạn đã gây $destroy sát thương chí mạng cho đối thủ";
+                                            }
+                                        }
                                         /* Enemy passive skill */
                                         foreach($getEnemyInfor->usingSkills() as $key => $enemyPassiveSkill)
                                         {
@@ -582,14 +591,14 @@ class PvPController extends Controller
                                                         if($skill->type == 'strength')
                                                         {
                                                             $destroy = $this->renderPassive($destroy,$enemyPassiveSkill) < 0 ? 0 : $this->renderPassive($destroy,$enemyPassiveSkill);
-                                                            $message = "[ $skill->name ] Đối thủ có kĩ năng bị động giảm sát thương vật lí ! Sát thương của bạn gây ra chỉ còn lại $destroy :(";
+                                                            $message = "[ $skill->name ] Đối thủ có kĩ năng bị động giảm sát thương vật lí ! Sát thương của bạn gây ra chỉ còn lại $destroy";
                                                         }
                                                     break;
                                                     case 'armor_intelligent':
                                                         if($skill->type == 'intelligent')
                                                         {
                                                             $destroy = $this->renderPassive($destroy,$enemyPassiveSkill) < 0 ? 0 : $this->renderPassive($destroy,$enemyPassiveSkill);
-                                                            $message = "[ $skill->name ] Đối thủ có kĩ năng bị động giảm sát thương phép thuật ! Sát thương của bạn gây ra chỉ còn lại $destroy :(";
+                                                            $message = "[ $skill->name ] Đối thủ có kĩ năng bị động giảm sát thương phép thuật ! Sát thương của bạn gây ra chỉ còn lại $destroy";
                                                         }
                                                     break;
                                                     default:
@@ -665,7 +674,7 @@ class PvPController extends Controller
                                         $response = [
                                             'code' => 200,
                                             'status' => 'success',
-                                            'message' => "[ $skill->name ] Sử dụng kĩ năng thất bại :(",
+                                            'message' => "[ $skill->name ] Sử dụng kĩ năng thất bại",
                                             'enemy' => [
                                                 'basic' => $userApi->userInfor($enemy->first()->user_challenge),
                                                 'hp' => $enemy->first()->user_challenge_hp,

@@ -87,6 +87,7 @@ app = new Vue({
             isSearching:false,
             isEnding:false,
             isMatching:false,
+            isAttack:false,
             timeOut:20,
             status:'Tìm Đối Thủ <i class="fas fa-swords"></i>',
             match:{
@@ -128,9 +129,18 @@ app = new Vue({
         await this.index();
         this.pvpArea();
     },
-    mounted() 
-    {
-        
+    watch:{
+        'pvp.isMatching'()
+        {
+            if(this.pvp.isMatching && document.location.href.includes('pvp'))
+            {
+                window.addEventListener('beforeunload', function (e) {
+                    const confirmationMessage = 'Bạn đang trong trận, điều này có thể ảnh hưởng đến trận đấu :/';
+                    (e || window.event).returnValue = confirmationMessage; 
+                    return confirmationMessage;                            
+                });
+            }
+        }
     },
     watch: {
         'pvp.match.you.turn'()
@@ -263,8 +273,8 @@ app = new Vue({
             }
             catch(e)
             {
-                console.error(e);
                 this.loading = false;
+                this.notify('Đã có lỗi xảy ra');
             }
         },
         showGearsDescription(data,permission)
@@ -301,16 +311,25 @@ app = new Vue({
         },
         async showUserInfor(id)
         {
-            this.loading = true;
-            let res = await axios.get(`${config.root}/api/v1/user/${id}`,{
-                headers:{
-                    pragma:this.token
-                }
-            });
-            await this.refreshToken(res);
-            this.user = res.data;
-            this.loading = false;
-            $('#show-infor-user').click();
+            try
+            {
+                this.loading = true;
+                let res = await axios.get(`${config.root}/api/v1/user/${id}`,{
+                    headers:{
+                        pragma:this.token
+                    }
+                });
+                await this.refreshToken(res);
+                this.user = res.data;
+                this.loading = false;
+                $('#show-infor-user').click();
+            }
+            catch(e)
+            {
+                this.loading = false;
+                this.notify('Đã có lỗi xảy ra, xin vui lòng thử lại');
+                this.refreshToken(this.token);
+            }
         },
         pvpArea()
         {
@@ -321,159 +340,201 @@ app = new Vue({
         },
         async findEnemy()
         {
-            if(this.pvp.isMatching)
+            try
             {
-                Swal.fire('','Bạn đang trong trận','warning');
-            }
-            else
-            {
-                if(this.pvp.isSearching)
+                if(this.pvp.isMatching)
                 {
-                    Swal.fire('','Đang tìm kiếm trận','warning');
-                    return false;
+                    Swal.fire('','Bạn đang trong trận','warning');
                 }
                 else
                 {
-                    if(!this.isMatching)
+                    if(this.pvp.isSearching)
                     {
-                        this.pvp.isSearching = true;
-                        var countDown = setInterval(() => {
-                            this.pvp.timeOut--;
-                            this.pvp.status = `Đang tìm trận..( ${this.pvp.timeOut}s )`;
-                            if(this.pvp.timeOut == 0)
-                            {
-                                this.pvp.status = 'Tìm Trận <i class="fas fa-swords"></i>';
-                                clearInterval(countDown);
-                                this.pvp.isSearching = false;
-                                this.pvp.timeOut = 20;
-                            }
-                        },1000);
-                        this.isSearching = false;
+                        Swal.fire('','Đang tìm kiếm trận','warning');
+                        return false;
                     }
-                    let res = await axios.post(`${config.root}/api/v1/pvp/find-enemy`,'',{
-                        headers:{
-                            pragma:this.token
-                        }
-                    });
-                    await this.refreshToken(res);
-                    switch(res.data.code)
+                    else
                     {
-                        case 200:
-                            Swal.fire('',res.data.message,res.data.status);
-                            const audio = new Audio(`${config.root}/assets/sound/found_enemy.mp3`);
-                            audio.play();
-                            this.pvp.isSearching = false;
-                            this.pvp.isMatching = true;
-                            
-                            this.pvp.match.you = res.data.you.basic.original;
-                            this.pvp.match.you.hp = res.data.you.hp;
-                            this.pvp.match.you.energy = res.data.you.energy;
-                            this.pvp.match.you.turn = res.data.you.turn;
-
-                            this.pvp.match.enemy = res.data.enemy.basic.original;
-                            this.pvp.match.enemy.hp = res.data.enemy.hp;
-                            this.pvp.match.enemy.energy = res.data.enemy.energy;
-                            clearInterval(countDown);
-                        break;
-                        case 404:
-                            Swal.fire('',res.data.message,res.data.status);
-                            this.pvp.isSearching = false;
-                            clearInterval(countDown);
-                            this.findEnemy();
-                        break;
-                        case 300:
-                            Swal.fire('',res.data.message,res.data.status);
-                            window.location.href = config.root;
-                        break;
-                        case 201:
-                            Swal.fire({
-                                title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
-                                focusConfirm: true,
-                                confirmButtonText:'Thoát',
-                            }).then((result) => {
-                                if(result.value)
-                                {
-                                    this.exitMatch();
-                                }
-                            });
-                            this.pvp.isSearching = false;
-                            this.pvp.isEnding = true;
-                            clearInterval(countDown);
-                        break;
-                        default:
-                            this.pvp.isSearching = false;
-                            clearInterval(countDown);
-                        break;
-                    }
-                }
-            }
-        },
-        async hit(id)
-        {
-            let res = await axios.post(`${config.root}/api/v1/pvp/hit`,{
-                skill:id
-            },{
-                headers:{
-                    pragma:this.token
-                }
-            });
-            await this.refreshToken(res);
-            switch(res.data.code)
-            {
-                case 200:
-                    this.pvp.match.you = res.data.you.basic.original;
-                    this.pvp.match.you.hp = res.data.you.hp;
-                    this.pvp.match.you.energy = res.data.you.energy;
-                    this.pvp.match.you.turn = res.data.you.turn;
-
-                    this.pvp.match.enemy = res.data.enemy.basic.original;
-                    this.pvp.match.enemy.hp = res.data.enemy.hp;
-                    this.pvp.match.enemy.energy = res.data.enemy.energy;
-                break;
-                case 404:
-                    Swal.fire('',res.data.message,res.data.status);
-                break;
-                case 300:
-                    Swal.fire('',res.data.message,res.data.status);
-                    window.location.href = config.root;
-                break;
-                case 201:
-                    Swal.fire({
-                        title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
-                        text:res.data.message,
-                        focusConfirm: true,
-                        confirmButtonText:'Thoát',
-                    }).then((result) => {
-                        if(result.value)
+                        if(!this.isMatching)
                         {
-                            this.exitMatch();
+                            this.pvp.isSearching = true;
+                            var countDown = setInterval(() => {
+                                this.pvp.timeOut--;
+                                this.pvp.status = `Đang tìm trận..( ${this.pvp.timeOut}s )`;
+                                if(this.pvp.timeOut == 0)
+                                {
+                                    this.pvp.status = 'Tìm Trận <i class="fas fa-swords"></i>';
+                                    clearInterval(countDown);
+                                    this.pvp.isSearching = false;
+                                    this.pvp.timeOut = 20;
+                                }
+                            },1000);
+                            this.isSearching = false;
                         }
-                    });
-                    this.pvp.isSearching = false;
-                    this.pvp.isEnding = true;
-                    clearInterval(countDown);
-                break;
-                default:
-                    Swal.fire('','Đã có lỗi xảy ra xin vui lòng thử lại','error');
-                break;
+                        let res = await axios.post(`${config.root}/api/v1/pvp/find-enemy`,'',{
+                            headers:{
+                                pragma:this.token
+                            }
+                        });
+                        await this.refreshToken(res);
+                        switch(res.data.code)
+                        {
+                            case 200:
+                                this.notify(res.data.message);
+                                const audio = new Audio(`${config.root}/assets/sound/found_enemy.mp3`);
+                                audio.play();
+                                this.pvp.isSearching = false;
+                                this.pvp.isMatching = true;
+                                
+                                this.pvp.match.you = res.data.you.basic.original;
+                                this.pvp.match.you.hp = res.data.you.hp;
+                                this.pvp.match.you.energy = res.data.you.energy;
+                                this.pvp.match.you.turn = res.data.you.turn;
+
+                                this.pvp.match.enemy = res.data.enemy.basic.original;
+                                this.pvp.match.enemy.hp = res.data.enemy.hp;
+                                this.pvp.match.enemy.energy = res.data.enemy.energy;
+                                clearInterval(countDown);
+                            break;
+                            case 404:
+                                this.notify(res.data.message);
+                                this.pvp.isSearching = false;
+                                clearInterval(countDown);
+                                this.findEnemy();
+                            break;
+                            case 300:
+                                this.notify(res.data.message);
+                                window.location.href = config.root;
+                            break;
+                            case 201:
+                                Swal.fire({
+                                    title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
+                                    focusConfirm: true,
+                                    confirmButtonText:'Thoát',
+                                }).then((result) => {
+                                    if(result.value)
+                                    {
+                                        this.exitMatch();
+                                    }
+                                });
+                                this.pvp.isSearching = false;
+                                this.pvp.isEnding = true;
+                                clearInterval(countDown);
+                            break;
+                            default:
+                                this.pvp.isSearching = false;
+                                clearInterval(countDown);
+                            break;
+                        }
+                    }
+                }
+            }
+            catch(e)
+            {
+                this.refreshToken(this.token);
             }
         },
-        async exitMatch()
+        async hit(skill)
         {
-            if(confirm('Rời rận đấu ?'))
+            try
             {
-                let res = await axios.post(`${config.root}/api/v1/pvp/exit-match`,'',{
+                let res = await axios.post(`${config.root}/api/v1/pvp/hit`,{
+                    skill:skill.id
+                },{
                     headers:{
                         pragma:this.token
                     }
                 });
                 await this.refreshToken(res);
-                if(res.data.code == 200)
+                switch(res.data.code)
                 {
-                    Swal.fire('',res.data.message,res.data.status);
-                    window.location.href = config.root;
-                } 
+                    case 200:
+                        this.pvp.isAttack = true;
+                        this.notify(res.data.message);
+                        setTimeout(() => {
+                            this.pvp.match.you = res.data.you.basic.original;
+                            this.pvp.match.you.hp = res.data.you.hp;
+                            this.pvp.match.you.energy = res.data.you.energy;
+                            this.pvp.match.you.turn = res.data.you.turn;
+    
+                            this.pvp.match.enemy = res.data.enemy.basic.original;
+                            this.pvp.match.enemy.hp = res.data.enemy.hp;
+                            this.pvp.match.enemy.energy = res.data.enemy.energy;
+                            this.pvp.isAttack = false;
+                        },300);
+                    break;
+                    case 404:
+                        this.notify(res.data.message);
+                    break;
+                    case 300:
+                        this.notify(res.data.message);
+                        window.location.href = config.root;
+                    break;
+                    case 201:
+                        this.pvp.isSearching = false;
+                        this.pvp.isMatching = false;
+                        this.pvp.isEnding = true;
+                        clearInterval(countDown);
+                        Swal.fire({
+                            title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
+                            text:res.data.message,
+                            focusConfirm: true,
+                            confirmButtonText:'Thoát',
+                        }).then((result) => {
+                            if(result.value)
+                            {
+                                this.exitMatch();
+                            }
+                        });
+                    break;
+                    default:
+                        this.notify('Đã có lỗi xảy ra xin vui lòng thử lại hoặc tải lại trang');
+                    break;
+                }
             }
+            catch(e)
+            {
+                this.notify('Đã có lỗi xảy ra, xin vui lòng tải lại trang');
+                this.refreshToken(this.token);
+            }
+        },
+        async exitMatch()
+        {
+            try
+            {
+                if(confirm('Rời rận đấu ?'))
+                {
+                    let res = await axios.post(`${config.root}/api/v1/pvp/exit-match`,'',{
+                        headers:{
+                            pragma:this.token
+                        }
+                    });
+                    await this.refreshToken(res);
+                    if(res.data.code == 200)
+                    {
+                        Swal.fire('',res.data.message,res.data.status);
+                        window.location.href = config.root;
+                    } 
+                }
+            }
+            catch(e)
+            {
+                this.notify('Đã có lỗi xảy ra');
+                this.refreshToken(this.token);
+            }
+        },
+        notify(message)
+        {
+            Toastify({
+                text: message,
+                duration: 5000,
+                newWindow: true,
+                gravity: "top", // `top` or `bottom`
+                position: 'right', // `left`, `center` or `right`
+                className: "vip-bordered",
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+                onClick: function(){} // Callback after click
+            }).showToast();
         },
         async refreshToken(auth)
         {
