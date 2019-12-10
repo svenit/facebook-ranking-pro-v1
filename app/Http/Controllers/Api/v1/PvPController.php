@@ -22,11 +22,13 @@ class PvPController extends Controller
     private $limitTime;
     private $energyRecovery;
     private $gameOver = [1,2];
+    private $parameter = 0;
+    private $percent = 1;
 
     public function __construct(Config $config)
     {
-        $this->limitTimeStatus = $config->limit_pvp_time_status == 1 ? true : false;
-        $this->limitTime = $config->limit_pvp_time ?? 0;
+        $this->limitTimeStatus = $config->first()->limit_pvp_time_status == 1 ? true : false;
+        $this->limitTime = $config->first()->limit_pvp_time ?? 0;
         $this->energyRecovery = 20;
     }
     public function findEnemy()
@@ -450,9 +452,9 @@ class PvPController extends Controller
                 else
                 {
                     $response = [
-                        'code' => 300,
-                        'status' => 'warning',
-                        'message' => 'Trận đấu đã kết thúc',
+                        'code' => 404,
+                        'status' => 'error',
+                        'message' => 'Đã có lỗi xảy ra, xin vui lòng thử lại',
                     ];
                 }
             }
@@ -494,7 +496,7 @@ class PvPController extends Controller
                 else
                 {
                     $enemy = FightRoom::where('user_challenge',$findMatch->first()->user_receive_challenge);
-                    if($findMatch->first()->turn == 1)
+                    if(FightRoom::where('user_challenge',Auth::id())->first()->turn == 1 && $enemy->first()->turn == 0)
                     {
                         $checkSkill = UserSkill::where([['user_id',Auth::id()],['skill_id',$request->skill],['status',1]])->first();
                         if(isset($checkSkill))
@@ -538,24 +540,26 @@ class PvPController extends Controller
                                                 $message = "[ $skill->name ] Bạn đã gây $destroy sát thương tinh thần cho đối thủ";
                                             break;
                                             case 'health_points':
-                                                if($skill->power_type == 0)
+                                                if($skill->power_type == $this->parameter)
                                                 {
+                                                    $hp = (int)($findMatch->first()->user_challenge_hp + $skill->power_value) < Auth::user()->power()['health_points'] ? $skill->power_value : (int)(Auth::user()->power()['health_points'] - $findMatch->first()->user_challenge_hp);
                                                     $yourUpdate = [
                                                         'turn' => 0,
-                                                        'user_challenge_hp' => DB::raw("user_challenge_hp + $skill->power_value"),
+                                                        'user_challenge_hp' => DB::raw("user_challenge_hp + $hp"),
                                                         'user_challenge_energy' => DB::raw("user_challenge_energy - $skill->energy")
                                                     ];
-                                                    $message = "[ $skill->name ] Bạn đã được hồi $skill->power_value HP";
+                                                    $message = $hp > 0 ? "[ $skill->name ] Bạn đã được hồi $skill->$hp HP" : "[ $skill->name ] Bạn đã đầy máu không thể hồi thêm";
                                                 }
-                                                elseif($skill->power_type == 1)
+                                                elseif($skill->power_type == $this->percent)
                                                 {
                                                     $renderHP = ($findMatch->first()->user_challenge_hp * $skill->power_value)/100;
+                                                    $hp = (int)($findMatch->first()->user_challenge_hp + $renderHP) < Auth::user()->power()['health_points'] ? $renderHP : (int)(Auth::user()->power()['health_points'] - $findMatch->first()->user_challenge_hp);
                                                     $yourUpdate = [
                                                         'turn' => 0,
-                                                        'user_challenge_hp' => DB::raw("user_challenge_hp + $renderHP"),
+                                                        'user_challenge_hp' => DB::raw("user_challenge_hp + $hp"),
                                                         'user_challenge_energy' => DB::raw("user_challenge_energy - $skill->energy")
                                                     ];
-                                                    $message = "[ $skill->name ] Bạn đã được hồi $renderHP HP";
+                                                    $message = $hp > 0 ? "[ $skill->name ] Bạn đã được hồi $hp HP" : "[ $skill->name ] Bạn đã đầy máu không thể hồi thêm";
                                                 }
                                                 else
                                                 {
@@ -639,27 +643,37 @@ class PvPController extends Controller
                                         }
                                         else
                                         {
-                                            $findMatch->update($yourUpdate);
-                                            $enemy->update([
+                                            $enemyUpdate = [
                                                 'user_challenge_hp' => DB::raw("user_challenge_hp - $destroy"),
                                                 'turn' => 1
-                                            ]);
-                                            $response = [
-                                                'code' => 200,
-                                                'status' => 'success',
-                                                'message' => $message ?? "[ $skill->name ] Không biết",
-                                                'enemy' => [
-                                                    'basic' => $userApi->userInfor($enemy->first()->user_challenge),
-                                                    'hp' => $enemy->first()->user_challenge_hp,
-                                                    'energy' => $enemy->first()->user_challenge_energy,
-                                                ],
-                                                'you' => [
-                                                    'basic' => $userApi->userInfor(Auth::id()),
-                                                    'hp' => $findMatch->first()->user_challenge_hp,
-                                                    'energy' => $findMatch->first()->user_challenge_energy,
-                                                    'turn' => 1,
-                                                ],
                                             ];
+                                            if($findMatch->update($yourUpdate) && $enemy->update($enemyUpdate))
+                                            {
+                                                $response = [
+                                                    'code' => 200,
+                                                    'status' => 'success',
+                                                    'message' => $message ?? "[ $skill->name ] Không biết",
+                                                    'enemy' => [
+                                                        'basic' => $userApi->userInfor($enemy->first()->user_challenge),
+                                                        'hp' => $enemy->first()->user_challenge_hp,
+                                                        'energy' => $enemy->first()->user_challenge_energy,
+                                                    ],
+                                                    'you' => [
+                                                        'basic' => $userApi->userInfor(Auth::id()),
+                                                        'hp' => $findMatch->first()->user_challenge_hp,
+                                                        'energy' => $findMatch->first()->user_challenge_energy,
+                                                        'turn' => 1,
+                                                    ],
+                                                ];
+                                            }
+                                            else
+                                            {
+                                                $response = [
+                                                    'code' => 404,
+                                                    'status' => 'error',
+                                                    'message' => 'Đã có lỗi xảy ra xin vui lòng thử lại'
+                                                ];
+                                            }
                                         }
                                     }
                                     else

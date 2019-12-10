@@ -88,6 +88,8 @@ app = new Vue({
             isEnding:false,
             isMatching:false,
             isAttack:false,
+            isBuff:false,
+            skillAnimation:'',
             timeOut:20,
             status:'Tìm Đối Thủ <i class="fas fa-swords"></i>',
             match:{
@@ -301,7 +303,7 @@ app = new Vue({
                 }
             });
         },
-        showSkillsDescription(data,role)
+        showSkillsDescription(data)
         {
             Swal.fire({
                 title:`<img style="width:80px;height:80px" src="${data.image}">`,
@@ -438,58 +440,86 @@ app = new Vue({
         {
             try
             {
-                let res = await axios.post(`${config.root}/api/v1/pvp/hit`,{
-                    skill:skill.id
-                },{
-                    headers:{
-                        pragma:this.token
-                    }
-                });
-                await this.refreshToken(res);
-                switch(res.data.code)
+                if(this.pvp.match.you.turn == 0)
                 {
-                    case 200:
-                        this.pvp.isAttack = true;
-                        this.notify(res.data.message);
-                        setTimeout(() => {
-                            this.pvp.match.you = res.data.you.basic.original;
-                            this.pvp.match.you.hp = res.data.you.hp;
-                            this.pvp.match.you.energy = res.data.you.energy;
-                            this.pvp.match.you.turn = res.data.you.turn;
-    
-                            this.pvp.match.enemy = res.data.enemy.basic.original;
-                            this.pvp.match.enemy.hp = res.data.enemy.hp;
-                            this.pvp.match.enemy.energy = res.data.enemy.energy;
-                            this.pvp.isAttack = false;
-                        },300);
-                    break;
-                    case 404:
-                        this.notify(res.data.message);
-                    break;
-                    case 300:
-                        this.notify(res.data.message);
-                        window.location.href = config.root;
-                    break;
-                    case 201:
-                        this.pvp.isSearching = false;
-                        this.pvp.isMatching = false;
-                        this.pvp.isEnding = true;
-                        clearInterval(countDown);
-                        Swal.fire({
-                            title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
-                            text:res.data.message,
-                            focusConfirm: true,
-                            confirmButtonText:'Thoát',
-                        }).then((result) => {
-                            if(result.value)
+                    if(skill.energy <= this.pvp.match.you.energy)
+                    {
+                        if(skill.passive == 0)
+                        {
+                            if(skill.effect_to == 1)
                             {
-                                this.exitMatch();
+                                this.pvp.isBuff = true;
                             }
-                        });
-                    break;
-                    default:
-                        this.notify('Đã có lỗi xảy ra xin vui lòng thử lại hoặc tải lại trang');
-                    break;
+                            else
+                            {
+                                this.pvp.isAttack = true;
+                            }
+                            let res = await axios.post(`${config.root}/api/v1/pvp/hit`,{
+                                skill:skill.id
+                            },{
+                                headers:{
+                                    pragma:this.token
+                                }
+                            });
+                            await this.refreshToken(res);
+                            switch(res.data.code)
+                            {
+                                case 200:
+                                    this.pvp.skillAnimation = skill.animation;
+                                    this.notify(res.data.message);
+                                    this.pvp.match.you = res.data.you.basic.original;
+                                    this.pvp.match.you.hp = res.data.you.hp;
+                                    this.pvp.match.you.energy = res.data.you.energy;
+                                    this.pvp.match.you.turn = res.data.you.turn;
+            
+                                    this.pvp.match.enemy = res.data.enemy.basic.original;
+                                    this.pvp.match.enemy.hp = res.data.enemy.hp;
+                                    this.pvp.match.enemy.energy = res.data.enemy.energy;
+                                    this.pvp.isAttack = false;
+                                    this.pvp.isBuff = false;
+                                break;
+                                case 404:
+                                    this.notify(res.data.message);
+                                break;
+                                case 300:
+                                    this.notify(res.data.message);
+                                    window.location.href = config.root;
+                                break;
+                                case 201:
+                                    this.pvp.isSearching = false;
+                                    this.pvp.isMatching = false;
+                                    this.pvp.isEnding = true;
+                                    clearInterval(countDown);
+                                    Swal.fire({
+                                        title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
+                                        text:res.data.message,
+                                        focusConfirm: true,
+                                        confirmButtonText:'Thoát',
+                                    }).then((result) => {
+                                        if(result.value)
+                                        {
+                                            this.exitMatch();
+                                        }
+                                    });
+                                break;
+                                default:
+                                    this.notify('Đã có lỗi xảy ra xin vui lòng thử lại hoặc tải lại trang');
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            this.notify('Bạn không thể sử dụng kĩ năng bị động');
+                        }
+                    }
+                    else
+                    {
+                        this.notify('Bạn không đủ MP để sử dụng kĩ năng này');
+                    }
+                }
+                else
+                {
+                    this.notify('Vui lòng chờ đến lượt của bạn !');
                 }
             }
             catch(e)
@@ -529,11 +559,11 @@ app = new Vue({
                 text: message,
                 duration: 5000,
                 newWindow: true,
-                gravity: "top", // `top` or `bottom`
-                position: 'right', // `left`, `center` or `right`
+                gravity: "top",
+                position: 'right',
                 className: "vip-bordered",
-                stopOnFocus: true, // Prevents dismissing of toast on hover
-                onClick: function(){} // Callback after click
+                stopOnFocus: true,
+                onClick: function(){}
             }).showToast();
         },
         async refreshToken(auth)
