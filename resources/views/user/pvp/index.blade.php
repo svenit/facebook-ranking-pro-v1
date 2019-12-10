@@ -1,7 +1,7 @@
 @extends('app')
 
-@section('hero','Chọn nhân vật')
-@section('sub_hero','Vui lòng chọn nhân vật để bắt đầu')
+@section('hero','PVP')
+@section('sub_hero','Vinh quang chỉ dành cho người chiến thắng')
 
 @section('content')
 <div class="page-content page-container" id="page-content">
@@ -10,7 +10,7 @@
         <button id='fight-button' style="width:300px" @click="findEnemy()" v-if="!pvp.isEnding" class="vip-bordered" v-html="pvp.status">Tìm Đối Thủ</button>
         <button id='fight-button' v-if="!pvp.isMatching || pvp.isEnding" style="width:100px" @click="exitMatch()" class="vip-bordered">Thoát</button>
         <div class="row row-sm sr">
-            <div class="col-md-4 col-lg-4 col-sm-4">
+            <div :class="[pvp.isAttack ? 'animated fadeOutRight' : '',pvp.isBufff ? 'animated shake' : '']" class="col-md-4 col-lg-4 col-sm-4">
                 <div class="">
                     <div class="media media-4x4">
                         <img v-if="pvp.match.you.turn == 0 && pvp.isMatching && !pvp.isEnding" style="position:absolute;width:100%" src="https://i.imgur.com/xjA4khR.gif">
@@ -32,7 +32,10 @@
                         <div class="card-body vip-bordered">
                             <div class="row row-sm">
                                 <div v-for="(skill,index) in pvp.match.you.skills" :key="index" class="col-3">
-                                    <img @click="hit(skill.id)" style="width:100%;border-radius:5px" :src="skill.image">
+                                    <span @click="hit(skill)" class="w-56 avatar gd-primary" :class="[pvp.match.you.energy >= skill.energy ? '' : 'loading not-allow']">
+                                        <span class="avatar-status b-white avatar-right" :class="[pvp.match.you.energy >= skill.energy ? 'on' : 'away']"></span> 
+                                        <img :src="skill.image" alt=".">
+                                    </span>
                                     <br>
                                     <center><p class="align-items-center text-gold">@{{ skill.energy }} <i class="fas fa-bolt"></i></p></center>
                                 </div>
@@ -46,9 +49,10 @@
                     <img style="width:100%" src="https://i.imgur.com/my7u02o.png">
                 </div>
             </div>
-            <div class="col-md-4 col-lg-4 col-sm-4">
+            <div :class="pvp.isAttack ? 'animated shake' : ''" class="col-md-4 col-lg-4 col-sm-4">
                 <div class="">
                     <img v-if="pvp.match.you.turn != 0 && pvp.isMatching" style="position:absolute;width:100%" src="https://i.imgur.com/xjA4khR.gif">
+                    <img v-if="pvp.isAttack" style="position:absolute;width:100%;z-index:9999999" :src="pvp.skillAnimation">
                     <div v-if="!pvp.isSearching && !pvp.isEnding" class="media media-4x4">
                         <a class="media-content" :style="{backgroundImage:'url('+pvp.match.enemy.infor.character.avatar+')',backgroundSize:'50%',backgroundColor:'transparent'}"></a>
                     </div>
@@ -71,7 +75,10 @@
                         <div class="card-body vip-bordered">
                             <div class="row row-sm">
                                 <div v-for="(skill,index) in pvp.match.enemy.skills" :key="index" class="col-3">
-                                    <img @click="showDescription(skill)" style="width:100%;border-radius:5px" :src="skill.image">
+                                    <span @click="showSkillsDescription(skill)" class="w-56 avatar gd-primary" :class="[pvp.match.enemy.energy >= skill.energy ? '' : 'loading']">
+                                        <span class="avatar-status b-white avatar-right" :class="[pvp.match.enemy.energy >= skill.energy ? 'on' : 'away']"></span> 
+                                        <img :src="skill.image" alt=".">
+                                    </span>
                                 </div>
                             </div>
                         </div>

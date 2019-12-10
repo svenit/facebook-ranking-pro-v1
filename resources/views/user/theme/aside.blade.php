@@ -256,7 +256,7 @@
                     <li><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
                         class="nav-text">PVP</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
-                            <li><a href="{{ Route('user.pvp.index') }}" class=""><span class="nav-text">Khiêu Chiến</span></a></li>
+                            <li><a href="{{ Route('user.pvp.index') }}" class=""><span class="nav-text">Tham Gia</span></a></li>
                         </ul>
                     </li>
                     <li class="nav-header hidden-folded"><span class="text-muted">Admin Cpanel</span></li>
