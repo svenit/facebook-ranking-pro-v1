@@ -18,7 +18,7 @@
             <form method="POST" action="{{ Route('oauth.confirm') }}">
                 @csrf
                 <div class="step1">
-                    <div class="md-form-group token"><input name="token" id='copy-text' type="text" value="{{ bcrypt(Session('user_callback')->id) ?? 'Lỗi' }}" class="md-input text-center"><label
+                    <div class="md-form-group token"><input name="token" readonly id='copy-text' type="text" value="{{ bcrypt(Session('user_callback')->id) ?? 'Lỗi' }}" class="md-input text-center"><label
                             class="d-block w-100">Sao chép mã Token</label></div>
                     <div class="mt-3">
                         <a href="#step2" onclick="next(2)" class="btn btn-rounded btn-primary">Tiếp theo</a>

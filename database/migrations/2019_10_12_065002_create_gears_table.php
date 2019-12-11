@@ -25,8 +25,11 @@ class CreateGearsTable extends Migration
             $table->foreign('cate_gear_id')
                 ->references('id')
                 ->on('cate_gears');
-            $table->string('type');
-            $table->integer('value');
+            $table->bigInteger('strength')->default(0);
+            $table->bigInteger('intelligent')->default(0);
+            $table->bigInteger('agility')->default(0);
+            $table->bigInteger('lucky')->default(0);
+            $table->bigInteger('health_points')->default(0);
             $table->string('description');
             $table->integer('level_required');
             $table->timestamps();

@@ -95,7 +95,7 @@ class HitController extends BaseController
                                                         'user_challenge_hp' => DB::raw("user_challenge_hp + $hp"),
                                                         'user_challenge_energy' => DB::raw("user_challenge_energy - $skill->energy")
                                                     ];
-                                                    $message = $hp > 0 ? "[ $skill->name ] Bạn đã được hồi $skill->$hp HP" : "[ $skill->name ] Bạn đã đầy máu không thể hồi thêm";
+                                                    $message = $hp > 0 ? "[ $skill->name ] Bạn đã được hồi $hp HP" : "[ $skill->name ] Bạn đã đầy máu không thể hồi thêm";
                                                 }
                                                 elseif($skill->power_type == $this->percent)
                                                 {

@@ -15,6 +15,12 @@ class CreateFightRoomsTable extends Migration
     {
         Schema::create('fight_rooms', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('room_id');
+            $table->foreign('room_id')
+                ->references('id')
+                ->on('rooms')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->unsignedBigInteger('user_challenge')->unique();
             $table->foreign('user_challenge')
                 ->references('id')
@@ -22,8 +28,10 @@ class CreateFightRoomsTable extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table->integer('user_challenge_hp')->default(0);
+            $table->integer('user_challenge_energy')->default(0);
             $table->integer('user_receive_challenge')->nullable();
             $table->tinyInteger('turn')->default(0);
+            $table->tinyInteger('status')->nullable();
             $table->timestamps();
         });
     }

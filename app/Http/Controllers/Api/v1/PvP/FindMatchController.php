@@ -204,6 +204,7 @@ class FindMatchController extends BaseController
         else
         {
             FightRoom::create([
+                'room_id' => 1,
                 'user_challenge' => Auth::id(),
                 'user_challenge_hp' => Auth::user()->power()['health_points'],
                 'user_challenge_energy' => Auth::user()->character->default_energy

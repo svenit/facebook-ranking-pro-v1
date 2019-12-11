@@ -84,11 +84,11 @@
 </div>
 @endsection
 
-@section('after-js')
+@push('js')
 <script>
     function showInfor(id)
     {
         return app.showUserInfor(id);
     }
 </script>
-@endsection
+@endpush

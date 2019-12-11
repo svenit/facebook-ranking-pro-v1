@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Carbon\Carbon;
 use App\Model\User;
 use App\Model\Config;
-use Carbon\Carbon;
+use App\Income\Helper;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Income\Helper;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -47,7 +48,6 @@ class LoginController extends Controller
         if(isset($userAuthentication))
         {
             Auth::loginUsingId($userAuthentication->id,TRUE);
-            Auth::logoutOtherDevices($userAuthentication->password);
             return redirect()->route('user.index')->with([
                 'status' => 'success',
                 'message' => 'Đăng nhập thành công'
@@ -90,7 +90,7 @@ class LoginController extends Controller
         {
             if(Hash::check($userCallback->id, $request->token))
             {
-                if(str_contains($request->url,'https://www.facebook.com/groups'))
+                if(Str::contains($request->url,'https://www.facebook.com/groups'))
                 {
                     $getComment = explode('?comment_id=',$request->url);
                     if(isset($getComment[1]) && gettype((int)$getComment[1]) == 'integer')
@@ -99,7 +99,6 @@ class LoginController extends Controller
                         $helper = new Helper(User::first());
                         $endpoint = "https://graph.facebook.com/v4.0/$getComment?access_token=".$helper->config->access_token;
                         $api = json_decode($helper->requestRaw($endpoint),TRUE);
-
                         if(isset($api) && empty($api['error']))
                         {
                             if(Hash::check($userCallback->id, $api['message']) && $api['id'] == $getComment && $api['from']['name'] == $userCallback->name)

@@ -308,7 +308,7 @@
         </div>
     </div>
 </div>
-@section('js')
+@push('js')
     <script src="{{ asset('assets/js/vue/app.js') }}"></script>
-@endsection
+@endpush
 @endif

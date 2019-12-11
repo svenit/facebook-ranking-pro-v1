@@ -13,7 +13,7 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-	@yield('css')
+	@stack('css')
 </head>
 
 <body>
@@ -45,15 +45,16 @@
 </body>
 <script>
 	config = {
-		root:'{{ url('/') }}'
+		root:'{{ url('/') }}',
+		auth:{{ Auth::check() ? 1 : 0 }}
 	};
 	</script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.2/dist/sweetalert2.all.min.js"></script>	
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+	<script src="{{ asset('assets/js/plugins/refresh/refresh.min.js') }}"></script>
 	<script src="{{ asset('assets/js/site.min.js') }}"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.2/dist/sweetalert2.all.min.js"></script>	@yield('js')
-	@yield('after-js')
+	<script src="{{ asset('assets/js/plugins/axios/axios.min.js') }}"></script>
+	<script src="{{ asset('assets/js/vue/vue.js') }}"></script>
+	@stack('js')
 </html>

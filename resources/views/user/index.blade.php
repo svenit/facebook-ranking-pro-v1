@@ -4,7 +4,6 @@
 @section('hero','Trang Chủ')
 @section('sub_hero',"Xin chào, $welcome")
 
-
 <div class="page-content page-container" id="page-content">
     <div class="padding-x">
         @include('user.theme.parameter')
@@ -112,10 +111,10 @@
 </div>
 @endsection
 
-@section('after-js')
+@push('js')
     @if(session('message'))
     <script>
         Swal.fire('', "{{ session('message') }}", "{{ session('status') }}");
     </script>
     @endif
-@endsection
+@endpush

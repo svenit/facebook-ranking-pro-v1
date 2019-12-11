@@ -43,25 +43,22 @@ class ListenActionController extends BaseController
                         $hp = 0;
                         foreach(Auth::user()->usingSkills() as $key => $yourPassiveSkill)
                         {
-                            if($yourPassiveSkill->passive == 1)
+                            if($yourPassiveSkill->passive == 1 && $yourPassiveSkill->success_rate <= rand(0,100))
                             {
                                 switch($yourPassiveSkill->type)
                                 {
                                     case 'health_points':
-                                        if($yourPassiveSkill->success_rate <= rand(0,100))
+                                        if($yourPassiveSkill->power_type == 0)
                                         {
-                                            if($yourPassiveSkill->power_type == 0)
-                                            {
-                                                $hp = $yourPassiveSkill->power_value;
-                                            }
-                                            elseif($yourPassiveSkill->power_type == 1)
-                                            {
-                                                $hp = ($you->first()->user_challenge_hp * $yourPassiveSkill->power_value)/100;
-                                            }
-                                            else
-                                            {
-                                                $hp = 0;
-                                            }
+                                            $hp = $yourPassiveSkill->power_value;
+                                        }
+                                        elseif($yourPassiveSkill->power_type == 1)
+                                        {
+                                            $hp = ($you->first()->user_challenge_hp * $yourPassiveSkill->power_value)/100;
+                                        }
+                                        else
+                                        {
+                                            $hp = 0;
                                         }
                                     break;
                                     default:

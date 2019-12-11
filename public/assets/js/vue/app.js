@@ -128,8 +128,12 @@ app = new Vue({
     async created()
     {
         this.token = await this.sha256($('meta[name="csrf-token"]').attr('content'));
-        await this.index();
-        this.pvpArea();
+        if(config.auth)
+        {
+            await this.index();
+            this.pvpArea();
+        }
+        this.loading = false;
     },
     watch:{
         'pvp.isMatching'()

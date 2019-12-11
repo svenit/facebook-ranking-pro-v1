@@ -196,11 +196,11 @@
     </div>
 </div>
 @endsection
-@section('js')
+@push('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script src="{{ asset('assets/js/admin/api.js') }}"></script>
     <script src="{{ asset('assets/js/admin/rank.js') }}"></script>
     <script src="{{ asset('assets/js/admin/app.js') }}"></script>
     <script>
 </script>
-@endsection
+@endpush

@@ -15,6 +15,7 @@ class CreateSkillsTable extends Migration
     {
         Schema::create('skills', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('name');
             $table->unsignedBigInteger('character_id');
             $table->string('image')->nullable();
             $table->foreign('character_id')
@@ -22,12 +23,14 @@ class CreateSkillsTable extends Migration
                 ->on('characters')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->integer('value')->default(0);
-            $table->tinyInteger('value_type')->default(0);
-            $table->string('type',50);
+            $table->bigInteger('power_value')->default(0);
+            $table->tinyInteger('power_type')->default(0);
+            $table->string('type');
             $table->string('description');
             $table->tinyInteger('required_level')->default(0);
-            $table->integer('level')->default(0);
+            $table->tinyInteger('passive')->default(0);
+            $table->integer('energy')->default(0);
+            $table->integer('success_rate')->default(0);
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
