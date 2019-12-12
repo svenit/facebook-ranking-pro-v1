@@ -84,14 +84,16 @@ app = new Vue({
             skills:[]
         },
         pvp:{
+            rooms:[],
             isSearching:false,
             isEnding:false,
             isMatching:false,
             isAttack:false,
             isBuff:false,
+            enemyJoined:false,
             skillAnimation:'',
             timeOut:20,
-            status:'Tìm Đối Thủ <i class="fas fa-swords"></i>',
+            status:'Sẵn Sàng <i class="fas fa-swords"></i>',
             match:{
                 you:{
                     turn:'',
@@ -131,7 +133,35 @@ app = new Vue({
         if(config.auth)
         {
             await this.index();
-            this.pvpArea();
+            if(page)
+            {
+                switch(page.path)
+                {
+                    case 'pvp.list':
+                        this.listFightRoom();
+                    break;
+                    case 'pvp.room':
+                        const self = this;
+                        Pusher.logToConsole = true;
+                        var pusher = new Pusher(page.pusher.key, {
+                            cluster: 'ap1',
+                            forceTLS: true
+                        });
+                        var channel = pusher.subscribe('channel-pvp-joined-room');
+                        channel.bind(`event-pvp-joined-room-${page.room.id}-${page.room.me}`, function(res) {
+                            const audio = new Audio(`${config.root}/assets/sound/found_enemy.mp3`);
+                            audio.play();
+                            self.pvp.enemyJoined = true;
+                            this.notify(`${res.data.enemy.name} đã vào phòng`);
+                        });
+                        if(page.room.is_fighting)
+                        {
+                            this.pvp.enemyJoined = true;
+                            this.findEnemy();
+                        }
+                    break;
+                }
+            }
         }
         this.loading = false;
     },
@@ -283,6 +313,18 @@ app = new Vue({
                 this.notify('Đã có lỗi xảy ra');
             }
         },
+        async listFightRoom()
+        {
+            this.loading = true;
+            let res = await axios.get(`${config.root}/api/v1/pvp/list-room`,{
+                headers:{
+                    pragma:this.token
+                }
+            });
+            this.pvp.rooms = res.data.rooms || this.pvp.rooms;
+            await this.refreshToken(res);
+            this.loading = false;
+        },
         showGearsDescription(data,permission)
         {
             Swal.fire({
@@ -366,10 +408,10 @@ app = new Vue({
                             this.pvp.isSearching = true;
                             var countDown = setInterval(() => {
                                 this.pvp.timeOut--;
-                                this.pvp.status = `Đang tìm trận..( ${this.pvp.timeOut}s )`;
+                                this.pvp.status = `Đã sẵn sàng( ${this.pvp.timeOut}s )`;
                                 if(this.pvp.timeOut == 0)
                                 {
-                                    this.pvp.status = 'Tìm Trận <i class="fas fa-swords"></i>';
+                                    this.pvp.status = 'Sẵn sàng <i class="fas fa-swords"></i>';
                                     clearInterval(countDown);
                                     this.pvp.isSearching = false;
                                     this.pvp.timeOut = 20;

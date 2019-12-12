@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'v1','namespace' => 'Api\v1','middleware' => 'cors'], function () {
     Route::get('user/{param}','IndexController@userInfor');
     Route::group(['prefix' => 'pvp'], function () {
+        Route::get('list-room','PvP\ListRoomController');
         Route::post('find-enemy','PvP\FindMatchController');
         Route::post('turn-time-out','PvP\TurnOutController');
         Route::post('listen-action','PvP\ListenActionController');

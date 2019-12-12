@@ -15,6 +15,12 @@ class CreateRoomsTable extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_create_id');
+            $table->foreign('user_create_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->string('name');
             $table->tinyInteger('people');
             $table->string('password')->nullable();

@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\PvPJoinedRoom;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('x',function(){
+    event(new PvPJoinedRoom('hello world'));
+    return 'OK';
+});
 Route::get('test/{id}',function($id){
     Auth::loginUsingId($id,1);
     return redirect()->route('user.index');
@@ -52,6 +57,9 @@ Route::group(['prefix' => '/','as' => 'user.','namespace' => 'User','middleware'
         });
         Route::group(['prefix' => 'pvp','as' => 'pvp.','namespace' => 'PVP'], function () {
             Route::get('/','PvPController@index')->name('index');
+            Route::get('create-room','PvPController@createRoom')->name('create');
+            Route::get('join/{id}','PvPController@joinedRoom')->name('joined-room');
+            Route::get('room/{id}','PvPController@room')->name('room');
         });
     });
 });

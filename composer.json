@@ -13,7 +13,8 @@
         "highideas/laravel-users-online": "^3.0",
         "laravel/framework": "5.8.*",
         "laravel/socialite": "^4.2",
-        "laravel/tinker": "^1.0"
+        "laravel/tinker": "^1.0",
+        "pusher/pusher-php-server": "^4.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",

@@ -8,7 +8,7 @@
     border-image-width: 10px 10px 10px 10px;
     border-image-outset: 0;
     border-image-repeat: stretch stretch;
-    border-image-source: url(https://darktown.itam.store/_nuxt/img/5d2429c.png);
+    border-image-source: url(../images/vip-border.png);
 }
 .ribbon
 {
@@ -26,7 +26,7 @@
     font-weight: 500;
     text-align: center;
     color: #0f0402 !important;
-    background: url(https://darktown.itam.store/_nuxt/img/49295ca.png) no-repeat 50%;
+    background: url(../images/frame.png) no-repeat 50%;
     background-size: 100% 100%;
 }
 .ultra-bordered
@@ -36,7 +36,7 @@
     border-image-width: 15px 15px 15px 15px;
     border-image-outset: 0;
     border-image-repeat: stretch stretch;
-    border-image-source: url(https://darktown.itam.store/_nuxt/img/e203c29.png);
+    border-image-source: url(../images/ultra-bordered.png);
     background: transparent !important;
 }
 .normal-bordered
@@ -44,7 +44,7 @@
     position: relative;
     padding: 0px !important;
     box-shadow: 0 0 2px 3px #6e6e6e;
-    background: url(https://darktown.itam.store/_nuxt/img/40efc00.png);
+    background: url(../images/normal-bordered-background.png);
 }
 .normal-bordered .corner
 {
@@ -58,29 +58,33 @@
 {
     top: -6px;
     left: -7px;
-    background-image: url(https://darktown.itam.store/_nuxt/img/fba4663.png);
+    background-image: url(../images/bottom-right-bordered-corner.png);
 }
 .normal-bordered .corner-top-right
 {
     top: -6px;
     right: -7px;
-    background-image: url(https://darktown.itam.store/_nuxt/img/0fd4927.png);
+    background-image: url(../images/bottom-right-bordered-corner.png);
 }
 .normal-bordered .corner-bottom-right
 {
     bottom: -6px;
     right: -7px;
-    background-image: url(https://darktown.itam.store/_nuxt/img/a02aee1.png);
+    background-image: url(../images/top-left-bordered-corner.png);
 }
 .normal-bordered .corner-bottom-left
 {
     bottom: -6px;
     left: -7px;
-    background-image: url(https://darktown.itam.store/_nuxt/img/745fb6b.png);
+    background-image: url(../images/top-right-bordered-corner.png);
 }
 .text-gold
 {
     color: #cd8e2c
+}
+a:hover
+{
+    color: #cd8e2c !important;
 }
 .text-gold-2
 {

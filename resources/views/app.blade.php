@@ -20,7 +20,7 @@
 	<div id="app" class="layout-row">
 		@include('user.theme.aside')
 		{{-- <button class="btn btn-white btn-block mb-2" data-toggle="modal" data-target="#modal-left" data-toggle-class="modal-open-aside" data-target="body">Left</button> --}}
-		<div id="main" style="background: url(https://darktown.itam.store/_nuxt/img/5442740.jpg);" class="layout-column flex">
+		<div id="main" style="background: url({{ asset('assets/images/background.jpg') }});" class="layout-column flex">
 			@include('user.theme.header')
 			<div id="content" class="flex">
 				<div>
@@ -45,7 +45,8 @@
 </body>
 <script>
 	config = {
-		root:'{{ url('/') }}',
+		root:"{{ url('/') }}",
+		current_url:"{{ url()->current() }}",
 		auth:{{ Auth::check() ? 1 : 0 }}
 	};
 	</script>
@@ -57,4 +58,9 @@
 	<script src="{{ asset('assets/js/plugins/axios/axios.min.js') }}"></script>
 	<script src="{{ asset('assets/js/vue/vue.js') }}"></script>
 	@stack('js')
+	@if(session('message'))
+		<script>
+			Swal.fire('',"{{ session('message') }}","{{ session('status') }}");
+		</script>
+	@endif
 </html>
