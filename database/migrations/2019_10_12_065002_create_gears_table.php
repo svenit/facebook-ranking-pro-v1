@@ -30,8 +30,11 @@ class CreateGearsTable extends Migration
             $table->bigInteger('agility')->default(0);
             $table->bigInteger('lucky')->default(0);
             $table->bigInteger('health_points')->default(0);
+            $table->bigInteger('armor_strength')->default(0);
+            $table->bigInteger('armor_intelligent')->default(0);
             $table->string('description');
             $table->integer('level_required');
+            $table->string('rgb')->nullable();
             $table->timestamps();
         });
     }

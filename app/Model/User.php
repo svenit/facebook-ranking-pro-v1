@@ -90,7 +90,9 @@ class User extends Authenticatable
             'agility' => 15,
             'intelligent' => 20,
             'lucky' => 10,
-            'health_points' => 8
+            'health_points' => 8,
+            'armor_strength' => 5,
+            'armor_intelligent' => 5
         ];
         $power = [];
         foreach($properties as $key => $property)

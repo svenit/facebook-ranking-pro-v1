@@ -31,6 +31,7 @@ class CreateSkillsTable extends Migration
             $table->tinyInteger('passive')->default(0);
             $table->integer('energy')->default(0);
             $table->integer('success_rate')->default(0);
+            $table->string('rgb')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });

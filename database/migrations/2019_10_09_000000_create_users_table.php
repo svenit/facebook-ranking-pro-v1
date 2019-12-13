@@ -31,11 +31,13 @@ class CreateUsersTable extends Migration
             $table->bigInteger('income_coins')->default(0);
             $table->bigInteger('gold')->default(0);
             $table->string('exp')->default(0);
-            $table->integer('strength')->default(0);
-            $table->integer('intelligent')->default(0);
-            $table->integer('agility')->default(0);
-            $table->integer('lucky')->default(0);
-            $table->integer('health_points')->default(150);
+            $table->bigInteger('strength')->default(0);
+            $table->bigInteger('intelligent')->default(0);
+            $table->bigInteger('agility')->default(0);
+            $table->bigInteger('lucky')->default(0);
+            $table->bigInteger('health_points')->default(150);
+            $table->bigInteger('armor_strength')->default(0);
+            $table->bigInteger('armor_intelligent')->default(0);
             $table->bigInteger('full_power')->default(0);
             $table->tinyInteger('isVip')->default(0);
             $table->tinyInteger('isAdmin')->default(0);

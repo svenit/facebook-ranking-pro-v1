@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\User\PVP;
 
-use App\Events\PvPJoinedRoom;
 use App\Model\Room;
+use App\Model\Tracking;
 use App\Model\FightRoom;
+use App\Events\PvPJoinedRoom;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
@@ -15,7 +16,7 @@ class PvPController extends Controller
     {
         return view('user.pvp.index');
     }
-    public function createRoom()
+    public function createRoom(Request $request)
     {
         $checkRoom = Room::whereUserCreateId(Auth::id())->first();
         $checkFightRoom = FightRoom::whereUserChallenge(Auth::id())->first();
@@ -124,6 +125,7 @@ class PvPController extends Controller
     }
     public function room($room)
     {
+        $this->tracking(true);
         $checkRoom = Room::whereName($room)->first();
         if(isset($checkRoom))
         {

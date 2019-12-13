@@ -69,19 +69,33 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-6 d-flex mt-2">
+                        <div class="flex">
+                            <div class="text-primary"><small><i class="fas fa-shield"></i> Kháng Công <strong
+                                        class="text-primary">@{{ data.power.armor_strength }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex mt-2">
+                        <div class="flex">
+                            <div class="text-warning"><small><i class="fal fa-dice-d20"></i> Kháng Phép <strong
+                                        class="text-warning">@{{ data.power.armor_intelligent }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <br>
                 <div class="row row-sm">
                     <div v-for="(gear,index) in data.gears" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
                         <div class="flex">
-                            <img @click="showGearsDescription(gear,1)" style="border-radius:5px;width:100%" :src="gear.image">
+                            <img @click="showGearsDescription(gear,1)" :style="{borderRadius:'5px',width:'100%',border:`1px solid ${gear.rgb}`}" :src="gear.image">
                         </div>
                     </div>
                 </div>
                 <div class="row row-sm">
                     <div v-for="(skill,index) in data.skills" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
                         <div class="flex">
-                            <img title @click="showSkillsDescription(skill,1)" data-toggle="tooltip" style="border-radius:5px;width:100%" :src="skill.image">
+                            <img title @click="showSkillsDescription(skill,1)" data-toggle="tooltip" :style="{borderRadius:'5px',width:'100%',border:`1px solid ${skill.rgb}`}" :src="skill.image">
                         </div>
                     </div>
                 </div>
