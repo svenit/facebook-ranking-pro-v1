@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-6 d-flex mt-2">
                         <div class="flex">
-                            <div class="text-danger"><small><i class="fas fa-swords"></i> Sát Thương <strong
+                            <div class="text-danger"><small><i class="fas fa-swords"></i> Sức Mạnh <strong
                                         class="text-danger">@{{ data.power.strength }}</strong></small>
                             </div>
                         </div>
@@ -71,15 +71,15 @@
                     </div>
                     <div class="col-6 d-flex mt-2">
                         <div class="flex">
-                            <div class="text-primary"><small><i class="fas fa-shield"></i> Kháng Công <strong
-                                        class="text-primary">@{{ data.power.armor_strength }}</strong></small>
+                            <div class="text-silver"><small><i class="fas fa-shield"></i> Kháng Công <strong
+                                        class="text-silver">@{{ data.power.armor_strength }}</strong></small>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 d-flex mt-2">
                         <div class="flex">
-                            <div class="text-warning"><small><i class="fal fa-dice-d20"></i> Kháng Phép <strong
-                                        class="text-warning">@{{ data.power.armor_intelligent }}</strong></small>
+                            <div class="text-purple"><small><i class="fal fa-dice-d20"></i> Kháng Phép <strong
+                                        class="text-purple">@{{ data.power.armor_intelligent }}</strong></small>
                             </div>
                         </div>
                     </div>

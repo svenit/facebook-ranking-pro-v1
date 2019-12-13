@@ -9,4 +9,9 @@ class FightRoom extends Model
     protected $fillable = [
         'room_id','user_challenge','user_challenge_hp','user_receive_challenge','user_challenge_energy'
     ];
+
+    public function room()
+    {
+        $this->belongsTo('App\Model\Room','room_id','id');
+    }
 }

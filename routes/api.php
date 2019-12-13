@@ -20,7 +20,8 @@ Route::group(['prefix' => 'v1','namespace' => 'Api\v1','middleware' => 'cors'], 
     Route::get('user/{param}','IndexController@userInfor');
     Route::group(['prefix' => 'pvp'], function () {
         Route::get('list-room','PvP\ListRoomController');
-        Route::post('find-enemy','PvP\FindMatchController');
+        Route::get('find-enemy','PvP\FindEnemyController');
+        Route::post('get-ready','PvP\FindMatchController');
         Route::post('turn-time-out','PvP\TurnOutController');
         Route::post('listen-action','PvP\ListenActionController');
         Route::post('hit','PvP\HitController');

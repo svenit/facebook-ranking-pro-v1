@@ -90,10 +90,11 @@ app = new Vue({
             isMatching:false,
             isAttack:false,
             isBuff:false,
+            isReaddy:false,
             enemyJoined:false,
             skillAnimation:'',
             timeOut:20,
-            status:'Sẵn Sàng <i class="fas fa-swords"></i>',
+            status:`Sẵn Sàng <i class="fas fa-swords"></i>`,
             match:{
                 you:{
                     turn:'',
@@ -151,13 +152,19 @@ app = new Vue({
                         channel.bind(`event-pvp-joined-room-${page.room.id}-${page.room.me}`, function(res) {
                             const audio = new Audio(`${config.root}/assets/sound/found_enemy.mp3`);
                             audio.play();
-                            self.pvp.enemyJoined = true;
-                            this.notify(`${res.data.enemy.name} đã vào phòng`);
+                            self.notify(`${res.data.enemy.name} đã vào phòng`);
+                            self.findEnemy();
                         });
-                        if(page.room.is_fighting)
+                        if(page.room.people == 2)
                         {
-                            this.pvp.enemyJoined = true;
-                            this.findEnemy();
+                            if(page.room.is_fighting)
+                            {
+                                this.toggleReady();
+                            }
+                            else
+                            {
+                                this.findEnemy();
+                            }
                         }
                     break;
                 }
@@ -328,20 +335,22 @@ app = new Vue({
         showGearsDescription(data,permission)
         {
             Swal.fire({
-                title:`<img style="width:80px;height:80px" src="${data.image}">`,
+                title:`<img style="width:80px;height:80px;border:1px solid ${data.rgb};border-radius:5px" src="${data.image}">`,
                 type:'',
                 showConfirmButton:permission == 1 ? true : false,
                 confirmButtonText:permission == 1 ? 'Tháo trang bị' : '',
                 showCancelButton:true,
                 cancelButtonColor:'#333',
                 cancelButtonText:'Đóng',
-                html:`[ ${data.name} ] <br> ${data.description} 
-                    <br> Yêu cầu cấp độ : ${data.level_required} 
-                    <br>HP : +${data.health_points}
-                    <br> STVL : +${data.strength} 
-                    <br> STPT : +${data.intelligent}
-                    <br> Nhanh nhẹn : +${data.agility}
-                    <br> May mắn : +${data.lucky}`
+                html:`<p>[ ${data.name} ]</p><p>${data.description}</p>
+                    <p>Yêu cầu cấp độ : ${data.level_required}</p>
+                    <p>Sinh Lực : +${data.health_points}</p>
+                    <p> Sức Mạnh : +${data.strength} </p>
+                    <p> Trí Tuệ : +${data.intelligent}</p>
+                    <p> Nhanh nhẹn : +${data.agility}</p>
+                    <p> May mắn : +${data.lucky}</p>
+                    <p> Kháng Công : +${data.armor_strength}</p>
+                    <p> Kháng Phép : +${data.armor_intelligent}</p>`
             }).then((result) => {
                 if(result.value)
                 {
@@ -352,9 +361,9 @@ app = new Vue({
         showSkillsDescription(data)
         {
             Swal.fire({
-                title:`<img style="width:80px;height:80px" src="${data.image}">`,
+                title:`<img style="width:80px;height:80px;border-radius:5px;border:1px solid ${data.rgb}" src="${data.image}">`,
                 type:'',
-                html:`[ ${data.name} - ${data.passive == 1 ? 'Bị động' : 'Chủ động'} ] <br/> ${data.description} <br> Yêu cầu cấp độ : ${data.required_level} <br> MP : ${data.energy} <br> Tỉ lệ thành công : ${data.success_rate}% `
+                html:`<p>[ ${data.name} - ${data.passive == 1 ? 'Bị động' : 'Chủ động'} ] <p/> <p>${data.description} </p> <p>Yêu cầu cấp độ : ${data.required_level} </p> <p>MP : ${data.energy} </p> <p>Tỉ lệ thành công : ${data.success_rate}% </p>`
             });
         },
         async showUserInfor(id)
@@ -383,10 +392,43 @@ app = new Vue({
         {
             if(document.location.href.includes('pvp'))
             {
-                this.findEnemy();
+                this.toggleReady();
             }
         },
         async findEnemy()
+        {
+            let res = await axios.get(`${config.root}/api/v1/pvp/find-enemy`,{
+                params:{
+                    name:page.room.id,
+                    master:page.room.master,
+                    people:page.room.people,
+                    is_fighting:page.room.is_fighting,
+                },
+                headers:{
+                    pragma:this.token
+                }
+            });
+            await this.refreshToken(res);
+
+            this.pvp.match.you = res.data.you.basic.original || [];
+            this.pvp.match.you.hp = res.data.you.hp || [];
+            this.pvp.match.you.energy = res.data.you.energy || [];
+            this.pvp.match.you.turn = '';
+
+            if(res.status == 200 && res.data.code == 200)
+            {
+                this.pvp.enemyJoined = true;
+
+                this.pvp.match.enemy = res.data.enemy.basic.original || [];
+                this.pvp.match.enemy.hp = res.data.enemy.hp || [];
+                this.pvp.match.enemy.energy = res.data.enemy.energy || [];
+            }
+            else
+            {
+                this.notify(res.data.message);
+            }
+        },
+        async toggleReady()
         {
             try
             {
@@ -419,7 +461,7 @@ app = new Vue({
                             },1000);
                             this.isSearching = false;
                         }
-                        let res = await axios.post(`${config.root}/api/v1/pvp/find-enemy`,'',{
+                        let res = await axios.post(`${config.root}/api/v1/pvp/get-ready`,'',{
                             headers:{
                                 pragma:this.token
                             }
@@ -448,7 +490,6 @@ app = new Vue({
                                 this.notify(res.data.message);
                                 this.pvp.isSearching = false;
                                 clearInterval(countDown);
-                                this.findEnemy();
                             break;
                             case 300:
                                 this.notify(res.data.message);

@@ -82,6 +82,7 @@ class PvPController extends Controller
                             ]);
                             if(isset($joinMatch))
                             {
+                                Room::increment('people');
                                 $data = [
                                     'room' => [
                                         'name' => $room,

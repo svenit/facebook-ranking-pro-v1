@@ -133,3 +133,11 @@ img:hover
 {
     cursor: not-allowed;
 }
+.text-silver
+{
+    color: #9e9e9e;
+}
+.text-purple
+{
+    color:#9b44bf;
+}

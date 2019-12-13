@@ -7,7 +7,7 @@
 <div class="page-content page-container" id="page-content">
     <div class="padding-x">
         @include('user.theme.parameter')
-        <button id='fight-button' v-if="pvp.enemyJoined" style="width:300px" @click="findEnemy()" v-if="!pvp.isEnding" class="vip-bordered" v-html="pvp.status">Sẵn Sàng</button>
+        <button id='fight-button' v-if="pvp.enemyJoined" style="width:300px" @click="toggleReady()" v-if="!pvp.isEnding && pvp.enemyJoined" class="vip-bordered" v-html="pvp.status"></button>
         <button id='fight-button' v-if="!pvp.isMatching || pvp.isEnding" style="width:100px" @click="exitMatch()" class="vip-bordered">Thoát</button>
         <div class="row row-sm sr">
             <div :class="[pvp.isAttack ? 'animated fadeOutRight' : '',pvp.isBufff ? 'animated shake' : '']" class="col-md-4 col-lg-4 col-sm-4">
@@ -16,7 +16,7 @@
                         <img v-if="pvp.match.you.turn == 0 && pvp.isMatching && !pvp.isEnding" style="position:absolute;width:100%" src="https://i.imgur.com/xjA4khR.gif">
                         <a id="your-character" class="media-content your-character" style="background-image:url({{ $user->character()->avatar}});background-size:50%;background-color:transparent"></a>
                     </div>
-                    <div v-if="pvp.isMatching && !pvp.isEnding">
+                    <div v-if="pvp.enemyJoined">
                         <p class="card-title text-gold text-center">
                             @{{ pvp.match.you.infor.name }} ( @{{ pvp.match.you.infor.character.name }} )
                         </p>
@@ -53,13 +53,13 @@
                 <div class="">
                     <img v-if="pvp.match.you.turn != 0 && pvp.isMatching" style="position:absolute;width:100%" src="https://i.imgur.com/xjA4khR.gif">
                     <img v-if="pvp.isAttack" style="position:absolute;width:100%;z-index:9999999" :src="pvp.skillAnimation">
-                    <div v-if="!pvp.isSearching && !pvp.isEnding" class="media media-4x4">
+                    <div v-if="pvp.enemyJoined && !pvp.isEnding" class="media media-4x4">
                         <a class="media-content" :style="{backgroundImage:'url('+pvp.match.enemy.infor.character.avatar+')',backgroundSize:'50%',backgroundColor:'transparent'}"></a>
                     </div>
-                    <div v-else class="media media-4x4">
+                    <div v-if="!pvp.enemyJoined" class="media media-4x4">
                         <a class="media-content" :style="{backgroundImage:'url(https://vignette.wikia.nocookie.net/crusadersquest/images/5/56/UnknownSkill.png/revision/latest?cb=20150102055528)',backgroundSize:'50%',backgroundColor:'transparent'}"></a>
                     </div>
-                    <div v-if="pvp.isMatching && !pvp.isEnding">
+                    <div v-if="pvp.enemyJoined">
                         <p class="card-title text-gold text-center">
                             @{{ pvp.match.enemy.infor.name }} ( @{{ pvp.match.enemy.infor.character.name }} )
                         </p>
