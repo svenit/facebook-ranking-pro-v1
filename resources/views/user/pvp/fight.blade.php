@@ -13,7 +13,7 @@
             <div :class="[pvp.isAttack ? 'animated fadeOutRight' : '',pvp.isBufff ? 'animated shake' : '']" class="col-md-4 col-lg-4 col-sm-4">
                 <div class="">
                     <div class="media media-4x4">
-                        <img v-if="pvp.match.you.turn == 0 && pvp.isMatching && !pvp.isEnding" style="position:absolute;width:100%" src="https://i.imgur.com/xjA4khR.gif">
+                        <img v-if="pvp.match.you.turn == 1 && pvp.isMatching && !pvp.isEnding" style="position:absolute;width:100%" src="https://i.imgur.com/xjA4khR.gif">
                         <a id="your-character" class="media-content your-character" style="background-image:url({{ $user->character()->avatar}});background-size:50%;background-color:transparent"></a>
                     </div>
                     <div v-if="pvp.enemyJoined">
@@ -29,7 +29,7 @@
                             <div class="progress-bar circle gd-primary" :style="{width:(pvp.match.you.energy/pvp.match.you.power.energy)*100 + '%'}"></div>                        
                         </div>
                         <br>
-                        <div class="card-body vip-bordered">
+                        <div v-if="pvp.isMatching" class="card-body vip-bordered">
                             <div class="row row-sm">
                                 <div v-for="(skill,index) in pvp.match.you.skills" :key="index" class="col-3">
                                     <span @click="hit(skill)" class="w-56 avatar gd-primary" :class="[pvp.match.you.energy >= skill.energy ? '' : 'loading not-allow']">
@@ -51,13 +51,10 @@
             </div>
             <div :class="pvp.isAttack ? 'animated shake' : ''" class="col-md-4 col-lg-4 col-sm-4">
                 <div class="">
-                    <img v-if="pvp.match.you.turn != 0 && pvp.isMatching" style="position:absolute;width:100%" src="https://i.imgur.com/xjA4khR.gif">
+                    <img v-if="pvp.match.you.turn != 1 && pvp.isMatching" style="position:absolute;width:100%" src="https://i.imgur.com/xjA4khR.gif">
                     <img v-if="pvp.isAttack" style="position:absolute;width:100%;z-index:9999999" :src="pvp.skillAnimation">
                     <div v-if="pvp.enemyJoined && !pvp.isEnding" class="media media-4x4">
                         <a class="media-content" :style="{backgroundImage:'url('+pvp.match.enemy.infor.character.avatar+')',backgroundSize:'50%',backgroundColor:'transparent'}"></a>
-                    </div>
-                    <div v-if="!pvp.enemyJoined" class="media media-4x4">
-                        <a class="media-content" :style="{backgroundImage:'url(https://vignette.wikia.nocookie.net/crusadersquest/images/5/56/UnknownSkill.png/revision/latest?cb=20150102055528)',backgroundSize:'50%',backgroundColor:'transparent'}"></a>
                     </div>
                     <div v-if="pvp.enemyJoined">
                         <p class="card-title text-gold text-center">
@@ -72,7 +69,7 @@
                             <div class="progress-bar circle gd-primary" :style="{width:(pvp.match.enemy.energy/pvp.match.enemy.power.energy)*100 + '%'}"></div>                        
                         </div>
                         <br>
-                        <div class="card-body vip-bordered">
+                        <div v-if="pvp.isMatching" class="card-body vip-bordered">
                             <div class="row row-sm">
                                 <div v-for="(skill,index) in pvp.match.enemy.skills" :key="index" class="col-3">
                                     <span @click="showSkillsDescription(skill)" class="w-56 avatar gd-primary" :class="[pvp.match.enemy.energy >= skill.energy ? '' : 'loading']">
@@ -82,6 +79,9 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div v-else class="media media-4x4">
+                        <a class="media-content" :style="{backgroundImage:'url(https://vignette.wikia.nocookie.net/crusadersquest/images/5/56/UnknownSkill.png/revision/latest?cb=20150102055528)',backgroundSize:'50%',backgroundColor:'transparent'}"></a>
                     </div>
                 </div>
             </div>
