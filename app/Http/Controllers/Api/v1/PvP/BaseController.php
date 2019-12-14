@@ -30,6 +30,7 @@ class BaseController extends Controller
         if(isset($findMatch) && empty($findMatch->first()->user_receive_challenge) || collect($this->gameOver)->contains($findMatch->first()->status))
         {
             $findMatch->delete();
+            $this->removeTracking();
             $response = [
                 'code' => 200,
                 'status' => 'success',
@@ -51,8 +52,9 @@ class BaseController extends Controller
         $room = Room::where([['name',$request->room],['people',2],['is_fighting',0]])->first();
         if(isset($room))
         {
-            $toggleReady = FightRoom::where([['room_id',$room->id],['user_challenge',Auth::id()],['status',null],['user_receive_challenge',null]])->update([
-                'is_ready' => $request->status == 1 ? 1 : 0
+            $toggleReady = FightRoom::where([['room_id',$room->id],['user_challenge',Auth::id()],['user_receive_challenge',null]])->update([
+                'is_ready' => $request->status == 1 ? 1 : 0,
+                'status' => null
             ]);
             if(isset($toggleReady))
             {
@@ -60,7 +62,7 @@ class BaseController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => $request->status == 1 ? 'Sẵn sàng' : 'Đã hủy'
-            ],200);
+                ],200);
             }
             else
             {

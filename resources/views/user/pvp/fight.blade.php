@@ -99,7 +99,8 @@
             master:parseInt("{{ $checkRoom->user_create_id }}"),
             is_fighting:parseInt("{{ $checkRoom->is_fighting }}"),
             created_at:"{{ $checkRoom->created_at }}",
-            people:parseInt("{{ $checkRoom->people }}")
+            people:parseInt("{{ $checkRoom->people }}"),
+            is_ready:parseInt("{{ $checkSession->is_ready }}"),
         },
         path:'pvp.room',
         pusher:{

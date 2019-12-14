@@ -131,11 +131,10 @@ app = new Vue({
     async created()
     {
         this.token = await this.sha256($('meta[name="csrf-token"]').attr('content'));
-        this.pvp.status = this.pvp.isReady ? 'Hủy' : 'Sẵn Sàng <i class="fas fa-swords"></i>';
         if(config.auth)
         {
             await this.index();
-            if(page)
+            if(typeof page != "undefined" || page != null)
             {
                 switch(page.path)
                 {
@@ -143,6 +142,12 @@ app = new Vue({
                         this.listFightRoom();
                     break;
                     case 'pvp.room':
+                        this.pvp.isReady = page.room.is_ready == 1 ? true : false;
+                        if(this.pvp.isReady)
+                        {
+                            this.findMatch();
+                        }
+                        this.pvp.status = this.pvp.isReady ? 'Hủy' : 'Sẵn Sàng <i class="fas fa-swords"></i>';
                         const self = this;
                         Pusher.logToConsole = true;
                         var pusher = new Pusher(page.pusher.key, {
@@ -181,7 +186,7 @@ app = new Vue({
         },
         'pvp.isMatching'()
         {
-            if(this.pvp.isMatching && document.location.href.includes('pvp'))
+            if(this.pvp.isMatching && page.path == 'pvp.room')
             {
                 window.addEventListener('beforeunload', function (e) {
                     const confirmationMessage = 'Bạn đang trong trận, điều này có thể ảnh hưởng đến trận đấu :/';
@@ -195,7 +200,7 @@ app = new Vue({
             if(this.pvp.match.you.turn == 1)
             {
                 this.pvp.timeOut = 15;
-                var countDown = setInterval(() => {
+                countDown = setInterval(() => {
                     if(this.pvp.match.you.turn == 1)
                     {
                         this.pvp.timeOut--;
@@ -234,15 +239,9 @@ app = new Vue({
                                         Swal.fire({
                                             title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
                                             focusConfirm: true,
-                                            confirmButtonText:'Thoát',
-                                        }).then((result) => {
-                                            if(result.value)
-                                            {
-                                                this.exitMatch();
-                                            }
+                                            confirmButtonText:'OK',
                                         });
-                                        this.pvp.isSearching = false;
-                                        this.pvp.isEnding = true;
+                                        this.resetPvp();
                                         clearInterval(countDown);
                                     break;
                                 }
@@ -251,7 +250,7 @@ app = new Vue({
                     }
                 },1000);
             }
-            else
+            else if(this.pvp.match.you.turn == 0)
             {
                 this.pvp.status = `Đang đợi đối thủ ra đòn...( 15s )`;
                 axios.post(`${config.root}/api/v1/pvp/listen-action`,'',{
@@ -272,7 +271,6 @@ app = new Vue({
                             this.pvp.match.enemy.hp = res.data.enemy.hp;
                             this.pvp.match.enemy.energy = res.data.enemy.energy;
                             this.pvp.timeOut = 15;
-                            clearInterval(countDown);
                         break;
                         case 404:
                             Swal.fire('',res.data.message,res.data.status);
@@ -285,18 +283,10 @@ app = new Vue({
                             Swal.fire({
                                 title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
                                 focusConfirm: true,
-                                confirmButtonText:'Thoát',
-                            }).then((result) => {
-                                if(result.value)
-                                {
-                                    this.exitMatch();
-                                }
+                                confirmButtonText:'OK',
                             });
-                            this.pvp.isSearching = false;
-                            this.pvp.isEnding = true;
-                            this.pvp.isMatching = false;
-                            this.pvp.match.enemy = [];
-                            clearInterval(countDown);
+                            this.resetPvp();
+                            this.findEnemy();
                         break;
                     }
                 });
@@ -392,13 +382,6 @@ app = new Vue({
                 this.refreshToken(this.token);
             }
         },
-        pvpArea()
-        {
-            if(document.location.href.includes('pvp'))
-            {
-                this.toggleReady();
-            }
-        },
         async findEnemy()
         {
             let res = await axios.get(`${config.root}/api/v1/pvp/find-enemy`,{
@@ -417,11 +400,11 @@ app = new Vue({
             this.pvp.match.you = res.data.you.basic.original || [];
             this.pvp.match.you.hp = res.data.you.hp || [];
             this.pvp.match.you.energy = res.data.you.energy || [];
-            this.pvp.match.you.turn = '';
 
             if(res.status == 200 && res.data.code == 200)
             {
                 this.pvp.enemyJoined = true;
+                this.pvp.isAttack = false;
 
                 this.pvp.match.enemy = res.data.enemy.basic.original || [];
                 this.pvp.match.enemy.hp = res.data.enemy.hp || [];
@@ -434,22 +417,29 @@ app = new Vue({
         },
         async toggleReady()
         {
-            this.pvp.isReady = !this.pvp.isReady;
-            let res = await axios.post(`${config.root}/api/v1/pvp/toggle-ready`,{
-                room:page.room.id,
-                status:this.pvp.isReady ? 1 : 0
-            },{
-                headers:{
-                    pragma:this.token
-                }
-            });
-            await this.refreshToken(res);
-            this.notify(res.data.message);
-            if(res.status == 200 && res.data.code == 200)
+            if(!this.pvp.isMatching)
             {
-                if(this.pvp.isReady)
+                this.pvp.isReady = !this.pvp.isReady;
+                let res = await axios.post(`${config.root}/api/v1/pvp/toggle-ready`,{
+                    room:page.room.id,
+                    status:this.pvp.isReady ? 1 : 0
+                },{
+                    headers:{
+                        pragma:this.token
+                    }
+                });
+                await this.refreshToken(res);
+                this.notify(res.data.message);
+                if(res.status == 200 && res.data.code == 200)
                 {
-                    this.findMatch();
+                    if(this.pvp.isReady)
+                    {
+                        this.findMatch();
+                    }
+                }
+                else
+                {
+                    this.pvp.isReady = false;
                 }
             }
         },
@@ -486,25 +476,18 @@ app = new Vue({
                     break;
                     case 404:
                         this.notify(res.data.message);
-                        this.pvp.isSearching = false;
+                        this.pvp.isReady = false;
                     break;
                     case 300:
                         this.notify(res.data.message);
-                        window.location.href = config.root;
                     break;
                     case 201:
                         Swal.fire({
                             title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
                             focusConfirm: true,
-                            confirmButtonText:'Thoát',
-                        }).then((result) => {
-                            if(result.value)
-                            {
-                                this.exitMatch();
-                            }
+                            confirmButtonText:'OK',
                         });
-                        this.pvp.isSearching = false;
-                        this.pvp.isEnding = true;
+                        this.resetPvp();
                     break;
                     default:
                         this.pvp.isSearching = false;
@@ -627,6 +610,7 @@ app = new Vue({
                                 this.pvp.isAttack = true;
                             }
                             let res = await axios.post(`${config.root}/api/v1/pvp/hit`,{
+                                room:page.room.id,
                                 skill:skill.id
                             },{
                                 headers:{
@@ -647,6 +631,7 @@ app = new Vue({
                                     this.pvp.match.enemy = res.data.enemy.basic.original;
                                     this.pvp.match.enemy.hp = res.data.enemy.hp;
                                     this.pvp.match.enemy.energy = res.data.enemy.energy;
+
                                     this.pvp.isAttack = false;
                                     this.pvp.isBuff = false;
                                 break;
@@ -658,21 +643,15 @@ app = new Vue({
                                     window.location.href = config.root;
                                 break;
                                 case 201:
-                                    this.pvp.isSearching = false;
-                                    this.pvp.isMatching = false;
-                                    this.pvp.isEnding = true;
                                     clearInterval(countDown);
                                     Swal.fire({
                                         title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
                                         text:res.data.message,
                                         focusConfirm: true,
-                                        confirmButtonText:'Thoát',
-                                    }).then((result) => {
-                                        if(result.value)
-                                        {
-                                            this.exitMatch();
-                                        }
+                                        confirmButtonText:'OK',
                                     });
+                                    this.resetPvp();
+                                    this.findEnemy();
                                 break;
                                 default:
                                     this.notify('Đã có lỗi xảy ra xin vui lòng thử lại hoặc tải lại trang');
@@ -760,6 +739,17 @@ app = new Vue({
             message = message.replace(/8/gi,"_");
             message = message.replace(/9/gi,"=");
             return message;
+        },
+        resetPvp()
+        {
+            this.pvp.timeOut = 20;
+            this.pvp.isSearching = false;
+            this.pvp.isEnding = false;
+            this.pvp.isMatching = false;
+            this.pvp.isAttack = false;
+            this.pvp.isBuff = false;
+            this.pvp.isReady = false;
+            this.pvp.status = 'Sẵn Sàng <i class="fas fa-swords"></i>';
         }
     },
 });

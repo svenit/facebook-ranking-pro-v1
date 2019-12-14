@@ -12,6 +12,6 @@ class FightRoom extends Model
 
     public function room()
     {
-        $this->belongsTo('App\Model\Room','room_id','id');
+        return $this->belongsTo('App\Model\Room','room_id','id');
     }
 }

@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use App\Income\Helper;
+use App\Model\FightRoom;
+use App\Observers\FightRoomObserver;
+use App\Providers\FightRoomProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(HelperService::class);
+        $this->app->bind(FightRoomProvider::class);
     }
 
     /**
@@ -27,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        FightRoom::observe(FightRoomObserver::class);
+        
         if(Schema::hasTable('configs'))
         {
             View::composer('*', function ($view) 

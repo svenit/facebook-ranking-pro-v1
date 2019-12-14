@@ -25,7 +25,7 @@ class PvPController extends Controller
             $room = new Room();
             $room->user_create_id = Auth::id();
             $room->name = uniqid().time();
-            $room->people = 1;
+            $room->people = 0;
             $room->save();
 
             $fightRoom = new FightRoom();
@@ -37,7 +37,7 @@ class PvPController extends Controller
 
             if(isset($room,$fightRoom))
             {
-                return redirect()->route('user.pvp.room',['id' => $room->id])->with([
+                return redirect()->route('user.pvp.room',['id' => $room->name])->with([
                     'message' => 'Tạo phòng thành công',
                     'status' => 'success'
                 ]);
@@ -82,7 +82,6 @@ class PvPController extends Controller
                             ]);
                             if(isset($joinMatch))
                             {
-                                Room::increment('people');
                                 $data = [
                                     'room' => [
                                         'name' => $room,
@@ -126,14 +125,14 @@ class PvPController extends Controller
     }
     public function room($room)
     {
-        $this->tracking(true);
         $checkRoom = Room::whereName($room)->first();
         if(isset($checkRoom))
         {
             $checkSession = FightRoom::where([['room_id',$checkRoom->id],['user_challenge',Auth::id()]])->first();
             if(isset($checkSession))
             {
-                return view('user.pvp.fight',compact('room','checkRoom'));
+                $this->tracking(true);
+                return view('user.pvp.fight',compact('room','checkRoom','checkSession'));
             }
             else
             {

@@ -135,7 +135,7 @@ class ListenActionController extends BaseController
                             'basic' => $userApi->userInfor(Auth::id()),
                             'hp' => $you->first()->user_challenge_hp,
                             'energy' => $you->first()->user_challenge_energy,
-                            'turn' => 0,
+                            'turn' => 1,
                         ],
                     ];
                 }

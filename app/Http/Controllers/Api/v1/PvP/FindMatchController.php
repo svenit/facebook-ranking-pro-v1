@@ -32,7 +32,7 @@ class FindMatchController extends BaseController
                 
                 if($room->is_fighting == 0)
                 {
-                    if(isset($room->started_at) && $this->limitTimeStatus && Carbon::parse($room->started_at)->diffInMinutes() >= $this->limitTime)
+                    if(isset($room->started_at) && $room->is_fighting == 1 && $this->limitTimeStatus && Carbon::parse($room->started_at)->diffInMinutes() >= $this->limitTime)
                     {
                         $response = [
                             'code' => 300,

@@ -13,18 +13,18 @@ class FindEnemyController extends Controller
 {
     public function __invoke(Request $request)
     {
+        $api = new IndexController();
         $room = Room::where([['name',$request->name],['user_create_id',$request->master],['people',$request->people],['is_fighting',$request->is_fighting]])->first();
         if(isset($room))
         {
+            $enemy = FightRoom::where([['room_id',$room->id],['user_challenge','!=',Auth::id()]])->first();
+            $you = FightRoom::where([['room_id',$room->id],['user_challenge',Auth::id()]])->first();
+            
             if($room->people == 2)
             {
                 $fightRoom = FightRoom::where('room_id',$room->id);
-                if($fightRoom->count() == 2)
+                if($fightRoom->count() == 2 && isset($enemy,$you))
                 {
-                    $enemy = FightRoom::where([['room_id',$room->id],['user_challenge','!=',Auth::id()]])->first();
-                    $you = FightRoom::where([['room_id',$room->id],['user_challenge',Auth::id()]])->first();
-
-                    $api = new IndexController();
                     return response()->json([
                         'you' => [
                             'basic' => $api->userInfor(Auth::id()),
