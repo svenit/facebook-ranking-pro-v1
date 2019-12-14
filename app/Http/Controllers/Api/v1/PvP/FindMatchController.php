@@ -74,37 +74,49 @@ class FindMatchController extends BaseController
                         while($time <= $timeLimit)
                         {
                             $enemyReady = FightRoom::where([['room_id',$room->id],['user_challenge',$enemy->user_challenge]])->first();
-                            if($enemyReady->is_ready == 0)
+                            if(isset($enemyReady))
                             {
-                                sleep(1);
-                                $time++;
-                                if($time == $timeLimit)
+                                if($enemyReady->is_ready == 0)
                                 {
-                                    return $response = [
-                                        'code' => 404,
-                                        'status' => 'error',
-                                        'message' => 'Đối thủ vẫn chưa sẵn sàng'
-                                    ];
-                                    break;
+                                    sleep(1);
+                                    $time++;
+                                    if($time == $timeLimit)
+                                    {
+                                        return $response = [
+                                            'code' => 404,
+                                            'status' => 'error',
+                                            'message' => 'Đối thủ vẫn chưa sẵn sàng'
+                                        ];
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    $updateRoom = Room::where('id',$room->id)->update([
+                                        'is_fighting' => 1,
+                                        'started_at' => now()
+                                    ]);
+                                    $updateEnemy = FightRoom::where([['room_id',$room->id],['user_challenge',$enemy->user_challenge]])->update([
+                                        'user_receive_challenge' => Auth::id(),
+                                    ]);
+                                    $updateYou = FightRoom::where([['room_id',$room->id],['user_challenge',Auth::id()]])->update([
+                                        'user_receive_challenge' => $enemy->user_challenge,
+                                    ]);
+                                    if(isset($updateRoom,$updateEnemy,$updateYou))
+                                    {
+                                        $time = 60;
+                                        break;
+                                    }
                                 }
                             }
                             else
                             {
-                                $updateRoom = Room::where('id',$room->id)->update([
-                                    'is_fighting' => 1,
-                                    'started_at' => now()
-                                ]);
-                                $updateEnemy = FightRoom::where([['room_id',$room->id],['user_challenge',$enemy->user_challenge]])->update([
-                                    'user_receive_challenge' => Auth::id(),
-                                ]);
-                                $updateYou = FightRoom::where([['room_id',$room->id],['user_challenge',Auth::id()]])->update([
-                                    'user_receive_challenge' => $enemy->user_challenge,
-                                ]);
-                                if(isset($updateRoom,$updateEnemy,$updateYou))
-                                {
-                                    $time = 60;
-                                    break;
-                                }
+                                return $response = [
+                                    'code' => 500,
+                                    'status' => 'error',
+                                    'message' => 'Không tìm thấy đối thủ hoặc đối thủ đã thoát khỏi phòng'
+                                ];
+                                break;
                             }
                         }
                         $getEnemy = FightRoom::where('user_challenge',Auth::id())->first();

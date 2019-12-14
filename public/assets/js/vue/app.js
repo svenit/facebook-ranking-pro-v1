@@ -143,7 +143,7 @@ app = new Vue({
                     break;
                     case 'pvp.room':
                         this.pvp.isReady = page.room.is_ready == 1 ? true : false;
-                        if(this.pvp.isReady)
+                        if(this.pvp.isReady && page.room.people == 2 && page.room.is_fighting)
                         {
                             this.findMatch();
                         }
@@ -160,11 +160,15 @@ app = new Vue({
                             audio.play();
                             self.notify(`${res.data.enemy.name} đã vào phòng`);
                             self.findEnemy();
+                            if(this.pvp.isReady)
+                            {
+                                this.findMatch();
+                            }
                         });
                         if(page.room.people == 2)
                         {
                             this.pvp.enemyJoined = true;
-                            if(page.room.is_fighting)
+                            if(page.room.is_fighting == 1)
                             {
                                 this.findMatch();
                             }
@@ -401,19 +405,22 @@ app = new Vue({
             this.pvp.match.you.hp = res.data.you.hp || [];
             this.pvp.match.you.energy = res.data.you.energy || [];
 
-            if(res.status == 200 && res.data.code == 200)
+            switch(res.data.code)
             {
-                this.pvp.enemyJoined = true;
-                this.pvp.isAttack = false;
+                case 200:
+                    this.pvp.enemyJoined = true;
+                    this.pvp.isAttack = false;
 
-                this.pvp.match.enemy = res.data.enemy.basic.original || [];
-                this.pvp.match.enemy.hp = res.data.enemy.hp || [];
-                this.pvp.match.enemy.energy = res.data.enemy.energy || [];
+                    this.pvp.match.enemy = res.data.enemy.basic.original || [];
+                    this.pvp.match.enemy.hp = res.data.enemy.hp || [];
+                    this.pvp.match.enemy.energy = res.data.enemy.energy || [];
+                break;
+                case 404:
+                    this.pvp.enemyJoined = false;
+                    this.resetPvp();
+                break;
             }
-            else
-            {
-                this.notify(res.data.message);
-            }
+            this.notify(res.data.message);
         },
         async toggleReady()
         {
@@ -477,6 +484,11 @@ app = new Vue({
                     case 404:
                         this.notify(res.data.message);
                         this.pvp.isReady = false;
+                    break;
+                    case 500:
+                        this.notify(res.data.message);
+                        this.pvp.enemyJoined = false;
+                        this.resetPvp();
                     break;
                     case 300:
                         this.notify(res.data.message);
