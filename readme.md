@@ -7,17 +7,17 @@ Hệ thống bảng xếp hạng tương tác thành viên trong nhóm ( Faceboo
 ### Công Nghệ
 
 
-* [HTML] 
-* [CSS] 
-* [JavaScript] 
-* [Laravel] 
-* [VueJS] 
-* [Facebook API] 
+* HTML
+* CSS
+* JavaScript
+* Laravel
+* VueJS
+* Facebook API
 
 
 ### Cài Đặt
 
-Yêu cầu : PHP >= 7.x
+Yêu cầu : PHP >= 7.x & Composer
 
 ```sh
 $ git clone https://github.com/Juniorsz/facebook-ranking-pro-v1.git
