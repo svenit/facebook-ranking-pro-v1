@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Income\Helper;
 use App\Model\FightRoom;
+use Illuminate\Support\Facades\URL;
 use App\Observers\FightRoomObserver;
 use App\Providers\FightRoomProvider;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         FightRoom::observe(FightRoomObserver::class);
-        
+        URL::forceScheme('https');
         if(Schema::hasTable('configs'))
         {
             View::composer('*', function ($view) 
