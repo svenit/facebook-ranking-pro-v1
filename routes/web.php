@@ -58,7 +58,7 @@ Route::group(['middleware' => 'redirect.action'], function () {
             });
             Route::group(['prefix' => 'pvp','as' => 'pvp.','namespace' => 'PVP'], function () {
                 Route::get('/','PvPController@index')->name('index');
-                Route::get('create-room','PvPController@createRoom')->name('create');
+                Route::post('create-room','PvPController@createRoom')->name('create');
                 Route::get('join/{id}','PvPController@joinedRoom')->name('joined-room');
                 Route::get('room/{id}','PvPController@room')->name('room');
             });

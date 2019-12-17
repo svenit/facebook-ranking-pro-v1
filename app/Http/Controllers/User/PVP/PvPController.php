@@ -5,10 +5,10 @@ namespace App\Http\Controllers\User\PVP;
 use App\Model\Room;
 use App\Model\Tracking;
 use App\Model\FightRoom;
+use Illuminate\Http\Request;
 use App\Events\PvPJoinedRoom;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
 
 class PvPController extends Controller
 {
@@ -18,6 +18,11 @@ class PvPController extends Controller
     }
     public function createRoom(Request $request)
     {
+        $this->validate($request,[
+            'g-recaptcha-response' => 'required'
+        ],[
+            'g-recaptcha-response.required' => 'Bạn chưa xác nhận recaptcha'
+        ]);
         $checkRoom = Room::whereUserCreateId(Auth::id())->first();
         $checkFightRoom = FightRoom::whereUserChallenge(Auth::id())->first();
         if(empty($checkRoom) && empty($checkFightRoom))
