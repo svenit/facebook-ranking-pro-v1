@@ -48,11 +48,11 @@ class BaseController extends Controller
             {
                 if($room->user_create_id == Auth::id() && $countUser == 2)
                 {
-                    $target = FightRoom::where([['user_challenge','!=',Auth::id()],['room_id',$room->id]]);
+                    $target = FightRoom::where([['user_challenge','!=',Auth::id()],['room_id',$room->id]])->first();
                     $updateMaster = Room::whereId($room->id)->update([
                         'user_create_id' => $target->user_challenge
                     ]);
-                    $leaveRoom = FightRoom::where([['user_challenge',Auth::id()],['room_id',$room->id]])->delete();
+                    $leaveRoom = FightRoom::where([['user_challenge',Auth::id()],['room_id',$room->id]])->first()->delete();
                     if(isset($leaveRoom,$target,$updateMaster))
                     {
                         $this->removeTracking();
@@ -66,7 +66,7 @@ class BaseController extends Controller
                 }
                 else
                 {
-                    $leaveRoom = FightRoom::where([['user_challenge',Auth::id()],['room_id',$room->id]])->delete();
+                    $leaveRoom = FightRoom::where([['user_challenge',Auth::id()],['room_id',$room->id]])->first()->delete();
                     if(isset($leaveRoom))
                     {
                         $this->removeTracking();

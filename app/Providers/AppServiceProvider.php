@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(FightRoomProvider::class);
+        
     }
 
     /**
@@ -31,7 +31,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        FightRoom::observe(FightRoomObserver::class);
         //URL::forceScheme('https');
         if(Schema::hasTable('configs'))
         {

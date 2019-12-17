@@ -2,7 +2,9 @@
 
 namespace App\Observers;
 
+use App\Model\Room;
 use App\Model\FightRoom;
+use Illuminate\Support\Facades\DB;
 
 class FightRoomObserver
 {
@@ -36,7 +38,7 @@ class FightRoomObserver
      */
     public function deleted(FightRoom $fightRoom)
     {
-        $fightRoom->room()->decrement();
+        $fightRoom->room()->decrement('people');
     }
 
     /**

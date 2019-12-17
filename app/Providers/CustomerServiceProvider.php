@@ -6,7 +6,7 @@ use App\Model\FightRoom;
 use App\Observers\FightRoomObserver;
 use Illuminate\Support\ServiceProvider;
 
-class FightRoomProvider extends ServiceProvider
+class CustomerServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
