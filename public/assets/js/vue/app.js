@@ -211,6 +211,7 @@ app = new Vue({
                         this.pvp.status = `Lượt của bạn..( ${this.pvp.timeOut}s )`;
                         if(this.pvp.timeOut == 0)
                         {
+                            this.pvp.match.you.turn = 0;
                             this.pvp.status = 'Hết giờ <i class="fas fa-swords"></i>';
                             axios.post(`${config.root}/api/v1/pvp/turn-time-out`,'',{
                                 headers:{
@@ -510,98 +511,6 @@ app = new Vue({
             {
                 this.notify('Đã có lỗi xảy ra');
             }
-            // try
-            // {
-            //     if(this.pvp.isMatching)
-            //     {
-            //         Swal.fire('','Bạn đang trong trận','warning');
-            //     }
-            //     else
-            //     {
-            //         if(this.pvp.isSearching)
-            //         {
-            //             Swal.fire('','Đang đợi đối thủ','warning');
-            //             return false;
-            //         }
-            //         else
-            //         {
-            //             if(!this.isMatching)
-            //             {
-            //                 this.pvp.isSearching = true;
-            //                 var countDown = setInterval(() => {
-            //                     this.pvp.timeOut--;
-            //                     this.pvp.status = `Đã sẵn sàng( ${this.pvp.timeOut}s )`;
-            //                     if(this.pvp.timeOut == 0)
-            //                     {
-            //                         this.pvp.status = 'Sẵn sàng <i class="fas fa-swords"></i>';
-            //                         clearInterval(countDown);
-            //                         this.pvp.isSearching = false;
-            //                         this.pvp.timeOut = 20;
-            //                     }
-            //                 },1000);
-            //                 this.isSearching = false;
-            //             }
-            //             let res = await axios.post(`${config.root}/api/v1/pvp/get-ready`,'',{
-            //                 headers:{
-            //                     pragma:this.token
-            //                 }
-            //             });
-            //             await this.refreshToken(res);
-            //             switch(res.data.code)
-            //             {
-            //                 case 200:
-            //                     this.notify(res.data.message);
-            //                     const audio = new Audio(`${config.root}/assets/sound/found_enemy.mp3`);
-            //                     audio.play();
-            //                     this.pvp.isSearching = false;
-            //                     this.pvp.isMatching = true;
-                                
-            //                     this.pvp.match.you = res.data.you.basic.original;
-            //                     this.pvp.match.you.hp = res.data.you.hp;
-            //                     this.pvp.match.you.energy = res.data.you.energy;
-            //                     this.pvp.match.you.turn = res.data.you.turn;
-
-            //                     this.pvp.match.enemy = res.data.enemy.basic.original;
-            //                     this.pvp.match.enemy.hp = res.data.enemy.hp;
-            //                     this.pvp.match.enemy.energy = res.data.enemy.energy;
-            //                     clearInterval(countDown);
-            //                 break;
-            //                 case 404:
-            //                     this.notify(res.data.message);
-            //                     this.pvp.isSearching = false;
-            //                     clearInterval(countDown);
-            //                 break;
-            //                 case 300:
-            //                     this.notify(res.data.message);
-            //                     window.location.href = config.root;
-            //                 break;
-            //                 case 201:
-            //                     Swal.fire({
-            //                         title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
-            //                         focusConfirm: true,
-            //                         confirmButtonText:'Thoát',
-            //                     }).then((result) => {
-            //                         if(result.value)
-            //                         {
-            //                             this.exitMatch();
-            //                         }
-            //                     });
-            //                     this.pvp.isSearching = false;
-            //                     this.pvp.isEnding = true;
-            //                     clearInterval(countDown);
-            //                 break;
-            //                 default:
-            //                     this.pvp.isSearching = false;
-            //                     clearInterval(countDown);
-            //                 break;
-            //             }
-            //         }
-            //     }
-            // }
-            // catch(e)
-            // {
-            //     this.refreshToken(this.token);
-            // }
         },
         async hit(skill)
         {
@@ -619,6 +528,7 @@ app = new Vue({
                             }
                             else
                             {
+                                this.pvp.skillAnimation = skill.animation;
                                 this.pvp.isAttack = true;
                             }
                             let res = await axios.post(`${config.root}/api/v1/pvp/hit`,{
@@ -633,7 +543,6 @@ app = new Vue({
                             switch(res.data.code)
                             {
                                 case 200:
-                                    this.pvp.skillAnimation = skill.animation;
                                     this.notify(res.data.message);
                                     this.pvp.match.you = res.data.you.basic.original;
                                     this.pvp.match.you.hp = res.data.you.hp;
@@ -662,6 +571,7 @@ app = new Vue({
                                         focusConfirm: true,
                                         confirmButtonText:'OK',
                                     });
+                                    this.index();
                                     this.resetPvp();
                                     this.findEnemy();
                                 break;
@@ -697,7 +607,9 @@ app = new Vue({
             {
                 if(confirm('Rời rận đấu ?'))
                 {
-                    let res = await axios.post(`${config.root}/api/v1/pvp/exit-match`,'',{
+                    let res = await axios.post(`${config.root}/api/v1/pvp/exit-match`,{
+                        room:page.room.id
+                    },{
                         headers:{
                             pragma:this.token
                         }

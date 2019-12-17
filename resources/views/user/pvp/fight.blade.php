@@ -87,6 +87,11 @@
             </div>
         </div>
     </div>
+    <div style="display:none" class="preload-skills">
+        <div v-for="(skill,index) in pvp.match.you.skills" :key="index" class="col-3">
+            <img :src="skill.animation" alt=".">
+        </div>
+    </div>
 </div>
 @endsection
 @push('js')

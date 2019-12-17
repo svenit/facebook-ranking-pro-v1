@@ -18,6 +18,7 @@ class CreateSkillsTable extends Migration
             $table->string('name');
             $table->unsignedBigInteger('character_id');
             $table->string('image')->nullable();
+            $table->string('animation')->nullable();
             $table->foreign('character_id')
                 ->references('id')
                 ->on('characters')

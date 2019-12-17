@@ -58,7 +58,7 @@ class PvPController extends Controller
         $checkRoom = Room::whereName($room)->first();
         if(isset($checkRoom))
         {
-            $findEnemy = FightRoom::where([['room_id',$checkRoom->id],['user_challenge',$checkRoom->user_create_id],['status',null],['user_receive_challenge',null]])->first();
+            $findEnemy = FightRoom::where([['room_id',$checkRoom->id],['user_challenge',$checkRoom->user_create_id],['user_receive_challenge',null]])->first();
             if(Auth::id() == $checkRoom->user_create_id)
             {
                 return redirect()->route('user.pvp.room',['id' => $checkRoom->name]);
@@ -101,7 +101,7 @@ class PvPController extends Controller
                         }
                         else
                         {
-                            return redirect()->route('user.index')->with([
+                            return redirect()->route('user.pvp.index')->with([
                                 'status' => 'error',
                                 'message' => 'Đã đủ số người hoặc đang diễn ra trận chiến'
                             ]);
@@ -110,7 +110,7 @@ class PvPController extends Controller
                 }
                 else
                 {
-                    return redirect()->route('user.index')->with([
+                    return redirect()->route('user.pvp.index')->with([
                         'status' => 'error',
                         'message' => 'Không tìm thấy đối thủ'
                     ]);
@@ -119,7 +119,7 @@ class PvPController extends Controller
         }
         else
         {
-            return redirect()->route('user.index')->with([
+            return redirect()->route('user.pvp.index')->with([
                 'status' => 'error',
                 'message' => 'Không tìm thấy phòng này :('
             ]);

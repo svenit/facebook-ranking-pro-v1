@@ -36,7 +36,7 @@ class FightRoomObserver
      */
     public function deleted(FightRoom $fightRoom)
     {
-        $fightRoom->room()->decrement('people');
+        $fightRoom->room()->decrement();
     }
 
     /**

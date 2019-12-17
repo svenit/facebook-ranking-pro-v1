@@ -24,28 +24,62 @@ class BaseController extends Controller
         $this->limitTime = $config->first()->limit_pvp_time ?? 0;
         $this->energyRecovery = 20;
     }
-    public function exitMatch()
+    public function exitMatch(Request $request)
     {
-        $findMatch = FightRoom::where('user_challenge',Auth::id());
-        if(isset($findMatch) && empty($findMatch->first()->user_receive_challenge) || collect($this->gameOver)->contains($findMatch->first()->status))
+        $room = Room::where([['name',$request->room],['is_fighting',0]])->first();
+        if(isset($room))
         {
-            $findMatch->delete();
-            $this->removeTracking();
-            $response = [
-                'code' => 200,
-                'status' => 'success',
-                'message' => 'Thoát trận thành công'
-            ];
+            $countUser = FightRoom::where('room_id',$room->id)->count();
+            if($room->people == 1 && $countUser == 1)
+            {
+                $deleteRoom = Room::findOrFail($room->id)->delete();
+                if(isset($deleteRoom))
+                {
+                    $this->removeTracking();
+                    $response = [
+                        'code' => 200,
+                        'msg' => 'Đã thoát',
+                        'redirect' => ''
+                    ];
+                    return response()->json($response,200);
+                }
+            }
+            else
+            {
+                if($room->user_create_id == Auth::id() && $countUser == 2)
+                {
+                    $target = FightRoom::where([['user_challenge','!=',Auth::id()],['room_id',$room->id]]);
+                    $updateMaster = Room::whereId($room->id)->update([
+                        'user_create_id' => $target->user_challenge
+                    ]);
+                    $leaveRoom = FightRoom::where([['user_challenge',Auth::id()],['room_id',$room->id]])->delete();
+                    if(isset($leaveRoom,$target,$updateMaster))
+                    {
+                        $this->removeTracking();
+                        $response = [
+                            'code' => 200,
+                            'msg' => 'Đã thoát',
+                            'redirect' => ''
+                        ];
+                        return response()->json($response,200);
+                    }
+                }
+                else
+                {
+                    $leaveRoom = FightRoom::where([['user_challenge',Auth::id()],['room_id',$room->id]])->delete();
+                    if(isset($leaveRoom))
+                    {
+                        $this->removeTracking();
+                        $response = [
+                            'code' => 200,
+                            'msg' => 'Đã thoát',
+                            'redirect' => ''
+                        ];
+                        return response()->json($response,200);
+                    }
+                }
+            }
         }
-        else
-        {
-            $response = [
-                'code' => 404,
-                'status' => 'error',
-                'message' => 'Đã có lỗi xảy ra xin vui lòng thử lại'
-            ];
-        }
-        return response()->json($response,200);
     }
     public function toggleReady(Request $request)
     {
