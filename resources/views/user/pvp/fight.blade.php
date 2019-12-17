@@ -10,10 +10,11 @@
         <button id='fight-button' v-if="pvp.enemyJoined" style="width:300px" @click="toggleReady()" v-if="!pvp.isEnding && pvp.enemyJoined" class="vip-bordered" v-html="pvp.status"></button>
         <button id='fight-button' v-if="!pvp.isMatching || pvp.isEnding" style="width:100px" @click="exitMatch()" class="vip-bordered">Thoát</button>
         <div class="row row-sm sr">
-            <div :class="[pvp.isAttack ? 'animated fadeOutRight' : '',pvp.isBufff ? 'animated shake' : '']" class="col-md-4 col-lg-4 col-sm-4">
+            <div :class="[pvp.yourAttack ? 'animated fadeOutRight' : '',pvp.yourBuff || pvp.enemyAttack ? 'animated shake' : '']" class="col-md-4 col-lg-4 col-sm-4">
                 <div class="">
                     <div class="media media-4x4">
                         <img v-if="pvp.match.you.turn == 1 && pvp.isMatching && !pvp.isEnding" style="position:absolute;width:100%" src="https://i.imgur.com/xjA4khR.gif">
+                        <img v-if="pvp.enemyAttack" style="position:absolute;width:100%;z-index:9999999" :src="pvp.enemySkillAnimation">
                         <a id="your-character" class="media-content your-character" style="background-image:url({{ $user->character()->avatar}});background-size:50%;background-color:transparent"></a>
                     </div>
                     <div v-if="pvp.enemyJoined">
@@ -49,10 +50,10 @@
                     <img style="width:100%" src="https://i.imgur.com/my7u02o.png">
                 </div>
             </div>
-            <div :class="pvp.isAttack ? 'animated shake' : ''" class="col-md-4 col-lg-4 col-sm-4">
+            <div :class="[pvp.enemyAttack ? 'animated fadeOutLeft' : '',pvp.enemyBuff || pvp.yourAttack ? 'animated shake' : '']" class="col-md-4 col-lg-4 col-sm-4">
                 <div class="">
                     <img v-if="pvp.match.you.turn != 1 && pvp.isMatching" style="position:absolute;width:100%" src="https://i.imgur.com/xjA4khR.gif">
-                    <img v-if="pvp.isAttack" style="position:absolute;width:100%;z-index:9999999" :src="pvp.skillAnimation">
+                    <img v-if="pvp.yourAttack" style="position:absolute;width:100%;z-index:9999999" :src="pvp.yourSkillAnimation">
                     <div v-if="pvp.enemyJoined && !pvp.isEnding" class="media media-4x4">
                         <a class="media-content" :style="{backgroundImage:'url('+pvp.match.enemy.infor.character.avatar+')',backgroundSize:'50%',backgroundColor:'transparent'}"></a>
                     </div>
@@ -89,6 +90,9 @@
     </div>
     <div style="display:none" class="preload-skills">
         <div v-for="(skill,index) in pvp.match.you.skills" :key="index" class="col-3">
+            <img :src="skill.animation" alt=".">
+        </div>
+        <div v-for="(skill,index) in pvp.match.enemy.skills" :key="index" class="col-3">
             <img :src="skill.animation" alt=".">
         </div>
     </div>

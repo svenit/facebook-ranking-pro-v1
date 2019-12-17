@@ -58,6 +58,7 @@ class PvPController extends Controller
     }
     public function joinedRoom($room)
     {
+        session_write_close();
         set_time_limit(60);
         
         $checkRoom = Room::whereName($room)->first();

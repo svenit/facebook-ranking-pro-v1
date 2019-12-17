@@ -10,7 +10,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class PvPJoinedRoom implements ShouldBroadcast
+class PvPHitEnemy implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -20,7 +20,7 @@ class PvPJoinedRoom implements ShouldBroadcast
      * @return void
      */
     public $data;
-
+    
     public function __construct($data)
     {
         $this->data = $data;
@@ -33,10 +33,10 @@ class PvPJoinedRoom implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return "event-pvp-joined-room-".$this->data['room']['name'].'-'.$this->data['broadcast-to'];
+        return "event-pvp-hit-enemy-".$this->data['room']['name'].'-'.$this->data['broadcast-to'];
     }
     public function broadcastOn()
     {
-        return 'channel-pvp-joined-room';
+        return 'channel-pvp-hit-enemy';
     }
 }

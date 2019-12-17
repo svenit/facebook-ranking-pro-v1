@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1\PvP;
 
+use App\Events\PvPHitEnemy;
 use Carbon\Carbon;
 use App\Model\Room;
 use App\Model\User;
@@ -19,8 +20,12 @@ class HitController extends BaseController
 {
     public function __invoke(Request $request)
     {
+        session_write_close();
+        set_time_limit(60);
+
         $validate = Validator::make($request->all(), [
-            'skill' => 'required|numeric|min:0|exists:skills,id'
+            'skill' => 'required|numeric|min:0|exists:skills,id',
+            'room' => 'required|exists:rooms,name'
         ]);
         if($validate->fails())
         {
@@ -132,7 +137,7 @@ class HitController extends BaseController
                                                 if($effectTo == 0)
                                                 {
                                                     $destroy *= 1.5;
-                                                    $message = "[ $skill->name ] Bạn đã gây $destroy sát thương chí mạng cho đối thủ";
+                                                    $message = "[ $skill->name ] Bạn đã gây $destroy sát thương chí mạng cho đối thủ ( x1.5 )";
                                                 }
                                             }
                                             /* Enemy passive skill */
@@ -155,9 +160,6 @@ class HitController extends BaseController
                                                                 $destroy = $this->renderPassive($destroy,$enemyPassiveSkill) < 0 ? 0 : $this->renderPassive($destroy,$enemyPassiveSkill);
                                                                 $message = "[ $skill->name ] Đối thủ có kĩ năng bị động giảm sát thương phép thuật ! Sát thương của bạn gây ra chỉ còn lại $destroy";
                                                             }
-                                                        break;
-                                                        default:
-                                                            $destroy = $destroy;
                                                         break;
                                                     }
                                                 }
@@ -211,6 +213,23 @@ class HitController extends BaseController
                                                 ];
                                                 if($findMatch->update($yourUpdate) && $enemy->update($enemyUpdate))
                                                 {
+                                                    $data = [
+                                                        'room' => [
+                                                            'name' => $room->name,
+                                                            'id' => $room->id
+                                                        ],
+                                                        'enemy' => [
+                                                            'name' => User::findOrFail($enemy->first()->user_challenge)->name,
+                                                            'id' => $enemy->first()->user_challenge
+                                                        ],
+                                                        'data' => [
+                                                            'message' => $effectTo == 0 ? "Đối thủ đã gây cho bạn $destroy sát thương" : 'Đối thủ dùng kĩ năng buff',
+                                                            'effectTo' => $effectTo, 
+                                                            'skillAnimation' => $skill->animation
+                                                        ],
+                                                        'broadcast-to' => $enemy->first()->user_challenge
+                                                    ];
+                                                    event(new PvPHitEnemy($data));
                                                     $response = [
                                                         'code' => 200,
                                                         'status' => 'success',

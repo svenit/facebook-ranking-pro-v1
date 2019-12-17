@@ -88,11 +88,17 @@ app = new Vue({
             isSearching:false,
             isEnding:false,
             isMatching:false,
-            isAttack:false,
-            isBuff:false,
             isReady:false,
             enemyJoined:false,
-            skillAnimation:'',
+
+            yourAttack:false,
+            yourBuff:false,
+            yourSkillAnimation:'',
+
+            enemyAttack:false,
+            enemyBuff:false,
+            enemySkillAnimation:'',
+
             timeOut:20,
             status:'',
             match:{
@@ -143,10 +149,6 @@ app = new Vue({
                     break;
                     case 'pvp.room':
                         this.pvp.isReady = page.room.is_ready == 1 ? true : false;
-                        if(this.pvp.isReady && page.room.people == 2 && page.room.is_fighting)
-                        {
-                            this.findMatch();
-                        }
                         this.pvp.status = this.pvp.isReady ? 'Hủy' : 'Sẵn Sàng <i class="fas fa-swords"></i>';
                         const self = this;
                         Pusher.logToConsole = true;
@@ -154,15 +156,30 @@ app = new Vue({
                             cluster: 'ap1',
                             forceTLS: true
                         });
-                        var channel = pusher.subscribe('channel-pvp-joined-room');
-                        channel.bind(`event-pvp-joined-room-${page.room.id}-${page.room.me}`, function(res) {
+                        var joinRoom = pusher.subscribe('channel-pvp-joined-room');
+                        var hitEnemy =  pusher.subscribe('channel-pvp-hit-enemy');
+                        joinRoom.bind(`event-pvp-joined-room-${page.room.id}-${page.room.me}`, function(res) {
                             const audio = new Audio(`${config.root}/assets/sound/found_enemy.mp3`);
                             audio.play();
                             self.notify(`${res.data.enemy.name} đã vào phòng`);
                             self.findEnemy();
-                            if(this.pvp.isReady)
+                            if(self.pvp.isReady)
                             {
-                                this.findMatch();
+                                self.findMatch();
+                            }
+                        });
+                        hitEnemy.bind(`event-pvp-hit-enemy-${page.room.id}-${page.room.me}`, function(res) {
+                            self.notify(res.data.data.message);
+                            if(res.data.data.effectTo == 0)
+                            {
+                                self.pvp.enemyAttack = true;
+                                self.pvp.enemyBuff = true;
+                                self.pvp.enemySkillAnimation = res.data.data.skillAnimation;
+
+                                setTimeout(() => {
+                                    self.pvp.enemyAttack = false;
+                                    self.pvp.enemyBuff = false;
+                                },1000);
                             }
                         });
                         if(page.room.people == 2)
@@ -410,7 +427,7 @@ app = new Vue({
             {
                 case 200:
                     this.pvp.enemyJoined = true;
-                    this.pvp.isAttack = false;
+                    this.pvp.yourAttack = false;
 
                     this.pvp.match.enemy = res.data.enemy.basic.original || [];
                     this.pvp.match.enemy.hp = res.data.enemy.hp || [];
@@ -524,12 +541,12 @@ app = new Vue({
                         {
                             if(skill.effect_to == 1)
                             {
-                                this.pvp.isBuff = true;
+                                this.pvp.yourBuff = true;
                             }
                             else
                             {
-                                this.pvp.skillAnimation = skill.animation;
-                                this.pvp.isAttack = true;
+                                this.pvp.yourSkillAnimation = skill.animation;
+                                this.pvp.yourAttack = true;
                             }
                             let res = await axios.post(`${config.root}/api/v1/pvp/hit`,{
                                 room:page.room.id,
@@ -553,8 +570,9 @@ app = new Vue({
                                     this.pvp.match.enemy.hp = res.data.enemy.hp;
                                     this.pvp.match.enemy.energy = res.data.enemy.energy;
 
-                                    this.pvp.isAttack = false;
-                                    this.pvp.isBuff = false;
+                                    this.pvp.yourAttack = false;
+                                    this.pvp.yourBuff = false;
+                                    clearInterval(countDown);
                                 break;
                                 case 404:
                                     this.notify(res.data.message);
@@ -670,8 +688,8 @@ app = new Vue({
             this.pvp.isSearching = false;
             this.pvp.isEnding = false;
             this.pvp.isMatching = false;
-            this.pvp.isAttack = false;
-            this.pvp.isBuff = false;
+            this.pvp.yourAttack = false;
+            this.pvp.yourBuff = false;
             this.pvp.isReady = false;
             this.pvp.status = 'Sẵn Sàng <i class="fas fa-swords"></i>';
         }
