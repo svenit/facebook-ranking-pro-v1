@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1\PvP;
 
 use App\Model\Room;
+use App\Model\User;
 use App\Model\Config;
 use App\Model\FightRoom;
 use Illuminate\Http\Request;
@@ -88,7 +89,8 @@ class BaseController extends Controller
         {
             $toggleReady = FightRoom::where([['room_id',$room->id],['user_challenge',Auth::id()],['user_receive_challenge',null]])->update([
                 'is_ready' => $request->status == 1 ? 1 : 0,
-                'status' => null
+                'status' => null,
+                'turn' => 0
             ]);
             if(isset($toggleReady))
             {
@@ -115,5 +117,28 @@ class BaseController extends Controller
                 'message' => 'Không tìm thấy phòng'
             ],201);
         }
+    }
+    public function pvpRestart($id,$win = null)
+    {
+        $enemy = FightRoom::where([['room_id',$id],['user_challenge','!=',Auth::id()]])->first();
+        Room::whereId($id)->update([
+            'is_fighting' => 0
+        ]);
+        FightRoom::where([['user_challenge',Auth::id()],['room_id',$id]])->update([
+            'user_challenge_hp' => Auth::user()->power()['health_points'],
+            'user_challenge_energy' => Auth::user()->character->default_energy,
+            'turn' => 0,
+            'user_receive_challenge' => null,
+            'status' => $win ? 2 : null,
+            'is_ready' => 0
+        ]);
+        FightRoom::where([['user_challenge',$enemy->user_challenge],['room_id',$id]])->update([
+            'user_challenge_hp' => User::findOrFail($enemy->user_challenge)->power()['health_points'],
+            'user_challenge_energy' => User::findOrFail($enemy->user_challenge)->character->default_energy,
+            'turn' => 0,
+            'user_receive_challenge' => null,
+            'status' => $win ? 1 : null,
+            'is_ready' => 0
+        ]);
     }
 }

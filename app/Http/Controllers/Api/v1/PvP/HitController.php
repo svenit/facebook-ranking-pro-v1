@@ -40,9 +40,9 @@ class HitController extends BaseController
                 $findMatch = FightRoom::where('user_challenge',Auth::id());
                 if(isset($findMatch,$findMatch->first()->user_receive_challenge))
                 {
-                    if(isset($room->started_at,$findMatch->user_receive_challenge) && $room->is_fighting == 1 && $this->limitTimeStatus && Carbon::parse($room->started_at)->diffInMinutes() >= $this->limitTime)
+                    if(isset($room->started_at) && $room->is_fighting == 1 && $this->limitTimeStatus && Carbon::parse($room->started_at)->diffInMinutes() >= $this->limitTime)
                     {
-                        FightRoom::whereIn('user_challenge',[Auth::id(),$findMatch->user_receive_challenge])->delete();
+                        $this->pvpRestart($room->id);
                         $response = [
                             'code' => 300,
                             'status' => 'warning',
@@ -63,7 +63,7 @@ class HitController extends BaseController
                                     if($findMatch->first()->user_challenge_energy >= $skill->energy)
                                     {
                                         $randomRate = rand(0,100);
-                                        $getEnemyInfor = User::find($enemy->first()->user_challenge);
+                                        $getEnemyInfor = User::findOrFail($enemy->first()->user_challenge);
 
                                         $allAgility = Auth::user()->power()['agility'] + $getEnemyInfor->power()['agility'];
                                         $allLucky = Auth::user()->power()['lucky'] + $getEnemyInfor->power()['lucky'];
@@ -80,11 +80,11 @@ class HitController extends BaseController
                                             switch($skill->type)
                                             {
                                                 case 'strength':
-                                                    $destroy = $this->renderDestroy(Auth::user()->power()['strength'],$skill);
+                                                    $destroy = $this->renderDestroy(Auth::user()->power()['strength'],$skill) - $getEnemyInfor->power()['armor_strength'] <= 0 ? 0 : $this->renderDestroy(Auth::user()->power()['strength'],$skill) - $getEnemyInfor->power()['armor_strength'];
                                                     $message = "[ $skill->name ] Bạn đã gây $destroy sát thương vật lí cho đối thủ";
                                                 break;
                                                 case 'intelligent':
-                                                    $destroy = $this->renderDestroy(Auth::user()->power()['intelligent'],$skill);
+                                                    $destroy = $this->renderDestroy(Auth::user()->power()['intelligent'],$skill) - $getEnemyInfor->power()['armor_intelligent'] <= 0 ? 0 : $this->renderDestroy(Auth::user()->power()['intelligent'],$skill) - $getEnemyInfor->power()['armor_intelligent'];
                                                     $message = "[ $skill->name ] Bạn đã gây $destroy sát thương phép thuật cho đối thủ";
                                                 break;
                                                 case 'crit':
@@ -178,25 +178,7 @@ class HitController extends BaseController
 
                                                 if(isset($youWin))
                                                 {
-                                                    Room::where('id',$room->id)->update([
-                                                        'is_fighting' => 0
-                                                    ]);
-                                                    FightRoom::where('user_challenge',Auth::id())->update([
-                                                        'user_challenge_hp' => Auth::user()->power()['health_points'],
-                                                        'user_challenge_energy' => Auth::user()->character->default_energy,
-                                                        'turn' => 0,
-                                                        'user_receive_challenge' => null,
-                                                        'status' => 2,
-                                                        'is_ready' => 0
-                                                    ]);
-                                                    FightRoom::where('user_challenge',$enemy->first()->user_challenge)->update([
-                                                        'user_challenge_hp' => User::find($enemy->first()->user_challenge)->power()['health_points'],
-                                                        'user_challenge_energy' => User::find($enemy->first()->user_challenge)->character->default_energy,
-                                                        'turn' => 0,
-                                                        'user_receive_challenge' => null,
-                                                        'status' => 1,
-                                                        'is_ready' => 0
-                                                    ]);
+                                                    $this->pvpRestart($room->id,true);
                                                     $response = [
                                                         'code' => 201,
                                                         'win' => true,

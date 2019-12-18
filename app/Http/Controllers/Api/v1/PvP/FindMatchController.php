@@ -34,6 +34,7 @@ class FindMatchController extends BaseController
                 {
                     if(isset($room->started_at) && $room->is_fighting == 1 && $this->limitTimeStatus && Carbon::parse($room->started_at)->diffInMinutes() >= $this->limitTime)
                     {
+                        $this->pvpRestart($room->id);
                         $response = [
                             'code' => 300,
                             'status' => 'warning',
@@ -161,6 +162,9 @@ class FindMatchController extends BaseController
                             {
                                 $turn = $getEnemy->turn == 1 ? 1 : 0;
                             }
+                            Room::findOrFail($room->id)->update([
+                                'started_at' => now()
+                            ]);
                             return response()->json([
                                 'code' => 200,
                                 'status' => 'success',

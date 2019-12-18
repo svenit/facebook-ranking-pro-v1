@@ -4,7 +4,11 @@
 <head>
 	<meta charset="utf-8">
 	<title>Group Game</title>
-	<meta name="description" content="Responsive, Bootstrap, BS4">
+	<meta http-equiv="x-dns-prefetch-control" content="on">
+	<link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
+	<link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
+	<link rel="dns-prefetch" href="//ajax.googleapis.com" />
+	<meta name="description" content="Facebook Group Ranking System">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="{{ asset('assets/css/site.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
@@ -19,7 +23,6 @@
 <body>
 	<div id="app" class="layout-row">
 		@include('user.theme.aside')
-		{{-- <button class="btn btn-white btn-block mb-2" data-toggle="modal" data-target="#modal-left" data-toggle-class="modal-open-aside" data-target="body">Left</button> --}}
 		<div id="main" style="background: url({{ asset('assets/images/background.jpg') }});" class="layout-column flex">
 			@include('user.theme.header')
 			<div id="content" class="flex">
@@ -47,13 +50,15 @@
 	config = {
 		root:"{{ url('/') }}",
 		current_url:"{{ url()->current() }}",
-		auth:{{ Auth::check() ? 1 : 0 }}
+		auth:{{ Auth::check() ? 1 : 0 }},
+		bearer:"{{ str_random(50) }}"
 	};
 	</script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.2/dist/sweetalert2.all.min.js"></script>	
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-	<script src="{{ asset('assets/js/plugins/refresh/refresh.min.js') }}"></script>
+	<script src="{{ asset('assets/js/plugins/speed/refresh.min.js') }}"></script>
+	<script src="{{ asset('assets/js/plugins/speed/trasher.js') }}"></script>
 	<script src="{{ asset('assets/js/site.min.js') }}"></script>
 	<script src="{{ asset('assets/js/plugins/axios/axios.min.js') }}"></script>
 	<script src="{{ asset('assets/js/vue/vue.js') }}"></script>

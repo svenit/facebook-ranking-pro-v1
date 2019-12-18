@@ -39,6 +39,7 @@ class LoginController extends Controller
     }
     public function handleProviderCallback()
     {
+        session_write_close();
         set_time_limit(60);
 
         $callback = Socialite::driver('facebook')->user();
