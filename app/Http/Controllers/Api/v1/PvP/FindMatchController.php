@@ -180,7 +180,7 @@ class FindMatchController extends BaseController
                                     'energy' => $getEnemy->user_challenge_energy,
                                     'turn' => $turn,
                                 ],
-                                
+                                'remaining' => ($this->limitTime * 60) - Carbon::parse($room->started_at)->diffInSeconds()
                             ]);
                         }
                         else
@@ -211,6 +211,7 @@ class FindMatchController extends BaseController
                             'energy' => $you->user_challenge_energy,
                             'turn' => $you->turn,
                         ],
+                        'remaining' => ($this->limitTime * 60) - Carbon::parse($room->started_at)->diffInSeconds()
                     ];
                 }
                 return response()->json($response,200);

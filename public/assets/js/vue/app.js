@@ -84,6 +84,7 @@ app = new Vue({
             skills:[]
         },
         pvp:{
+            timeRemaining:0,
             rooms:[],
             isSearching:false,
             isEnding:false,
@@ -148,53 +149,7 @@ app = new Vue({
                         this.listFightRoom();
                     break;
                     case 'pvp.room':
-                        this.pvp.isReady = page.room.is_ready == 1 ? true : false;
-                        this.pvp.status = this.pvp.isReady ? 'Hủy' : 'Sẵn Sàng <i class="fas fa-swords"></i>';
-                        const self = this;
-                        Pusher.logToConsole = true;
-                        var pusher = new Pusher(page.pusher.key, {
-                            cluster: 'ap1',
-                            forceTLS: true
-                        });
-                        var joinRoom = pusher.subscribe('channel-pvp-joined-room');
-                        var hitEnemy =  pusher.subscribe('channel-pvp-hit-enemy');
-                        joinRoom.bind(`event-pvp-joined-room-${page.room.id}-${page.room.me}`, function(res) {
-                            const audio = new Audio(`${config.root}/assets/sound/found_enemy.mp3`);
-                            audio.play();
-                            self.notify(`${res.data.enemy.name} đã vào phòng`);
-                            self.findEnemy();
-                            if(self.pvp.isReady)
-                            {
-                                self.findMatch();
-                            }
-                        });
-                        hitEnemy.bind(`event-pvp-hit-enemy-${page.room.id}-${page.room.me}`, function(res) {
-                            self.notify(res.data.data.message);
-                            self.pvp.match.you.turn = 1;
-                            if(res.data.data.effectTo == 0)
-                            {
-                                self.pvp.enemyAttack = true;
-                                self.pvp.enemyBuff = true;
-                                self.pvp.enemySkillAnimation = res.data.data.skillAnimation;
-
-                                setTimeout(() => {
-                                    self.pvp.enemyAttack = false;
-                                    self.pvp.enemyBuff = false;
-                                },1000);
-                            }
-                        });
-                        if(page.room.people == 2)
-                        {
-                            this.pvp.enemyJoined = true;
-                            if(page.room.is_fighting == 1 || page.room.is_ready == 1)
-                            {
-                                this.findMatch();
-                            }
-                            if(page.room.is_fighting == 0)
-                            {
-                                this.findEnemy();
-                            }
-                        }
+                        this.pvpRoom();
                     break;
                 }
             }
@@ -232,7 +187,8 @@ app = new Vue({
                             this.pvp.match.you.turn = 0;
                             this.pvp.status = 'Hết giờ <i class="fas fa-swords"></i>';
                             axios.post(`${config.root}/api/v1/pvp/turn-time-out`,{
-                                room:page.room.id
+                                room:page.room.id,
+                                bearer:config.bearer
                             },{
                                 headers:{
                                     pragma:this.token
@@ -280,7 +236,8 @@ app = new Vue({
             {
                 this.pvp.status = `Đang đợi đối thủ ra đòn...( 15s )`;
                 axios.post(`${config.root}/api/v1/pvp/listen-action`,{
-                    room:page.room.id
+                    room:page.room.id,
+                    bearer:config.bearer
                 },{
                     headers:{
                         pragma:this.token
@@ -330,6 +287,9 @@ app = new Vue({
             {
                 this.loading = true;
                 let res = await axios.get(`${config.root}/api/v1/user/profile`,{
+                    params:{
+                        bearer:config.bearer
+                    },
                     headers:{
                         pragma:this.token
                     }
@@ -348,6 +308,9 @@ app = new Vue({
         {
             this.loading = true;
             let res = await axios.get(`${config.root}/api/v1/pvp/list-room`,{
+                params:{
+                    bearer:config.bearer
+                },
                 headers:{
                     pragma:this.token
                 }
@@ -355,6 +318,56 @@ app = new Vue({
             this.pvp.rooms = res.data.rooms || this.pvp.rooms;
             await this.refreshToken(res);
             this.loading = false;
+        },
+        pvpRoom()
+        {
+            this.pvp.isReady = page.room.is_ready == 1 ? true : false;
+            this.pvp.status = this.pvp.isReady ? 'Hủy' : 'Sẵn Sàng <i class="fas fa-swords"></i>';
+            const self = this;
+            Pusher.logToConsole = true;
+            var pusher = new Pusher(page.pusher.key, {
+                cluster: 'ap1',
+                forceTLS: true
+            });
+            var joinRoom = pusher.subscribe('channel-pvp-joined-room');
+            var hitEnemy =  pusher.subscribe('channel-pvp-hit-enemy');
+            joinRoom.bind(`event-pvp-joined-room-${page.room.id}-${page.room.me}`, function(res) {
+                const audio = new Audio(`${config.root}/assets/sound/found_enemy.mp3`);
+                audio.play();
+                self.notify(`${res.data.enemy.name} đã vào phòng`);
+                self.findEnemy();
+                if(self.pvp.isReady)
+                {
+                    self.findMatch();
+                }
+            });
+            hitEnemy.bind(`event-pvp-hit-enemy-${page.room.id}-${page.room.me}`, function(res) {
+                self.notify(res.data.data.message);
+                self.pvp.match.you.turn = 1;
+                if(res.data.data.effectTo == 0)
+                {
+                    self.pvp.enemyAttack = true;
+                    self.pvp.enemyBuff = true;
+                    self.pvp.enemySkillAnimation = res.data.data.skillAnimation;
+
+                    setTimeout(() => {
+                        self.pvp.enemyAttack = false;
+                        self.pvp.enemyBuff = false;
+                    },1000);
+                }
+            });
+            if(page.room.people == 2)
+            {
+                this.pvp.enemyJoined = true;
+                if(page.room.is_fighting == 1 || page.room.is_ready == 1)
+                {
+                    this.findMatch();
+                }
+                if(page.room.is_fighting == 0)
+                {
+                    this.findEnemy();
+                }
+            }
         },
         showGearsDescription(data,permission)
         {
@@ -396,6 +409,9 @@ app = new Vue({
             {
                 this.loading = true;
                 let res = await axios.get(`${config.root}/api/v1/user/${id}`,{
+                    params:{
+                        bearer:config.bearer
+                    },
                     headers:{
                         pragma:this.token
                     }
@@ -415,6 +431,7 @@ app = new Vue({
         turnOut()
         {
             axios.post(`${config.root}/api/v1/pvp/turn-time-out`,{
+                bearer:config.bearer,
                 room:page.room.id
             },{
                 headers:{
@@ -460,6 +477,7 @@ app = new Vue({
         {
             let res = await axios.get(`${config.root}/api/v1/pvp/find-enemy`,{
                 params:{
+                    bearer:config.bearer,
                     name:page.room.id,
                     master:page.room.master,
                     people:page.room.people,
@@ -499,6 +517,7 @@ app = new Vue({
             {
                 this.pvp.isReady = !this.pvp.isReady;
                 let res = await axios.post(`${config.root}/api/v1/pvp/toggle-ready`,{
+                    bearer:config.bearer,
                     room:page.room.id,
                     status:this.pvp.isReady ? 1 : 0
                 },{
@@ -519,6 +538,7 @@ app = new Vue({
                 {
                     this.pvp.isReady = false;
                 }
+                clearInterval(remaining);
             }
         },
         async findMatch()
@@ -526,7 +546,8 @@ app = new Vue({
             try
             {
                 let res = await axios.post(`${config.root}/api/v1/pvp/find-match`,{
-                    room:page.room.id
+                    room:page.room.id,
+                    bearer:config.bearer
                 },{
                     headers:{
                         pragma:this.token
@@ -536,6 +557,15 @@ app = new Vue({
                 switch(res.data.code)
                 {
                     case 200:
+                        const self = this;
+                        this.pvp.timeRemaining = res.data.remaining;
+                        remaining = setInterval(() => {
+                           self.pvp.timeRemaining--;
+                           if(self.pvp.timeRemaining == 1)
+                           {
+                               clearInterval(remaining);
+                           }
+                        },1000);
                         this.notify(res.data.message);
                         const audio = new Audio(`${config.root}/assets/sound/found_enemy.mp3`);
                         audio.play();
@@ -605,7 +635,8 @@ app = new Vue({
                             }
                             let res = await axios.post(`${config.root}/api/v1/pvp/hit`,{
                                 room:page.room.id,
-                                skill:skill.id
+                                skill:skill.id,
+                                bearer:config.bearer
                             },{
                                 headers:{
                                     pragma:this.token
@@ -682,7 +713,8 @@ app = new Vue({
                 if(confirm('Rời rận đấu ?'))
                 {
                     let res = await axios.post(`${config.root}/api/v1/pvp/exit-match`,{
-                        room:page.room.id
+                        room:page.room.id,
+                        bearer:config.bearer
                     },{
                         headers:{
                             pragma:this.token

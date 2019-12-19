@@ -1,5 +1,10 @@
 <?php
 
+use App\Income\CustomeConnection;
+
+$pusher = (OBJECT)CustomeConnection::pusher();
+
+
 return [
 
     /*
@@ -32,11 +37,11 @@ return [
 
         'pusher' => [
             'driver' => 'pusher',
-            'key' => env('PUSHER_APP_KEY'),
-            'secret' => env('PUSHER_APP_SECRET'),
-            'app_id' => env('PUSHER_APP_ID'),
+            'key' => $pusher->app_key,
+            'secret' => $pusher->app_secret,
+            'app_id' => $pusher->app_id,
             'options' => [
-                'cluster' => env('PUSHER_APP_CLUSTER'),
+                'cluster' => $pusher->cluster,
                 'useTLS' => true,
             ],
         ],

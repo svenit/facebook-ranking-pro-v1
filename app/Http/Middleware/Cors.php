@@ -19,22 +19,33 @@ class Cors
     {
         if(env('APP_PROTECTED_API'))
         {
-            $token = md5(hash('sha256',md5($this->encode(strrev(csrf_token().'VYDEPTRAI')))));
-            if($request->header('host') == env('APP_DOMAIN') && $request->header('pragma') == $token)
+            if(isset($request->bearer))
             {
-                $newToken = Str::random(40);
-                Session::forget('_token');
-                Session::put('_token',$newToken);
-                return $next($request)->header('Authorization',$newToken)
-                    ->header('Token',Str::random(40))
-                    ->header('Access-Control-Allow-Origin', env('APP_DOMAIN'))
-                    ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+                $token = md5(hash('sha256',md5($this->encode(strrev(csrf_token().'VYDEPTRAI')))));
+                if($request->header('host') == env('APP_DOMAIN') && $request->header('pragma') == $token)
+                {
+                    $newToken = Str::random(40);
+                    Session::forget('_token');
+                    Session::put('_token',$newToken);
+                    return $next($request)->header('Authorization',$newToken)
+                        ->header('Token',Str::random(40))
+                        ->header('Access-Control-Allow-Origin', env('APP_DOMAIN'))
+                        ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+                }
+                return response()->json([
+                    'status' => 'error',
+                    'code' => '403',
+                    'message' => 'Invalid token or token expired'
+                ]);
             }
-            return response()->json([
-                'status' => 'error',
-                'code' => '403',
-                'message' => 'Forbidden'
-            ]);
+            else
+            {
+                return response()->json([
+                    'status' => 'error',
+                    'code' => '403',
+                    'message' => 'Invalid token or token expired'
+                ]);
+            }
         }
         return $next($request);
     }
