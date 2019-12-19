@@ -12,7 +12,7 @@ class CheckController extends Controller
 
     public function __invoke()
     {
-        if( Auth::user()->getCoins() >= $this->price)
+        if(Auth::user()->getCoins() >= $this->price)
         {
             return response()->json([
                 'code' => 200,

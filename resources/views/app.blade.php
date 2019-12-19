@@ -20,7 +20,15 @@
 	@stack('css')
 </head>
 <body>
-	<div id="app" class="layout-row">
+	<noscript>
+		<style type="text/css">
+			.layout-row {display:none;}
+		</style>
+		<div class="noscriptmsg">
+			You don't have javascript enabled.  Good luck with that.
+		</div>
+	</noscript>
+	<div id="app" class="layout-row" v-if="!detect">
 		@include('user.theme.aside')
 		<div id="main" style="background: url({{ asset('assets/images/background.jpg') }});" class="layout-column flex">
 			@include('user.theme.header')
@@ -50,7 +58,8 @@
 		root:"{{ url('/') }}",
 		current_url:"{{ url()->current() }}",
 		auth:{{ Auth::check() ? 1 : 0 }},
-		bearer:"{{ str_random(50) }}"
+		bearer:"{{ str_random(50) }}",
+		detect:false
 	};
 	</script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -58,6 +67,7 @@
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 	<script src="{{ asset('assets/js/plugins/speed/refresh.min.js') }}"></script>
 	<script src="{{ asset('assets/js/plugins/speed/trasher.js') }}"></script>
+	<script src="{{ asset('assets/js/plugins/speed/lite.min.js') }}"></script>
 	<script src="{{ asset('assets/js/site.min.js') }}"></script>
 	<script src="{{ asset('assets/js/plugins/axios/axios.min.js') }}"></script>
 	<script src="{{ asset('assets/js/vue/vue.js') }}"></script>

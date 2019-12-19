@@ -174,6 +174,20 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-6 d-flex mt-2">
+                        <div class="flex">
+                            <div class="text-silver"><small><i class="fas fa-shield"></i> Kháng Công <strong
+                                        class="text-silver">@{{ user.power.armor_strength }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex mt-2">
+                        <div class="flex">
+                            <div class="text-purple"><small><i class="fal fa-dice-d20"></i> Kháng Phép <strong
+                                        class="text-purple">@{{ user.power.armor_intelligent }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <br>
                 <div class="row row-sm">

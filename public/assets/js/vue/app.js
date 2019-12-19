@@ -2,6 +2,7 @@ app = new Vue({
     el:'#app',
     data:{
         loading:true,
+        detect:false,
         token:'',
         data:{
             infor:{
@@ -158,6 +159,16 @@ app = new Vue({
             }
         }
         this.loading = false;
+    },
+    updated() 
+    {
+        if(config.detect)
+        {
+            window.addEventListener('devtoolschange', event => {
+                this.detect = event.detail.isOpen;
+            });
+            this.detect = window.devtools.isOpen;
+        }
     },
     watch:{
         'pvp.isReady'()
