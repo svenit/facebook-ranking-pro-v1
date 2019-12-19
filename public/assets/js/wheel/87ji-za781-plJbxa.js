@@ -1,4 +1,4 @@
-function Spin2WinWheel() {
+function wheel() {
 
     var xmlns = "http://www.w3.org/2000/svg",
       xlinkns = "http://www.w3.org/1999/xlink",
@@ -792,12 +792,17 @@ function Spin2WinWheel() {
   
           showToast(resultStr2);
           //create a result object 
-          resultObj = {target:thisWheel, type:'result', spinCount:spinCount, win:segmentValuesArray[e].win, msg:segmentValuesArray[e].resultText, gameId:gameId, userData:segmentValuesArray[e].userData};
-          
-          //fire the result event
+          resultObj = {
+            target:thisWheel, 
+            type:'result', 
+            spinCount:spinCount, 
+            win:segmentValuesArray[e].win, 
+            msg:segmentValuesArray[e].resultText, 
+            gameId:gameId, 
+            userData:segmentValuesArray[e].userData,
+            data:segmentValuesArray[e]
+        };
           onResult(resultObj);
-          
-          //add result to gameResultsArray
           gameResultsArray.push(resultObj);
         }
       },
@@ -946,7 +951,7 @@ function Spin2WinWheel() {
       
   }
   
-  Spin2WinWheel.reset = function(){
+  wheel.reset = function(){
   
         document.querySelector('.wheel').innerHTML = "";
         document.querySelector('.wheelOutline').innerHTML = "";

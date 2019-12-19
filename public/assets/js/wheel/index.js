@@ -1,8 +1,5 @@
-//Usage
-
-//load your JSON (you could jQuery if you prefer)
-function loadJSON(callback) {
-
+function loadJSON(callback) 
+{
     var xobj = new XMLHttpRequest();
     xobj.overrideMimeType("application/json");
     xobj.open('GET', config.root + '/events/wheel/data', true);
@@ -13,46 +10,26 @@ function loadJSON(callback) {
     };
     xobj.send(null);
 }
-
 function myResult(e) 
 {
-    console.log('Spin Count: ' + e.spinCount + ' - ' + 'Win: ' + e.win + ' - ' + 'Message: ' + e.msg);
-    if (e.userData) {
-
-        console.log('User defined score: ' + e.userData.score)
-    }
-    alert(e.msg);
-
+    app.triggerWheel(e);
 }
-
-function myError(e) {
-    console.log('Spin Count: ' + e.spinCount + ' - ' + 'Message: ' + e.msg);
-
+function myError(e) 
+{
+    console.log('Something was wrong');
 }
-
-function myGameEnd(e) {
-
-    //e is gameResultsArray
-    console.log(e);
+function myGameEnd(e) 
+{
     TweenMax.delayedCall(5, function () {
-
-        Spin2WinWheel.reset();
-
+        wheel.reset();
     })
-
-
 }
-
-function init() {
+function init() 
+{
     loadJSON(function (response) {
-        // Parse JSON string to an object
         var jsonData = JSON.parse(response);
-        //if you want to spin it using your own button, then create a reference and pass it in as spinTrigger
         var mySpinBtn = document.querySelector('.spinBtn');
-        //create a new instance of Spin2Win Wheel and pass in the vars object
-        var myWheel = new Spin2WinWheel();
-
-        //WITH your own button
+        var myWheel = new wheel();
         myWheel.init({
             data: jsonData,
             onResult: myResult,
@@ -60,13 +37,6 @@ function init() {
             onError: myError,
             spinTrigger: mySpinBtn
         });
-
-        //WITHOUT your own button
-        //myWheel.init({data:jsonData, onResult:myResult, onGameEnd:myGameEnd, onError:myError});
     });
 }
-
-
-
-//And finally call it
 init();

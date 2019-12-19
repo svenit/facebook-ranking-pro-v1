@@ -35,24 +35,29 @@
                         </g>
                         <g class="valueContainer" />
                     </svg>
-                    <div class="toast spinBtn">
+                    <div id="spinBtn" @click="checkWheel()" class="toast">
                         <p/>
-                    </div> 
+                    </div>
+                    <div style="display:none" class="spinBtn"></div> 
                 </div>
             </div>
         </div>
     </div>
 </div>
 @endsection
-
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/css/wheel.css') }}">
 @endpush
 @push('js')
+    <script>
+        const page = {
+            path:'wheel.index',
+        }
+    </script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/utils/Draggable.min.js'></script>
-    <script src="{{ asset('assets/js/wheel/ThrowPropsPlugin.min.js') }}"></script>
-    <script src="{{ asset('assets/js/wheel/Spin2WinWheel.js') }}"></script>
+    <script src="{{ asset('assets/js/wheel/throw.min.js') }}"></script>
+    <script src="{{ asset('assets/js/wheel/wheel.js') }}"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/TextPlugin.min.js'></script>
     <script src="{{ asset('assets/js/wheel/index.js') }}"></script>
 @endpush

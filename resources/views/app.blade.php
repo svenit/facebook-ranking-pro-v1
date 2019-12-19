@@ -19,7 +19,6 @@
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 	@stack('css')
 </head>
-
 <body>
 	<div id="app" class="layout-row">
 		@include('user.theme.aside')

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User\Events;
 
+use App\Model\SpinWheel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -36,58 +37,7 @@ class WheelController extends Controller
             '#7F8C8D'
         ];
         shuffle($randomColor);
-        $segmentValues = [
-            [
-                'probability' => 20,
-                'type' => 'string',
-                'value' => 'HOLIDAY^FOR TWO',
-                'win' => false,
-                'resultText' => 'YOU WON A HOLIDAY!',
-                'userData' => [
-                    'score' => 10
-                ]
-            ],
-            [
-                'probability' => 120,
-                'type' => 'image',
-                'value' => 'http://pixelartmaker.com/art/2b6c9fa2d26bf98.png',
-                'win' => true,
-                'resultText' => 'Gold',
-                'userData' => [
-                    'score' => 20
-                ]
-            ],
-            [
-                'probability' => 120,
-                'type' => 'string',
-                'value' => '2M XU',
-                'win' => true,
-                'resultText' => 'A SQUARE!',
-                'userData' => [
-                    'score' => 3000
-                ]
-            ],
-            [
-                'probability' => 120,
-                'type' => 'image',
-                'value' => 'https://clipart.info/images/ccovers/1499793247facebook-sad-emoji-like-png.png',
-                'win' => true,
-                'resultText' => 'A SQUARE!',
-                'userData' => [
-                    'score' => 3000
-                ]
-            ],
-            [
-                'probability' => 120,
-                'type' => 'image',
-                'value' => 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/7d638993-ee6c-4f33-a918-7526f0bb9e50/d4lyhdi-67246a08-321e-488c-aeea-3ba9093c3288.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzdkNjM4OTkzLWVlNmMtNGYzMy1hOTE4LTc1MjZmMGJiOWU1MFwvZDRseWhkaS02NzI0NmEwOC0zMjFlLTQ4OGMtYWVlYS0zYmE5MDkzYzMyODgucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.QmjMUPrNd6CbAre175pEH18Y0_XHH4Htb6uq_rd2gew',
-                'win' => true,
-                'resultText' => 'A SQUARE!',
-                'userData' => [
-                    'score' => 3000
-                ]
-            ]
-        ];
+        $segmentValues = SpinWheel::all();
         $data = [
             'colorArray' => $randomColor,
             'segmentValuesArray' => $segmentValues,

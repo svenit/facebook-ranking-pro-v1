@@ -18,15 +18,18 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::group(['prefix' => 'v1','namespace' => 'Api\v1','middleware' => 'cors'], function () {
     Route::get('user/{param}','IndexController@userInfor');
-    Route::group(['prefix' => 'pvp'], function () {
-        Route::get('list-room','PvP\ListRoomController');
-        Route::get('find-enemy','PvP\FindEnemyController');
-        Route::post('toggle-ready','PvP\BaseController@toggleReady');
-        Route::post('get-ready','PvP\FindMatchController');
-        Route::post('find-match','PvP\FindMatchController');
-        Route::post('turn-time-out','PvP\TurnOutController');
-        Route::post('listen-action','PvP\ListenActionController');
-        Route::post('hit','PvP\HitController');
-        Route::post('exit-match','PvP\BaseController@exitMatch');
+    Route::group(['prefix' => 'pvp','namespace' => 'PVP'], function () {
+        Route::get('list-room','ListRoomController');
+        Route::get('find-enemy','FindEnemyController');
+        Route::post('toggle-ready','BaseController@toggleReady');
+        Route::post('get-ready','FindMatchController');
+        Route::post('find-match','FindMatchController');
+        Route::post('turn-time-out','TurnOutController');
+        Route::post('listen-action','ListenActionController');
+        Route::post('hit','HitController');
+        Route::post('exit-match','BaseController@exitMatch');
+    });
+    Route::group(['prefix' => 'wheel','namespace' => 'Wheel'], function () {
+        Route::get('check','CheckController');
     });
 });

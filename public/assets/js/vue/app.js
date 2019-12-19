@@ -133,6 +133,9 @@ app = new Vue({
                     energy:1
                 }
             }
+        },
+        wheel:{
+            spinning:false
         }
     },
     async created()
@@ -729,6 +732,37 @@ app = new Vue({
             {
                 this.notify('Đã có lỗi xảy ra');
                 this.refreshToken(this.token);
+            }
+        },
+        triggerWheel(data)
+        {
+            this.wheel.spinning = false;
+            console.log(data);
+        },
+        async checkWheel()
+        {
+            if(page.path == 'wheel.index')
+            {
+                if(!this.wheel.spinning)
+                {
+                    let res = await axios.get(`${config.root}/api/v1/wheel/check`,{
+                        params:{
+                            bearer:config.bearer
+                        },
+                        headers:{
+                            pragma:this.token
+                        }
+                    });
+                    await this.refreshToken(res);
+                    if(res.data.code == 200)
+                    {
+                        this.wheel.spinning = true;
+                        $('.spinBtn').click();
+                        return;
+                    }
+                    this.notify(res.data.message);
+                }
+                this.notify('Đang quay...');
             }
         },
         notify(message)
