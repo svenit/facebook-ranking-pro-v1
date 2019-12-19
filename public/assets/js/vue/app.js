@@ -195,6 +195,7 @@ app = new Vue({
                                 }
                             }).then(async (res) => {
                                 await this.refreshToken(res);
+                                clearInterval(countDown);
                                 switch(res.data.code)
                                 {
                                     case 200:
@@ -207,7 +208,6 @@ app = new Vue({
                                         this.pvp.match.enemy.hp = res.data.enemy.hp;
                                         this.pvp.match.enemy.energy = res.data.enemy.energy;
                                         this.pvp.timeOut = 15;
-                                        clearInterval(countDown);
                                     break;
                                     case 404:
                                         Swal.fire('',res.data.message,res.data.status);
@@ -224,7 +224,6 @@ app = new Vue({
                                             confirmButtonText:'OK',
                                         });
                                         this.resetPvp();
-                                        clearInterval(countDown);
                                     break;
                                 }
                             });
@@ -538,7 +537,6 @@ app = new Vue({
                 {
                     this.pvp.isReady = false;
                 }
-                clearInterval(remaining);
             }
         },
         async findMatch()
@@ -557,11 +555,10 @@ app = new Vue({
                 switch(res.data.code)
                 {
                     case 200:
-                        const self = this;
                         this.pvp.timeRemaining = res.data.remaining;
                         remaining = setInterval(() => {
-                           self.pvp.timeRemaining--;
-                           if(self.pvp.timeRemaining == 1)
+                           this.pvp.timeRemaining--;
+                           if(this.pvp.timeRemaining <= 0)
                            {
                                clearInterval(remaining);
                            }
