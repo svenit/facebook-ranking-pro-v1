@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 // });
 Route::group(['prefix' => 'v1','namespace' => 'Api\v1','middleware' => 'cors'], function () {
     Route::get('user/{param}','IndexController@userInfor');
-    Route::group(['prefix' => 'pvp','namespace' => 'PVP'], function () {
+    Route::group(['prefix' => 'pvp','namespace' => 'PvP'], function () {
         Route::get('list-room','ListRoomController');
         Route::get('find-enemy','FindEnemyController');
         Route::post('toggle-ready','BaseController@toggleReady');
