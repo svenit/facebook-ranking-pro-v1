@@ -2,7 +2,7 @@
 
 use App\Income\CustomeConnection;
 
-//$pusher = (OBJECT)CustomeConnection::pusher();
+$pusher = (OBJECT)CustomeConnection::pusher();
 
 
 return [
