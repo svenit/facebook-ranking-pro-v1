@@ -237,48 +237,44 @@
                         </ul>
                     </li>
                     <li><a href="#" class=""><span class="nav-icon"><i data-feather="calendar"></i></span> <span
-                                class="nav-text">Sự Kiện</span> <span class="nav-caret"></span></a>
+                                class="nav-text">Giải Trí</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
                             <li><a href="{{ Route('user.events.wheel') }}" class=""><span class="nav-text">VQMM</span></a></li>
-                            <li><a href="ui.badge.html" class=""><span class="nav-text">Kho Báu</span></a></li>
+                            <li><a href="#" class=""><span class="nav-text">Kho Báu</span></a></li>
                         </ul>
                     </li>
                     <li><a href="#" class=""><span class="nav-icon"><i data-feather="activity"></i></span> <span
                         class="nav-text">Khám Phá</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
-                            <li><a href="ui.alert.html" class=""><span class="nav-text">Khu Tập Luyện</span></a></li>
-                            <li><a href="ui.badge.html" class=""><span class="nav-text">Trường Học</span></a></li>
-                            <li><a href="ui.badge.html" class=""><span class="nav-text">Nhiệm Vụ</span></a></li>
-                            <li><a href="ui.badge.html" class=""><span class="nav-text">Phòng Hồi Phục</span></a></li>
+                            <li><a href="#" class=""><span class="nav-text">Khu Tập Luyện</span></a></li>
+                            <li><a href="#" class=""><span class="nav-text">Trường Học</span></a></li>
+                            <li><a href="#" class=""><span class="nav-text">Nhiệm Vụ</span></a></li>
+                            <li><a href="#" class=""><span class="nav-text">Phòng Hồi Phục</span></a></li>
                         </ul>
                     </li>
                     <li><a href="#" class=""><span class="nav-icon"><i data-feather="shopping-cart"></i></span> <span
                         class="nav-text">Cửa Hàng</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
-                            <li><a href="ui.alert.html" class=""><span class="nav-text">Vũ Khí</span></a></li>
-                            <li><a href="ui.badge.html" class=""><span class="nav-text">Mũ</span></a></li>
-                            <li><a href="ui.badge.html" class=""><span class="nav-text">Áo Giáp</span></a></li>
-                            <li><a href="ui.badge.html" class=""><span class="nav-text">Quần</span></a></li>
-                            <li><a href="ui.badge.html" class=""><span class="nav-text">Giày</span></a></li>
-                            <li><a href="ui.badge.html" class=""><span class="nav-text">Trang Sức</span></a></li>
-                            <li><a href="ui.badge.html" class=""><span class="nav-text">Thần Thú</span></a></li>
+                            <li><a href="#" class=""><span class="nav-text">Vũ Khí</span></a></li>
+                            <li><a href="#" class=""><span class="nav-text">Mũ</span></a></li>
+                            <li><a href="#" class=""><span class="nav-text">Trang Phục</span></a></li>
+                            <li><a href="#" class=""><span class="nav-text">Phụ Kiện</span></a></li>
                         </ul>
                     </li>
                     <li><a href="#" class=""><span class="nav-icon"><i data-feather="zap"></i></span> <span
                         class="nav-text">Trinh Phạt</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
-                            <li><a href="ui.alert.html" class=""><span class="nav-text">Farm Quái</span></a></li>
+                            <li><a href="#" class=""><span class="nav-text">Farm Quái</span></a></li>
                         </ul>
                     </li>
                     <li><a href="#" class=""><span class="nav-icon"><i data-feather="users"></i></span> <span
                         class="nav-text">Bang Hội</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
-                            <li><a href="ui.alert.html" class=""><span class="nav-text">Tạo</span></a></li>
-                            <li><a href="ui.alert.html" class=""><span class="nav-text">Đại Sảnh</span></a></li>
-                            <li><a href="ui.alert.html" class=""><span class="nav-text">Thành Viên</span></a></li>
-                            <li><a href="ui.alert.html" class=""><span class="nav-text">Hoạt Động</span></a></li>
-                            <li><a href="ui.alert.html" class=""><span class="nav-text">Khiêu Chiến</span></a></li>
-                            <li><a href="ui.alert.html" class=""><span class="nav-text">Thiết Lập</span></a></li>
+                            <li><a href="#" class=""><span class="nav-text">Tạo</span></a></li>
+                            <li><a href="#" class=""><span class="nav-text">Đại Sảnh</span></a></li>
+                            <li><a href="#" class=""><span class="nav-text">Thành Viên</span></a></li>
+                            <li><a href="#" class=""><span class="nav-text">Hoạt Động</span></a></li>
+                            <li><a href="#" class=""><span class="nav-text">Thiết Lập</span></a></li>
                         </ul>
                     </li>
                     <li><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
@@ -287,28 +283,19 @@
                             <li><a href="{{ Route('user.pvp.index') }}" class=""><span class="nav-text">Tham Gia</span></a></li>
                         </ul>
                     </li>
+                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="message-circle"></i></span> <span
+                        class="nav-text">Chat</span> <span class="nav-caret"></span></a>
+                        <ul class="nav-sub nav-mega">
+                            <li><a href="{{ Route('user.chat.global') }}" class=""><span class="nav-text">Thế Giới</span></a></li>
+                            <li><a href="{{ Route('user.pvp.index') }}" class=""><span class="nav-text">CVNL</span></a></li>
+                        </ul>
+                    </li>
                     <li class="nav-header hidden-folded"><span class="text-muted">Admin Cpanel</span></li>
                     <li><a href="#" class=""><span class="nav-icon"><i data-feather="grid"></i></span> <span
                                 class="nav-text">Admin</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
                             <li><a href="{{ Route('admin.update-points') }}" class=""><span class="nav-text">Cập Nhật Điểm</span></a></li>
-                            <li><a href="ui.badge.html" class=""><span class="nav-text">Badge</span></a></li>
-                            <li><a href="ui.button.html" class=""><span class="nav-text">Button</span></a></li>
-                            <li><a href="ui.card.html" class=""><span class="nav-text">Card</span></a></li>
-                            <li><a href="ui.carousel.html" class=""><span class="nav-text">Carousel</span></a></li>
-                            <li><a href="ui.color.html" class=""><span class="nav-text">Color</span></a></li>
-                            <li><a href="ui.dropdown.html" class=""><span class="nav-text">Dropdown</span></a></li>
-                            <li><a href="ui.grid.html" class=""><span class="nav-text">Grid</span></a></li>
-                            <li><a href="ui.icon.html" class=""><span class="nav-text">Icon</span></a></li>
-                            <li><a href="ui.list.html" class=""><span class="nav-text">List</span></a></li>
-                            <li><a href="ui.modal.html" class=""><span class="nav-text">Modal</span></a></li>
-                            <li><a href="ui.navbar.html" class=""><span class="nav-text">Navbar</span></a></li>
-                            <li><a href="ui.sidenav.html" class=""><span class="nav-text">Sidenav</span></a></li>
-                            <li><a href="ui.timeline.html" class=""><span class="nav-text">Timeline</span></a></li>
-                            <li><a href="ui.tab.html" class=""><span class="nav-text">Tab &amp; Collpase</span></a>
                             </li>
-                            <li><a href="ui.tooltip.html" class=""><span class="nav-text">&amp;
-                                        Popover</span></a></li>
                         </ul>
                     </li>
                 </ul>
@@ -316,9 +303,9 @@
         </div>
         <div class="no-shrink">
             <div class="p-3 d-flex align-items-center">
-                <div class="text-sm hidden-folded text-muted">Trial: 35%</div>
+                <div class="text-sm hidden-folded text-muted">Exp : @{{ data.level.percent }} %</div>
                 <div class="progress mx-2 flex" style="height:4px">
-                    <div class="progress-bar gd-success" style="width: 35%"></div>
+                    <div class="progress-bar gd-success" :style="{width:data.level.percent + '%'}"></div>
                 </div>
             </div>
         </div>

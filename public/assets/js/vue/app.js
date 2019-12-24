@@ -1,3 +1,4 @@
+const myFirebase = new Firebase('https://vuejs-307.firebaseio.com');
 app = new Vue({
     el:'#app',
     data:{
@@ -137,6 +138,14 @@ app = new Vue({
         },
         wheel:{
             spinning:false
+        },
+        chat:{
+            global:{
+                messages:[],
+                text:'',
+                isIn:false,
+                noti:false
+            }
         }
     },
     async created()
@@ -154,6 +163,9 @@ app = new Vue({
                     break;
                     case 'pvp.room':
                         this.pvpRoom();
+                    break;
+                    case 'chat.global':
+                        this.listGlobalChat();
                     break;
                 }
             }
@@ -181,6 +193,17 @@ app = new Vue({
             {
                 window.addEventListener('beforeunload', function (e) {
                     const confirmationMessage = 'Bạn đang trong trận, điều này có thể ảnh hưởng đến trận đấu :/';
+                    (e || window.event).returnValue = confirmationMessage; 
+                    return confirmationMessage;                            
+                });
+            }
+        },
+        'wheel.spinning'()
+        {
+            if(page.path == 'wheel.index')
+            {
+                window.addEventListener('beforeunload', function (e) {
+                    const confirmationMessage = 'Tải lại trang sẽ không nhận được phần thưởng !';
                     (e || window.event).returnValue = confirmationMessage; 
                     return confirmationMessage;                            
                 });
@@ -747,22 +770,25 @@ app = new Vue({
         },
         async triggerWheel(data)
         {
-            let res = await axios.post(`${config.root}/api/v1/wheel/spin`,{
-                bearer:config.bearer,
-                data:`${md5(this.encodeTime().split("").reverse().join(""))}-${md5(data.data.id)}-${md5(data.data.type)}-${md5(data.data.probability)}`,
-                hash:this.encodeTime()
-            },{
-                headers:{
-                    pragma:this.token
-                }
-            });
-            await this.refreshToken(res);
-            this.notify(res.data.message);
-            if(res.data.code == 200)
+            if(this.wheel.spinning)
             {
-                this.index();
+                let res = await axios.post(`${config.root}/api/v1/wheel/spin`,{
+                    bearer:config.bearer,
+                    data:`${md5(this.encodeTime().split("").reverse().join(""))}-${md5(data.data.id)}-${md5(data.data.type)}-${md5(data.data.probability)}`,
+                    hash:this.encodeTime()
+                },{
+                    headers:{
+                        pragma:this.token
+                    }
+                });
+                await this.refreshToken(res);
+                this.notify(res.data.message);
+                if(res.data.code == 200)
+                {
+                    this.index();
+                }
+                this.wheel.spinning = false;
             }
-            this.wheel.spinning = false;
         },
         async checkWheel()
         {
@@ -783,6 +809,7 @@ app = new Vue({
                     if(res.data.code == 200)
                     {
                         this.wheel.spinning = true;
+                        await this.index();
                         $('.spinBtn').click();
                         return;
                     }
@@ -845,6 +872,54 @@ app = new Vue({
             this.pvp.yourBuff = false;
             this.pvp.isReady = false;
             this.pvp.status = 'Sẵn Sàng <i class="fas fa-swords"></i>';
+        },
+        async listGlobalChat()
+        {
+            const self = this;
+            this.loading = true;
+            await myFirebase.on('child_added', function (data){
+                self.chat.global.messages.push(data.val());
+                $('#chat-box').stop().animate({
+                  scrollTop: 1000000000000000000
+                }, $('#chat-box').scrollHeight);
+                if(self.chat.global.isIn && self.chat.global.noti)
+                {
+                    const audio = new Audio(`${config.root}/assets/sound/ting.mp3`);
+                    audio.play();
+                }
+            });
+            this.chat.global.isIn = true;
+            this.loading = false;
+        },
+        async sendMessage()
+        {
+            try
+            {
+                if(this.chat.global.text == '' || !this.chat.global.text.trim())
+                {
+                    return;
+                }
+                await myFirebase.push({
+                    id:page.user.id,
+                    name:page.user.name,
+                    time:new Date().getTime(),
+                    message:this.chat.global.text
+                });
+                this.chat.global.text = '';
+                $('#chat-box').animate({
+                    scrollTop: 1000000000000000000
+                },0);            
+                this.chat.global.noti = true;
+            }
+            catch(e)
+            {
+                this.notify('Đã có lỗi xảy ra');
+                console.log(e);
+            }
+        },
+        timeAgo(time)
+        {
+            return moment(time).lang('vi').fromNow(true);
         }
     },
 });

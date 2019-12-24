@@ -17,11 +17,15 @@ class CheckController extends Controller
         {
             if(Auth::user()->getCoins() >= $this->price)
             {
-                return response()->json([
-                    'code' => 200,
-                    'status' => 'success',
-                    'message' => 'OK'
-                ],200);
+                $paid = Auth::user()->decrement('income_coins',$this->price);
+                if(isset($paid))
+                {
+                    return response()->json([
+                        'code' => 200,
+                        'status' => 'success',
+                        'message' => 'OK'
+                    ],200);
+                }
             }
             return response()->json([
                 'code' => 500,

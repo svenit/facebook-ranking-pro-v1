@@ -17,6 +17,7 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+	<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
 	@stack('css')
 </head>
 <body>
@@ -65,6 +66,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.2/dist/sweetalert2.all.min.js"></script>	
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+	<script src="{{ asset('assets/js/plugins/moment/moment.js') }}"></script>
 	<script src="{{ asset('assets/js/plugins/speed/refresh.min.js') }}"></script>
 	<script src="{{ asset('assets/js/plugins/speed/trasher.js') }}"></script>
 	<script src="{{ asset('assets/js/plugins/speed/lite.min.js') }}"></script>

@@ -22,7 +22,6 @@ Route::get('test/{id}',function($id){
     Auth::loginUsingId($id,1);
     return redirect()->route('user.index');
 });
-
 Route::group(['middleware' => 'redirect.action'], function () {
     Route::group(['prefix' => 'oauth','as' => 'oauth.','namespace' => 'Auth'], function () {
         Route::get('login', 'LoginController@showLoginForm')->name('index');
@@ -32,17 +31,12 @@ Route::group(['middleware' => 'redirect.action'], function () {
         Route::get('facebook','LoginController@redirectToProvider')->name('login');
         Route::get('facebook/callback','LoginController@handleProviderCallback');
     });
-
     Route::group(['prefix' => 'character','as' => 'user.character.','namespace' => 'User\Character'], function () {
         Route::get('choose','CharacterController@choose')->name('choose');
         Route::get('set/{id}','CharacterController@set')->name('set')->where('id','[1-9+]');
     });
-
     Route::group(['prefix' => '/','as' => 'user.','namespace' => 'User','middleware' => 'user'], function () {
-        
         Route::get('/','HomeController@index')->name('index');
-
-
         Route::group(['prefix' => 'top','as' => 'top.','namespace' => 'Top'], function () {
             Route::get('/','TopController@power')->name('power');
             Route::get('gold','TopController@coin')->name('coin');
@@ -61,6 +55,9 @@ Route::group(['middleware' => 'redirect.action'], function () {
                 Route::post('create-room','PvPController@createRoom')->name('create');
                 Route::get('join/{id}','PvPController@joinedRoom')->name('joined-room');
                 Route::get('room/{id}','PvPController@room')->name('room');
+            });
+            Route::group(['prefix' => 'chat','as' => 'chat.','namespace' => 'Chat'], function () {
+                Route::get('/','GlobalChatController@index')->name('global');
             });
         });
     });

@@ -9,9 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class SpinController extends Controller
-{
-    private $price = 5000;
-    
+{   
     public function __invoke(Request $request)
     {
         $hash = md5(substr(time(),0,-2));
@@ -24,8 +22,7 @@ class SpinController extends Controller
                 if(isset($findGif))
                 {
                     $receiveGif = DB::statement($findGif->query.Auth::id());
-                    $paid = Auth::user()->decrement('income_coins',$this->price);
-                    if($receiveGif && $paid)
+                    if($receiveGif)
                     {
                         $response = [
                             'code' => 200,
