@@ -19,5 +19,6 @@ class CustomeConnection
 
             return $pusher->fetchAll(PDO::FETCH_ASSOC)[0];
         }
+        return [];
     }
 }
