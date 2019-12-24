@@ -10,20 +10,29 @@ class CheckController extends Controller
 {
     private $price = 1000;
 
-    public function __invoke()
+    public function __invoke(Request $request)
     {
-        if(Auth::user()->getCoins() >= $this->price)
+        $hash = md5(substr(time(),0,-2));
+        if($request->hash == $hash)
         {
+            if(Auth::user()->getCoins() >= $this->price)
+            {
+                return response()->json([
+                    'code' => 200,
+                    'status' => 'success',
+                    'message' => 'OK'
+                ],200);
+            }
             return response()->json([
-                'code' => 200,
-                'status' => 'success',
-                'message' => 'OK'
-            ],200);
+                'code' => 500,
+                'status' => 'error',
+                'message' => 'Bạn không đủ vàng'
+            ]);
         }
         return response()->json([
             'code' => 500,
             'status' => 'error',
-            'message' => 'Bạn không đủ vàng'
-        ]);
+            'message' => 'Không tìm thấy mã kết nối, vui lòng thử lại'
+        ]); 
     }
 }

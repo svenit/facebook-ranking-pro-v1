@@ -37,7 +37,7 @@ class WheelController extends Controller
             '#7F8C8D'
         ];
         shuffle($randomColor);
-        $segmentValues = SpinWheel::all();
+        $segmentValues = SpinWheel::inRandomOrder()->get();
         $data = [
             'colorArray' => $randomColor,
             'segmentValuesArray' => $segmentValues,

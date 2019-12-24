@@ -13,9 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 Route::group(['prefix' => 'v1','namespace' => 'Api\v1','middleware' => 'cors'], function () {
     Route::get('user/{param}','IndexController@userInfor');
     Route::group(['prefix' => 'pvp','namespace' => 'PVP'], function () {
@@ -31,5 +31,6 @@ Route::group(['prefix' => 'v1','namespace' => 'Api\v1','middleware' => 'cors'], 
     });
     Route::group(['prefix' => 'wheel','namespace' => 'Wheel'], function () {
         Route::get('check','CheckController');
+        Route::post('spin','SpinController');
     });
 });

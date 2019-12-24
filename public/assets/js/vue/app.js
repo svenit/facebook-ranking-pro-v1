@@ -745,10 +745,24 @@ app = new Vue({
                 this.refreshToken(this.token);
             }
         },
-        triggerWheel(data)
+        async triggerWheel(data)
         {
+            let res = await axios.post(`${config.root}/api/v1/wheel/spin`,{
+                bearer:config.bearer,
+                data:`${md5(this.encodeTime().split("").reverse().join(""))}-${md5(data.data.id)}-${md5(data.data.type)}-${md5(data.data.probability)}`,
+                hash:this.encodeTime()
+            },{
+                headers:{
+                    pragma:this.token
+                }
+            });
+            await this.refreshToken(res);
+            this.notify(res.data.message);
+            if(res.data.code == 200)
+            {
+                this.index();
+            }
             this.wheel.spinning = false;
-            console.log(data);
         },
         async checkWheel()
         {
@@ -758,7 +772,8 @@ app = new Vue({
                 {
                     let res = await axios.get(`${config.root}/api/v1/wheel/check`,{
                         params:{
-                            bearer:config.bearer
+                            bearer:config.bearer,
+                            hash:this.encodeTime(),
                         },
                         headers:{
                             pragma:this.token
@@ -811,6 +826,13 @@ app = new Vue({
             message = message.replace(/8/gi,"_");
             message = message.replace(/9/gi,"=");
             return message;
+        },
+        encodeTime()
+        {
+            var string = new Date().getTime();
+            string = string.toString();
+            var str = string.slice(0,-5);
+            return md5(parseInt(str));
         },
         resetPvp()
         {
