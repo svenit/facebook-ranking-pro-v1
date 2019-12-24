@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //URL::forceScheme('https');
+        URL::forceScheme('https');
         if(Schema::hasTable('configs'))
         {
             View::composer('*', function ($view) 
