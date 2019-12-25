@@ -30,9 +30,9 @@
                                 </div>
                                 <div v-else class="chat-list">
                                     <div v-for="(msg,index) in chat.global.messages" :key="index" class="chat-item" :data-class="msg.id == {{ Auth::user()->user_id }} ? 'alt' : 'null'" v-if="msg.message && msg.id && msg.name && msg.time" data-sr-id="32" style="visibility: visible; transform: none; opacity: 1; transition: transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s;">
-                                        <a href="#" class="avatar w-40" data-pjax-state=""><img class="image" :src="`http://graph.facebook.com/${msg.id}/picture?type=normal`" alt="."></a>
+                                        <a v-if="msg.id != {{ Auth::user()->user_id }}" href="#" class="avatar w-40" data-pjax-state=""><img class="image" :src="`http://graph.facebook.com/${msg.id}/picture?type=normal`" alt="."></a>
                                         <div class="chat-body">
-                                            <div :style="{color:'#333',borderRadius:'25px !important',backgroundColor:msg.id == {{ Auth::user()->user_id }} ? '#e7ad55' : 'whitesmoke',}" class="chat-content rounded msg">@{{ msg.message }}</div>
+                                            <div :style="{maxWidth:'300px',color:'#333',borderRadius:'25px !important',backgroundColor:msg.id == {{ Auth::user()->user_id }} ? '#e7ad55' : 'whitesmoke',}" class="chat-content rounded msg">@{{ msg.message }}</div>
                                             <div class="chat-date date">@{{ timeAgo(msg.time) }}</div>
                                         </div>
                                     </div>
@@ -44,30 +44,7 @@
                         <div class="p-2">
                             <div class="px-3">
                                 <div class="toolbar my-1">
-                                    <a href="#" class="text-muted mx-1" data-pjax-state="">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-image">
-                                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                            <polyline points="21 15 16 10 5 21"></polyline>
-                                        </svg>
-                                    </a>
-                                    <a href="#" class="text-muted mx-1" data-pjax-state="">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-camera">
-                                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                                            <circle cx="12" cy="13" r="4"></circle>
-                                        </svg>
-                                    </a>
-                                    <a href="#" class="text-muted mx-1" data-pjax-state="">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin">
-                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                            <circle cx="12" cy="10" r="3"></circle>
-                                        </svg>
-                                    </a>
-                                    <a href="#" class="text-muted mx-1" data-pjax-state="">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-paperclip">
-                                            <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
-                                        </svg>
-                                    </a>
+                                    <i data-feather="image"></i>
                                 </div>
                             </div>
                             <div class="input-group">

@@ -144,7 +144,7 @@ app = new Vue({
                 messages:[],
                 text:'',
                 isIn:false,
-                noti:false
+                noti:true
             }
         }
     },
@@ -882,13 +882,15 @@ app = new Vue({
                 $('#chat-box').stop().animate({
                   scrollTop: 1000000000000000000
                 }, $('#chat-box').scrollHeight);
-                if(self.chat.global.isIn && self.chat.global.noti)
+                if(self.chat.global.isIn && self.chat.global.noti && data.val().id != page.user.id)
                 {
                     const audio = new Audio(`${config.root}/assets/sound/ting.mp3`);
                     audio.play();
                 }
             });
-            this.chat.global.isIn = true;
+            setTimeout(() => {
+                this.chat.global.isIn = true;
+            },1500);
             this.loading = false;
         },
         async sendMessage()
@@ -909,7 +911,6 @@ app = new Vue({
                 $('#chat-box').animate({
                     scrollTop: 1000000000000000000
                 },0);            
-                this.chat.global.noti = true;
             }
             catch(e)
             {
