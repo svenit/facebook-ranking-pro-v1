@@ -146,6 +146,8 @@ app = new Vue({
                 isIn:false,
                 noti:true,
                 percent:0,
+                previewImage:'',
+                uploading:false
             }
         }
     },
@@ -901,52 +903,66 @@ app = new Vue({
         },
         async uploadImage(e)
         {
-            this.chat.global.percent = 0;
-            const file = e.target.files[0];
-            const validate = ['image/png','image/jpg','image/jpge','image/gif'];
-            const apiKey = '2bb20e13e69a991';
-            var form = new FormData();
-            form.append('image',file);
-            const self = this;
-            if(validate.includes(file.type))
+            try
             {
-                if(file.size <= 5000)
+                this.chat.global.uploading = true;
+                this.chat.global.percent = 0;
+                const file = e.target.files[0];
+                console.log(file);
+                const validate = ['image/png','image/jpg','image/jpeg','image/gif'];
+                const apiKey = '2bb20e13e69a991';
+                var form = new FormData();
+                form.append('image',file);
+                const self = this;
+                if(validate.includes(file.type))
                 {
-                    let res = await axios.post('https://api.imgur.com/3/image',form,{
-                        headers: {
-                            Authorization: 'Client-ID ' + apiKey,
-                            Accept: 'application/json'
-                        },
-                        onUploadProgress(uploadEvent)
-                        {
-                            self.chat.global.percent = Math.round((uploadEvent.loaded/uploadEvent.total)*100);
-                        }
-                    });
-                    if(res.status == 200)
+                    if(file.size <= 5000000)
                     {
-                        this.chat.global.text = res.data.data.link;
-                        this.sendMessage('attachments');
+                        let res = await axios.post('https://api.imgur.com/3/image',form,{
+                            headers: {
+                                Authorization: 'Client-ID ' + apiKey,
+                                Accept: 'application/json'
+                            },
+                            onUploadProgress(uploadEvent)
+                            {
+                                self.chat.global.percent = Math.round((uploadEvent.loaded/uploadEvent.total)*100);
+                            }
+                        });
+                        if(res.status == 200)
+                        {
+                            this.chat.global.uploading = false;
+                            this.chat.global.percent = 0;
+                            this.chat.global.text = res.data.data.link;
+                            this.sendMessage('attachments');
+                        }
+                        else
+                        {
+                            this.notify('Không thể tải ảnh lên');
+                        }
                     }
                     else
                     {
-                        this.notify('Không thể tải ảnh lên');
+                        this.notify('Ảnh phải có kích thước nhỏ hơn 5MB');
                     }
                 }
                 else
                 {
-                    this.notify('Ảnh phải có kích thước nhỏ hơn 5MB');
+                    this.notify('Ảnh không đúng định dạng !');
                 }
+                this.chat.global.uploading = false;
+                this.chat.global.percent = 0;
             }
-            else
+            catch(e)
             {
-                this.notify('Ảnh không đúng định dạng !');
+                this.chat.global.uploading = false;
+                this.chat.global.percent = 0;
             }
         },
         async sendMessage(type)
         {
             try
             {
-                if(this.chat.global.text == '' || !this.chat.global.text.trim())
+                if(this.chat.global.text == '' || !this.chat.global.text.trim() || this.chat.global.uploading)
                 {
                     return;
                 }

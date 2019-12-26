@@ -35,7 +35,16 @@
                                     <div v-for="(msg,index) in chat.global.messages" :key="index" class="chat-item" :data-class="msg.id == {{ Auth::user()->user_id }} ? 'alt' : 'null'" v-if="msg.message && msg.id && msg.name && msg.time" data-sr-id="32" style="visibility: visible; transform: none; opacity: 1; transition: transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s;">
                                         <a v-if="msg.id != {{ Auth::user()->user_id }}" href="#" class="avatar w-40" data-pjax-state=""><img class="image" :src="`http://graph.facebook.com/${msg.id}/picture?type=normal`" alt="."></a>
                                         <div class="chat-body">
-                                            <div :style="{maxWidth:'300px',color:'#333',borderRadius:'25px !important',backgroundColor:msg.id == {{ Auth::user()->user_id }} ? '#e7ad55' : 'whitesmoke',}" class="chat-content rounded msg">@{{ msg.message }}</div>
+                                            <div v-if="msg.type == 'text'" :style="{maxWidth:'300px',color:'#333',borderRadius:'25px !important',backgroundColor:msg.id == {{ Auth::user()->user_id }} ? '#e7ad55' : 'whitesmoke',}" class="chat-content rounded msg">@{{ msg.message }}</div>
+                                            <div v-if="msg.type == 'attachments'" class="w-md my-3">
+                                                <div class="row row-xs">
+                                                    <div class="col-12">
+                                                        <div class="media media-2x1 r box-shadows">
+                                                            <a target="_blank" :href="msg.message" class="media-content" :style="{backgroundImage: `url(${msg.message})`}" data-pjax-state=""></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="chat-date date">@{{ timeAgo(msg.time) }} trước</div>
                                         </div>
                                     </div>
@@ -47,8 +56,11 @@
                         <div class="p-2">
                             <div class="px-3">
                                 <div class="toolbar my-1">
-                                    <button class="btn btn-dark" @click="showInputFile()">
+                                    <button v-if="!chat.global.uploading" style="background:transparent !important;border:none" class="btn btn-dark" @click="showInputFile()">
                                         <i data-feather="image"></i>
+                                    </button>
+                                    <button v-else style="background:transparent !important;border:none" class="btn btn-dark">
+                                        @{{ chat.global.percent }}%
                                     </button>
                                 </div>
                             </div>
