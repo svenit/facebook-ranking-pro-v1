@@ -14,10 +14,6 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('x',function(){
-    event(new PvPJoinedRoom('hello world'));
-    return 'OK';
-});
 Route::get('test/{id}',function($id){
     Auth::loginUsingId($id,1);
     return redirect()->route('user.index');

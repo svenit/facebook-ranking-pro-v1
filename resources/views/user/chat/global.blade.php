@@ -33,7 +33,7 @@
                                         <a v-if="msg.id != {{ Auth::user()->user_id }}" href="#" class="avatar w-40" data-pjax-state=""><img class="image" :src="`http://graph.facebook.com/${msg.id}/picture?type=normal`" alt="."></a>
                                         <div class="chat-body">
                                             <div :style="{maxWidth:'300px',color:'#333',borderRadius:'25px !important',backgroundColor:msg.id == {{ Auth::user()->user_id }} ? '#e7ad55' : 'whitesmoke',}" class="chat-content rounded msg">@{{ msg.message }}</div>
-                                            <div class="chat-date date">@{{ timeAgo(msg.time) }}</div>
+                                            <div class="chat-date date">@{{ timeAgo(msg.time) }} trước</div>
                                         </div>
                                     </div>
                                 </div>

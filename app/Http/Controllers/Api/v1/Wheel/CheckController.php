@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1\Wheel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Session;
 
 class CheckController extends Controller
 {
@@ -20,6 +21,7 @@ class CheckController extends Controller
                 $paid = Auth::user()->decrement('income_coins',$this->price);
                 if(isset($paid))
                 {
+                    Session::put('spinning',true);
                     return response()->json([
                         'code' => 200,
                         'status' => 'success',
