@@ -14,10 +14,13 @@
                         <button data-toggle="modal" data-target="#content-aside" data-modal="" class="d-md-none btn btn-sm btn-icon no-bg"><span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></span></button> <span class="text-ellipsis flex mx-1"><span class="text-md text-highlight mx-2">Chat</span> </span><span class="flex"></span>
                         <div>
                             <div class="d-flex flex-wrap align-items-center avatar-group">
-                                Thông báo <label class="mx-2 ui-switch ui-switch-md success m-t-xs"><input type="checkbox" v-model="chat.global.noti"> <i></i></label>
+                                <i v-if="chat.global.noti" data-feather="bell"></i>
+                                <i v-else data-feather="bell-off"></i>
+                                <label class="mx-2 ui-switch ui-switch-sm danger m-t-xs"><input type="checkbox" v-model="chat.global.noti"> <i></i></label>
                             </div>
                         </div>
                     </div>
+                    <input @change="uploadImage" type="file" id="file" style="display:none">
                     <div class="scrollable hover" id="chat-box" style="max-height:500px">
                         <div class="list">
                             <div class="p-3">
@@ -44,12 +47,14 @@
                         <div class="p-2">
                             <div class="px-3">
                                 <div class="toolbar my-1">
-                                    <i data-feather="image"></i>
+                                    <button class="btn btn-dark" @click="showInputFile()">
+                                        <i data-feather="image"></i>
+                                    </button>
                                 </div>
                             </div>
                             <div class="input-group">
-                                <input @change="sendMessage()" v-model="chat.global.text" type="text" class="form-control p-3 no-shadow no-border" placeholder="Nhập tin nhắn..." id="newField">
-                                <button @click="sendMessage()" class="btn btn-icon btn-rounded gd-success" type="button" id="newBtn">
+                                <input @change="sendMessage('text')" v-model="chat.global.text" type="text" class="form-control p-3 no-shadow no-border" placeholder="Nhập tin nhắn..." id="newField">
+                                <button @click="sendMessage('text')" class="btn btn-icon btn-rounded gd-success" type="button" id="newBtn">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up">
                                         <line x1="12" y1="19" x2="12" y2="5"></line>
                                         <polyline points="5 12 12 5 19 12"></polyline>

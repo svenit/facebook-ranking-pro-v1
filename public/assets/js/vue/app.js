@@ -144,7 +144,8 @@ app = new Vue({
                 messages:[],
                 text:'',
                 isIn:false,
-                noti:true
+                noti:true,
+                percent:0,
             }
         }
     },
@@ -181,6 +182,7 @@ app = new Vue({
             });
             this.detect = window.devtools.isOpen;
         }
+        
     },
     watch:{
         'pvp.isReady'()
@@ -890,10 +892,57 @@ app = new Vue({
             });
             setTimeout(() => {
                 this.chat.global.isIn = true;
-            },1500);
+            },3000);
             this.loading = false;
         },
-        async sendMessage()
+        showInputFile()
+        {
+            $('#file').click();
+        },
+        async uploadImage(e)
+        {
+            this.chat.global.percent = 0;
+            const file = e.target.files[0];
+            const validate = ['image/png','image/jpg','image/jpge','image/gif'];
+            const apiKey = '2bb20e13e69a991';
+            var form = new FormData();
+            form.append('image',file);
+            const self = this;
+            if(validate.includes(file.type))
+            {
+                if(file.size <= 5000)
+                {
+                    let res = await axios.post('https://api.imgur.com/3/image',form,{
+                        headers: {
+                            Authorization: 'Client-ID ' + apiKey,
+                            Accept: 'application/json'
+                        },
+                        onUploadProgress(uploadEvent)
+                        {
+                            self.chat.global.percent = Math.round((uploadEvent.loaded/uploadEvent.total)*100);
+                        }
+                    });
+                    if(res.status == 200)
+                    {
+                        this.chat.global.text = res.data.data.link;
+                        this.sendMessage('attachments');
+                    }
+                    else
+                    {
+                        this.notify('Không thể tải ảnh lên');
+                    }
+                }
+                else
+                {
+                    this.notify('Ảnh phải có kích thước nhỏ hơn 5MB');
+                }
+            }
+            else
+            {
+                this.notify('Ảnh không đúng định dạng !');
+            }
+        },
+        async sendMessage(type)
         {
             try
             {
@@ -905,7 +954,8 @@ app = new Vue({
                     id:page.user.id,
                     name:page.user.name,
                     time:new Date().getTime(),
-                    message:this.chat.global.text
+                    message:this.chat.global.text,
+                    type:type
                 });
                 this.chat.global.text = '';
                 $('#chat-box').animate({
@@ -920,7 +970,7 @@ app = new Vue({
         },
         timeAgo(time)
         {
-            return moment(time).lang('vi').fromNow(true);
+            return moment(time).locale('vi').fromNow(true);
         }
     },
 });
