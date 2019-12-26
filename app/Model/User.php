@@ -67,6 +67,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Model\Gear','user_gears','user_id','gear_id')->withPivot('status');
     }
+    public function pets()
+    {
+        return $this->belongsToMany('App\Model\Pet','user_pets','user_id','pet_id')->withPivot('status');
+    }
     public function usingSkills()
     {
         return $this->skills->filter(function($status){
@@ -79,11 +83,17 @@ class User extends Authenticatable
             return $status->pivot->status == 1;
         });
     }
+    public function usingPets()
+    {
+        return $this->pets->filter(function($status){
+            return $status->pivot->status == 1;
+        });
+    }
     public function power()
     {
-        return $this->gearsPower();
+        return $this->getPower();
     }
-    public function gearsPower()
+    public function getPower()
     {
         $properties = [
             'strength' => 20,
@@ -97,9 +107,10 @@ class User extends Authenticatable
         $power = [];
         foreach($properties as $key => $property)
         {
-            $power[$key] =  collect($this->usingGears())->sum($key) + ($this[$key]);
+            $power[$key] =  collect($this->usingPets())->sum($key) + collect($this->usingGears())->sum($key) + ($this[$key]);
         }
         return collect($power);
+        return 1;
     }
     public function fullPower($id)
     {

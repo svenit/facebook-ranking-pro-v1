@@ -10,6 +10,7 @@
 	<link rel="dns-prefetch" href="//ajax.googleapis.com" />
 	<meta name="description" content="Facebook Group Ranking System">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="{{ asset('assets/css/static.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/css/site.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 	<link href="{{ asset('cdn/css/all.min.css') }}" rel="stylesheet">

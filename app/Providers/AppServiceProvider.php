@@ -3,10 +3,8 @@
 namespace App\Providers;
 
 use App\Income\Helper;
-use App\Model\FightRoom;
+use App\Model\CateGear;
 use Illuminate\Support\Facades\URL;
-use App\Observers\FightRoomObserver;
-use App\Providers\FightRoomProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Schema;
@@ -39,6 +37,16 @@ class AppServiceProvider extends ServiceProvider
                 if(Auth::check())
                 {
                     $view->with('user', new Helper(Auth::id()));    
+                }
+            });
+        }
+        if(Schema::hasTable('cate_gears'))
+        {
+            View::composer('*', function ($view) 
+            {
+                if(Auth::check())
+                {
+                    $view->with('menuShop', CateGear::all());    
                 }
             });
         }

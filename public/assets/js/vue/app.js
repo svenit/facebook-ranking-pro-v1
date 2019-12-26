@@ -43,7 +43,8 @@ app = new Vue({
                 lucky: 0
             },
             gears:[],
-            skills:[]
+            skills:[],
+            pet:{}
         },
         user:{
             infor:{

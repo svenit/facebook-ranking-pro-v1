@@ -50,7 +50,29 @@
         </div>
     </div>
 </div>
-<span class="ch ch1">
-    <a href="#my-character"><img @click="index()" title="Nhấp vào để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px" width="100px" alt="" src="{{ $user->character()->avatar }}" class="{{ Auth::user()->isVip == 1 ? 'vip-2' : '' }} animated pulse infinite fast"></a>
-</span>
+<div @click="index()" title="Nhấp vào để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px" class="character-sprites hoverable {{ Auth::user()->isVip == 1 ? 'vip-2' : '' }} animated pulse infinite fast">
+    <span v-if="data.pet" :class="`Mount_Body_${data.pet.class_tag}`"></span>
+	<span class="hair_flower_3"></span>
+	<span class="chair_none"></span>
+	<span class=""></span>
+	<span class="skin_f5a76e"></span>
+	<span class="broad_shirt_black"></span>
+	<span class="head_0"></span>
+	<span class="broad_armor_base_0"></span>
+	<span class=""></span>
+	<span class="hair_bangs_0_black"></span>
+	<span class="hair_base_0_black"></span>
+	<span class="hair_mustache_0_black"></span>
+	<span class="hair_beard_0_black"></span>
+	<span class=""></span>
+	<span class="eyewear_base_0"></span>
+	<span class="head_base_0"></span>
+	<span class=""></span>
+	<span class="hair_flower_0"></span>
+	<span class="shield_base_0"></span>
+    <span class=""></span>
+    <span v-for="(gear,index) in data.gears" :class="gear.class_tag"></span>
+    <span v-if="data.pet" :class="`Mount_Head_${data.pet.class_tag}`"></span>
+</div>
+<br v-if="data.pet">
 @endauth

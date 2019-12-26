@@ -7,7 +7,30 @@
             </div>
             <div class="modal-body">
                 <div class="p-4 text-center">
-                    <img width="80%" class="{{ Auth::user()->isVip == 1 ? 'vip-2' : '' }}" :src="data.infor.character.avatar">
+                    <div title="Nhấp vào để xem thông số" style="margin:0px 10px 35px 0px" class="character-sprites hoverable {{ Auth::user()->isVip == 1 ? 'vip-2' : '' }}">
+                        <span v-if="data.pet" :class="`Mount_Body_${data.pet.class_tag}`"></span>
+                        <span class="hair_flower_3"></span>
+                        <span class="chair_none"></span>
+                        <span class=""></span>
+                        <span class="skin_f5a76e"></span>
+                        <span class="broad_shirt_black"></span>
+                        <span class="head_0"></span>
+                        <span class="broad_armor_base_0"></span>
+                        <span class=""></span>
+                        <span class="hair_bangs_0_black"></span>
+                        <span class="hair_base_0_black"></span>
+                        <span class="hair_mustache_0_black"></span>
+                        <span class="hair_beard_0_black"></span>
+                        <span class=""></span>
+                        <span class="eyewear_base_0"></span>
+                        <span class="head_base_0"></span>
+                        <span class=""></span>
+                        <span class="hair_flower_0"></span>
+                        <span class="shield_base_0"></span>
+                        <span class=""></span>
+                        <span v-for="(gear,index) in data.gears" :class="gear.class_tag"></span>
+                        <span v-if="data.pet" :class="`Mount_Head_${data.pet.class_tag}`"></span>
+                    </div>
                     <p style="margin-top:20px" class="text-gold">@{{ data.infor.name }} ( @{{ data.infor.character.name }})</p>
                 </div>
                 <div class="row row-sm">
@@ -88,14 +111,14 @@
                 <div class="row row-sm">
                     <div v-for="(gear,index) in data.gears" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
                         <div class="flex">
-                            <img @click="showGearsDescription(gear,1)" :style="{borderRadius:'5px',width:'100%',border:`1px solid ${gear.rgb}`}" :src="gear.image">
+                            <div @click="showGearsDescription(gear,1)" :class="`${gear.shop_tag}`" :style="{borderRadius:'5px',border:`1px solid ${gear.rgb}`,backgroundColor:`#383449`}"></div>
                         </div>
                     </div>
                 </div>
                 <div class="row row-sm">
                     <div v-for="(skill,index) in data.skills" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
                         <div class="flex">
-                            <img title @click="showSkillsDescription(skill,1)" data-toggle="tooltip" :style="{borderRadius:'5px',width:'100%',border:`1px solid ${skill.rgb}`}" :src="skill.image">
+                            <img title @click="showSkillsDescription(skill,1)" data-toggle="tooltip" :style="{borderRadius:'5px',width:'68px',height:'68px',border:`1px solid ${skill.rgb}`}" :src="skill.image">
                         </div>
                     </div>
                 </div>
@@ -112,7 +135,30 @@
             </div>
             <div class="modal-body">
                 <div class="p-4 text-center">
-                    <img :class="user.infor.vip ? 'vip-2' : ''" width="80%" :src="user.infor.character.avatar">
+                    <div title="Nhấp vào để xem thông số" style="margin:0px 10px 35px 0px" class="character-sprites hoverable" :class="user.infor.vip ? 'vip-2' : ''">
+                        <span v-if="user.pet" :class="`Mount_Body_${user.pet.class_tag}`"></span>
+                        <span class="hair_flower_3"></span>
+                        <span class="chair_none"></span>
+                        <span class=""></span>
+                        <span class="skin_f5a76e"></span>
+                        <span class="broad_shirt_black"></span>
+                        <span class="head_0"></span>
+                        <span class="broad_armor_base_0"></span>
+                        <span class=""></span>
+                        <span class="hair_bangs_0_black"></span>
+                        <span class="hair_base_0_black"></span>
+                        <span class="hair_mustache_0_black"></span>
+                        <span class="hair_beard_0_black"></span>
+                        <span class=""></span>
+                        <span class="eyewear_base_0"></span>
+                        <span class="head_base_0"></span>
+                        <span class=""></span>
+                        <span class="hair_flower_0"></span>
+                        <span class="shield_base_0"></span>
+                        <span class=""></span>
+                        <span v-for="(gear,index) in user.gears" :class="gear.class_tag"></span>
+                        <span v-if="user.pet" :class="`Mount_Head_${user.pet.class_tag}`"></span>
+                    </div>
                     <p style="margin-top:20px" class="text-gold">@{{ user.infor.name }} ( @{{ user.infor.character.name }})</p>
                 </div>
                 <div class="row row-sm">
@@ -193,14 +239,14 @@
                 <div class="row row-sm">
                     <div v-for="(gear,index) in user.gears" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
                         <div class="flex">
-                            <img @click="showGearsDescription(gear,0)" style="border-radius:5px;width:100%" :src="gear.image">
+                            <div @click="showGearsDescription(gear,1)" :class="`shop_${gear.class_tag}`" :style="{borderRadius:'5px',border:`1px solid ${gear.rgb}`}"></div>
                         </div>
                     </div>
                 </div>
                 <div class="row row-sm">
                     <div v-for="(skill,index) in user.skills" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
                         <div class="flex">
-                            <img title @click="showSkillsDescription(skill,0)" data-toggle="tooltip" style="border-radius:5px;width:100%" :src="skill.image">
+                            <img title @click="showSkillsDescription(skill,1)" data-toggle="tooltip" :style="{borderRadius:'5px',width:'68px',height:'68px',border:`1px solid ${skill.rgb}`}" :src="skill.image">
                         </div>
                     </div>
                 </div>
@@ -255,10 +301,9 @@
                     <li><a href="#" class=""><span class="nav-icon"><i data-feather="shopping-cart"></i></span> <span
                         class="nav-text">Cửa Hàng</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
-                            <li><a href="#" class=""><span class="nav-text">Vũ Khí</span></a></li>
-                            <li><a href="#" class=""><span class="nav-text">Mũ</span></a></li>
-                            <li><a href="#" class=""><span class="nav-text">Trang Phục</span></a></li>
-                            <li><a href="#" class=""><span class="nav-text">Phụ Kiện</span></a></li>
+                            @foreach($menuShop as $menu)
+                                <li><a href="{{ Route('user.shop.index',['cate' => str_slug($menu->name)]) }}" class=""><span class="nav-text">{{ $menu->name }}</span></a></li>
+                            @endforeach
                         </ul>
                     </li>
                     <li><a href="#" class=""><span class="nav-icon"><i data-feather="zap"></i></span> <span

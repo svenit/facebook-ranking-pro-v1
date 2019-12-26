@@ -10,8 +10,26 @@
             @foreach($characters as $key => $character)
                 <div class="col-md-3">
                     <div class="card">
-                        <div class="media media-4x4 gd-dark">
-                            <a class="media-content" style="background-image:url({{ $character->avatar }});background-size:50%"></a>
+                        <div class="character-sprites hoverable">
+                            <span class="hair_flower_3"></span>
+                            <span class="chair_none"></span>
+                            <span class=""></span>
+                            <span class="skin_f5a76e"></span>
+                            <span class="broad_shirt_black"></span>
+                            <span class="head_0"></span>
+                            <span class="broad_armor_base_0"></span>
+                            <span class=""></span>
+                            <span class="hair_bangs_0_black"></span>
+                            <span class="hair_base_0_black"></span>
+                            <span class="hair_mustache_0_black"></span>
+                            <span class="hair_beard_0_black"></span>
+                            <span class=""></span>
+                            <span class="eyewear_base_0"></span>
+                            <span class="head_base_0"></span>
+                            <span class=""></span>
+                            <span class="hair_flower_0"></span>
+                            <span class="shield_base_0"></span>
+                            <span class=""></span>
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">{{ $character->name }}</h5>

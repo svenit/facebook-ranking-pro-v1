@@ -141,3 +141,7 @@ img:hover
 {
     color:#9b44bf;
 }
+.hoverable:hover
+{
+    cursor: pointer;
+}

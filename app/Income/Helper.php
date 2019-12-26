@@ -42,6 +42,10 @@ class Helper
     {
         return $this->user()->usingGears();
     }
+    public function usingPets()
+    {
+        return $this->user()->usingPets();
+    }
     public function power()
     {
         return $this->user()->power();

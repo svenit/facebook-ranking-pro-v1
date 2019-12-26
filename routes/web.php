@@ -55,6 +55,9 @@ Route::group(['middleware' => 'redirect.action'], function () {
             Route::group(['prefix' => 'chat','as' => 'chat.','namespace' => 'Chat'], function () {
                 Route::get('/','GlobalChatController@index')->name('global');
             });
+            Route::group(['prefix' => 'shop','as' => 'shop.','namespace' => 'Shop'], function () {
+                Route::get('{cate}',"ShopController@index")->name('index');
+            });
         });
     });
 });
