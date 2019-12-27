@@ -74,5 +74,5 @@
     <span v-for="(gear,index) in data.gears" :class="gear.class_tag"></span>
     <span v-if="data.pet" :class="`Mount_Head_${data.pet.class_tag}`"></span>
 </div>
-<br v-if="data.pet">
+<div style="margin-bottom:80px" v-if="data.pet"></div>
 @endauth

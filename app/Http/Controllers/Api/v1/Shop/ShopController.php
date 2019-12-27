@@ -52,7 +52,7 @@ class ShopController extends Controller
                                 $response = [
                                     'code' => 200,
                                     'status' => 'error',
-                                    'message' => 'Mua vật phẩm thành công'
+                                    'message' => 'Mua vật phẩm thành công, vui lòng kiểm ra rương đồ'
                                 ];
                             }
                             else
@@ -74,7 +74,7 @@ class ShopController extends Controller
                                 $response = [
                                     'code' => 200,
                                     'status' => 'error',
-                                    'message' => 'Mua vật phẩm thành công'
+                                    'message' => 'Mua vật phẩm thành công, ui lòng kiểm ra rương đồ'
                                 ];
                             }
                             else

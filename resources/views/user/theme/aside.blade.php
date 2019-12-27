@@ -31,6 +31,7 @@
                         <span v-for="(gear,index) in data.gears" :class="gear.class_tag"></span>
                         <span v-if="data.pet" :class="`Mount_Head_${data.pet.class_tag}`"></span>
                     </div>
+                    <div style="margin-bottom:80px" v-if="data.pet"></div>
                     <p style="margin-top:20px" class="text-gold">@{{ data.infor.name }} ( @{{ data.infor.character.name }})</p>
                 </div>
                 <div class="row row-sm">
@@ -159,6 +160,7 @@
                         <span v-for="(gear,index) in user.gears" :class="gear.class_tag"></span>
                         <span v-if="user.pet" :class="`Mount_Head_${user.pet.class_tag}`"></span>
                     </div>
+                    <div style="margin-bottom:80px" v-if="user.pet"></div>
                     <p style="margin-top:20px" class="text-gold">@{{ user.infor.name }} ( @{{ user.infor.character.name }})</p>
                 </div>
                 <div class="row row-sm">
@@ -274,14 +276,15 @@
                 <ul class="nav">
                     <li class="nav-header hidden-folded"><span class="text-muted">Hoạt Động</span></li>
                     @auth
-                        <li class=""><a href="#"><span class="nav-icon"><i data-feather="user"></i></span> <span
-                            class="nav-text">Cá Nhân</span> <span class="nav-caret"></span></a>
+                        <li class="{{ Request::is('profile/*') ? 'active' : '' }}"><a href="#"><span class="nav-icon"><i data-feather="user"></i></span> <span
+                            class="nav-text">{{ Auth::user()->name }}</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('user.inventory.index') }}" class=""><span class="nav-text">Rương Đồ</span></a></li>
+                                <li><a href="{{ Route('user.profile.inventory.index') }}" class=""><span class="nav-text">Rương Đồ</span></a></li>
+                                <li><a href="{{ Route('user.profile.pet.index') }}" class=""><span class="nav-text">Thú Cưỡi</span></a></li>
                             </ul>
                         </li>
                     @endauth
-                    <li class=""><a href="#"><span class="nav-icon"><i data-feather="award"></i></span> <span
+                    <li class="{{ Request::is('top/*') ? 'active' : '' }}"><a href="#"><span class="nav-icon"><i data-feather="award"></i></span> <span
                         class="nav-text">BXH</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
                             <li><a href="{{ Route('user.top.power') }}" class=""><span class="nav-text">Lực Chiến</span></a></li>
@@ -290,7 +293,7 @@
                             <li><a href="{{ Route('user.top.activities') }}" class=""><span class="nav-text">Hoạt Động</span></a></li>
                         </ul>
                     </li>
-                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="coffee"></i></span> <span
+                    <li class="{{ Request::is('events/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="coffee"></i></span> <span
                                 class="nav-text">Giải Trí</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
                             <li><a href="{{ Route('user.events.wheel') }}" class=""><span class="nav-text">VQMM</span></a></li>
@@ -306,7 +309,7 @@
                             <li><a href="#" class=""><span class="nav-text">Phòng Hồi Phục</span></a></li>
                         </ul>
                     </li>
-                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="shopping-cart"></i></span> <span
+                    <li class="{{ Request::is('shop/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shopping-cart"></i></span> <span
                         class="nav-text">Cửa Hàng</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
                             @foreach($menuShop as $menu)
@@ -330,13 +333,13 @@
                             <li><a href="#" class=""><span class="nav-text">Thiết Lập</span></a></li>
                         </ul>
                     </li>
-                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
+                    <li {{ Request::is('pvp/*') ? 'active' : '' }}><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
                         class="nav-text">PVP</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
                             <li><a href="{{ Route('user.pvp.index') }}" class=""><span class="nav-text">Tham Gia</span></a></li>
                         </ul>
                     </li>
-                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="message-circle"></i></span> <span
+                    <li {{ Request::is('chat/*') ? 'active' : '' }}><a href="#" class=""><span class="nav-icon"><i data-feather="message-circle"></i></span> <span
                         class="nav-text">Chat</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
                             <li><a href="{{ Route('user.chat.global') }}" class=""><span class="nav-text">Thế Giới</span></a></li>

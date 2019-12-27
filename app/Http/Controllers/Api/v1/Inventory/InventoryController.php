@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Api\v1\Inventory;
 
 use App\Model\User;
+use App\Income\Helper;
 use App\Model\CateGear;
+use App\Model\UserGear;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Model\UserGear;
 use Illuminate\Support\Facades\Auth;
 
 class InventoryController extends Controller
@@ -35,6 +36,7 @@ class InventoryController extends Controller
     }
     public function delete(Request $request)
     {
+        $this->updatePower();
         Auth::user()->gears()->detach($request->id);
     }
     public function removeEquipment(Request $request)
@@ -44,6 +46,7 @@ class InventoryController extends Controller
         ],false);
         if(isset($unWear))
         {
+            $this->updatePower();
             return response()->json([
                 'code' => 200,
                 'status' => 'success',
@@ -59,32 +62,45 @@ class InventoryController extends Controller
         {
             if($find->load('gear')->gear->character_id == Auth::user()->character->id)
             {
-                foreach($all as $key => $each)
+                $helper = new Helper(Auth::id());
+                if($find->load('gear')->gear->level_required <= $helper->level())
                 {
-                    if($each->gear->cate_gear_id == $find->load('gear')->gear->cate_gear_id)
+                    foreach($all as $key => $each)
                     {
-                        Auth::user()->gears()->updateExistingPivot($each->gear->id,[
-                            'status' => 0
-                        ],false);
+                        if($each->gear->cate_gear_id == $find->load('gear')->gear->cate_gear_id)
+                        {
+                            Auth::user()->gears()->updateExistingPivot($each->gear->id,[
+                                'status' => 0
+                            ],false);
+                        }
                     }
-                }
-                $wear = Auth::user()->gears()->updateExistingPivot($request->id,[
-                    'status' => 1
-                ],false);
-                if(isset($wear))
-                {
-                    $response = [
-                        'code' => 200,
-                        'status' => 'success',
-                        'message' => "Đã trang bị ".$find->load('gear')->gear->name." thành công !"
-                    ];
+                    $wear = Auth::user()->gears()->updateExistingPivot($request->id,[
+                        'status' => 1
+                    ],false);
+                    if(isset($wear))
+                    {
+                        $this->updatePower();
+                        $response = [
+                            'code' => 200,
+                            'status' => 'success',
+                            'message' => "Đã trang bị ".$find->load('gear')->gear->name." thành công !"
+                        ];
+                    }
+                    else
+                    {
+                        $response = [
+                            'code' => 500,
+                            'status' => 'success',
+                            'message' => "Đã có lỗi xảy ra"
+                        ];
+                    }
                 }
                 else
                 {
                     $response = [
                         'code' => 500,
                         'status' => 'success',
-                        'message' => "Đã có lỗi xảy ra"
+                        'message' => "Bạn chưa đủ cấp độ để sử dụng vật phẩm này"
                     ];
                 }
             }
@@ -93,7 +109,7 @@ class InventoryController extends Controller
                 $response = [
                     'code' => 500,
                     'status' => 'success',
-                    'message' => "Bạn không thể sử dụng trang bị của lớp khác"
+                    'message' => "Bạn không thể sử dụng vật phấm của lớp khác"
                 ];
             }
         }

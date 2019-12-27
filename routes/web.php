@@ -34,7 +34,7 @@ Route::group(['middleware' => 'redirect.action'], function () {
     Route::group(['prefix' => '/','as' => 'user.','namespace' => 'User','middleware' => 'user'], function () {
         Route::get('/','HomeController@index')->name('index');
         Route::group(['prefix' => 'top','as' => 'top.','namespace' => 'Top'], function () {
-            Route::get('/','TopController@power')->name('power');
+            Route::get('power','TopController@power')->name('power');
             Route::get('gold','TopController@coin')->name('coin');
             Route::get('diamond','TopController@gold')->name('gold');
             Route::get('activities','TopController@activities')->name('activities');
@@ -58,8 +58,9 @@ Route::group(['middleware' => 'redirect.action'], function () {
             Route::group(['prefix' => 'shop','as' => 'shop.','namespace' => 'Shop'], function () {
                 Route::get('{cate}',"ShopController@index")->name('index');
             });
-            Route::group(['prefix' => 'profile/inventory','as' => 'inventory.','namespace' => 'Inventory'], function () {
-                Route::get('/','InventoryController@index')->name('index');
+            Route::group(['prefix' => 'profile','as' => 'profile.','namespace' => 'Profile'], function () {
+                Route::get('inventories','Inventory\InventoryController@index')->name('inventory.index');
+                Route::get('pets','Pet\PetController@index')->name('pet.index');
             });
         });
     });

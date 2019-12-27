@@ -1,14 +1,11 @@
 <?php
-
 namespace App\Http\Controllers\User\Shop;
-
 use App\Model\Gear;
 use App\Model\CateGear;
 use App\Model\Character;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
 class ShopController extends Controller
 {
     public function index($cate)

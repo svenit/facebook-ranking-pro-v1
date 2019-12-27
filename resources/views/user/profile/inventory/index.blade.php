@@ -27,7 +27,6 @@
                                         <div class="text-center hoverable">
                                             <div @click="showGearsDescription(inven,1)" style="margin:0 auto" :class="inven.shop_tag"></div>
                                             <p :style="{color:inven.rgb}" v-html="inven.name"></p>
-                                            <p class="gear-description" v-html="inven.description"></p>
                                         </div>
                                         <div class="btn-group">
                                             <button @click="deleteEquipment(inven.id)" type="button" class="btn btn-secondary active">

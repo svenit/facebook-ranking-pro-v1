@@ -149,3 +149,40 @@ img:hover
 {
     font-size: 11px;
 }
+.nav-active-text-primary .nav-item.active>a, .nav-active-text-primary .nav-link.active, .nav-active-text-primary .nav-sub>li.active>a, .nav-active-text-primary .nav>li.active>a {
+    color: #cd8e2c !important;
+}
+/* width */
+::-webkit-scrollbar {
+    width: 3px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #333;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #333;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #333;
+  }
+  .swal2-styled.swal2-cancel
+  {
+      font-size:14px !important;
+  }
+  .swal2-styled.swal2-confirm
+  {
+    font-size:14px !important;
+  }
+  #swal2-content{
+      color:#ccc !important;
+  }
+  .clearfix
+  {
+      clear: both;
+  }

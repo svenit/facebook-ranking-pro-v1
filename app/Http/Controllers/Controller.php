@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Income\Helper;
 use App\Model\Tracking;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
@@ -56,5 +57,10 @@ class Controller extends BaseController
     public function checkTracking()
     {
         return Tracking::whereUserId(Auth::id())->first() ? true : false;
+    }
+    public function updatePower()
+    {
+        $helper = new Helper(Auth::id());
+        $helper->updateFullPower();
     }
 }

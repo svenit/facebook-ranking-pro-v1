@@ -1,13 +1,16 @@
 @extends('app')
 
-@section('hero','PVP')
-@section('sub_hero','Vinh quang chỉ dành cho người chiến thắng')
+@section('hero','Cửa Hàng')
+@section('sub_hero','Nơi bán những vật phẩm có giá trên trời')
 
 @section('content')
 <div id="list-fight-room">
     <div class="page-content page-container" id="page-content">
         <div class="padding-x">
             @include('user.theme.parameter')
+            @foreach($menuShop as $menu)
+                <a href="{{ Route('user.shop.index',['cate' => str_slug($menu->name)]) }}" class="{{ Request::is("shop/".str_slug($menu->name)) ? 'active' : '' }} btn btn-dark">{{ $menu->name }}</a>
+            @endforeach
             <div class="card vip-bordered">
                 <div class="b-b">
                     <div class="nav-active-border b-primary bottom">
@@ -28,9 +31,7 @@
                                     <div @click="showGearsDescription({{ json_encode($item) }},0)" class="text-center hoverable">
                                         <div style="margin:0 auto" class="{{ $item->shop_tag }}"></div>
                                         <p :style="{color:'{{ $item->rgb }}'}">{{ $item->name }}</p>
-                                        <p class="gear-description">
-                                            {{ $item->description }}
-                                        </p>
+                                        <p>( {{ $item->level_required == 0 ? 'Không yêu cầu level' : "Level : $item->level_required" }} )</p>
                                     </div>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-secondary active">
