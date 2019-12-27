@@ -133,7 +133,9 @@ app = new Vue({
                         hp:1
                     },
                     hp:1,
-                    energy:1
+                    energy:1,
+                    gears:[],
+                    skills:[]
                 }
             }
         },
@@ -150,7 +152,8 @@ app = new Vue({
                 previewImage:'',
                 uploading:false
             }
-        }
+        },
+        inventory:{}
     },
     async created()
     {
@@ -170,6 +173,9 @@ app = new Vue({
                     break;
                     case 'chat.global':
                         this.listGlobalChat();
+                    break;
+                    case 'inventory.index':
+                        this.invetory();
                     break;
                 }
             }
@@ -413,11 +419,12 @@ app = new Vue({
         showGearsDescription(data,permission)
         {
             Swal.fire({
-                title:`<img style="width:80px;height:80px;border:1px solid ${data.rgb};border-radius:5px" src="${data.image}">`,
+                title:`<div style="border:1px solid ${data.rgb};border-radius:5px" class="${data.shop_tag}">`,
                 type:'',
                 showConfirmButton:permission == 1 ? true : false,
-                confirmButtonText:permission == 1 ? 'Tháo trang bị' : '',
+                confirmButtonText:permission == 1 && data.pivot.status == 1 ? `Tháo trang bị` : '',
                 showCancelButton:true,
+                showConfirmButton:permission == 1 && data.pivot.status == 1 ? true : false,
                 cancelButtonColor:'#333',
                 cancelButtonText:'Đóng',
                 html:`<p>[ ${data.name} ]</p><p>${data.description}</p>
@@ -432,7 +439,7 @@ app = new Vue({
             }).then((result) => {
                 if(result.value)
                 {
-                    alert(1);
+                    this.removeEquipment(data.id);
                 }
             });
         },
@@ -959,6 +966,91 @@ app = new Vue({
                 this.chat.global.percent = 0;
             }
         },
+        async invetory()
+        {
+            this.loading = true;
+            let res = await axios.get(`${config.root}/api/v1/inventory`,{
+                params:{
+                    bearer:config.bearer,
+                },
+                headers:{
+                    pragma:this.token
+                }
+            });
+            await this.refreshToken(res);
+            this.inventory = res.data;
+            this.loading = false;
+        },
+        async deleteEquipment(id)
+        {
+            if(confirm('Vứt bỏ vật phẩm này ?'))
+            {
+                this.loading = true;
+                let res = await axios.post(`${config.root}/api/v1/inventory/delete`,{
+                    bearer:config.bearer,
+                    id:id
+                },{
+                    headers:{
+                        pragma:this.token
+                    }
+                });
+                await this.refreshToken(res);
+                await this.invetory();
+                this.index();
+            }
+        },
+        async removeEquipment(id)
+        {
+            this.loading = true;
+            let res = await axios.put(`${config.root}/api/v1/inventory/remove`,{
+                bearer:config.bearer,
+                id:id
+            },{
+                headers:{
+                    pragma:this.token
+                }
+            });
+            await this.refreshToken(res);
+            await this.invetory();
+            this.index();
+            this.notify(res.data.message);
+        },
+        async equipment(id)
+        {
+            this.loading = true;
+            let res = await axios.put(`${config.root}/api/v1/inventory/equipment`,{
+                bearer:config.bearer,
+                id:id
+            },{
+                headers:{
+                    pragma:this.token
+                }
+            });
+            await this.refreshToken(res);
+            await this.index();
+            this.invetory();
+            this.notify(res.data.message);
+        },
+        async buyItem(id,e)
+        {
+            if(confirm('Mua vật phẩm này ?'))
+            {
+                let res = await axios.post(`${config.root}/api/v1/shop/buy-item`,{
+                    bearer:config.bearer,
+                    id:id
+                },{
+                    headers:{
+                        pragma:this.token
+                    }
+                })
+                await this.refreshToken(res);
+                this.notify(res.data.message);
+                if(res.data.code == 200)
+                {
+                    e.target.innerHTML = 'Đã mua';
+                }
+            }
+        },
         async sendMessage(type)
         {
             try
@@ -988,6 +1080,6 @@ app = new Vue({
         timeAgo(time)
         {
             return moment(time).locale('vi').fromNow(true);
-        }
+        },
     },
 });

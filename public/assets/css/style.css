@@ -145,3 +145,7 @@ img:hover
 {
     cursor: pointer;
 }
+.gear-description
+{
+    font-size: 11px;
+}

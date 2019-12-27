@@ -33,4 +33,13 @@ Route::group(['prefix' => 'v1','namespace' => 'Api\v1','middleware' => 'cors'], 
         Route::get('check','CheckController');
         Route::post('spin','SpinController');
     });
+    Route::group(['prefix' => 'inventory','namespace' => 'Inventory'], function () {
+        Route::get('/','InventoryController');
+        Route::put('equipment','InventoryController@equipment');
+        Route::post('delete','InventoryController@delete');
+        Route::put('remove','InventoryController@removeEquipment');
+    });
+    Route::group(['prefix' => 'shop','namespace' => 'Shop'], function () {
+        Route::post('buy-item','ShopController@buyItem');
+    });
 });

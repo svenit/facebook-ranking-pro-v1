@@ -11,4 +11,8 @@ class Character extends Model
         $hiddenId = [0];
         return $query->whereNotIn('id',$hiddenId)->get();
     }
+    public function gears()
+    {
+        return $this->hasMany('App\Model\Gear','character_id','id');
+    }
 }

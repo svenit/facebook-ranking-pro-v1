@@ -53,4 +53,8 @@ class Controller extends BaseController
     {
         Tracking::whereUserId(Auth::id())->delete();
     }
+    public function checkTracking()
+    {
+        return Tracking::whereUserId(Auth::id())->first() ? true : false;
+    }
 }

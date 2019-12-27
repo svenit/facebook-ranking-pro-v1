@@ -11,7 +11,7 @@
             <a class="text-gold">
                 <button id='fight-button' data-toggle="modal" data-target="#modal" style="width:300px" class="vip-bordered">Tạo Phòng</button>
             </a>
-            <div class="row">
+            <div style="margin-top:20px" class="row">
                 <div v-for="(room,index) in pvp.rooms" :key="index" class="col-6 col-md-4 col-lg-3">
                     <a :href="`pvp/join/${room.name}`">
                         <div class="card vip-bordered">
@@ -23,7 +23,6 @@
                                 <button type="button" class="btn btn-secondary active">@{{ room.people }} Người </button> 
                                 <a v-if="room.people == 1" style="border-radius:0px !important" :href="`pvp/join/${room.name}`"><button style="border-top-left-radius:0px;border-bottom-left-radius:0px" type="button" class="btn btn-secondary">Vào</button></a>
                             </div>
-                            
                         </div>
                     </a>
                 </div>

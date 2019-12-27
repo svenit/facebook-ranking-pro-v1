@@ -111,7 +111,7 @@
                 <div class="row row-sm">
                     <div v-for="(gear,index) in data.gears" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
                         <div class="flex">
-                            <div @click="showGearsDescription(gear,1)" :class="`${gear.shop_tag}`" :style="{borderRadius:'5px',border:`1px solid ${gear.rgb}`,backgroundColor:`#383449`}"></div>
+                            <div @click="showGearsDescription(gear,1)" :class="`${gear.shop_tag}`" :style="{borderRadius:'5px',border:`1px solid ${gear.rgb}`}"></div>
                         </div>
                     </div>
                 </div>
@@ -273,6 +273,12 @@
                 </ul>
                 <ul class="nav">
                     <li class="nav-header hidden-folded"><span class="text-muted">Hoạt Động</span></li>
+                    <li class=""><a href="#"><span class="nav-icon"><i data-feather="user"></i></span> <span
+                        class="nav-text">Cá Nhân</span> <span class="nav-caret"></span></a>
+                        <ul class="nav-sub nav-mega">
+                            <li><a href="{{ Route('user.inventory.index') }}" class=""><span class="nav-text">Rương Đồ</span></a></li>
+                        </ul>
+                    </li>
                     <li class=""><a href="#"><span class="nav-icon"><i data-feather="award"></i></span> <span
                         class="nav-text">BXH</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
@@ -282,7 +288,7 @@
                             <li><a href="{{ Route('user.top.activities') }}" class=""><span class="nav-text">Hoạt Động</span></a></li>
                         </ul>
                     </li>
-                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="calendar"></i></span> <span
+                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="coffee"></i></span> <span
                                 class="nav-text">Giải Trí</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
                             <li><a href="{{ Route('user.events.wheel') }}" class=""><span class="nav-text">VQMM</span></a></li>

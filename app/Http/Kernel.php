@@ -69,7 +69,8 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\AdminAuth::class,
         'user' => \App\Http\Middleware\UserCheckPoint::class,
         'cors' => \App\Http\Middleware\Cors::class,
-        'redirect.action' => \App\Http\Middleware\RedirectIfInAction::class
+        'redirect.action' => \App\Http\Middleware\RedirectIfInAction::class,
+        'prevent' => \App\Http\Middleware\PreventActionWhenTracking::class
     ];
 
     /**

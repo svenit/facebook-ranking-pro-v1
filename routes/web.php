@@ -58,6 +58,9 @@ Route::group(['middleware' => 'redirect.action'], function () {
             Route::group(['prefix' => 'shop','as' => 'shop.','namespace' => 'Shop'], function () {
                 Route::get('{cate}',"ShopController@index")->name('index');
             });
+            Route::group(['prefix' => 'profile/inventory','as' => 'inventory.','namespace' => 'Inventory'], function () {
+                Route::get('/','InventoryController@index')->name('index');
+            });
         });
     });
 });
