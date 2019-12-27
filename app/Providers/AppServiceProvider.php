@@ -44,10 +44,7 @@ class AppServiceProvider extends ServiceProvider
         {
             View::composer('*', function ($view) 
             {
-                if(Auth::check())
-                {
-                    $view->with('menuShop', CateGear::all());    
-                }
+                $view->with('menuShop', CateGear::all());   
             });
         }
     }

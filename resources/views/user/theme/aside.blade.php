@@ -273,12 +273,14 @@
                 </ul>
                 <ul class="nav">
                     <li class="nav-header hidden-folded"><span class="text-muted">Hoạt Động</span></li>
-                    <li class=""><a href="#"><span class="nav-icon"><i data-feather="user"></i></span> <span
-                        class="nav-text">Cá Nhân</span> <span class="nav-caret"></span></a>
-                        <ul class="nav-sub nav-mega">
-                            <li><a href="{{ Route('user.inventory.index') }}" class=""><span class="nav-text">Rương Đồ</span></a></li>
-                        </ul>
-                    </li>
+                    @auth
+                        <li class=""><a href="#"><span class="nav-icon"><i data-feather="user"></i></span> <span
+                            class="nav-text">Cá Nhân</span> <span class="nav-caret"></span></a>
+                            <ul class="nav-sub nav-mega">
+                                <li><a href="{{ Route('user.inventory.index') }}" class=""><span class="nav-text">Rương Đồ</span></a></li>
+                            </ul>
+                        </li>
+                    @endauth
                     <li class=""><a href="#"><span class="nav-icon"><i data-feather="award"></i></span> <span
                         class="nav-text">BXH</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
@@ -341,14 +343,16 @@
                             <li><a href="{{ Route('user.pvp.index') }}" class=""><span class="nav-text">CVNL</span></a></li>
                         </ul>
                     </li>
-                    <li class="nav-header hidden-folded"><span class="text-muted">Admin Cpanel</span></li>
-                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="grid"></i></span> <span
-                                class="nav-text">Admin</span> <span class="nav-caret"></span></a>
-                        <ul class="nav-sub nav-mega">
-                            <li><a href="{{ Route('admin.update-points') }}" class=""><span class="nav-text">Cập Nhật Điểm</span></a></li>
-                            </li>
-                        </ul>
-                    </li>
+                    @if(Auth::check() && Auth::user()->isAdmin)
+                        <li class="nav-header hidden-folded"><span class="text-muted">Admin Cpanel</span></li>
+                        <li><a href="#" class=""><span class="nav-icon"><i data-feather="grid"></i></span> <span
+                                    class="nav-text">Admin</span> <span class="nav-caret"></span></a>
+                            <ul class="nav-sub nav-mega">
+                                <li><a href="{{ Route('admin.update-points') }}" class=""><span class="nav-text">Cập Nhật Điểm</span></a></li>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </div>
