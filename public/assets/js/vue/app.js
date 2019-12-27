@@ -423,10 +423,10 @@ app = new Vue({
                 type:'',
                 showConfirmButton:permission == 1 ? true : false,
                 confirmButtonText:permission == 1 && data.pivot.status == 1 ? `Tháo trang bị` : '',
-                showCancelButton:true,
+                showCancelButton:permission == 1 && data.pivot.status == 0 ? true : false,
                 showConfirmButton:permission == 1 && data.pivot.status == 1 ? true : false,
                 cancelButtonColor:'#333',
-                cancelButtonText:'Đóng',
+                cancelButtonText:permission == 1 && data.pivot.status == 0 ? `Trang bị` : '',
                 html:`<p>[ ${data.name} ]</p><p>${data.description}</p>
                     <p>Yêu cầu cấp độ : ${data.level_required}</p>
                     <p>Sinh Lực : +${data.health_points}</p>
@@ -440,6 +440,10 @@ app = new Vue({
                 if(result.value)
                 {
                     this.removeEquipment(data.id);
+                }
+                else if(result.dismiss === Swal.DismissReason.cancel)
+                {
+                    this.equipment(data.id);
                 }
             });
         },

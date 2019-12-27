@@ -29,7 +29,6 @@ class ShopController extends Controller
                 break;
             }
         }
-        
         if($avaiableRows)
         {
             return view('user.shop.index',compact('gears'));
