@@ -3,6 +3,7 @@ app = new Vue({
     el:'#app',
     data:{
         loading:true,
+        flash:true,
         detect:false,
         token:'',
         detailGear:{
@@ -170,29 +171,34 @@ app = new Vue({
         if(config.auth)
         {
             await this.index();
-            if(typeof page != "undefined" || page != null)
+            if(typeof page == "undefined" || page == null)
+            {
+                
+            }
+            else
             {
                 switch(page.path)
                 {
                     case 'pvp.list':
-                        this.listFightRoom();
+                        await this.listFightRoom();
                     break;
                     case 'pvp.room':
-                        this.pvpRoom();
+                        await this.pvpRoom();
                     break;
                     case 'chat.global':
-                        this.listGlobalChat();
+                        await this.listGlobalChat();
                     break;
                     case 'inventory.index':
-                        this.invetory();
+                        await this.invetory();
                     break;
                     case 'pet.index':
-                        this.pet();
+                        await this.pet();
                     break;
                 }
             }
         }
         this.loading = false;
+        this.flash = false;
     },
     updated() 
     {
