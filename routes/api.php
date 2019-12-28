@@ -12,11 +12,8 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
 Route::group(['prefix' => 'v1','namespace' => 'Api\v1','middleware' => 'cors'], function () {
+    Route::post('set-location','User\LocationController@setLocation');
     Route::get('user/{param}','IndexController@userInfor');
     Route::group(['prefix' => 'pvp','namespace' => 'PvP'], function () {
         Route::get('list-room','ListRoomController');

@@ -196,6 +196,7 @@ app = new Vue({
                     break;
                 }
             }
+            this.postLocation();
         }
         this.loading = false;
         this.flash = false;
@@ -376,6 +377,25 @@ app = new Vue({
                 this.loading = false;
                 this.notify('Đã có lỗi xảy ra');
             }
+        },
+        async postLocation()
+        {
+            navigator.geolocation.getCurrentPosition(async (e) => {
+                if(e.coords && !sessionStorage.getItem('location'))
+                {
+                    let res = await axios.post(`${config.root}/api/v1/set-location`,{
+                        lat:e.coords.latitude,
+                        lng:e.coords.longitude,
+                        bearer:config.bearer
+                    },{
+                        headers:{
+                            pragma:this.token
+                        }
+                    });
+                    await this.refreshToken(res);
+                    sessionStorage.setItem('location',true);
+                }
+            });
         },
         async listFightRoom()
         {

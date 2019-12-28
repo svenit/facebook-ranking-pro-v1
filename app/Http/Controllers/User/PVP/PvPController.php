@@ -21,7 +21,7 @@ class PvPController extends Controller
         $this->validate($request,[
             'g-recaptcha-response' => 'required'
         ],[
-            'g-recaptcha-response.required' => 'Bạn chưa xác nhận recaptcha'
+            'g-recaptcha-response.required' => 'Bạn chưa xác nhập recaptcha'
         ]);
         $checkRoom = Room::whereUserCreateId(Auth::id())->first();
         $checkFightRoom = FightRoom::whereUserChallenge(Auth::id())->first();

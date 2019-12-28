@@ -22,11 +22,9 @@
                     @foreach($cates as $key => $menu)
                         <div class="tab-pane fade {{ $key == 0 ? 'show active' : '' }}" id="home{{ str_slug($menu->name) }}" role="tabpanel" aria-labelledby="{{ str_slug($menu->name) }}-tab">
                             <div v-if="inventory['{{ str_slug($menu->name) }}']" class="row">
-                                <div v-for="(inven,index) in inventory['{{ str_slug($menu->name) }}']" :key="index" class="col-1">
-                                    <div class="">
-                                        <div class="text-center hoverable">
-                                            <div @click="showGearsDescription(inven,1)" :style="{margin:'0 auto',border:`1px solid ${inven.rgb}`}" :class="inven.shop_tag"></div>
-                                        </div>
+                                <div v-for="(inven,index) in inventory['{{ str_slug($menu->name) }}']" :key="index" class="col-lg-1 col-md-2 col-sm-2">
+                                    <div class="text-center hoverable">
+                                        <div @click="showGearsDescription(inven,1)" :style="{margin:'0 auto',border:`1px solid ${inven.rgb}`}" :class="inven.shop_tag"></div>
                                     </div>
                                 </div>
                             </div>
