@@ -75,6 +75,6 @@
     <span v-if="data.pet" :class="`Mount_Head_${data.pet.class_tag}`"></span>
 </div>
 <div style="margin-bottom:60px" v-if="data.pet"></div>
+@endauth
 <button class="btn btn-white btn-block mb-2" style="display:none" id="trigger-gear" data-toggle="modal" data-target="#gear"></button>
 <button class="btn btn-white btn-block mb-2" style="display:none" id="trigger-pet" data-toggle="modal" data-target="#pet"></button>
-@endauth

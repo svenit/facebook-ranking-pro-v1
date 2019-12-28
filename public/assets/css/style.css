@@ -323,3 +323,11 @@ img:hover {
     margin: 0 auto;
     margin-top:20%;
 }
+.modal .fade .modal-left
+{
+    position: unset !important;
+}
+.top-off
+{
+    z-index: 999999999;
+}

@@ -109,6 +109,7 @@
                     </div>
                 </div>
                 <br>
+                <p class="text-gold">Trang Bị</p>
                 <div class="row row-sm">
                     <div v-for="(gear,index) in data.gears" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
                         <div class="flex">
@@ -122,10 +123,17 @@
                         </div>
                     </div>
                 </div>
+                <p class="text-gold">Kỹ Năng</p>
                 <div class="row row-sm">
                     <div v-for="(skill,index) in data.skills" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
                         <div class="flex hoverable">
                             <img title @click="showSkillsDescription(skill,1)" data-toggle="tooltip" :style="{borderRadius:'5px',width:'68px',height:'68px',border:`1px solid ${skill.rgb}`}" :src="skill.image">
+                        </div>
+                    </div>
+                    <div v-for="n in parseInt(4 - data.skills.length)" :key="n + Math.random(1,10)" style="margin-bottom:15px" class="col-3 d-flex">
+                        <div class="flex">
+                            <div class="hoverable" :style="{width:'68px',height:'68px',borderRadius:'5px',border:'1px dashed #ccc',background:'#4e4e4e'}">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -133,7 +141,8 @@
         </div>
     </div>
 </div>
-<div id="gear" v-if="detailGear.data" class="modal fade gear" data-backdrop="true" aria-hidden="true" style="display: none;">
+@endauth
+<div id="gear" v-if="detailGear.data" class="modal fade gear top-off" data-backdrop="true" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content bg-dark">
             <div class="modal-header">
@@ -226,7 +235,7 @@
         <!-- /.modal-content -->
     </div>
 </div>
-<div id="pet" v-if="detailPet.data" class="modal fade pet" data-backdrop="true" aria-hidden="true" style="display: none;">
+<div id="pet" v-if="detailPet.data" class="modal fade pet top-off" data-backdrop="true" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content bg-dark">
             <div class="modal-header">
@@ -321,7 +330,6 @@
         <!-- /.modal-content -->
     </div>
 </div>
-@endauth
 <div v-if="user" class="modal fade modal-right" data-backdrop="true">
     <div style="overflow:auto" class="modal-dialog modal-right w-xl">
         <div style="min-height:100vh;background:#111 !important" class="modal-content vip-bordered no-radius">
@@ -432,17 +440,31 @@
                     </div>
                 </div>
                 <br>
+                <p class="text-gold">Trang Bị</p>
                 <div class="row row-sm">
                     <div v-for="(gear,index) in user.gears" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
                         <div class="flex">
                             <div @click="showGearsDescription(gear,0)" :class="`${gear.shop_tag}`" :style="{borderRadius:'5px',border:`1px solid ${gear.rgb}`}"></div>
                         </div>
                     </div>
+                    <div v-for="n in parseInt(8 - user.gears.length)" :key="n + Math.random(1,10)" style="margin-bottom:15px" class="col-3 d-flex">
+                        <div class="flex hoverable">
+                            <div class="hoverable" :style="{width:'68px',height:'68px',borderRadius:'5px',border:'1px dashed #ccc',background:'#4e4e4e'}">
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <p class="text-gold">Kỹ Năng</p>
                 <div class="row row-sm">
                     <div v-for="(skill,index) in user.skills" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
-                        <div class="flex">
+                        <div class="flex hoverable">
                             <img title @click="showSkillsDescription(skill,0)" data-toggle="tooltip" :style="{borderRadius:'5px',width:'68px',height:'68px',border:`1px solid ${skill.rgb}`}" :src="skill.image">
+                        </div>
+                    </div>
+                    <div v-for="n in parseInt(4 - user.skills.length)" :key="n + Math.random(1,10)" style="margin-bottom:15px" class="col-3 d-flex">
+                        <div class="flex">
+                            <div class="hoverable" :style="{width:'68px',height:'68px',borderRadius:'5px',border:'1px dashed #ccc',background:'#4e4e4e'}">
+                            </div>
                         </div>
                     </div>
                 </div>
