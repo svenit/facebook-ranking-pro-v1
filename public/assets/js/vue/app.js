@@ -9,6 +9,10 @@ app = new Vue({
             data:{},
             permission:0
         },
+        detailPet:{
+            data:{},
+            permission:0
+        },
         data:{
             infor:{
                 name: "",
@@ -157,7 +161,8 @@ app = new Vue({
                 uploading:false
             }
         },
-        inventory:{}
+        inventory:{},
+        pets:[]
     },
     async created()
     {
@@ -180,6 +185,9 @@ app = new Vue({
                     break;
                     case 'inventory.index':
                         this.invetory();
+                    break;
+                    case 'pet.index':
+                        this.pet();
                     break;
                 }
             }
@@ -348,6 +356,7 @@ app = new Vue({
                 await this.refreshToken(res);
                 this.data = res.data;
                 this.loading = false;
+               
             }
             catch(e)
             {
@@ -420,6 +429,14 @@ app = new Vue({
                 }
             }
         },
+        showInforPet(data,permission)
+        {
+            this.detailPet = {
+                data:data,
+                permission:permission
+            };
+            $('#trigger-pet').click();
+        },
         showGearsDescription(data,permission)
         {
             this.detailGear = {
@@ -427,34 +444,6 @@ app = new Vue({
                 permission:permission
             };
             $('#trigger-gear').click();
-            // Swal.fire({
-            //     title:`<div style="border:1px solid ${data.rgb};border-radius:5px" class="${data.shop_tag}">`,
-            //     type:'',
-            //     showConfirmButton:permission == 1 ? true : false,
-            //     confirmButtonText:permission == 1 && data.pivot.status == 1 ? `Tháo trang bị` : '',
-            //     showCancelButton:permission == 1 && data.pivot.status == 0 ? true : false,
-            //     showConfirmButton:permission == 1 && data.pivot.status == 1 ? true : false,
-            //     cancelButtonColor:'#333',
-            //     cancelButtonText:permission == 1 && data.pivot.status == 0 ? `Trang bị` : '',
-            //     html:`<p>[ ${data.name} ]</p><p>${data.description}</p>
-            //         <p>Yêu cầu cấp độ : ${data.level_required}</p>
-            //         <p>Sinh Lực : +${data.health_points}</p>
-            //         <p> Sức Mạnh : +${data.strength} </p>
-            //         <p> Trí Tuệ : +${data.intelligent}</p>
-            //         <p> Nhanh nhẹn : +${data.agility}</p>
-            //         <p> May mắn : +${data.lucky}</p>
-            //         <p> Kháng Công : +${data.armor_strength}</p>
-            //         <p> Kháng Phép : +${data.armor_intelligent}</p>`
-            // }).then((result) => {
-            //     if(result.value)
-            //     {
-            //         this.removeEquipment(data.id);
-            //     }
-            //     else if(result.dismiss === Swal.DismissReason.cancel)
-            //     {
-            //         this.equipment(data.id);
-            //     }
-            // });
         },
         showSkillsDescription(data)
         {
@@ -1010,6 +999,7 @@ app = new Vue({
                 await this.refreshToken(res);
                 await this.invetory();
                 this.index();
+                this.notify(res.data.message);
             }
         },
         async removeEquipment(id)
@@ -1062,6 +1052,72 @@ app = new Vue({
                 {
                     e.target.innerHTML = 'Đã mua';
                 }
+            }
+        },
+        async pet()
+        {
+            this.loading = true;
+            let res = await axios.get(`${config.root}/api/v1/pet`,{
+                params:{
+                    bearer:config.bearer,
+                },
+                headers:{
+                    pragma:this.token
+                }
+            });
+            await this.refreshToken(res);
+            this.pets = res.data;
+            this.loading = false;
+        },
+        async ridingPet(id)
+        {
+            this.loading = true;
+            let res = await axios.put(`${config.root}/api/v1/pet/riding`,{
+                bearer:config.bearer,
+                id:id
+            },{
+                headers:{
+                    pragma:this.token
+                }
+            });
+            await this.refreshToken(res);
+            await this.index();
+            this.pet();
+            this.notify(res.data.message);
+        },
+        async petDown(id)
+        {
+            this.loading = true;
+            let res = await axios.put(`${config.root}/api/v1/pet/pet-down`,{
+                bearer:config.bearer,
+                id:id
+            },{
+                headers:{
+                    pragma:this.token
+                }
+            });
+            await this.refreshToken(res);
+            await this.index();
+            this.pet();
+            this.notify(res.data.message);
+        },
+        async dropPet(id)
+        {
+            if(confirm('Phóng sinh cho thú cưỡi này ?'))
+            {
+                this.loading = true;
+                let res = await axios.post(`${config.root}/api/v1/pet/drop-pet`,{
+                    bearer:config.bearer,
+                    id:id
+                },{
+                    headers:{
+                        pragma:this.token
+                    }
+                });
+                await this.refreshToken(res);
+                await this.pet();
+                this.index();
+                this.notify(res.data.message);
             }
         },
         async sendMessage(type)

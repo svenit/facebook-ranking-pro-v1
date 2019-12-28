@@ -30,6 +30,16 @@
 			You don't have javascript enabled.  Good luck with that.
 		</div>
 	</noscript>
+	<div id="loader" class="loading-screen">
+		<div class="flash-screen">
+			<div class="text-center">
+				<img style="width:100px" src="{{ asset('assets/images/loader.jpg') }}">
+			</div>
+			<div class="progress">
+                <div class="indeterminate"></div>
+            </div>
+		</div>
+	</div>
 	<div id="app" class="layout-row" v-if="!detect">
 		@include('user.theme.aside')
 		<div id="main" style="background: url({{ asset('assets/images/background.jpg') }});" class="layout-column flex">
@@ -74,6 +84,11 @@
 	<script src="{{ asset('assets/js/site.min.js') }}"></script>
 	<script src="{{ asset('assets/js/plugins/axios/axios.min.js') }}"></script>
 	<script src="{{ asset('assets/js/vue/vue.js') }}"></script>
+	<script>
+		$(document).ready(() => {
+			$('#loader').fadeOut('slow');
+		});
+	</script>
 	@stack('js')
 	@if(session('message'))
 		<script>

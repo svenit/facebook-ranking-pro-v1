@@ -112,13 +112,13 @@
                 <div class="row row-sm">
                     <div v-for="(gear,index) in data.gears" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
                         <div class="flex">
-                            <div @click="showGearsDescription(gear,1)" :class="`${gear.shop_tag}`" :style="{borderRadius:'5px',border:`1px solid ${gear.rgb}`}"></div>
+                            <div @click="showGearsDescription(gear,1)" :class="`hoverable ${gear.shop_tag}`" :style="{borderRadius:'5px',border:`1px solid ${gear.rgb}`}"></div>
                         </div>
                     </div>
                 </div>
                 <div class="row row-sm">
                     <div v-for="(skill,index) in data.skills" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
-                        <div class="flex">
+                        <div class="flex hoverable">
                             <img title @click="showSkillsDescription(skill,1)" data-toggle="tooltip" :style="{borderRadius:'5px',width:'68px',height:'68px',border:`1px solid ${skill.rgb}`}" :src="skill.image">
                         </div>
                     </div>
@@ -127,10 +127,11 @@
         </div>
     </div>
 </div>
-<div id="modal" v-if="detailGear.data" class="modal fade" data-backdrop="true" aria-hidden="true" style="display: none;">
+<div id="gear" v-if="detailGear.data" class="modal fade gear" data-backdrop="true" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content bg-dark">
             <div class="modal-header">
+                <p>Trang Bị</p>
                 <button class="close" data-dismiss="modal">×</button>
             </div>
             <div class="modal-body">
@@ -213,6 +214,101 @@
                 </button>
                 <button v-else type="button" @click="removeEquipment(detailGear.data.id)" class="btn btn-secondary" data-dismiss="modal">
                     Tháo
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+<div id="pet" v-if="detailPet.data" class="modal fade pet" data-backdrop="true" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <p>Thú Cưỡi</p>
+                <button class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-4">
+                        <div :style="{border:`1px solid ${detailPet.data.rgb}`,margin:'0 auto',width:'68px',height:'68px'}">
+                            <div :class="[`text-center mount Mount_Icon_${detailPet.data.class_tag}`]"></div>
+                        </div>
+                        <p :style="{fontSize:'14px',color:`${detailPet.data.rgb}`,marginTop:'20px'}" class="modal-title text-md text-center">@{{ detailPet.data.name }}</p>
+                    </div>
+                    <div class="col-8">
+                        <div class="row">
+                            <div class="col-6 d-flex">
+                                <div class="flex">
+                                    <div class="text-light"><small><i class="fas fa-chevron-double-up"></i> Level yêu cầu : <strong
+                                        class="text-light">@{{ detailPet.data.level_required }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex">
+                                <div class="flex">
+                                    <div class="text-info"><small><i class="fas fa-heart"></i> Sinh Lực <strong
+                                        class="text-info">+ @{{ detailPet.data.health_points }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex mt-2">
+                                <div class="flex">
+                                    <div class="text-danger"><small><i class="fas fa-swords"></i> Sức Mạnh <strong
+                                        class="text-danger">+ @{{ detailPet.data.strength }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex mt-2">
+                                <div class="flex">
+                                    <div class="text-success"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
+                                        class="text-success">@{{ detailPet.data.intelligent }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex mt-2">
+                                <div class="flex">
+                                    <div class="text-primary"><small><i class="fas fa-bolt"></i> Nhanh Nhẹn <strong
+                                        class="text-primary">+ @{{ detailPet.data.agility }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex mt-2">
+                                <div class="flex">
+                                    <div class="text-warning"><small><i class="fas fa-stars"></i> May Mắn <strong
+                                        class="text-warning">+ @{{ detailPet.data.lucky }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex mt-2">
+                                <div class="flex">
+                                    <div class="text-silver"><small><i class="fas fa-shield"></i> Kháng Công <strong
+                                        class="text-silver">+ @{{ detailPet.data.armor_strength }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex mt-2">
+                                <div class="flex">
+                                    <div class="text-purple"><small><i class="fal fa-dice-d20"></i> Kháng Phép <strong
+                                        class="text-purple">+ @{{ detailPet.data.armor_intelligent }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin:20px 10px" class="col-12">
+                        <p>@{{ detailPet.data.description || '( Không có thông tin thêm về thú cưỡi này )' }}</p>
+                    </div>
+                </div>
+            </div>
+            <div v-if="detailPet.permission == 1" class="modal-footer">
+                <button type="button" @click="dropPet(detailPet.data.id)" class="btn bg-danger-lt" data-dismiss="modal">
+                    Thả
+                </button>
+                <button v-if="detailPet.data.pivot.status == 0" type="button" @click="ridingPet(detailPet.data.id)" class="btn btn-secondary" data-dismiss="modal">
+                    Cưỡi
+                </button>
+                <button v-else type="button" @click="petDown(detailPet.data.id)" class="btn btn-secondary" data-dismiss="modal">
+                    Xuống
                 </button>
             </div>
         </div>

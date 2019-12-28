@@ -10,7 +10,7 @@
             @include('user.theme.parameter')
             <div class="card vip-bordered">
                 <div class="b-b">
-                    <div class="nav-active-border b-primary bottom">
+                    <div class="nav-active-border b-danger bottom">
                         <ul class="nav" id="myTab" role="tablist">
                             @foreach($cates as $key => $menu)
                                 <li class="nav-item"><a class="nav-link {{ $key == 0 ? 'active' : '' }}" id="{{ str_slug($menu->name) }}-tab" data-toggle="tab" href="#home{{ str_slug($menu->name) }}" role="tab" aria-controls="home{{ str_slug($menu->name) }}" aria-selected="{{ $key == 0 ? 'true' : 'false' }}">{{ $menu->name }}</a></li>
@@ -26,13 +26,6 @@
                                     <div class="">
                                         <div class="text-center hoverable">
                                             <div @click="showGearsDescription(inven,1)" :style="{margin:'0 auto',border:`1px solid ${inven.rgb}`}" :class="inven.shop_tag"></div>
-                                        </div>
-                                        <div class="btn-group">
-                                            {{-- <button @click="deleteEquipment(inven.id)" type="button" class="btn btn-secondary active">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                            <button v-if="inven.pivot.status == 0" @click="equipment(inven.id,$event)" type="button" class="btn btn-success">Trang Bị</button>
-                                            <button v-else @click="removeEquipment(inven.id,$event)" type="button" class="btn btn-secondary">Tháo</button> --}}
                                         </div>
                                     </div>
                                 </div>

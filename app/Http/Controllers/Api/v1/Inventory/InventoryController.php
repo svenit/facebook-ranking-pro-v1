@@ -36,8 +36,13 @@ class InventoryController extends Controller
     }
     public function delete(Request $request)
     {
-        $this->updatePower();
         Auth::user()->gears()->detach($request->id);
+        $this->updatePower();
+        return response()->json([
+            'code' => 200,
+            'status' => 'success',
+            'message' => "Trang bị của bạn đã về với cõi hư vô"
+        ],200);
     }
     public function removeEquipment(Request $request)
     {

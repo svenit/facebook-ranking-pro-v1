@@ -42,4 +42,10 @@ Route::group(['prefix' => 'v1','namespace' => 'Api\v1','middleware' => 'cors'], 
     Route::group(['prefix' => 'shop','namespace' => 'Shop'], function () {
         Route::post('buy-item','ShopController@buyItem');
     });
+    Route::group(['prefix' => 'pet','namespace' => 'Pet'], function () {
+        Route::get('/','PetController');
+        Route::put('riding','PetController@riding');
+        Route::put('pet-down','PetController@petDown');
+        Route::post('drop-pet','PetController@dropPet');
+    });
 });
