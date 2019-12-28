@@ -210,7 +210,7 @@ img:hover {
     background: #0d1130;
 }
 
-.progress {
+.progress-screen {
     position: relative;
     height: 4px;
     display: block;
@@ -220,11 +220,11 @@ img:hover {
     overflow: hidden;
 }
 
-.progress .indeterminate {
+.progress-screen .indeterminate {
     background-color: #f8ba63;
 }
 
-.progress .indeterminate:before {
+.progress-screen .indeterminate:before {
     content: '';
     position: absolute;
     background-color: inherit;
@@ -236,7 +236,7 @@ img:hover {
     animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
 }
 
-.progress .indeterminate:after {
+.progress-screen .indeterminate:after {
     content: '';
     position: absolute;
     background-color: inherit;

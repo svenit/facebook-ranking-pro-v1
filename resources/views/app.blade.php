@@ -36,7 +36,7 @@
 				<div class="text-center">
 					<img style="width:100px" src="{{ asset('assets/images/loader.jpg') }}">
 				</div>
-				<div class="progress">
+				<div class="progress-screen">
 					<div class="indeterminate"></div>
 				</div>
 			</div>

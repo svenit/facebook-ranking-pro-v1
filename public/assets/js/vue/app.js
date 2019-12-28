@@ -209,7 +209,6 @@ app = new Vue({
             });
             this.detect = window.devtools.isOpen;
         }
-        
     },
     watch:{
         'pvp.isReady'()
@@ -240,6 +239,14 @@ app = new Vue({
         },
         'pvp.match.you.turn'()
         {
+            if(typeof countDown == "undefined" || countDown == null)
+            {
+                
+            }
+            else
+            {
+                clearInterval(countDown);
+            }
             if(this.pvp.match.you.turn == 1)
             {
                 this.pvp.timeOut = 15;
@@ -397,6 +404,7 @@ app = new Vue({
             });
             var joinRoom = pusher.subscribe('channel-pvp-joined-room');
             var hitEnemy =  pusher.subscribe('channel-pvp-hit-enemy');
+            var exitMatch = pusher.subscribe('channel-pvp-exit-match');
             joinRoom.bind(`event-pvp-joined-room-${page.room.id}-${page.room.me}`, function(res) {
                 const audio = new Audio(`${config.root}/assets/sound/found_enemy.mp3`);
                 audio.play();
@@ -421,6 +429,10 @@ app = new Vue({
                         self.pvp.enemyBuff = false;
                     },1000);
                 }
+            });
+            exitMatch.bind(`event-pvp-exit-match-${page.room.id}-${page.room.me}`, function(res) {
+                self.notify(`${res.data.data.message}`);
+                self.findEnemy();
             });
             if(page.room.people == 2)
             {

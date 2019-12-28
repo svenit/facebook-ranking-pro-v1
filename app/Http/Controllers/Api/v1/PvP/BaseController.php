@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1\PvP;
 
+use App\Events\PvPExitMatch;
 use App\Model\Room;
 use App\Model\User;
 use App\Model\Config;
@@ -47,9 +48,9 @@ class BaseController extends Controller
             }
             else
             {
+                $target = FightRoom::where([['user_challenge','!=',Auth::id()],['room_id',$room->id]])->first();
                 if($room->user_create_id == Auth::id() && $countUser == 2)
                 {
-                    $target = FightRoom::where([['user_challenge','!=',Auth::id()],['room_id',$room->id]])->first();
                     $updateMaster = Room::whereId($room->id)->update([
                         'user_create_id' => $target->user_challenge
                     ]);
@@ -57,6 +58,17 @@ class BaseController extends Controller
                     if(isset($leaveRoom,$target,$updateMaster))
                     {
                         $this->removeTracking();
+                        return $data = [
+                            'room' => [
+                                'name' => $room->name,
+                                'id' => $room->id
+                            ],
+                            'data' => [
+                                'message' => "Đối thủ đã rời phòng"
+                            ],
+                            'broadcast-to' => $target->user_challenge
+                        ];
+                        event(new PvPExitMatch($data));
                         $response = [
                             'code' => 200,
                             'msg' => 'Đã thoát',
@@ -71,6 +83,17 @@ class BaseController extends Controller
                     if(isset($leaveRoom))
                     {
                         $this->removeTracking();
+                        $data = [
+                            'room' => [
+                                'name' => $room->name,
+                                'id' => $room->id
+                            ],
+                            'data' => [
+                                'message' => "Đối thủ đã rời phòng"
+                            ],
+                            'broadcast-to' => $target->user_challenge
+                        ];
+                        event(new PvPExitMatch($data));
                         $response = [
                             'code' => 200,
                             'msg' => 'Đã thoát',

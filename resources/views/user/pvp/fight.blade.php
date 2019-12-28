@@ -78,7 +78,7 @@
                 <div class="">
                     <img v-if="pvp.match.you.turn != 1 && pvp.isMatching" style="position:absolute;width:50%;left:20%;top:10%" src="https://i.imgur.com/xjA4khR.gif">
                     <img v-if="pvp.yourAttack" style="position:absolute;width:100%;z-index:9999999" :src="pvp.yourSkillAnimation">
-                    <div v-if="pvp.enemyJoined && !pvp.isEnding" style="position:absolute;bottom:30%;left:30%" @click="index()" title="Nhấp vào để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px" class="character-sprites hoverable {{ Auth::user()->isVip == 1 ? 'vip-2' : '' }}">
+                    <div v-if="pvp.enemyJoined && !pvp.isEnding" style="position:absolute;bottom:30%;left:30%" @click="showUserInfor(pvp.match.enemy.infor.facebook_id)" title="Nhấp vào để xem thông số" data-toggle="modal" data-target=".modal-right" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px" class="character-sprites hoverable {{ Auth::user()->isVip == 1 ? 'vip-2' : '' }}">
                         <span v-if="pvp.match.enemy.pet" :class="`Mount_Body_${pvp.match.enemy.pet.class_tag}`"></span>
                         <span class="hair_flower_3"></span>
                         <span class="chair_none"></span>

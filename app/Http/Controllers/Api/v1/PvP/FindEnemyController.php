@@ -14,7 +14,7 @@ class FindEnemyController extends Controller
     public function __invoke(Request $request)
     {
         $api = new IndexController();
-        $room = Room::where([['name',$request->name],['people',2]])->first();
+        $room = Room::where('name',$request->name)->first();
         if(isset($room))
         {
             $enemy = FightRoom::where([['room_id',$room->id],['user_challenge','!=',Auth::id()]])->first();
