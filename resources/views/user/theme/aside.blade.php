@@ -31,7 +31,7 @@
                         <span v-for="(gear,index) in data.gears" :class="gear.class_tag"></span>
                         <span v-if="data.pet" :class="`Mount_Head_${data.pet.class_tag}`"></span>
                     </div>
-                    <div style="margin-bottom:80px" v-if="data.pet"></div>
+                    <div style="margin-bottom:60px" v-if="data.pet"></div>
                     <p style="margin-top:20px" class="text-gold">@{{ data.infor.name }} ( @{{ data.infor.character.name }})</p>
                 </div>
                 <div class="row row-sm">
@@ -127,6 +127,98 @@
         </div>
     </div>
 </div>
+<div id="modal" v-if="detailGear.data" class="modal fade" data-backdrop="true" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-4">
+                        <div :style="{border:`1px solid ${detailGear.data.rgb}`,margin:'0 auto'}" :class="[`text-center ${detailGear.data.shop_tag}`]"></div>
+                        <p :style="{fontSize:'14px',color:`${detailGear.data.rgb}`,marginTop:'20px'}" class="modal-title text-md text-center">@{{ detailGear.data.name }}</p>
+                    </div>
+                    <div class="col-8">
+                        <div class="row">
+                            <div class="col-6 d-flex">
+                                <div class="flex">
+                                    <div class="text-light"><small><i class="fas fa-chevron-double-up"></i> Level yêu cầu : <strong
+                                        class="text-light">@{{ detailGear.data.level_required }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex">
+                                <div class="flex">
+                                    <div class="text-info"><small><i class="fas fa-heart"></i> Sinh Lực <strong
+                                        class="text-info">+ @{{ detailGear.data.health_points }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex mt-2">
+                                <div class="flex">
+                                    <div class="text-danger"><small><i class="fas fa-swords"></i> Sức Mạnh <strong
+                                        class="text-danger">+ @{{ detailGear.data.strength }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex mt-2">
+                                <div class="flex">
+                                    <div class="text-success"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
+                                        class="text-success">@{{ detailGear.data.intelligent }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex mt-2">
+                                <div class="flex">
+                                    <div class="text-primary"><small><i class="fas fa-bolt"></i> Nhanh Nhẹn <strong
+                                        class="text-primary">+ @{{ detailGear.data.agility }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex mt-2">
+                                <div class="flex">
+                                    <div class="text-warning"><small><i class="fas fa-stars"></i> May Mắn <strong
+                                        class="text-warning">+ @{{ detailGear.data.lucky }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex mt-2">
+                                <div class="flex">
+                                    <div class="text-silver"><small><i class="fas fa-shield"></i> Kháng Công <strong
+                                        class="text-silver">+ @{{ detailGear.data.armor_strength }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex mt-2">
+                                <div class="flex">
+                                    <div class="text-purple"><small><i class="fal fa-dice-d20"></i> Kháng Phép <strong
+                                        class="text-purple">+ @{{ detailGear.data.armor_intelligent }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin:20px 10px" class="col-12">
+                        <p>@{{ detailGear.data.description }}</p>
+                    </div>
+                </div>
+            </div>
+            <div v-if="detailGear.permission == 1" class="modal-footer">
+                <button type="button" @click="deleteEquipment(detailGear.data.id)" class="btn bg-danger-lt" data-dismiss="modal">
+                    Vứt Bỏ
+                </button>
+                <button v-if="detailGear.data.pivot.status == 0" type="button" @click="equipment(detailGear.data.id)" class="btn btn-secondary" data-dismiss="modal">
+                    Trang bị
+                </button>
+                <button v-else type="button" @click="removeEquipment(detailGear.data.id)" class="btn btn-secondary" data-dismiss="modal">
+                    Tháo
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
 @endauth
 <div v-if="user" class="modal fade modal-right" data-backdrop="true">
     <div style="overflow:auto" class="modal-dialog modal-right w-xl">
@@ -160,7 +252,7 @@
                         <span v-for="(gear,index) in user.gears" :class="gear.class_tag"></span>
                         <span v-if="user.pet" :class="`Mount_Head_${user.pet.class_tag}`"></span>
                     </div>
-                    <div style="margin-bottom:80px" v-if="user.pet"></div>
+                    <div style="margin-bottom:60px" v-if="user.pet"></div>
                     <p style="margin-top:20px" class="text-gold">@{{ user.infor.name }} ( @{{ user.infor.character.name }})</p>
                 </div>
                 <div class="row row-sm">
@@ -241,14 +333,14 @@
                 <div class="row row-sm">
                     <div v-for="(gear,index) in user.gears" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
                         <div class="flex">
-                            <div @click="showGearsDescription(gear,1)" :class="`shop_${gear.class_tag}`" :style="{borderRadius:'5px',border:`1px solid ${gear.rgb}`}"></div>
+                            <div @click="showGearsDescription(gear,0)" :class="`${gear.shop_tag}`" :style="{borderRadius:'5px',border:`1px solid ${gear.rgb}`}"></div>
                         </div>
                     </div>
                 </div>
                 <div class="row row-sm">
                     <div v-for="(skill,index) in user.skills" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
                         <div class="flex">
-                            <img title @click="showSkillsDescription(skill,1)" data-toggle="tooltip" :style="{borderRadius:'5px',width:'68px',height:'68px',border:`1px solid ${skill.rgb}`}" :src="skill.image">
+                            <img title @click="showSkillsDescription(skill,0)" data-toggle="tooltip" :style="{borderRadius:'5px',width:'68px',height:'68px',border:`1px solid ${skill.rgb}`}" :src="skill.image">
                         </div>
                     </div>
                 </div>

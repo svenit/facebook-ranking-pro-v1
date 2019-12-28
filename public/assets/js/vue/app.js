@@ -5,6 +5,10 @@ app = new Vue({
         loading:true,
         detect:false,
         token:'',
+        detailGear:{
+            data:{},
+            permission:0
+        },
         data:{
             infor:{
                 name: "",
@@ -418,34 +422,39 @@ app = new Vue({
         },
         showGearsDescription(data,permission)
         {
-            Swal.fire({
-                title:`<div style="border:1px solid ${data.rgb};border-radius:5px" class="${data.shop_tag}">`,
-                type:'',
-                showConfirmButton:permission == 1 ? true : false,
-                confirmButtonText:permission == 1 && data.pivot.status == 1 ? `Tháo trang bị` : '',
-                showCancelButton:permission == 1 && data.pivot.status == 0 ? true : false,
-                showConfirmButton:permission == 1 && data.pivot.status == 1 ? true : false,
-                cancelButtonColor:'#333',
-                cancelButtonText:permission == 1 && data.pivot.status == 0 ? `Trang bị` : '',
-                html:`<p>[ ${data.name} ]</p><p>${data.description}</p>
-                    <p>Yêu cầu cấp độ : ${data.level_required}</p>
-                    <p>Sinh Lực : +${data.health_points}</p>
-                    <p> Sức Mạnh : +${data.strength} </p>
-                    <p> Trí Tuệ : +${data.intelligent}</p>
-                    <p> Nhanh nhẹn : +${data.agility}</p>
-                    <p> May mắn : +${data.lucky}</p>
-                    <p> Kháng Công : +${data.armor_strength}</p>
-                    <p> Kháng Phép : +${data.armor_intelligent}</p>`
-            }).then((result) => {
-                if(result.value)
-                {
-                    this.removeEquipment(data.id);
-                }
-                else if(result.dismiss === Swal.DismissReason.cancel)
-                {
-                    this.equipment(data.id);
-                }
-            });
+            this.detailGear = {
+                data:data,
+                permission:permission
+            };
+            $('#trigger-gear').click();
+            // Swal.fire({
+            //     title:`<div style="border:1px solid ${data.rgb};border-radius:5px" class="${data.shop_tag}">`,
+            //     type:'',
+            //     showConfirmButton:permission == 1 ? true : false,
+            //     confirmButtonText:permission == 1 && data.pivot.status == 1 ? `Tháo trang bị` : '',
+            //     showCancelButton:permission == 1 && data.pivot.status == 0 ? true : false,
+            //     showConfirmButton:permission == 1 && data.pivot.status == 1 ? true : false,
+            //     cancelButtonColor:'#333',
+            //     cancelButtonText:permission == 1 && data.pivot.status == 0 ? `Trang bị` : '',
+            //     html:`<p>[ ${data.name} ]</p><p>${data.description}</p>
+            //         <p>Yêu cầu cấp độ : ${data.level_required}</p>
+            //         <p>Sinh Lực : +${data.health_points}</p>
+            //         <p> Sức Mạnh : +${data.strength} </p>
+            //         <p> Trí Tuệ : +${data.intelligent}</p>
+            //         <p> Nhanh nhẹn : +${data.agility}</p>
+            //         <p> May mắn : +${data.lucky}</p>
+            //         <p> Kháng Công : +${data.armor_strength}</p>
+            //         <p> Kháng Phép : +${data.armor_intelligent}</p>`
+            // }).then((result) => {
+            //     if(result.value)
+            //     {
+            //         this.removeEquipment(data.id);
+            //     }
+            //     else if(result.dismiss === Swal.DismissReason.cancel)
+            //     {
+            //         this.equipment(data.id);
+            //     }
+            // });
         },
         showSkillsDescription(data)
         {

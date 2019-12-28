@@ -22,18 +22,17 @@
                     @foreach($cates as $key => $menu)
                         <div class="tab-pane fade {{ $key == 0 ? 'show active' : '' }}" id="home{{ str_slug($menu->name) }}" role="tabpanel" aria-labelledby="{{ str_slug($menu->name) }}-tab">
                             <div v-if="inventory['{{ str_slug($menu->name) }}']" class="row">
-                                <div v-for="(inven,index) in inventory['{{ str_slug($menu->name) }}']" :key="index" class="col-6 col-md-4 col-lg-3">
-                                    <div class="card vip-bordered">
+                                <div v-for="(inven,index) in inventory['{{ str_slug($menu->name) }}']" :key="index" class="col-1">
+                                    <div class="">
                                         <div class="text-center hoverable">
-                                            <div @click="showGearsDescription(inven,1)" style="margin:0 auto" :class="inven.shop_tag"></div>
-                                            <p :style="{color:inven.rgb}" v-html="inven.name"></p>
+                                            <div @click="showGearsDescription(inven,1)" :style="{margin:'0 auto',border:`1px solid ${inven.rgb}`}" :class="inven.shop_tag"></div>
                                         </div>
                                         <div class="btn-group">
-                                            <button @click="deleteEquipment(inven.id)" type="button" class="btn btn-secondary active">
+                                            {{-- <button @click="deleteEquipment(inven.id)" type="button" class="btn btn-secondary active">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                             <button v-if="inven.pivot.status == 0" @click="equipment(inven.id,$event)" type="button" class="btn btn-success">Trang Bị</button>
-                                            <button v-else @click="removeEquipment(inven.id,$event)" type="button" class="btn btn-secondary">Tháo</button>
+                                            <button v-else @click="removeEquipment(inven.id,$event)" type="button" class="btn btn-secondary">Tháo</button> --}}
                                         </div>
                                     </div>
                                 </div>
