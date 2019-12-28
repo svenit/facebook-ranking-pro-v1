@@ -1,6 +1,5 @@
 <?php
 
-use App\Events\PvPJoinedRoom;
 use Illuminate\Support\Facades\Auth;
 
 

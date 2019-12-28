@@ -112,7 +112,13 @@
                 <div class="row row-sm">
                     <div v-for="(gear,index) in data.gears" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
                         <div class="flex">
-                            <div @click="showGearsDescription(gear,1)" :class="`hoverable ${gear.shop_tag}`" :style="{borderRadius:'5px',border:`1px solid ${gear.rgb}`}"></div>
+                            <div @click="showGearsDescription(gear,1)" :class="`hoverable ${gear.shop_tag}`" :style="{borderRadius:'5px',border:`1px solid ${gear.rgb}`,backgroundColor:'#272727'}"></div>
+                        </div>
+                    </div>
+                    <div v-for="n in parseInt(8 - data.gears.length)" :key="n + Math.random(1,10)" style="margin-bottom:15px" class="col-3 d-flex">
+                        <div class="flex">
+                            <div class="hoverable" :style="{width:'68px',height:'68px',borderRadius:'5px',border:'1px dashed #ccc',background:'#4e4e4e'}">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -469,6 +475,7 @@
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('user.profile.inventory.index') }}" class=""><span class="nav-text">Rương Đồ</span></a></li>
                                 <li><a href="{{ Route('user.profile.pet.index') }}" class=""><span class="nav-text">Thú Cưỡi</span></a></li>
+                                <li><a href="{{ Route('user.profile.pet.index') }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
                             </ul>
                         </li>
                     @endauth

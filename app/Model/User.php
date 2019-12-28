@@ -73,15 +73,27 @@ class User extends Authenticatable
     }
     public function usingSkills()
     {
-        return $this->skills->filter(function($status){
-            return $status->pivot->status == 1;
-        });
+        $data = [];
+        foreach($this->skills as $key => $skill)
+        {
+            if($skill->pivot->status == 1)
+            {
+                array_push($data,$skill);
+            }
+        }
+        return $data;
     }
     public function usingGears()
     {
-        return $this->gears->filter(function($status){
-            return $status->pivot->status == 1;
-        });
+        $data = [];
+        foreach($this->gears as $key => $gear)
+        {
+            if($gear->pivot->status == 1)
+            {
+                array_push($data,$gear);
+            }
+        }
+        return $data;
     }
     public function usingPets()
     {

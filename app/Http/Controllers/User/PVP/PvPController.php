@@ -134,6 +134,7 @@ class PvPController extends Controller
     public function room($room)
     {
         $checkRoom = Room::whereName($room)->first();
+        $tracking = Tracking::where([['route','user.pvp.room'],['user_id',Auth::id()]])->first();
         if(isset($checkRoom))
         {
             $checkSession = FightRoom::where([['room_id',$checkRoom->id],['user_challenge',Auth::id()]])->first();
@@ -144,6 +145,10 @@ class PvPController extends Controller
             }
             else
             {
+                if(isset($tracking))
+                {
+                    $this->removeTracking();
+                }
                 return redirect()->route('user.index')->with([
                     'status' => 'error',
                     'message' => 'Không tìm thấy phòng này :('
@@ -152,6 +157,10 @@ class PvPController extends Controller
         }
         else
         {
+            if(isset($tracking))
+            {
+                $this->removeTracking();
+            }
             return redirect()->route('user.index')->with([
                 'status' => 'error',
                 'message' => 'Không tìm thấy phòng này :('
