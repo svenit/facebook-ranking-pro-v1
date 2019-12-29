@@ -1,4 +1,14 @@
-const myFirebase = new Firebase('https://vuejs-307.firebaseio.com');
+
+var firebaseConfig = {
+    apiKey: "AIzaSyClQ_--hmDvFQMz3YNlZxbb78kAaBSpIZ8",
+    authDomain: "vuejs-307.firebaseapp.com",
+    databaseURL: "https://vuejs-307.firebaseio.com",
+    projectId: "vuejs-307",
+    storageBucket: "vuejs-307.appspot.com",
+    messagingSenderId: "692999704197",
+    appId: "1:692999704197:web:e0e81247da8e0e32b063ec"
+  };
+firebase.initializeApp(firebaseConfig);
 app = new Vue({
     el:'#app',
     data:{
@@ -152,18 +162,17 @@ app = new Vue({
             spinning:false
         },
         chat:{
-            global:{
-                messages:[],
-                text:'',
-                isIn:false,
-                noti:true,
-                percent:0,
-                previewImage:'',
-                uploading:false
-            }
+            messages:[],
+            text:'',
+            isIn:false,
+            noti:true,
+            percent:0,
+            previewImage:'',
+            uploading:false,
+            block:true
         },
         inventory:{},
-        pets:[]
+        pets:[],
     },
     async created()
     {
@@ -186,7 +195,18 @@ app = new Vue({
                         await this.pvpRoom();
                     break;
                     case 'chat.global':
-                        await this.listGlobalChat();
+                        await this.listGlobalChat('global');
+                    break;
+                    case 'chat.stranger':
+                        if(page.room.people == 2)
+                        {
+                            this.chat.block =  false;
+                        }
+                        else
+                        {
+                            this.chat.message = [];
+                        }
+                        await this.chatRoom();
                     break;
                     case 'inventory.index':
                         await this.invetory();
@@ -417,7 +437,6 @@ app = new Vue({
             this.pvp.isReady = page.room.is_ready == 1 ? true : false;
             this.pvp.status = this.pvp.isReady ? 'Hủy' : 'Sẵn Sàng <i class="fas fa-swords"></i>';
             const self = this;
-            Pusher.logToConsole = true;
             var pusher = new Pusher(page.pusher.key, {
                 cluster: 'ap1',
                 forceTLS: true
@@ -925,38 +944,71 @@ app = new Vue({
             this.pvp.isReady = false;
             this.pvp.status = 'Sẵn Sàng <i class="fas fa-swords"></i>';
         },
-        async listGlobalChat()
+        async listGlobalChat(channel)
         {
             const self = this;
             this.loading = true;
-            await myFirebase.on('child_added', function (data){
-                self.chat.global.messages.push(data.val());
+            await firebase.database().ref(channel).on('child_added', function (data){
+                self.chat.messages.push(data.val());
                 $('#chat-box').stop().animate({
                   scrollTop: 1000000000000000000
                 }, $('#chat-box').scrollHeight);
-                if(self.chat.global.isIn && self.chat.global.noti && data.val().id != page.user.id)
+                if(self.chat.isIn && self.chat.noti && data.val().id != page.user.id)
                 {
                     const audio = new Audio(`${config.root}/assets/sound/ting.mp3`);
                     audio.play();
                 }
             });
             setTimeout(() => {
-                this.chat.global.isIn = true;
+                this.chat.isIn = true;
             },3000);
             this.loading = false;
+        },
+        async sendMessage(type)
+        {
+            try
+            {
+                if(this.chat.isIn)
+                {
+                    if(this.chat.text == '' || !this.chat.text.trim() || this.chat.uploading)
+                    {
+                        return;
+                    }
+                    await firebase.database().ref('global').push({
+                        id:page.user.id,
+                        name:page.user.name,
+                        time:new Date().getTime(),
+                        message:this.chat.text,
+                        type:type
+                    });
+                    this.chat.text = '';
+                    $('#chat-box').animate({
+                        scrollTop: 1000000000000000000
+                    },0); 
+                }         
+            }
+            catch(e)
+            {
+                this.notify('Đã có lỗi xảy ra');
+                console.log(e);
+            }
         },
         showInputFile()
         {
             $('#file').click();
         },
-        async uploadImage(e)
+        async uploadImage(e,channel)
         {
             try
             {
-                this.chat.global.uploading = true;
-                this.chat.global.percent = 0;
+                if(this.chat.block && this.channel == 'stranger')
+                {
+                    this.notify('Chưa có ai trong phòng !');
+                    return;
+                }
+                this.chat.uploading = true;
+                this.chat.percent = 0;
                 const file = e.target.files[0];
-                console.log(file);
                 const validate = ['image/png','image/jpg','image/jpeg','image/gif'];
                 const apiKey = '2bb20e13e69a991';
                 var form = new FormData();
@@ -973,15 +1025,23 @@ app = new Vue({
                             },
                             onUploadProgress(uploadEvent)
                             {
-                                self.chat.global.percent = Math.round((uploadEvent.loaded/uploadEvent.total)*100);
+                                self.chat.percent = Math.round((uploadEvent.loaded/uploadEvent.total)*100);
                             }
                         });
                         if(res.status == 200)
                         {
-                            this.chat.global.uploading = false;
-                            this.chat.global.percent = 0;
-                            this.chat.global.text = res.data.data.link;
-                            this.sendMessage('attachments');
+                            this.chat.uploading = false;
+                            this.chat.percent = 0;
+                            this.chat.text = res.data.data.link;
+                            switch(channel)
+                            {
+                                case 'global':
+                                    this.sendMessage('attachments',channel);
+                                break;
+                                case 'stranger':
+                                    this.sendPrivateMessage('attachments',`strangers/rooms/${page.room.name}`);
+                                break;
+                            }
                         }
                         else
                         {
@@ -997,13 +1057,69 @@ app = new Vue({
                 {
                     this.notify('Ảnh không đúng định dạng !');
                 }
-                this.chat.global.uploading = false;
-                this.chat.global.percent = 0;
+                this.chat.uploading = false;
+                this.chat.percent = 0;
             }
             catch(e)
             {
-                this.chat.global.uploading = false;
-                this.chat.global.percent = 0;
+                this.chat.uploading = false;
+                this.chat.percent = 0;
+            }
+        },
+        chatRoom()
+        {
+            const channel = `strangers/rooms/${page.room.name}`;
+            var pusher = new Pusher(page.pusher.key, {
+                cluster: 'ap1',
+                forceTLS: true
+            });
+            const self = this;
+            var join = pusher.subscribe('channel-chat-join-room');
+            join.bind(`event-chat-join-room-${page.room.name}`, function(res) {
+                const audio = new Audio(`${config.root}/assets/sound/ting.mp3`);
+                audio.play();
+                self.notify(`Người lạ đã vào phòng`);
+                self.chat.block = false;
+            });
+            var exit = pusher.subscribe('channel-chat-exit-room');
+            exit.bind(`event-chat-exit-room-${page.room.name}`, function(res) {
+                self.notify(`Người lạ đã ngắt kết nối :(`);
+                self.chat.messages = [];
+                self.chat.block = true;
+                firebase.database().ref(channel).remove();
+            });
+            this.listGlobalChat(channel);
+        },
+        async sendPrivateMessage(type)
+        {
+            try
+            {
+                if(!this.chat.block)
+                {
+                    if(this.chat.text == '' || !this.chat.text.trim() || this.chat.uploading)
+                    {
+                        return;
+                    }
+                    await firebase.database().ref(`strangers/rooms/${page.room.name}`).push({
+                        id:page.user.id,
+                        time:new Date().getTime(),
+                        message:this.chat.text,
+                        type:type
+                    });
+                    this.chat.text = '';
+                    $('#chat-box').animate({
+                        scrollTop: 1000000000000000000
+                    },0); 
+                }
+                else
+                {
+                    this.notify('Chưa có ai trong phòng !');
+                }        
+            }
+            catch(e)
+            {
+                this.notify('Đã có lỗi xảy ra');
+                console.log(e);
             }
         },
         async invetory()
@@ -1156,32 +1272,6 @@ app = new Vue({
                 await this.pet();
                 this.index();
                 this.notify(res.data.message);
-            }
-        },
-        async sendMessage(type)
-        {
-            try
-            {
-                if(this.chat.global.text == '' || !this.chat.global.text.trim() || this.chat.global.uploading)
-                {
-                    return;
-                }
-                await myFirebase.push({
-                    id:page.user.id,
-                    name:page.user.name,
-                    time:new Date().getTime(),
-                    message:this.chat.global.text,
-                    type:type
-                });
-                this.chat.global.text = '';
-                $('#chat-box').animate({
-                    scrollTop: 1000000000000000000
-                },0);            
-            }
-            catch(e)
-            {
-                this.notify('Đã có lỗi xảy ra');
-                console.log(e);
             }
         },
         timeAgo(time)

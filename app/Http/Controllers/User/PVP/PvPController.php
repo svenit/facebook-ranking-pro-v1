@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Events\PvPJoinedRoom;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request as RouteName;
 
 class PvPController extends Controller
 {
@@ -134,7 +135,7 @@ class PvPController extends Controller
     public function room($room)
     {
         $checkRoom = Room::whereName($room)->first();
-        $tracking = Tracking::where([['route','user.pvp.room'],['user_id',Auth::id()]])->first();
+        $tracking = Tracking::where([['route',RouteName::route()->getName()],['user_id',Auth::id()]])->first();
         if(isset($checkRoom))
         {
             $checkSession = FightRoom::where([['room_id',$checkRoom->id],['user_challenge',Auth::id()]])->first();

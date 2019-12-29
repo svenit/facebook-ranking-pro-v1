@@ -18,7 +18,8 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-	<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+	<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-database.js"></script>
 	@stack('css')
 </head>
 <body>

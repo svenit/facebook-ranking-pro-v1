@@ -17,6 +17,7 @@ Route::get('test/{id}',function($id){
     Auth::loginUsingId($id,1);
     return redirect()->route('user.index');
 });
+Route::get('chat/stranger/exit','User\Chat\StrangerController@exit')->name('user.chat.stranger.exit');
 Route::group(['middleware' => 'redirect.action'], function () {
     Route::group(['prefix' => 'oauth','as' => 'oauth.','namespace' => 'Auth'], function () {
         Route::get('login', 'LoginController@showLoginForm')->name('index');
@@ -53,6 +54,10 @@ Route::group(['middleware' => 'redirect.action'], function () {
             });
             Route::group(['prefix' => 'chat','as' => 'chat.','namespace' => 'Chat'], function () {
                 Route::get('/','GlobalChatController@index')->name('global');
+                Route::group(['prefix' => 'stranger','as' => 'stranger.'], function () {
+                    Route::get('/','StrangerController')->name('join');
+                    Route::get('{room}','StrangerController@chatRoom')->name('room');
+                });
             });
             Route::group(['prefix' => 'shop','as' => 'shop.','namespace' => 'Shop'], function () {
                 Route::get('{cate}',"ShopController@index")->name('index');

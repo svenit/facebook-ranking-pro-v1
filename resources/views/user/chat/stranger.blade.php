@@ -1,13 +1,14 @@
 @extends('app')
 
-@section('hero','Kênh Thế Giới')
-@section('sub_hero','Giao lưu cùng mọi người')
+@section('hero','Chat Với Người Lạ')
+@section('sub_hero','Lúc đi không biết họ lúc về không biết tên')
 
 @section('content')
 <div id="list-fight-room">
     <div class="page-content page-container" id="page-content">
         <div class="padding-x">
             @include('user.theme.parameter')
+            <a href="{{ Route('user.chat.stranger.exit') }}" class="text-gold"><button style="margin-bottom:10px" id='fight-button' style="width:100px" class="vip-bordered">Thoát</button></a>
             <div class="vip-bordered d-flex flex pr-md-3" id="content-body">
                 <div class="d-flex flex-column flex card m-0 mb-md-3" id="chat-list">
                     <div class="navbar flex-nowrap b-b">
@@ -20,20 +21,20 @@
                             </div>
                         </div>
                     </div>
-                    <input @change="uploadImage($event,'global')" type="file" id="file" style="display:none">
+                    <input @change="uploadImage($event,'stranger')" type="file" id="file" style="display:none">
                     <div class="scrollable hover" id="chat-box" style="max-height:500px">
                         <div class="list">
                             <div class="p-3">
-                                <div v-if="chat.messages.length == 0" class="text-center">
-                                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M21.1641 38.997C23.6931 40.262 26.7301 41 30.0001 41C31.1791 41 32.3261 40.898 33.4321 40.716L42.0001 45V36.919C44.4821 34.805 46.0001 32.038 46.0001 29C46.0001 27.962 45.8241 26.958 45.4941 26.001" stroke="#808080" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M22 2C10.954 2 2 9.163 2 18C2 21.594 3.499 24.9 6 27.571V38L15.665 33.167C17.658 33.7 19.783 34 22 34C33.046 34 42 26.837 42 18C42 9.163 33.046 2 22 2Z" fill="#F2F2F2" stroke="#808080" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                    <p style="margin-top:20px">( Trống )</p>
+                                <div v-if="chat.messages.length == 0 && !chat.block" class="text-center">
+                                    <p class="text-success" style="margin-top:20px">Đã kết nối, nói hi để bắt đầu cuộc trò chuyện</p>
+                                </div>
+                                <div v-else-if="chat.messages.length == 0 && chat.block">
+                                    <p class="text-warning text-center" style="margin-top:20px">Đang tìm kiếm, xin vui lòng đợi trong giây lát...</p>
                                 </div>
                                 <div v-else class="chat-list">
-                                    <div v-for="(msg,index) in chat.messages" :key="index" class="chat-item" :data-class="msg.id == {{ Auth::user()->user_id }} ? 'alt' : 'null'" v-if="msg.message && msg.id && msg.name && msg.time" data-sr-id="32" style="visibility: visible; transform: none; opacity: 1; transition: transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s;">
-                                        <a v-if="msg.id != {{ Auth::user()->user_id }}" href="#" class="avatar w-40" data-pjax-state=""><img class="image" :src="`http://graph.facebook.com/${msg.id}/picture?type=normal`" alt="."></a>
+                                    <p class="text-center"><i :class="chat.block ? 'text-gold' : 'text-success'">@{{ chat.block ? 'Đang kết nối...' : 'Đã kết nối' }}</i></p>
+                                    <div v-for="(msg,index) in chat.messages" :key="index" class="chat-item" :data-class="msg.id == {{ Auth::user()->user_id }} ? 'alt' : 'null'" v-if="msg.message && msg.id && msg.time" data-sr-id="32" style="visibility: visible; transform: none; opacity: 1; transition: transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s;">
+                                        <a v-if="msg.id != {{ Auth::user()->user_id }}" href="#" class="avatar w-40" data-pjax-state=""><img class="image" src="https://image.flaticon.com/icons/png/512/149/149071.png" alt="."></a>
                                         <div class="chat-body">
                                             <div v-if="msg.type == 'text'" :style="{maxWidth:'300px',color:'#333',borderRadius:'25px !important',backgroundColor:msg.id == {{ Auth::user()->user_id }} ? '#e7ad55' : 'whitesmoke',}" class="chat-content rounded msg">@{{ msg.message }}</div>
                                             <div v-if="msg.type == 'attachments'" class="w-md my-3">
@@ -65,8 +66,8 @@
                                 </div>
                             </div>
                             <div class="input-group">
-                                <input @change="sendMessage('text','global')" v-model="chat.text" type="text" class="form-control p-3 no-shadow no-border" placeholder="Nhập tin nhắn..." id="newField">
-                                <button @click="sendMessage('text','global')" class="btn btn-icon btn-rounded gd-success" type="button" id="newBtn">
+                                <input @change="sendPrivateMessage('text')" v-model="chat.text" type="text" class="form-control p-3 no-shadow no-border" placeholder="Nhập tin nhắn..." id="newField">
+                                <button @click="sendPrivateMessage('text')" class="btn btn-icon btn-rounded gd-success" type="button" id="newBtn">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up">
                                         <line x1="12" y1="19" x2="12" y2="5"></line>
                                         <polyline points="5 12 12 5 19 12"></polyline>
@@ -82,6 +83,7 @@
 </div>
 @endsection
 @push('js')
+<script src="https://js.pusher.com/5.0/pusher.min.js"></script>
 @if($errors->any())
     <script>
         Swal.fire('',"{{ $errors->first() }}",'error');
@@ -89,10 +91,17 @@
 @endif
 <script>
     const page = {
-        path:'chat.global',
+        path:'chat.stranger',
         user:{
             id:{{ Auth::user()->user_id }},
-            name:"{{ Auth::user()->name }}"
+            name:"{{ Auth::user()->name }}",
+        },
+        room:{
+            name:"{{ $room->name }}",
+            people:{{ $room->people }}
+        },
+        pusher:{
+            key:"{{ \App\Income\CustomeConnection::pusher()['app_key'] }}"
         }
     };
 </script>

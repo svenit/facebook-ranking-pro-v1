@@ -22,7 +22,7 @@ class RedirectIfInAction
         {
             return redirect()->intended($tracking->path)->with([
                 'status' => 'warning',
-                'message' => 'Vui lòng bấm vào thoát trước khi bạn muốn thực hiện hành động'
+                'message' => 'Vui lòng bấm vào thoát trước khi bạn muốn thực hiện hành động khác'
             ]);
         }
         return $next($request);

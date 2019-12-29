@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Model\ChatConversation;
 use App\Model\FightRoom;
+use App\Observers\ChatObserver;
 use App\Observers\FightRoomObserver;
 use Illuminate\Support\ServiceProvider;
 
@@ -26,5 +28,6 @@ class CustomerServiceProvider extends ServiceProvider
     public function boot()
     {
         FightRoom::observe(FightRoomObserver::class);
+        ChatConversation::observe(ChatObserver::class);
     }
 }
