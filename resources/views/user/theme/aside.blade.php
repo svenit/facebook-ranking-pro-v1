@@ -560,7 +560,7 @@
                         class="nav-text">Chat</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
                             <li><a href="{{ Route('user.chat.global') }}" class=""><span class="nav-text">Thế Giới</span></a></li>
-                            <li><a href="{{ Route('user.chat.stranger.join') }}" class=""><span class="nav-text">CVNL</span></a></li>
+                            <li><a onclick="return confirm('Chat với người lạ ?')" href="{{ Route('user.chat.stranger.join') }}" class=""><span class="nav-text">CVNL</span></a></li>
                         </ul>
                     </li>
                     @if(Auth::check() && Auth::user()->isAdmin)
