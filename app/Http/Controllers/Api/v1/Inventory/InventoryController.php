@@ -67,8 +67,7 @@ class InventoryController extends Controller
         {
             if($find->load('gear')->gear->character_id == Auth::user()->character->id)
             {
-                $helper = new Helper(Auth::id());
-                if($find->load('gear')->gear->level_required <= $helper->level())
+                if($find->load('gear')->gear->level_required <= Auth::user()->level())
                 {
                     foreach($all as $key => $each)
                     {

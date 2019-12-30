@@ -37,8 +37,7 @@ class PetController extends Controller
             $findPet = UserPet::where([['user_id',Auth::id()],['pet_id',$request->id]])->first();
             if(isset($findPet) && $findPet->status == 0)
             {
-                $helper = new Helper(Auth::id());
-                if($findPet->load('pets')->pets->level_required <= $helper->level())
+                if($findPet->load('pets')->pets->level_required <= Auth::user()->level())
                 {
                     UserPet::where([['user_id',Auth::id()],['status',1]])->update([
                         'status' => 0

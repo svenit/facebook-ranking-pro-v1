@@ -27,7 +27,6 @@ class IndexController extends Controller
                     'name' => $helper->user()->name,
                     'character' => [
                         'name' => $helper->character()->name,
-                        'avatar' => $helper->character()->avatar
                     ],
                     'exp' => (int)$helper->user()->exp,
                     'coins' => $helper->coins(),

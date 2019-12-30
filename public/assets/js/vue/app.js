@@ -506,8 +506,9 @@ app = new Vue({
             };
             $('#trigger-gear').click();
         },
-        showSkillsDescription(data,permission = null)
+        showSkillsDescription(data,permission = null,name = null)
         {
+            var skillName = name || data.character.name;
             Swal.fire({
                 title:`<img style="width:80px;height:80px;border-radius:5px;border:1px solid ${data.rgb}" src="${data.image}">`,
                 type:'',
@@ -516,7 +517,7 @@ app = new Vue({
                 confirmButtonText:permission && data.pivot.status == 1 ? 'Gỡ' : 'Sử Dụng',
                 cancelButtonText: 'Vứt',
                 cancelButtonColor:'#f21378',
-                html:`<p>[ ${data.name} - ${data.passive == 1 ? 'Bị động' : 'Chủ động'} ] <p/> <p>${data.description} </p> <p>Yêu cầu cấp độ : ${data.required_level} </p> <p>MP : ${data.energy} </p> <p>Tỉ lệ thành công : ${data.success_rate}% </p>`
+                html:`<p>[ ${data.name} - ${data.passive == 1 ? 'Bị động' : 'Chủ động'} ] <p/><p>( ${skillName} )</p> <p>${data.description} </p> <p>Yêu cầu cấp độ : ${data.required_level} </p> <p>MP : ${data.energy} </p> <p>Tỉ lệ thành công : ${data.success_rate}% </p>`
             }).then((result) => {
                 if(result.value) {
                     switch(data.pivot.status)

@@ -134,4 +134,9 @@ class User extends Authenticatable
         $helper = new Helper($id);
         return $this->power()->sum() * $helper->level();
     }
+    public function level()
+    {
+        $helper = new Helper($this->id);
+        return $helper->level();
+    }
 }

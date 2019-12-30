@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api\v1\Skill;
 
+use App\Model\Skill;
+use App\Model\UserSkill;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Model\UserSkill;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Income\Helper;
 
 class SkillController extends Controller
 {
@@ -18,7 +20,7 @@ class SkillController extends Controller
     }
     public function __invoke()
     {
-        return response()->json(Auth::user()->skills,200);
+        return response()->json(Auth::user()->skills->load('character'),200);
     }
     public function useSkill(Request $request)
     {
@@ -38,14 +40,26 @@ class SkillController extends Controller
             $recentSkills = UserSkill::where([['user_id',Auth::id()],['status',1]]);
             if($recentSkills->count() < $this->maxSkill)
             {
-                Auth::user()->skills()->updateExistingPivot($request->id,[
-                    'status' => 1
-                ],false);
-                $response = [
-                    'code' => 200,
-                    'status' => 'success',
-                    'message' => "Trang bị kỹ năng thành công"
-                ];
+                $levelRequired = Skill::findOrFail($request->id)->requied_level;
+                if(Auth::user()->level() >= $levelRequired)
+                {
+                    Auth::user()->skills()->updateExistingPivot($request->id,[
+                        'status' => 1
+                    ],false);
+                    $response = [
+                        'code' => 200,
+                        'status' => 'success',
+                        'message' => "Trang bị kỹ năng thành công"
+                    ];
+                }
+                else
+                {
+                    $response = [
+                        'code' => 500,
+                        'status' => 'error',
+                        'message' => "Không đủ cấp độ yêu cầu"
+                    ];
+                }
             }
             else
             {

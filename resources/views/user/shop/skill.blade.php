@@ -31,7 +31,7 @@
                                 @if($item->status == 1)
                                     <div class="col-6 col-md-4 col-lg-3">
                                         <div class="card vip-bordered">
-                                            <div @click="showSkillsDescription({{ json_encode($item) }},0)" class="text-center hoverable">
+                                            <div @click="showSkillsDescription({{ json_encode($item) }},0,'{{ $skill->name }}')" class="text-center hoverable">
                                                 <img style="border:1px solid {{ $item->rgb }};border-radius:5px" src="{{ $item->image }}">
                                                 <p style="margin-top:10px;color:{{ $item->rgb }}">{{ $item->name }}</p>
                                             </div>
