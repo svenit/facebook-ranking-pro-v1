@@ -34,7 +34,9 @@ Route::group(['middleware' => 'redirect.action'], function () {
     Route::group(['prefix' => '/','as' => 'user.','namespace' => 'User','middleware' => 'user'], function () {
         Route::get('/','HomeController@index')->name('index');
         Route::group(['prefix' => 'top','as' => 'top.','namespace' => 'Top'], function () {
+            Route::get('level','TopController@level')->name('level');
             Route::get('power','TopController@power')->name('power');
+            Route::get('pvp','TopController@pvp')->name('pvp');
             Route::get('gold','TopController@coin')->name('coin');
             Route::get('diamond','TopController@gold')->name('gold');
             Route::get('activities','TopController@activities')->name('activities');

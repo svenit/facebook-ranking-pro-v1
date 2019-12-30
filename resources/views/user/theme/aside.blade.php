@@ -238,15 +238,16 @@
     <div class="modal-dialog">
         <div class="modal-content bg-dark">
             <div class="modal-header">
+                <p :style="{fontSize:'14px',color:`${detailPet.data.rgb}`}">@{{ detailPet.data.name }}</p>
                 <button class="close" data-dismiss="modal">×</button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-4">
-                        <div :style="{border:`1px solid ${detailPet.data.rgb}`,margin:'0 auto',width:'68px',height:'68px'}">
-                            <div :class="[`text-center mount Mount_Icon_${detailPet.data.class_tag}`]"></div>
+                        <div class="character-sprites" :style="{margin:'0 auto',width:'68px',height:'68px'}">
+                            <span :class="[`text-center mount Mount_Body_${detailPet.data.class_tag}`]"></span>
+                            <span :class="[`text-center mount Mount_Head_${detailPet.data.class_tag}`]"></span>
                         </div>
-                        <p :style="{fontSize:'14px',color:`${detailPet.data.rgb}`,marginTop:'20px'}" class="modal-title text-md text-center">@{{ detailPet.data.name }}</p>
                     </div>
                     <div class="col-8">
                         <div class="row">
@@ -503,6 +504,8 @@
                         class="nav-text">BXH</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
                             <li><a href="{{ Route('user.top.power') }}" class=""><span class="nav-text">Lực Chiến</span></a></li>
+                            <li><a href="{{ Route('user.top.level') }}" class=""><span class="nav-text">Cấp Độ</span></a></li>
+                            <li><a href="{{ Route('user.top.pvp') }}" class=""><span class="nav-text">PVP</span></a></li>
                             <li><a href="{{ Route('user.top.coin') }}" class=""><span class="nav-text">Vàng</span></a></li>
                             <li><a href="{{ Route('user.top.gold') }}" class=""><span class="nav-text">Kim Cương</span></a></li>
                             <li><a href="{{ Route('user.top.activities') }}" class=""><span class="nav-text">Hoạt Động</span></a></li>

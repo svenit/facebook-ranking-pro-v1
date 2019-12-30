@@ -20,6 +20,20 @@ class TopController extends Controller
         });
         return view('user.top.power',compact('ranks'));
     }
+    public function level(Request $request)
+    {
+        $ranks = Cache::remember("top.power.$request->page", $this->cacheTime, function () {
+            return User::orderByDesc('exp')->paginate($this->perPage);
+        });
+        return view('user.top.level',compact('ranks'));
+    }
+    public function pvp(Request $request)
+    {
+        $ranks = Cache::remember("top.power.$request->page", $this->cacheTime, function () {
+            return User::orderByDesc('pvp_points')->paginate($this->perPage);
+        });
+        return view('user.top.pvp',compact('ranks'));
+    }
     public function coin(Request $request)
     {
         $ranks = Cache::remember("top.coin.$request->page", $this->cacheTime, function () {
