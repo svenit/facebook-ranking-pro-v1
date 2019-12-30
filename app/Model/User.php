@@ -82,6 +82,7 @@ class User extends Authenticatable
         {
             if($skill->pivot->status == 1)
             {
+                $skill->character = $skill->load('character');
                 array_push($data,$skill);
             }
         }

@@ -63,7 +63,7 @@ app = new Vue({
             },
             gears:[],
             skills:[],
-            pet:{}
+            pet:{},
         },
         user:{
             infor:{
@@ -173,6 +173,7 @@ app = new Vue({
         },
         inventory:{},
         pets:[],
+        skills:[]
     },
     async created()
     {
@@ -213,6 +214,9 @@ app = new Vue({
                     break;
                     case 'pet.index':
                         await this.pet();
+                    break;
+                    case 'skill.index':
+                        await this.skill();
                     break;
                 }
             }
@@ -502,13 +506,85 @@ app = new Vue({
             };
             $('#trigger-gear').click();
         },
-        showSkillsDescription(data)
+        showSkillsDescription(data,permission = null)
         {
             Swal.fire({
                 title:`<img style="width:80px;height:80px;border-radius:5px;border:1px solid ${data.rgb}" src="${data.image}">`,
                 type:'',
+                showCancelButton: permission ? true : false,
+                showConfirmButton:permission ? true : false,
+                confirmButtonText:permission && data.pivot.status == 1 ? 'Gỡ' : 'Sử Dụng',
+                cancelButtonText: 'Vứt',
+                cancelButtonColor:'#f21378',
                 html:`<p>[ ${data.name} - ${data.passive == 1 ? 'Bị động' : 'Chủ động'} ] <p/> <p>${data.description} </p> <p>Yêu cầu cấp độ : ${data.required_level} </p> <p>MP : ${data.energy} </p> <p>Tỉ lệ thành công : ${data.success_rate}% </p>`
+            }).then((result) => {
+                if(result.value) {
+                    switch(data.pivot.status)
+                    {
+                        case 0:
+                            this.useSkill(data.id);
+                        break;
+                        case 1:
+                            this.removeSkill(data.id);
+                        break;
+                    }
+                }
+                else if(result.dismiss === Swal.DismissReason.cancel)
+                {
+                    this.deleteSkill(data.id);
+                }
             });
+        },
+        async useSkill(id)
+        {
+            this.loading = true;
+            let res = await axios.put(`${config.root}/api/v1/skill/use`,{
+                bearer:config.bearer,
+                id:id
+            },{
+                headers:{
+                    pragma:this.token
+                }
+            });
+            await this.refreshToken(res);
+            await this.index();
+            this.skill();
+            this.notify(res.data.message);
+        },
+        async removeSkill(id)
+        {
+            this.loading = true;
+            let res = await axios.put(`${config.root}/api/v1/skill/remove`,{
+                bearer:config.bearer,
+                id:id
+            },{
+                headers:{
+                    pragma:this.token
+                }
+            });
+            await this.refreshToken(res);
+            await this.index();
+            this.skill();
+            this.notify(res.data.message);
+        },
+        async deleteSkill(id)
+        {
+            if(confirm('Vứt bỏ kỹ năng này ?'))
+            {
+                this.loading = true;
+                let res = await axios.post(`${config.root}/api/v1/skill/delete`,{
+                    bearer:config.bearer,
+                    id:id
+                },{
+                    headers:{
+                        pragma:this.token
+                    }
+                });
+                await this.refreshToken(res);
+                await this.index();
+                this.skill();
+                this.notify(res.data.message);
+            }
         },
         async showUserInfor(id)
         {
@@ -1208,6 +1284,26 @@ app = new Vue({
                 }
             }
         },
+        async buySkill(id,e)
+        {
+            if(confirm('Mua kĩ năng này ?'))
+            {
+                let res = await axios.post(`${config.root}/api/v1/shop/buy-skill`,{
+                    bearer:config.bearer,
+                    id:id
+                },{
+                    headers:{
+                        pragma:this.token
+                    }
+                })
+                await this.refreshToken(res);
+                this.notify(res.data.message);
+                if(res.data.code == 200)
+                {
+                    e.target.innerHTML = 'Đã mua';
+                }
+            }
+        },
         async pet()
         {
             this.loading = true;
@@ -1273,6 +1369,21 @@ app = new Vue({
                 this.index();
                 this.notify(res.data.message);
             }
+        },
+        async skill()
+        {
+            this.loading = true;
+            let res = await axios.get(`${config.root}/api/v1/skill`,{
+                params:{
+                    bearer:config.bearer,
+                },
+                headers:{
+                    pragma:this.token
+                }
+            });
+            await this.refreshToken(res);
+            this.skills = res.data;
+            this.loading = false;
         },
         timeAgo(time)
         {

@@ -60,11 +60,14 @@ Route::group(['middleware' => 'redirect.action'], function () {
                 });
             });
             Route::group(['prefix' => 'shop','as' => 'shop.','namespace' => 'Shop'], function () {
+                Route::get('pets','ShopController@pet')->name('pet');
+                Route::get('skills','ShopController@skill')->name('skill');
                 Route::get('{cate}',"ShopController@index")->name('index');
             });
             Route::group(['prefix' => 'profile','as' => 'profile.','namespace' => 'Profile'], function () {
                 Route::get('inventories','Inventory\InventoryController@index')->name('inventory.index');
                 Route::get('pets','Pet\PetController@index')->name('pet.index');
+                Route::get('skills','Skill\SkillController@index')->name('skill.index');
             });
         });
     });

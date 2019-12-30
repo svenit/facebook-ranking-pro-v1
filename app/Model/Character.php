@@ -15,4 +15,8 @@ class Character extends Model
     {
         return $this->hasMany('App\Model\Gear','character_id','id');
     }
+    public function skills()
+    {
+        return $this->hasMany('App\Model\Skill','character_id','id');
+    }
 }

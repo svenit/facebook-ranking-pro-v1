@@ -497,7 +497,7 @@
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('user.profile.inventory.index') }}" class=""><span class="nav-text">Rương Đồ</span></a></li>
                                 <li><a href="{{ Route('user.profile.pet.index') }}" class=""><span class="nav-text">Thú Cưỡi</span></a></li>
-                                <li><a href="{{ Route('user.profile.pet.index') }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
+                                <li><a href="{{ Route('user.profile.skill.index') }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
                             </ul>
                         </li>
                     @endauth
@@ -532,6 +532,8 @@
                             @foreach($menuShop as $menu)
                                 <li><a href="{{ Route('user.shop.index',['cate' => str_slug($menu->name)]) }}" class=""><span class="nav-text">{{ $menu->name }}</span></a></li>
                             @endforeach
+                            <li><a href="{{ Route('user.shop.index',['cate' => 'pets']) }}" class=""><span class="nav-text">Thú Cưỡi</span></a></li>
+                            <li><a href="{{ Route('user.shop.index',['cate' => 'skills']) }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
                         </ul>
                     </li>
                     <li><a href="#" class=""><span class="nav-icon"><i data-feather="zap"></i></span> <span

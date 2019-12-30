@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -38,11 +36,18 @@ Route::group(['prefix' => 'v1','namespace' => 'Api\v1','middleware' => 'cors'], 
     });
     Route::group(['prefix' => 'shop','namespace' => 'Shop'], function () {
         Route::post('buy-item','ShopController@buyItem');
+        Route::post('buy-skill','ShopController@buySkill');
     });
     Route::group(['prefix' => 'pet','namespace' => 'Pet'], function () {
         Route::get('/','PetController');
         Route::put('riding','PetController@riding');
         Route::put('pet-down','PetController@petDown');
         Route::post('drop-pet','PetController@dropPet');
+    });
+    Route::group(['prefix' => 'skill','namespace' => 'Skill'], function () {
+        Route::get('/','SkillController');
+        Route::put('use','SkillController@useSkill');
+        Route::put('remove','SkillController@removeSkill');
+        Route::post('delete','SkillController@deleteSkill');
     });
 });
