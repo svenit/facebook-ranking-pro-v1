@@ -146,7 +146,6 @@
     <div class="modal-dialog">
         <div class="modal-content bg-dark">
             <div class="modal-header">
-                <p>Trang Bị</p>
                 <button class="close" data-dismiss="modal">×</button>
             </div>
             <div class="modal-body">
@@ -239,7 +238,6 @@
     <div class="modal-dialog">
         <div class="modal-content bg-dark">
             <div class="modal-header">
-                <p>Thú Cưỡi</p>
                 <button class="close" data-dismiss="modal">×</button>
             </div>
             <div class="modal-body">

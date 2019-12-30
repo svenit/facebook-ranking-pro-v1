@@ -40,7 +40,7 @@ class SkillController extends Controller
             $recentSkills = UserSkill::where([['user_id',Auth::id()],['status',1]]);
             if($recentSkills->count() < $this->maxSkill)
             {
-                $levelRequired = Skill::findOrFail($request->id)->requied_level;
+                $levelRequired = Skill::findOrFail($request->id)->required_level;
                 if(Auth::user()->level() >= $levelRequired)
                 {
                     Auth::user()->skills()->updateExistingPivot($request->id,[
@@ -82,7 +82,7 @@ class SkillController extends Controller
             return response()->json([
                 'code' => 200,
                 'status' => 'success',
-                'message' => "Đã gỡ kĩ năng"
+                'message' => "Đã gỡ kỹ năng"
             ],200);
         }
     }

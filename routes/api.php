@@ -37,6 +37,7 @@ Route::group(['prefix' => 'v1','namespace' => 'Api\v1','middleware' => 'cors'], 
     Route::group(['prefix' => 'shop','namespace' => 'Shop'], function () {
         Route::post('buy-item','ShopController@buyItem');
         Route::post('buy-skill','ShopController@buySkill');
+        Route::post('buy-pet','ShopController@buyPet');
     });
     Route::group(['prefix' => 'pet','namespace' => 'Pet'], function () {
         Route::get('/','PetController');

@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\User\Shop;
+use App\Model\Pet;
 use App\Model\Gear;
 use App\Model\Skill;
 use App\Model\CateGear;
@@ -38,5 +39,10 @@ class ShopController extends Controller
     {
         $skills = Character::with('skills')->where([['id','!=',0]])->get();
         return view('user.shop.skill',compact('skills'));
+    }
+    public function pet()
+    {
+        $pets = Pet::where('status',1)->get();
+        return view('user.shop.pet',compact('pets'));
     }
 }

@@ -1281,6 +1281,10 @@ app = new Vue({
                 this.notify(res.data.message);
                 if(res.data.code == 200)
                 {
+                    this.index();
+                }
+                if(res.data.code == 200)
+                {
                     e.target.innerHTML = 'Đã mua';
                 }
             }
@@ -1298,6 +1302,34 @@ app = new Vue({
                     }
                 })
                 await this.refreshToken(res);
+                if(res.data.code == 200)
+                {
+                    this.index();
+                }
+                this.notify(res.data.message);
+                if(res.data.code == 200)
+                {
+                    e.target.innerHTML = 'Đã mua';
+                }
+            }
+        },
+        async buyPet(id,e)
+        {
+            if(confirm('Mua thú cưỡi này ?'))
+            {
+                let res = await axios.post(`${config.root}/api/v1/shop/buy-pet`,{
+                    bearer:config.bearer,
+                    id:id
+                },{
+                    headers:{
+                        pragma:this.token
+                    }
+                })
+                await this.refreshToken(res);
+                if(res.data.code == 200)
+                {
+                    this.index();
+                }
                 this.notify(res.data.message);
                 if(res.data.code == 200)
                 {
