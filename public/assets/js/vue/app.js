@@ -17,7 +17,9 @@ app = new Vue({
         detect:false,
         token:'',
         detailGear:{
-            data:{},
+            data:{
+                character:{}
+            },
             permission:0
         },
         detailPet:{

@@ -155,6 +155,7 @@
                     <div class="col-4">
                         <div :style="{border:`1px solid ${detailGear.data.rgb}`,margin:'0 auto'}" :class="[`text-center ${detailGear.data.shop_tag}`]"></div>
                         <p :style="{fontSize:'14px',color:`${detailGear.data.rgb}`,marginTop:'20px'}" class="modal-title text-md text-center">@{{ detailGear.data.name }}</p>
+                        <p :style="{fontSize:'14px',marginTop:'10px'}" class="modal-title text-md text-center">( @{{ detailGear.data.character.name }} )</p>
                     </div>
                     <div class="col-8">
                         <div class="row">

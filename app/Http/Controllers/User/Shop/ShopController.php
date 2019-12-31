@@ -24,7 +24,7 @@ class ShopController extends Controller
                 $gears = Character::with('gears')->where('id','!=',0)->get();
                 foreach($gears as $i => $gear)
                 {
-                    $gears[$i]->items = Gear::with('cates')->where([['status',1],['cate_gear_id',$cates->id],['character_id',$gear->id]])->get();
+                    $gears[$i]->items = Gear::with('character')->where([['status',1],['cate_gear_id',$cates->id],['character_id',$gear->id]])->get();
                 }
                 break;
             }

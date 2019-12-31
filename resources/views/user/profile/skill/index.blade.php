@@ -8,6 +8,9 @@
     <div class="page-content page-container" id="page-content">
         <div class="padding-x">
             @include('user.theme.parameter')
+            <a href="{{ Route('user.profile.inventory.index') }}" class="{{ Request::is("profile/inventories") ? 'active' : '' }} btn btn-dark">Rương Đồ</a>
+            <a href="{{ Route('user.profile.pet.index') }}" class="{{ Request::is("profile/pets") ? 'active' : '' }} btn btn-dark">Thú Cưỡi</a>
+            <a href="{{ Route('user.profile.skill.index') }}" class="{{ Request::is("profile/skills") ? 'active' : '' }} btn btn-dark">Kỹ Năng</a>
             <div class="card vip-bordered">
                 <div class="b-b">
                     <div class="nav-active-border b-primary bottom">
@@ -30,7 +33,7 @@
                             </div>
                         </div>
                         <div v-else>
-                            <p class="text-center">( Không có thú cưỡi nào )</p>
+                            <p class="text-center">( Không có kỹ năng nào )</p>
                         </div>
                     </div>
                     <div :class="[`tab-pane fade ${!data.skills ? 'show active' : ''}`]" id="home-list-skills" role="tabpanel" aria-labelledby="list-skills-tab">
@@ -42,7 +45,7 @@
                             </div>
                         </div>
                         <div v-else>
-                            <p class="text-center">( Không có thú cưỡi nào )</p>
+                            <p class="text-center">( Không có kỹ năng nào )</p>
                         </div>
                     </div>
                 </div>
