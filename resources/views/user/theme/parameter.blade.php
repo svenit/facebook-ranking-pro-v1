@@ -9,7 +9,7 @@
                             <h2 class="ribbon"> <button @click="index()" style="background:transparent;border:none" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body">{{ Auth::user()->name }}</button></h2>
                             <div class="card-body">
                                 <div class="row row-sm">
-                                    <div class="col-3">
+                                    <div class="col-sm-6 col-md-6 col-lg-3">
                                         <div class="d-flex align-items-center text-hover-success">
                                             <div class="px-4 flex">
                                                 <small class="text-gold">Xếp Hạng</small>
@@ -18,7 +18,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-sm-6 col-md-6 col-lg-3">
                                         <div class="d-flex align-items-center text-hover-warning">
                                             <div class="px-4 flex">
                                                 <small class="text-gold">Lực Chiến</small>
@@ -27,7 +27,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-sm-6 col-md-6 col-lg-3">
                                         <div class="d-flex align-items-center text-hover-warning">
                                             <div class="px-4 flex">
                                                 <small class="text-gold">Vàng</small>
@@ -36,10 +36,14 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-3"><small class="text-gold">Kim Cương
-                                        </small>
-                                        <div class="mt-2 text-gold-2"><i class="fas fa-gem"></i></i>
-                                            @{{ data.infor.gold }}</div>
+                                    <div class="col-sm-6 col-md-6 col-lg-3">
+                                        <div class="d-flex align-items-center text-hover-warning">
+                                            <div class="px-4 flex">
+                                                <small class="text-gold">Kim Cương</small>
+                                                <div class="text-gold-2 mt-2"><i class="fas fa-gem"></i>
+                                                    @{{ data.infor.gold }}</div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

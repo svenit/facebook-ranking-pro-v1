@@ -49,13 +49,13 @@ Route::group(['middleware' => 'redirect.action'], function () {
                 });
             });
             Route::group(['prefix' => 'pvp','as' => 'pvp.','namespace' => 'PVP'], function () {
-                Route::get('/','PvPController@index')->name('index');
+                Route::get('list-room','PvPController@index')->name('index');
                 Route::post('create-room','PvPController@createRoom')->name('create');
                 Route::get('join/{id}','PvPController@joinedRoom')->name('joined-room');
                 Route::get('room/{id}','PvPController@room')->name('room');
             });
             Route::group(['prefix' => 'chat','as' => 'chat.','namespace' => 'Chat'], function () {
-                Route::get('/','GlobalChatController@index')->name('global');
+                Route::get('global','GlobalChatController@index')->name('global');
                 Route::group(['prefix' => 'stranger','as' => 'stranger.'], function () {
                     Route::get('/','StrangerController')->name('join');
                     Route::get('{room}','StrangerController@chatRoom')->name('room');

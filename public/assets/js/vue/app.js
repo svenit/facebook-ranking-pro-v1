@@ -193,6 +193,9 @@ app = new Vue({
                 {
                     case 'pvp.list':
                         await this.listFightRoom();
+                        setInterval(() => {
+                            this.listFightRoom();
+                        },5000);
                     break;
                     case 'pvp.room':
                         await this.pvpRoom();
@@ -454,7 +457,7 @@ app = new Vue({
             var hitEnemy =  pusher.subscribe('channel-pvp-hit-enemy');
             var exitMatch = pusher.subscribe('channel-pvp-exit-match');
             joinRoom.bind(`event-pvp-joined-room-${page.room.id}-${page.room.me}`, function(res) {
-                const audio = new Audio(`${config.root}/assets/sound/found_enemy.mp3`);
+                const audio = new Audio(`${config.root}/assets/sound/found_enemy.ogg`);
                 audio.play();
                 self.notify(`${res.data.enemy.name} đã vào phòng`);
                 self.findEnemy();
@@ -760,7 +763,7 @@ app = new Vue({
                         }
                         },1000);
                         this.notify(res.data.message);
-                        const audio = new Audio(`${config.root}/assets/sound/found_enemy.mp3`);
+                        const audio = new Audio(`${config.root}/assets/sound/found_enemy.ogg`);
                         audio.play();
                         this.pvp.enemyJoined = true;
                         this.pvp.isSearching = false;

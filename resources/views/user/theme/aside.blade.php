@@ -521,15 +521,6 @@
                             <li><a href="#" class=""><span class="nav-text">Kho Báu</span></a></li>
                         </ul>
                     </li>
-                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="activity"></i></span> <span
-                        class="nav-text">Khám Phá</span> <span class="nav-caret"></span></a>
-                        <ul class="nav-sub nav-mega">
-                            <li><a href="#" class=""><span class="nav-text">Khu Tập Luyện</span></a></li>
-                            <li><a href="#" class=""><span class="nav-text">Trường Học</span></a></li>
-                            <li><a href="#" class=""><span class="nav-text">Nhiệm Vụ</span></a></li>
-                            <li><a href="#" class=""><span class="nav-text">Phòng Hồi Phục</span></a></li>
-                        </ul>
-                    </li>
                     <li class="{{ Request::is('shop/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shopping-cart"></i></span> <span
                         class="nav-text">Cửa Hàng</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
@@ -538,6 +529,15 @@
                             @endforeach
                             <li><a href="{{ Route('user.shop.index',['cate' => 'pets']) }}" class=""><span class="nav-text">Thú Cưỡi</span></a></li>
                             <li><a href="{{ Route('user.shop.index',['cate' => 'skills']) }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="activity"></i></span> <span
+                        class="nav-text">Khám Phá</span> <span class="nav-caret"></span></a>
+                        <ul class="nav-sub nav-mega">
+                            <li><a href="#" class=""><span class="nav-text">Khu Tập Luyện</span></a></li>
+                            <li><a href="#" class=""><span class="nav-text">Trường Học</span></a></li>
+                            <li><a href="#" class=""><span class="nav-text">Nhiệm Vụ</span></a></li>
+                            <li><a href="#" class=""><span class="nav-text">Phòng Hồi Phục</span></a></li>
                         </ul>
                     </li>
                     <li><a href="#" class=""><span class="nav-icon"><i data-feather="zap"></i></span> <span
@@ -556,13 +556,13 @@
                             <li><a href="#" class=""><span class="nav-text">Thiết Lập</span></a></li>
                         </ul>
                     </li>
-                    <li {{ Request::is('pvp/*') ? 'active' : '' }}><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
+                    <li class="{{ Request::is('pvp/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
                         class="nav-text">PVP</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
                             <li><a href="{{ Route('user.pvp.index') }}" class=""><span class="nav-text">Tham Gia</span></a></li>
                         </ul>
                     </li>
-                    <li {{ Request::is('chat/*') ? 'active' : '' }}><a href="#" class=""><span class="nav-icon"><i data-feather="message-circle"></i></span> <span
+                    <li class="{{ Request::is('chat/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="message-circle"></i></span> <span
                         class="nav-text">Chat</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
                             <li><a href="{{ Route('user.chat.global') }}" class=""><span class="nav-text">Thế Giới</span></a></li>
