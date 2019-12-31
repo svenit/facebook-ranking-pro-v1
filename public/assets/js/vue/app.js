@@ -272,108 +272,111 @@ app = new Vue({
             {
                 clearInterval(countDown);
             }
-            if(this.pvp.match.you.turn == 1)
+            if(this.pvp.isMatching)
             {
-                this.pvp.timeOut = 15;
-                countDown = setInterval(() => {
-                    if(this.pvp.match.you.turn == 1)
-                    {
-                        this.pvp.timeOut--;
-                        this.pvp.status = `Lượt của bạn..( ${this.pvp.timeOut}s )`;
-                        if(this.pvp.timeOut == 0)
+                if(this.pvp.match.you.turn == 1)
+                {
+                    this.pvp.timeOut = 15;
+                    countDown = setInterval(() => {
+                        if(this.pvp.match.you.turn == 1)
                         {
-                            this.pvp.match.you.turn = 0;
-                            this.pvp.status = 'Hết giờ <i class="fas fa-swords"></i>';
-                            axios.post(`${config.root}/api/v1/pvp/turn-time-out`,{
-                                room:page.room.id,
-                                bearer:config.bearer
-                            },{
-                                headers:{
-                                    pragma:this.token
-                                }
-                            }).then(async (res) => {
-                                await this.refreshToken(res);
-                                clearInterval(countDown);
-                                switch(res.data.code)
-                                {
-                                    case 200:
-                                        this.pvp.match.you = res.data.you.basic.original;
-                                        this.pvp.match.you.hp = res.data.you.hp;
-                                        this.pvp.match.you.energy = res.data.you.energy;
-                                        this.pvp.match.you.turn = res.data.you.turn;
-                                        
-                                        this.pvp.match.enemy = res.data.enemy.basic.original;
-                                        this.pvp.match.enemy.hp = res.data.enemy.hp;
-                                        this.pvp.match.enemy.energy = res.data.enemy.energy;
-                                        this.pvp.timeOut = 15;
-                                    break;
-                                    case 404:
-                                        Swal.fire('',res.data.message,res.data.status);
-                                    break;
-                                    case 300:
-                                        Swal.fire('',res.data.message,res.data.status);
-                                        this.resetPvp();
-                                        await this.findEnemy();
-                                    break;
-                                    case 201:
-                                        Swal.fire({
-                                            title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
-                                            focusConfirm: true,
-                                            confirmButtonText:'OK',
-                                        });
-                                        this.resetPvp();
-                                    break;
-                                }
-                            });
+                            this.pvp.timeOut--;
+                            this.pvp.status = `Lượt của bạn..( ${this.pvp.timeOut}s )`;
+                            if(this.pvp.timeOut == 0)
+                            {
+                                this.pvp.match.you.turn = 0;
+                                this.pvp.status = 'Hết giờ <i class="fas fa-swords"></i>';
+                                axios.post(`${config.root}/api/v1/pvp/turn-time-out`,{
+                                    room:page.room.id,
+                                    bearer:config.bearer
+                                },{
+                                    headers:{
+                                        pragma:this.token
+                                    }
+                                }).then(async (res) => {
+                                    await this.refreshToken(res);
+                                    clearInterval(countDown);
+                                    switch(res.data.code)
+                                    {
+                                        case 200:
+                                            this.pvp.match.you = res.data.you.basic.original;
+                                            this.pvp.match.you.hp = res.data.you.hp;
+                                            this.pvp.match.you.energy = res.data.you.energy;
+                                            this.pvp.match.you.turn = res.data.you.turn;
+                                            
+                                            this.pvp.match.enemy = res.data.enemy.basic.original;
+                                            this.pvp.match.enemy.hp = res.data.enemy.hp;
+                                            this.pvp.match.enemy.energy = res.data.enemy.energy;
+                                            this.pvp.timeOut = 15;
+                                        break;
+                                        case 404:
+                                            Swal.fire('',res.data.message,res.data.status);
+                                        break;
+                                        case 300:
+                                            Swal.fire('',res.data.message,res.data.status);
+                                            this.resetPvp();
+                                            await this.findEnemy();
+                                        break;
+                                        case 201:
+                                            Swal.fire({
+                                                title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
+                                                focusConfirm: true,
+                                                confirmButtonText:'OK',
+                                            });
+                                            this.resetPvp();
+                                        break;
+                                    }
+                                });
+                            }
                         }
-                    }
-                },1000);
-            }
-            if(this.pvp.match.you.turn == 0)
-            {
-                this.pvp.status = `Đang đợi đối thủ ra đòn...( 15s )`;
-                axios.post(`${config.root}/api/v1/pvp/listen-action`,{
-                    room:page.room.id,
-                    bearer:config.bearer
-                },{
-                    headers:{
-                        pragma:this.token
-                    }
-                }).then(async (res) => {
-                    await this.refreshToken(res);
-                    switch(res.data.code)
-                    {
-                        case 200:
-                            this.notify('Đến lượt của bạn');
-                            this.pvp.match.you = res.data.you.basic.original;
-                            this.pvp.match.you.hp = res.data.you.hp;
-                            this.pvp.match.you.energy = res.data.you.energy;
-                            this.pvp.match.you.turn = res.data.you.turn;
+                    },1000);
+                }
+                if(this.pvp.match.you.turn == 0)
+                {
+                    this.pvp.status = `Đang đợi đối thủ ra đòn...( 15s )`;
+                    axios.post(`${config.root}/api/v1/pvp/listen-action`,{
+                        room:page.room.id,
+                        bearer:config.bearer
+                    },{
+                        headers:{
+                            pragma:this.token
+                        }
+                    }).then(async (res) => {
+                        await this.refreshToken(res);
+                        switch(res.data.code)
+                        {
+                            case 200:
+                                this.notify('Đến lượt của bạn');
+                                this.pvp.match.you = res.data.you.basic.original;
+                                this.pvp.match.you.hp = res.data.you.hp;
+                                this.pvp.match.you.energy = res.data.you.energy;
+                                this.pvp.match.you.turn = res.data.you.turn;
 
-                            this.pvp.match.enemy = res.data.enemy.basic.original;
-                            this.pvp.match.enemy.hp = res.data.enemy.hp;
-                            this.pvp.match.enemy.energy = res.data.enemy.energy;
-                            this.pvp.timeOut = 15;
-                        break;
-                        case 404:
-                            Swal.fire('',res.data.message,res.data.status);
-                        break;
-                        case 300:
-                            Swal.fire('',res.data.message,res.data.status);
-                            this.resetPvp();
-                            await this.findEnemy();
-                        break;
-                        case 201:
-                            Swal.fire({
-                                title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
-                                focusConfirm: true,
-                                confirmButtonText:'OK',
-                            });
-                            this.resetPvp();
-                            this.findEnemy();
-                        break;
-                    }
-                });
+                                this.pvp.match.enemy = res.data.enemy.basic.original;
+                                this.pvp.match.enemy.hp = res.data.enemy.hp;
+                                this.pvp.match.enemy.energy = res.data.enemy.energy;
+                                this.pvp.timeOut = 15;
+                            break;
+                            case 404:
+                                Swal.fire('',res.data.message,res.data.status);
+                            break;
+                            case 300:
+                                Swal.fire('',res.data.message,res.data.status);
+                                this.resetPvp();
+                                await this.findEnemy();
+                            break;
+                            case 201:
+                                Swal.fire({
+                                    title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
+                                    focusConfirm: true,
+                                    confirmButtonText:'OK',
+                                });
+                                this.resetPvp();
+                                this.findEnemy();
+                            break;
+                        }
+                    });
+                }
             }
         }
     },
@@ -740,13 +743,19 @@ app = new Vue({
                 switch(res.data.code)
                 {
                     case 200:
+                        if(typeof remaining == "undefined" || remaining == null)
+                        {}
+                        else
+                        {
+                            clearInterval(remaining);
+                        }
                         this.pvp.timeRemaining = res.data.remaining;
                         remaining = setInterval(() => {
-                           this.pvp.timeRemaining--;
-                           if(this.pvp.timeRemaining <= 0)
-                           {
-                               clearInterval(remaining);
-                           }
+                        this.pvp.timeRemaining--;
+                        if(this.pvp.timeRemaining <= 0)
+                        {
+                            clearInterval(remaining);
+                        }
                         },1000);
                         this.notify(res.data.message);
                         const audio = new Audio(`${config.root}/assets/sound/found_enemy.mp3`);
