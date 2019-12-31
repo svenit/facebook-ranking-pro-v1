@@ -32,16 +32,18 @@
 		</div>
 	</noscript>
 	<div id="app" class="layout-row" v-if="!detect">
-		<div v-if="flash" id="loader" class="loading-screen">
-			<div class="flash-screen">
-				<div class="text-center">
-					<img style="width:100px" src="{{ asset('assets/images/loader.jpg') }}">
-				</div>
-				<div class="progress-screen">
-					<div class="indeterminate"></div>
+		@if(!request()->is('admin/*'))
+			<div v-if="flash" id="loader" class="loading-screen">
+				<div class="flash-screen">
+					<div class="text-center">
+						<img style="width:100px" src="{{ asset('assets/images/loader.jpg') }}">
+					</div>
+					<div class="progress-screen">
+						<div class="indeterminate"></div>
+					</div>
 				</div>
 			</div>
-		</div>
+		@endif
 		@include('user.theme.aside')
 		<div id="main" style="background: url({{ asset('assets/images/background.jpg') }});" class="layout-column flex">
 			@include('user.theme.header')

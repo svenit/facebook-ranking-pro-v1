@@ -33,64 +33,52 @@ class ShopController extends Controller
             $item = Gear::whereId($request->id)->first();
             if(isset($item))
             {
-                $checkItem = UserGear::where([['user_id',Auth::id()],['gear_id',$item->id]])->first();
-                if(isset($checkItem))
+                switch($item->price_type)
                 {
-                    $response = [
-                        'code' => 500,
-                        'status' => 'error',
-                        'message' => 'Bạn đã có vật phẩm này trong túi đồ rồi'
-                    ];
-                }
-                else
-                {
-                    switch($item->price_type)
-                    {
-                        case 0:
-                            if(Auth::user()->getCoins() >= $item->price)
-                            {
-                                Auth::user()->decrement('income_coins',$item->price);
-                                Auth::user()->gears()->attach($item->id,[
-                                    'status' => 0
-                                ]);
-                                $response = [
-                                    'code' => 200,
-                                    'status' => 'error',
-                                    'message' => 'Mua vật phẩm thành công, vui lòng kiểm ra rương đồ'
-                                ];
-                            }
-                            else
-                            {
-                                $response = [
-                                    'code' => 500,
-                                    'status' => 'error',
-                                    'message' => 'Bạn không đủ vàng'
-                                ];
-                            }
-                        break;
-                        case 1:
-                            if(Auth::user()->gold >= $item->price)
-                            {
-                                Auth::user()->decrement('gold',$item->price);
-                                Auth::user()->gears()->attach($item->id,[
-                                    'status' => 0
-                                ]);
-                                $response = [
-                                    'code' => 200,
-                                    'status' => 'error',
-                                    'message' => 'Mua vật phẩm thành công, ui lòng kiểm ra rương đồ'
-                                ];
-                            }
-                            else
-                            {
-                                $response = [
-                                    'code' => 500,
-                                    'status' => 'error',
-                                    'message' => 'Bạn không đủ kim cương'
-                                ];
-                            }
-                        break;
-                    }
+                    case 0:
+                        if(Auth::user()->getCoins() >= $item->price)
+                        {
+                            Auth::user()->decrement('income_coins',$item->price);
+                            Auth::user()->gears()->attach($item->id,[
+                                'status' => 0
+                            ]);
+                            $response = [
+                                'code' => 200,
+                                'status' => 'error',
+                                'message' => 'Mua vật phẩm thành công, vui lòng kiểm ra rương đồ'
+                            ];
+                        }
+                        else
+                        {
+                            $response = [
+                                'code' => 500,
+                                'status' => 'error',
+                                'message' => 'Bạn không đủ vàng'
+                            ];
+                        }
+                    break;
+                    case 1:
+                        if(Auth::user()->gold >= $item->price)
+                        {
+                            Auth::user()->decrement('gold',$item->price);
+                            Auth::user()->gears()->attach($item->id,[
+                                'status' => 0
+                            ]);
+                            $response = [
+                                'code' => 200,
+                                'status' => 'error',
+                                'message' => 'Mua vật phẩm thành công, ui lòng kiểm ra rương đồ'
+                            ];
+                        }
+                        else
+                        {
+                            $response = [
+                                'code' => 500,
+                                'status' => 'error',
+                                'message' => 'Bạn không đủ kim cương'
+                            ];
+                        }
+                    break;
                 }
             }
             else
@@ -211,64 +199,52 @@ class ShopController extends Controller
             $item = Pet::whereId($request->id)->first();
             if(isset($item))
             {
-                $checkItem = UserPet::where([['user_id',Auth::id()],['pet_id',$item->id]])->first();
-                if(isset($checkItem))
+                switch($item->price_type)
                 {
-                    $response = [
-                        'code' => 500,
-                        'status' => 'error',
-                        'message' => 'Bạn đã có thú cưỡi này rồi'
-                    ];
-                }
-                else
-                {
-                    switch($item->price_type)
-                    {
-                        case 0:
-                            if(Auth::user()->getCoins() >= $item->price)
-                            {
-                                Auth::user()->decrement('income_coins',$item->price);
-                                Auth::user()->pets()->attach($item->id,[
-                                    'status' => 0
-                                ]);
-                                $response = [
-                                    'code' => 200,
-                                    'status' => 'error',
-                                    'message' => 'Mua thú cưỡi thành công thành công'
-                                ];
-                            }
-                            else
-                            {
-                                $response = [
-                                    'code' => 500,
-                                    'status' => 'error',
-                                    'message' => 'Bạn không đủ vàng'
-                                ];
-                            }
-                        break;
-                        case 1:
-                            if(Auth::user()->gold >= $item->price)
-                            {
-                                Auth::user()->decrement('gold',$item->price);
-                                Auth::user()->pets()->attach($item->id,[
-                                    'status' => 0
-                                ]);
-                                $response = [
-                                    'code' => 200,
-                                    'status' => 'error',
-                                    'message' => 'Mua thú cưỡi thành công'
-                                ];
-                            }
-                            else
-                            {
-                                $response = [
-                                    'code' => 500,
-                                    'status' => 'error',
-                                    'message' => 'Bạn không đủ kim cương'
-                                ];
-                            }
-                        break;
-                    }
+                    case 0:
+                        if(Auth::user()->getCoins() >= $item->price)
+                        {
+                            Auth::user()->decrement('income_coins',$item->price);
+                            Auth::user()->pets()->attach($item->id,[
+                                'status' => 0
+                            ]);
+                            $response = [
+                                'code' => 200,
+                                'status' => 'error',
+                                'message' => 'Mua thú cưỡi thành công thành công'
+                            ];
+                        }
+                        else
+                        {
+                            $response = [
+                                'code' => 500,
+                                'status' => 'error',
+                                'message' => 'Bạn không đủ vàng'
+                            ];
+                        }
+                    break;
+                    case 1:
+                        if(Auth::user()->gold >= $item->price)
+                        {
+                            Auth::user()->decrement('gold',$item->price);
+                            Auth::user()->pets()->attach($item->id,[
+                                'status' => 0
+                            ]);
+                            $response = [
+                                'code' => 200,
+                                'status' => 'error',
+                                'message' => 'Mua thú cưỡi thành công'
+                            ];
+                        }
+                        else
+                        {
+                            $response = [
+                                'code' => 500,
+                                'status' => 'error',
+                                'message' => 'Bạn không đủ kim cương'
+                            ];
+                        }
+                    break;
                 }
             }
             else

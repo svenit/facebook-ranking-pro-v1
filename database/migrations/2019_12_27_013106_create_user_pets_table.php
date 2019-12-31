@@ -14,6 +14,7 @@ class CreateUserPetsTable extends Migration
     public function up()
     {
         Schema::create('user_pets', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->index();
             $table->foreign('user_id')
                 ->references('id')
@@ -26,8 +27,7 @@ class CreateUserPetsTable extends Migration
                 ->on('pets')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->tinyInteger('status');
-            $table->primary(['user_id','pet_id']);
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });
     }

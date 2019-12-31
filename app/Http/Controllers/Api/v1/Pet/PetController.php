@@ -22,7 +22,7 @@ class PetController extends Controller
     public function riding(Request $request)
     {
         $validate = Validator::make($request->all(),[
-            'id' => 'required|numeric|exists:pets,id'
+            'pet_id' => 'required|numeric|exists:pets,id'
         ]);
         if($validate->fails())
         {
@@ -34,29 +34,40 @@ class PetController extends Controller
         }
         else
         { 
-            $findPet = UserPet::where([['user_id',Auth::id()],['pet_id',$request->id]])->first();
-            if(isset($findPet) && $findPet->status == 0)
+            $findPet = UserPet::where([['user_id',Auth::id()],['id',$request->id],['pet_id',$request->pet_id]]);
+            if(isset($findPet) && $findPet->first()->status == 0)
             {
-                if($findPet->load('pets')->pets->level_required <= Auth::user()->level())
+                if($findPet->first()->load('pets')->pets->level_required <= Auth::user()->level())
                 {
                     UserPet::where([['user_id',Auth::id()],['status',1]])->update([
                         'status' => 0
                     ]);
-                    Auth::user()->pets()->updateExistingPivot($request->id,[
+                    $ridingPet = $findPet->update([
                         'status' => 1
-                    ],false);
-                    $this->updatePower();
-                    $response = [
-                        'code' => 200,
-                        'status' => 'success',
-                        'message' => "Đã sử dụng thú cưỡi ".$findPet->load('pets')->pets->name." thành công !"
-                    ];
+                    ]);
+                    if(isset($ridingPet))
+                    {
+                        $this->updatePower();
+                        $response = [
+                            'code' => 200,
+                            'status' => 'success',
+                            'message' => "Đã sử dụng thú cưỡi ".$findPet->first()->load('pets')->pets->name." thành công !"
+                        ];
+                    }
+                    else
+                    {
+                        $response = [
+                            'code' => 500,
+                            'status' => 'error',
+                            'message' => "Đã có lỗi xảy ra"
+                        ];
+                    }
                 }
                 else
                 {
                     $response = [
                         'code' => 500,
-                        'status' => 'success',
+                        'status' => 'error',
                         'message' => "Không đủ cấp độ"
                     ];
                 }
@@ -65,7 +76,7 @@ class PetController extends Controller
             {
                 $response = [
                     'code' => 500,
-                    'status' => 'success',
+                    'status' => 'error',
                     'message' => "Thú cưỡi không tồn tại hoặc đã được trang bị"
                 ];
             }
@@ -74,27 +85,72 @@ class PetController extends Controller
     }
     public function petDown(Request $request)
     {
-        $petDown = Auth::user()->pets()->updateExistingPivot($request->id,[
-            'status' => 0
-        ],false);
-        if(isset($petDown))
+        $findPet = UserPet::where([['user_id',Auth::id()],['id',$request->id],['pet_id',$request->pet_id]]);
+        if(isset($findPet))
         {
-            $this->updatePower();
-            return response()->json([
-                'code' => 200,
-                'status' => 'success',
-                'message' => "Đã cho thú cưỡi nghỉ ngơi"
-            ],200);
+            $petDown = $findPet->update([
+                'status' => 0
+            ]);
+            if(isset($petDown))
+            {
+                $this->updatePower();
+                $response = [
+                    'code' => 200,
+                    'status' => 'success',
+                    'message' => "Đã cho thú cưỡi nghỉ ngơi"
+                ];
+            }
+            else
+            {
+                $response = [
+                    'code' => 500,
+                    'status' => 'error',
+                    'message' => "Đã có lỗi xảy ra"
+                ];
+            }
         }
+        else
+        {
+            $response = [
+                'code' => 500,
+                'status' => 'error',
+                'message' => "Thú cưỡi không tồn tại"
+            ];
+        }
+        return response()->json($response,200);
     }
     public function dropPet(Request $request)
     {
-        Auth::user()->pets()->detach($request->id);
-        $this->updatePower();
-        return response()->json([
-            'code' => 200,
-            'status' => 'success',
-            'message' => "Thú cưỡi đã về với tự nhiên, cảm ơn tấm lòng tốt bụng của bạn"
-        ],200);
+        $findPet = UserPet::where([['user_id',Auth::id()],['id',$request->id],['pet_id',$request->pet_id]]);
+        if(isset($findPet))
+        {
+            $dropPet = $findPet->delete();
+            if(isset($dropPet))
+            {
+                $this->updatePower();
+                $response = [
+                    'code' => 200,
+                    'status' => 'success',
+                    'message' => "Thú cưỡi đã về với tự nhiên, cảm ơn tấm lòng tốt bụng của bạn"
+                ];
+            }
+            else
+            {
+                $response = [
+                    'code' => 500,
+                    'status' => 'error',
+                    'message' => "Đã có lỗi xảy ra"
+                ];
+            }
+        }
+        else
+        {
+            $response = [
+                'code' => 500,
+                'status' => 'error',
+                'message' => "Thú cưỡi không tồn tại"
+            ];
+        }
+        return response()->json($response,200);
     }
 }

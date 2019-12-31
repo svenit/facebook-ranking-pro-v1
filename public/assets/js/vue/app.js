@@ -1223,14 +1223,15 @@ app = new Vue({
             this.inventory = res.data;
             this.loading = false;
         },
-        async deleteEquipment(id)
+        async deleteEquipment(data)
         {
             if(confirm('Vứt bỏ vật phẩm này ?'))
             {
                 this.loading = true;
                 let res = await axios.post(`${config.root}/api/v1/inventory/delete`,{
                     bearer:config.bearer,
-                    id:id
+                    id:data.pivot.id,
+                    gear_id:data.id
                 },{
                     headers:{
                         pragma:this.token
@@ -1242,12 +1243,13 @@ app = new Vue({
                 this.notify(res.data.message);
             }
         },
-        async removeEquipment(id)
+        async removeEquipment(data)
         {
             this.loading = true;
             let res = await axios.put(`${config.root}/api/v1/inventory/remove`,{
                 bearer:config.bearer,
-                id:id
+                id:data.pivot.id,
+                gear_id:data.id
             },{
                 headers:{
                     pragma:this.token
@@ -1258,12 +1260,13 @@ app = new Vue({
             this.index();
             this.notify(res.data.message);
         },
-        async equipment(id)
+        async equipment(data)
         {
             this.loading = true;
             let res = await axios.put(`${config.root}/api/v1/inventory/equipment`,{
                 bearer:config.bearer,
-                id:id
+                id:data.pivot.id,
+                gear_id:data.id
             },{
                 headers:{
                     pragma:this.token
@@ -1290,7 +1293,7 @@ app = new Vue({
                 this.notify(res.data.message);
                 if(res.data.code == 200)
                 {
-                    this.index();
+                    await this.index();
                 }
                 if(res.data.code == 200)
                 {
@@ -1300,7 +1303,7 @@ app = new Vue({
         },
         async buySkill(id,e)
         {
-            if(confirm('Mua kĩ năng này ?'))
+            if(confirm('Mua kỹ năng này ?'))
             {
                 let res = await axios.post(`${config.root}/api/v1/shop/buy-skill`,{
                     bearer:config.bearer,
@@ -1313,7 +1316,7 @@ app = new Vue({
                 await this.refreshToken(res);
                 if(res.data.code == 200)
                 {
-                    this.index();
+                    await this.index();
                 }
                 this.notify(res.data.message);
                 if(res.data.code == 200)
@@ -1337,7 +1340,7 @@ app = new Vue({
                 await this.refreshToken(res);
                 if(res.data.code == 200)
                 {
-                    this.index();
+                    await this.index();
                 }
                 this.notify(res.data.message);
                 if(res.data.code == 200)
@@ -1361,54 +1364,66 @@ app = new Vue({
             this.pets = res.data;
             this.loading = false;
         },
-        async ridingPet(id)
+        async ridingPet(data)
         {
             this.loading = true;
             let res = await axios.put(`${config.root}/api/v1/pet/riding`,{
                 bearer:config.bearer,
-                id:id
+                id:data.pivot.id,
+                pet_id:data.id
             },{
                 headers:{
                     pragma:this.token
                 }
             });
             await this.refreshToken(res);
-            await this.index();
-            this.pet();
+            if(res.data.code == 200)
+            {
+                await this.index();
+                this.pet();
+            }
             this.notify(res.data.message);
         },
-        async petDown(id)
+        async petDown(data)
         {
             this.loading = true;
             let res = await axios.put(`${config.root}/api/v1/pet/pet-down`,{
                 bearer:config.bearer,
-                id:id
+                id:data.pivot.id,
+                pet_id:data.id
             },{
                 headers:{
                     pragma:this.token
                 }
             });
             await this.refreshToken(res);
-            await this.index();
-            this.pet();
+            if(res.data.code == 200)
+            {
+                await this.index();
+                this.pet();
+            }
             this.notify(res.data.message);
         },
-        async dropPet(id)
+        async dropPet(data)
         {
             if(confirm('Phóng sinh cho thú cưỡi này ?'))
             {
                 this.loading = true;
                 let res = await axios.post(`${config.root}/api/v1/pet/drop-pet`,{
                     bearer:config.bearer,
-                    id:id
+                    id:data.pivot.id,
+                    pet_id:data.id
                 },{
                     headers:{
                         pragma:this.token
                     }
                 });
                 await this.refreshToken(res);
-                await this.pet();
-                this.index();
+                if(res.data.code == 200)
+                {
+                    await this.index();
+                    this.pet();
+                }
                 this.notify(res.data.message);
             }
         },

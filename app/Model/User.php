@@ -65,11 +65,11 @@ class User extends Authenticatable
     }
     public function gears()
     {
-        return $this->belongsToMany('App\Model\Gear','user_gears','user_id','gear_id')->withPivot('status');
+        return $this->belongsToMany('App\Model\Gear','user_gears','user_id','gear_id')->withPivot(['status','id']);
     }
     public function pets()
     {
-        return $this->belongsToMany('App\Model\Pet','user_pets','user_id','pet_id')->withPivot('status');
+        return $this->belongsToMany('App\Model\Pet','user_pets','user_id','pet_id')->withPivot(['status','id']);
     }
     public function chat()
     {
@@ -95,6 +95,8 @@ class User extends Authenticatable
         {
             if($gear->pivot->status == 1)
             {
+                $gear->set = explode(',',$gear->class_tag);
+                $gear->character = $gear->character;
                 array_push($data,$gear);
             }
         }

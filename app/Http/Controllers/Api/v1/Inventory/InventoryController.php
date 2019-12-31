@@ -36,33 +36,78 @@ class InventoryController extends Controller
     }
     public function delete(Request $request)
     {
-        Auth::user()->gears()->detach($request->id);
-        $this->updatePower();
-        return response()->json([
-            'code' => 200,
-            'status' => 'success',
-            'message' => "Trang bị của bạn đã về với cõi hư vô"
-        ],200);
+        $find = UserGear::where([['user_id',Auth::id()],['id',$request->id],['gear_id',$request->gear_id]]);
+        if(isset($find))
+        {
+            $removeGear = $find->delete();
+            if(isset($removeGear))
+            {
+                $this->updatePower();
+                $response = [
+                    'code' => 200,
+                    'status' => 'success',
+                    'message' => "Trang bị của bạn đã về với cõi hư vô"
+                ];
+            }
+            else
+            {
+                $response = [
+                    'code' => 500,
+                    'status' => 'error',
+                    'message' => "Đã có lỗi xảy ra"
+                ];
+            }
+        }
+        else
+        {
+            $response = [
+                'code' => 500,
+                'status' => 'error',
+                'message' => "Không tìm thấy trang bị"
+            ];
+        }
+        return response()->json($response,200);
     }
     public function removeEquipment(Request $request)
     {
-        $unWear = Auth::user()->gears()->updateExistingPivot($request->id,[
-            'status' => 0
-        ],false);
-        if(isset($unWear))
+        $find = UserGear::where([['user_id',Auth::id()],['id',$request->id],['gear_id',$request->gear_id]]);
+        if(isset($find))
         {
-            $this->updatePower();
-            return response()->json([
-                'code' => 200,
-                'status' => 'success',
-                'message' => "Tháo trang bị thành công !"
-            ],200);
+            $unWear = $find->update([
+                'status' => 0
+            ]);
+            if(isset($unWear))
+            {
+                $this->updatePower();
+                $response = [
+                    'code' => 200,
+                    'status' => 'success',
+                    'message' => "Tháo trang bị thành công !"
+                ];
+            }
+            else
+            {
+                $response = [
+                    'code' => 500,
+                    'status' => 'error',
+                    'message' => "Đã có lỗi xảy ra"
+                ];
+            }
         }
+        else
+        {
+            $response = [
+                'code' => 500,
+                'status' => 'error',
+                'message' => "Không tìm thấy trang bị"
+            ];
+        }
+        return response()->json($response,200);
     }
     public function equipment(Request $request)
     {
         $all =  UserGear::with('gear')->where([['user_id',Auth::id()],['status',1]])->get(); 
-        $find = UserGear::where([['user_id',Auth::id()],['gear_id',$request->id]])->first();
+        $find = UserGear::where([['user_id',Auth::id()],['id',$request->id],['gear_id',$request->gear_id]])->first();
         if(isset($find) && $find->status == 0)
         {
             if($find->load('gear')->gear->character_id == Auth::user()->character->id)
@@ -78,9 +123,9 @@ class InventoryController extends Controller
                             ],false);
                         }
                     }
-                    $wear = Auth::user()->gears()->updateExistingPivot($request->id,[
+                    $wear = UserGear::findOrFail($find->id)->update([
                         'status' => 1
-                    ],false);
+                    ]);
                     if(isset($wear))
                     {
                         $this->updatePower();

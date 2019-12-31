@@ -28,7 +28,9 @@
                         <span class="hair_flower_0"></span>
                         <span class="shield_base_0"></span>
                         <span class=""></span>
-                        <span v-for="(gear,index) in data.gears" :class="gear.class_tag"></span>
+                        <span v-for="(gear,index) in data.gears" :key="index">
+                            <span v-for="(set,index) in gear.set" :class="set"></span>
+                        </span>
                         <span v-if="data.pet" :class="`Mount_Head_${data.pet.class_tag}`"></span>
                     </div>
                     <div style="margin-bottom:60px" v-if="data.pet"></div>
@@ -220,13 +222,13 @@
                 </div>
             </div>
             <div v-if="detailGear.permission == 1" class="modal-footer">
-                <button type="button" @click="deleteEquipment(detailGear.data.id)" class="btn bg-danger-lt" data-dismiss="modal">
+                <button type="button" @click="deleteEquipment(detailGear.data)" class="btn bg-danger-lt" data-dismiss="modal">
                     Vứt Bỏ
                 </button>
-                <button v-if="detailGear.data.pivot.status == 0" type="button" @click="equipment(detailGear.data.id)" class="btn btn-secondary" data-dismiss="modal">
+                <button v-if="detailGear.data.pivot.status == 0" type="button" @click="equipment(detailGear.data)" class="btn btn-secondary" data-dismiss="modal">
                     Trang bị
                 </button>
-                <button v-else type="button" @click="removeEquipment(detailGear.data.id)" class="btn btn-secondary" data-dismiss="modal">
+                <button v-else type="button" @click="removeEquipment(detailGear.data)" class="btn btn-secondary" data-dismiss="modal">
                     Tháo
                 </button>
             </div>
@@ -315,13 +317,13 @@
                 </div>
             </div>
             <div v-if="detailPet.permission == 1" class="modal-footer">
-                <button type="button" @click="dropPet(detailPet.data.id)" class="btn bg-danger-lt" data-dismiss="modal">
+                <button type="button" @click="dropPet(detailPet.data)" class="btn bg-danger-lt" data-dismiss="modal">
                     Thả
                 </button>
-                <button v-if="detailPet.data.pivot.status == 0" type="button" @click="ridingPet(detailPet.data.id)" class="btn btn-secondary" data-dismiss="modal">
+                <button v-if="detailPet.data.pivot.status == 0" type="button" @click="ridingPet(detailPet.data)" class="btn btn-secondary" data-dismiss="modal">
                     Cưỡi
                 </button>
-                <button v-else type="button" @click="petDown(detailPet.data.id)" class="btn btn-secondary" data-dismiss="modal">
+                <button v-else type="button" @click="petDown(detailPet.data)" class="btn btn-secondary" data-dismiss="modal">
                     Xuống
                 </button>
             </div>
@@ -358,7 +360,9 @@
                         <span class="hair_flower_0"></span>
                         <span class="shield_base_0"></span>
                         <span class=""></span>
-                        <span v-for="(gear,index) in user.gears" :class="gear.class_tag"></span>
+                        <span v-for="(gear,index) in user.gears" :key="index">
+                            <span v-for="(set,index) in gear.set" :class="set"></span>
+                        </span>
                         <span v-if="user.pet" :class="`Mount_Head_${user.pet.class_tag}`"></span>
                     </div>
                     <div style="margin-bottom:60px" v-if="user.pet"></div>

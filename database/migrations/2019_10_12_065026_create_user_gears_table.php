@@ -14,6 +14,7 @@ class CreateUserGearsTable extends Migration
     public function up()
     {
         Schema::create('user_gears', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->index();
             $table->foreign('user_id')
                 ->references('id')
@@ -27,7 +28,6 @@ class CreateUserGearsTable extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table->tinyInteger('status');
-            $table->primary(['user_id','gear_id']);
             $table->timestamps();
         });
     }

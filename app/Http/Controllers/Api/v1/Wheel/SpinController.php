@@ -25,7 +25,8 @@ class SpinController extends Controller
                     $findGif = SpinWheel::where([[DB::raw("md5(id)"),$data[1]],[DB::raw("md5(type)"),$data[2]],[DB::raw("md5(probability)"),$data[3]]])->first();
                     if(isset($findGif))
                     {
-                        $receiveGif = DB::statement($findGif->query.Auth::id());
+                        $query = str_replace("?",Auth::id(),$findGif->query);
+                        $receiveGif = DB::statement($query);
                         if($receiveGif)
                         {
                             Session::forget('spinning');
