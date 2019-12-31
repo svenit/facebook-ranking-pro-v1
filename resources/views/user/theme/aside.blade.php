@@ -490,16 +490,14 @@
                 </ul>
                 <ul class="nav">
                     <li class="nav-header hidden-folded"><span class="text-muted">Hoạt Động</span></li>
-                    @auth
-                        <li class="{{ Request::is('profile/*') ? 'active' : '' }}"><a href="#"><span class="nav-icon"><i data-feather="user"></i></span> <span
-                            class="nav-text">{{ Auth::user()->name }}</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('user.profile.inventory.index') }}" class=""><span class="nav-text">Rương Đồ</span></a></li>
-                                <li><a href="{{ Route('user.profile.pet.index') }}" class=""><span class="nav-text">Thú Cưỡi</span></a></li>
-                                <li><a href="{{ Route('user.profile.skill.index') }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
-                            </ul>
-                        </li>
-                    @endauth
+                    <li class="{{ Request::is('profile/*') ? 'active' : '' }}"><a href="#"><span class="nav-icon"><i data-feather="user"></i></span> <span
+                        class="nav-text">Nhân Vật</span> <span class="nav-caret"></span></a>
+                        <ul class="nav-sub nav-mega">
+                            <li><a href="{{ Route('user.profile.inventory.index') }}" class=""><span class="nav-text">Rương Đồ</span></a></li>
+                            <li><a href="{{ Route('user.profile.pet.index') }}" class=""><span class="nav-text">Thú Cưỡi</span></a></li>
+                            <li><a href="{{ Route('user.profile.skill.index') }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
+                        </ul>
+                    </li>
                     <li class="{{ Request::is('top/*') ? 'active' : '' }}"><a href="#"><span class="nav-icon"><i data-feather="award"></i></span> <span
                         class="nav-text">BXH</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">

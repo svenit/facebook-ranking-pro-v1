@@ -57,17 +57,14 @@ class StrangerController extends Controller
     {
         $room = ChatRoom::where([['name',$name],['people','<=',2]])->first();
         $tracking = Tracking::where([['route',RouteName::route()->getName()],['user_id',Auth::id()]])->first();
-        if(isset($room))
+        $checkSession = ChatConversation::where([['user_id',Auth::id()],['room_id',$room->id]])->first();
+        if(isset($room,$checkSession))
         {
             if(empty($tracking))
             {
                 $this->tracking(1);
             }
-            $checkSession = ChatConversation::where([['user_id',Auth::id()],['room_id',$room->id]])->first();
-            if(isset($checkSession))
-            {
-                return view('user.chat.stranger',compact('room'));
-            }
+            return view('user.chat.stranger',compact('room'));
         }
         else
         {
