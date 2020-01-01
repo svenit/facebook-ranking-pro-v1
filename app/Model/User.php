@@ -71,6 +71,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Model\Pet','user_pets','user_id','pet_id')->withPivot(['status','id']);
     }
+    public function items()
+    {
+        return $this->belongsToMany('App\Model\Item','user_items','user_id','item_id')->withPivot(['quantity','id']);
+    }
     public function chat()
     {
         return $this->belongsToMany('App\Model\ChatRoom','chat_conversations','user_id','room_id');

@@ -1,16 +1,14 @@
 @extends('app')
 
-@section('hero','Kho Đồ')
-@section('sub_hero','Kho đồ của bạn')
+@section('hero','Trang bị')
+@section('sub_hero','Kho trang bị của bạn')
 
 @section('content')
 <div id="list-fight-room">
     <div class="page-content page-container" id="page-content">
         <div class="padding-x">
             @include('user.theme.parameter')
-            <a href="{{ Route('user.profile.inventory.index') }}" class="{{ Request::is("profile/inventories") ? 'active' : '' }} btn btn-dark">Rương Đồ</a>
-            <a href="{{ Route('user.profile.pet.index') }}" class="{{ Request::is("profile/pets") ? 'active' : '' }} btn btn-dark">Thú Cưỡi</a>
-            <a href="{{ Route('user.profile.skill.index') }}" class="{{ Request::is("profile/skills") ? 'active' : '' }} btn btn-dark">Kỹ Năng</a>
+            @include('user.profile.base')
             <div class="card vip-bordered">
                 <div class="b-b">
                     <div class="nav-active-border b-danger bottom">

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1\Pet;
+namespace App\Http\Controllers\Api\v1\Profile\Pet;
 
 use App\Income\Helper;
 use App\Model\UserPet;

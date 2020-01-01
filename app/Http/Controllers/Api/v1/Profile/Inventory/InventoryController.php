@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1\Inventory;
+namespace App\Http\Controllers\Api\v1\Profile\Inventory;
 
 use App\Model\User;
-use App\Income\Helper;
 use App\Model\CateGear;
 use App\Model\UserGear;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class InventoryController extends Controller
 {
@@ -24,15 +24,16 @@ class InventoryController extends Controller
         $data = [];
         foreach($inventories->gears as $key => $gear)
         {
-            foreach($cates as $i => $cate)
+            foreach($cates as $cate)
             {
                 if($gear->cate_gear_id == $cate->id)
                 {
+                    $gear->character = $gear->character;
                     $data[Str::slug($cate->name)][$key] = $gear;
                 }
             }
         }
-        return response()->json($data,200);
+        return response()->json($data,200); 
     }
     public function delete(Request $request)
     {

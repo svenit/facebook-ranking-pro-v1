@@ -26,6 +26,10 @@ app = new Vue({
             data:{},
             permission:0
         },
+        detailItem:{
+            data:{},
+            permission:0
+        },
         data:{
             infor:{
                 name: "",
@@ -175,7 +179,8 @@ app = new Vue({
         },
         inventory:{},
         pets:[],
-        skills:[]
+        skills:[],
+        items:[]
     },
     async created()
     {
@@ -222,6 +227,9 @@ app = new Vue({
                     break;
                     case 'skill.index':
                         await this.skill();
+                    break;
+                    case 'item.index':
+                        await this.item();
                     break;
                 }
             }
@@ -498,6 +506,14 @@ app = new Vue({
                 }
             }
         },
+        showInforItem(data,permission)
+        {
+            this.detailItem = {
+                data:data,
+                permission:permission
+            };
+            $('#trigger-item').click();
+        },
         showInforPet(data,permission)
         {
             this.detailPet = {
@@ -547,7 +563,7 @@ app = new Vue({
         async useSkill(id)
         {
             this.loading = true;
-            let res = await axios.put(`${config.root}/api/v1/skill/use`,{
+            let res = await axios.put(`${config.root}/api/v1/profile/skill/use`,{
                 bearer:config.bearer,
                 id:id
             },{
@@ -563,7 +579,7 @@ app = new Vue({
         async removeSkill(id)
         {
             this.loading = true;
-            let res = await axios.put(`${config.root}/api/v1/skill/remove`,{
+            let res = await axios.put(`${config.root}/api/v1/profile/skill/remove`,{
                 bearer:config.bearer,
                 id:id
             },{
@@ -581,7 +597,7 @@ app = new Vue({
             if(confirm('Vứt bỏ kỹ năng này ?'))
             {
                 this.loading = true;
-                let res = await axios.post(`${config.root}/api/v1/skill/delete`,{
+                let res = await axios.post(`${config.root}/api/v1/profile/skill/delete`,{
                     bearer:config.bearer,
                     id:id
                 },{
@@ -1216,7 +1232,7 @@ app = new Vue({
         async invetory()
         {
             this.loading = true;
-            let res = await axios.get(`${config.root}/api/v1/inventory`,{
+            let res = await axios.get(`${config.root}/api/v1/profile/inventory`,{
                 params:{
                     bearer:config.bearer,
                 },
@@ -1233,7 +1249,7 @@ app = new Vue({
             if(confirm('Vứt bỏ vật phẩm này ?'))
             {
                 this.loading = true;
-                let res = await axios.post(`${config.root}/api/v1/inventory/delete`,{
+                let res = await axios.post(`${config.root}/api/v1/profile/inventory/delete`,{
                     bearer:config.bearer,
                     id:data.pivot.id,
                     gear_id:data.id
@@ -1251,7 +1267,7 @@ app = new Vue({
         async removeEquipment(data)
         {
             this.loading = true;
-            let res = await axios.put(`${config.root}/api/v1/inventory/remove`,{
+            let res = await axios.put(`${config.root}/api/v1/profile/inventory/remove`,{
                 bearer:config.bearer,
                 id:data.pivot.id,
                 gear_id:data.id
@@ -1268,7 +1284,7 @@ app = new Vue({
         async equipment(data)
         {
             this.loading = true;
-            let res = await axios.put(`${config.root}/api/v1/inventory/equipment`,{
+            let res = await axios.put(`${config.root}/api/v1/profile/inventory/equipment`,{
                 bearer:config.bearer,
                 id:data.pivot.id,
                 gear_id:data.id
@@ -1282,11 +1298,11 @@ app = new Vue({
             this.invetory();
             this.notify(res.data.message);
         },
-        async buyItem(id,e)
+        async buyEquip(id,e)
         {
-            if(confirm('Mua vật phẩm này ?'))
+            if(confirm('Mua trang bị này ?'))
             {
-                let res = await axios.post(`${config.root}/api/v1/shop/buy-item`,{
+                let res = await axios.post(`${config.root}/api/v1/shop/buy-equip`,{
                     bearer:config.bearer,
                     id:id
                 },{
@@ -1354,10 +1370,44 @@ app = new Vue({
                 }
             }
         },
+        async buyItem(id,e)
+        {
+            if(confirm('Mua vật phẩm này ?'))
+            {
+                var quantity = prompt('Nhập số lượng cần mua');
+                quantity = parseInt(quantity);
+                if(quantity && typeof quantity == 'number' && quantity > 0 && quantity <= 99999)
+                {
+                    let res = await axios.post(`${config.root}/api/v1/shop/buy-item`,{
+                        bearer:config.bearer,
+                        id:id,
+                        quantity:quantity
+                    },{
+                        headers:{
+                            pragma:this.token
+                        }
+                    })
+                    await this.refreshToken(res);
+                    if(res.data.code == 200)
+                    {
+                        await this.index();
+                    }
+                    this.notify(res.data.message);
+                    if(res.data.code == 200)
+                    {
+                        e.target.innerHTML = 'Đã mua';
+                    }
+                }
+                else
+                {
+                    this.notify('Số lượng quá lớn hoặc không hợp lệ');
+                }
+            }
+        },
         async pet()
         {
             this.loading = true;
-            let res = await axios.get(`${config.root}/api/v1/pet`,{
+            let res = await axios.get(`${config.root}/api/v1/profile/pet`,{
                 params:{
                     bearer:config.bearer,
                 },
@@ -1372,7 +1422,7 @@ app = new Vue({
         async ridingPet(data)
         {
             this.loading = true;
-            let res = await axios.put(`${config.root}/api/v1/pet/riding`,{
+            let res = await axios.put(`${config.root}/api/v1/profile/pet/riding`,{
                 bearer:config.bearer,
                 id:data.pivot.id,
                 pet_id:data.id
@@ -1392,7 +1442,7 @@ app = new Vue({
         async petDown(data)
         {
             this.loading = true;
-            let res = await axios.put(`${config.root}/api/v1/pet/pet-down`,{
+            let res = await axios.put(`${config.root}/api/v1/profile/pet/pet-down`,{
                 bearer:config.bearer,
                 id:data.pivot.id,
                 pet_id:data.id
@@ -1414,7 +1464,7 @@ app = new Vue({
             if(confirm('Phóng sinh cho thú cưỡi này ?'))
             {
                 this.loading = true;
-                let res = await axios.post(`${config.root}/api/v1/pet/drop-pet`,{
+                let res = await axios.post(`${config.root}/api/v1/profile/pet/drop-pet`,{
                     bearer:config.bearer,
                     id:data.pivot.id,
                     pet_id:data.id
@@ -1435,7 +1485,7 @@ app = new Vue({
         async skill()
         {
             this.loading = true;
-            let res = await axios.get(`${config.root}/api/v1/skill`,{
+            let res = await axios.get(`${config.root}/api/v1/profile/skill`,{
                 params:{
                     bearer:config.bearer,
                 },
@@ -1447,9 +1497,50 @@ app = new Vue({
             this.skills = res.data;
             this.loading = false;
         },
+        async item()
+        {
+            this.loading = true;
+            let res = await axios.get(`${config.root}/api/v1/profile/item`,{
+                params:{
+                    bearer:config.bearer,
+                },
+                headers:{
+                    pragma:this.token
+                }
+            });
+            await this.refreshToken(res);
+            this.items = res.data;
+            this.loading = false;
+        },
+        async useItem(data)
+        {
+            if(confirm('Sử dụng vật phẩm này ?'))
+            {
+                this.loading = true;
+                let res = await axios.put(`${config.root}/api/v1/profile/item/use`,{
+                    bearer:config.bearer,
+                    id:data.pivot.id,
+                    item_id:data.id
+                },{
+                    headers:{
+                        pragma:this.token
+                    }
+                });
+                await this.refreshToken(res);
+                if(res.data.code == 200)
+                {
+                    await this.index();
+                    this.item();
+                }
+                this.notify(res.data.message);
+            }
+        },
         timeAgo(time)
         {
             return moment(time).locale('vi').fromNow(true);
         },
+        numberFormat(num) {
+            return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+        }
     },
 });

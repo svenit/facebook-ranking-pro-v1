@@ -10,19 +10,19 @@
             @include('user.theme.parameter')
             @include('user.shop.base')
             <div class="vip-bordered row">                    
-                @if($pets->count() > 0)
-                    @foreach($pets as $key => $pet)
+                @if($items->count() > 0)
+                    @foreach($items as $key => $item)
                         <div class="col-6 col-md-4 col-lg-3">
                             <div class="card vip-bordered">
-                                <div @click="showInforPet({{ json_encode($pet) }},0)" class="text-center hoverable">
-                                    <div style="margin:0 auto !important" class="mount Mount_Icon_{{ $pet->class_tag }}"></div>
-                                    <p style="margin-top:10px;color:{{ $pet->rgb }}">{{ $pet->name }}</p>
+                                <div class="text-center hoverable">
+                                    <div @click="showInforItem({{ json_encode($item) }},0)" style="margin:0 auto !important" class="{{ $item->class_tag }}"></div>
+                                    <p style="margin-top:10px;color:{{ $item->rgb }}">{{ $item->name }}</p>
                                 </div>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-secondary active">
-                                        {{ number_format($pet->price) }} {{ $pet->price_type == 0 ? 'Vàng' : 'KC' }}
+                                        {{ number_format($item->price) }} {{ $item->price_type == 0 ? 'Vàng' : 'KC' }}
                                     </button> 
-                                    <button @click="buyPet({{ $pet->id }},$event)" style="border-top-left-radius:0px;border-bottom-left-radius:0px" type="button" class="btn btn-secondary">Mua</button>
+                                    <button @click="buyItem({{ $item->id }},$event)" style="border-top-left-radius:0px;border-bottom-left-radius:0px" type="button" class="btn btn-secondary">Mua</button>
                                 </div>
                             </div>
                         </div>

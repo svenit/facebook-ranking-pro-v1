@@ -7,7 +7,7 @@
             </div>
             <div class="modal-body">
                 <div class="p-4 text-center">
-                    <div title="Nhấp vào để xem thông số" style="margin:0px 10px 35px 0px" class="character-sprites hoverable {{ Auth::user()->isVip == 1 ? 'vip-2' : '' }}">
+                    <div  style="margin:0px 10px 35px 0px" class="character-sprites hoverable {{ Auth::user()->isVip == 1 ? 'vip-2' : '' }}">
                         <span v-if="data.pet" :class="`Mount_Body_${data.pet.class_tag}`"></span>
                         <span class="hair_flower_3"></span>
                         <span class="chair_none"></span>
@@ -46,8 +46,7 @@
                                 @{{ data.level.next_level }} 
                                 ( @{{ data.level.percent }} % )
                                 <div class="progress my-3 circle" style="height:6px">
-                                    <div class="progress-bar circle gd-info"
-                                        :title="'Người này cần '+ (data.level.next_level_exp - data.level.current_user_exp) +' kinh nghiệm nữa để lên cấp'" :style="{width:data.level.percent + '%'}">
+                                    <div class="progress-bar circle gd-info" data-title="tooltip" :title="`Người này cần ${(data.level.next_level_exp - data.level.current_user_exp)} kinh nghiệm nữa để lên cấp`" :style="{width:data.level.percent + '%'}">
                                     </div>
                                 </div>
                             </div>
@@ -113,7 +112,7 @@
                 <br>
                 <p class="text-gold">Trang Bị</p>
                 <div class="row row-sm">
-                    <div v-for="(gear,index) in data.gears" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
+                    <div v-for="(gear,index) in data.gears" :key="index" style="margin-bottom:15px" class="col-3 d-flex" data-title="tooltip" title="Click để xem chi tiết" >
                         <div class="flex">
                             <div @click="showGearsDescription(gear,1)" :class="`hoverable ${gear.shop_tag}`" :style="{borderRadius:'5px',border:`1px solid ${gear.rgb}`,backgroundColor:'#272727'}"></div>
                         </div>
@@ -128,7 +127,7 @@
                 <p class="text-gold">Kỹ Năng</p>
                 <div class="row row-sm">
                     <div v-for="(skill,index) in data.skills" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
-                        <div class="flex hoverable">
+                        <div data-title="tooltip" title="Click để xem chi tiết" class="flex hoverable">
                             <img title @click="showSkillsDescription(skill,1)" data-toggle="tooltip" :style="{borderRadius:'5px',width:'68px',height:'68px',border:`1px solid ${skill.rgb}`}" :src="skill.image">
                         </div>
                     </div>
@@ -226,7 +225,7 @@
                 <button type="button" @click="deleteEquipment(detailGear.data)" class="btn bg-danger-lt" data-dismiss="modal">
                     Vứt Bỏ
                 </button>
-                <button v-if="detailGear.data.pivot.status == 0" type="button" @click="equipment(detailGear.data)" class="btn btn-secondary" data-dismiss="modal">
+                <button v-if="detailGear.data.pivot.status == 0" type="button" @click="equipment(detailGear.data)" class="btn btn-success" data-dismiss="modal">
                     Trang bị
                 </button>
                 <button v-else type="button" @click="removeEquipment(detailGear.data)" class="btn btn-secondary" data-dismiss="modal">
@@ -321,11 +320,46 @@
                 <button type="button" @click="dropPet(detailPet.data)" class="btn bg-danger-lt" data-dismiss="modal">
                     Thả
                 </button>
-                <button v-if="detailPet.data.pivot.status == 0" type="button" @click="ridingPet(detailPet.data)" class="btn btn-secondary" data-dismiss="modal">
+                <button v-if="detailPet.data.pivot.status == 0" type="button" @click="ridingPet(detailPet.data)" class="btn btn-success" data-dismiss="modal">
                     Cưỡi
                 </button>
                 <button v-else type="button" @click="petDown(detailPet.data)" class="btn btn-secondary" data-dismiss="modal">
                     Xuống
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+<div id="item" v-if="detailItem.data" class="modal fade pet top-off" data-backdrop="true" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <p :style="{fontSize:'14px'}">@{{ detailItem.data.name }}</p>
+                <button class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="character-sprites" :style="{margin:'0 auto',width:'68px',height:'68px',border:'1px solid #cd8e2c'}">
+                            <div :class="detailItem.data.class_tag"></div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <p class="text-success">Tỉ lệ thành công : @{{ detailItem.data.success_rate }}%</p>
+                        <p class="text-warning">Sử dụng : Ai cũng có thể sử dụng</p>
+                    </div>
+                    <div style="margin:20px 10px" class="col-12">
+                        <p>@{{ detailItem.data.description || '( Không có thông tin thêm về vật phẩm này )' }}</p>
+                    </div>
+                </div>
+            </div>
+            <div v-if="detailItem.permission == 1" class="modal-footer">
+                <button type="button" @click="deleteItem(detailItem.data)" class="btn bg-danger-lt" data-dismiss="modal">
+                    Vứt Bỏ
+                </button>
+                <button type="button" @click="useItem(detailItem.data)" class="btn btn-success" data-dismiss="modal">
+                    Dùng
                 </button>
             </div>
         </div>
@@ -498,7 +532,8 @@
                     <li class="{{ Request::is('profile/*') ? 'active' : '' }}"><a href="#"><span class="nav-icon"><i data-feather="user"></i></span> <span
                         class="nav-text">Nhân Vật</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
-                            <li><a href="{{ Route('user.profile.inventory.index') }}" class=""><span class="nav-text">Rương Đồ</span></a></li>
+                            <li><a href="{{ Route('user.profile.item.index') }}" class=""><span class="nav-text">Vật Phẩm</span></a></li>
+                            <li><a href="{{ Route('user.profile.inventory.index') }}" class=""><span class="nav-text">Trang Bị</span></a></li>
                             <li><a href="{{ Route('user.profile.pet.index') }}" class=""><span class="nav-text">Thú Cưỡi</span></a></li>
                             <li><a href="{{ Route('user.profile.skill.index') }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
                         </ul>
@@ -524,6 +559,7 @@
                     <li class="{{ Request::is('shop/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shopping-cart"></i></span> <span
                         class="nav-text">Cửa Hàng</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
+                            <li><a href="{{ Route('user.shop.index',['cate' => 'items']) }}" class=""><span class="nav-text">Vật Phẩm</span></a></li>
                             @foreach($menuShop as $menu)
                                 <li><a href="{{ Route('user.shop.index',['cate' => str_slug($menu->name)]) }}" class=""><span class="nav-text">{{ $menu->name }}</span></a></li>
                             @endforeach

@@ -10,6 +10,6 @@ class InventoryController extends Controller
     public function index()
     {
         $cates = CateGear::all();
-        return view('user.profile.inventory.index',compact('cates'));
+        return view('user.profile.inventory',compact('cates'));
     }
 }

@@ -8,6 +8,7 @@ use App\Model\Character;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Model\Item;
 
 class ShopController extends Controller
 {
@@ -44,5 +45,10 @@ class ShopController extends Controller
     {
         $pets = Pet::where('status',1)->get();
         return view('user.shop.pet',compact('pets'));
+    }
+    public function item()
+    {
+        $items = Item::where('status',1)->get();
+        return view('user.shop.item',compact('items'));
     }
 }

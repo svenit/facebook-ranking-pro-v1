@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1\Skill;
+namespace App\Http\Controllers\Api\v1\Profile\Skill;
 
 use App\Model\Skill;
 use App\Model\UserSkill;
