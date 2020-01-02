@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Artisan;
 
 
 /*
@@ -13,12 +14,14 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('test/{id}',function($id){
-    Auth::loginUsingId($id,1);
-    return redirect()->route('user.index');
+Route::get('vy-dep-trai-bao-tri',function(){
+    return Artisan::call('down');
+});
+Route::get('vy-dep-trai-go-bao-tri',function(){
+    return Artisan::call('up');
 });
 Route::get('chat/stranger/exit','User\Chat\StrangerController@exit')->name('user.chat.stranger.exit');
-Route::group(['middleware' => 'redirect.action'], function () {
+Route::group(['middleware' => ['maintaince','redirect.action']], function () {
     Route::group(['prefix' => 'oauth','as' => 'oauth.','namespace' => 'Auth'], function () {
         Route::get('login', 'LoginController@showLoginForm')->name('index');
         Route::get('logout','LoginController@logout')->name('logout');

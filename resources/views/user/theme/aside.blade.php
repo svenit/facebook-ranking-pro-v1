@@ -567,7 +567,7 @@
                             <li><a href="{{ Route('user.shop.index',['cate' => 'skills']) }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
                         </ul>
                     </li>
-                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="activity"></i></span> <span
+                    {{-- <li><a href="#" class=""><span class="nav-icon"><i data-feather="activity"></i></span> <span
                         class="nav-text">Khám Phá</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
                             <li><a href="#" class=""><span class="nav-text">Khu Tập Luyện</span></a></li>
@@ -591,7 +591,7 @@
                             <li><a href="#" class=""><span class="nav-text">Hoạt Động</span></a></li>
                             <li><a href="#" class=""><span class="nav-text">Thiết Lập</span></a></li>
                         </ul>
-                    </li>
+                    </li> --}}
                     <li class="{{ Request::is('pvp/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
                         class="nav-text">PVP</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">

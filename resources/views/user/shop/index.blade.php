@@ -27,7 +27,7 @@
                                 @foreach($gear->items as $key => $item)
                                 <div data-title="tooltip" title="Click vào để xem chi tiết" class="col-6 col-md-4 col-lg-3">
                                     <div class="card vip-bordered">
-                                        <div @click="showequipsDescription({{ json_encode($item) }},0)" class="text-center hoverable">
+                                        <div @click="showGearsDescription({{ json_encode($item) }},0)" class="text-center hoverable">
                                             <div style="margin:0 auto" class="{{ $item->shop_tag }}"></div>
                                             <p :style="{color:'{{ $item->rgb }}'}">{{ $item->name }}</p>
                                         </div>

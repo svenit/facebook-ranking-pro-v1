@@ -14,7 +14,7 @@
                                             <div class="px-4 flex">
                                                 <small class="text-gold">Xếp Hạng</small>
                                                 <div class="text-gold-2 mt-2"><i class="fas fa-trophy"></i>
-                                                    @{{ data.rank.power }}</div>
+                                                    @{{ numberFormatDetail(data.rank.power) }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -22,7 +22,7 @@
                                         <div class="d-flex align-items-center text-hover-warning">
                                             <div class="px-4 flex">
                                                 <small class="text-gold">Lực Chiến</small>
-                                                <div data-title="tooltip" :title="data.power.total" class="text-gold-2 mt-2"><i class="fas fa-fist-raised"></i>
+                                                <div data-title="tooltip" :title="numberFormatDetail(data.power.total)" class="text-gold-2 mt-2"><i class="fas fa-fist-raised"></i>
                                                     @{{ numberFormat(data.power.total) }}</div>
                                             </div>
                                         </div>
@@ -31,7 +31,7 @@
                                         <div class="d-flex align-items-center text-hover-warning">
                                             <div class="px-4 flex">
                                                 <small class="text-gold">Vàng</small>
-                                                <div data-title="tooltip" :title="data.infor.coins" class="text-gold-2 mt-2"><i class="fas fa-usd-circle"></i>
+                                                <div data-title="tooltip" :title="numberFormatDetail(data.infor.coins)" class="text-gold-2 mt-2"><i class="fas fa-usd-circle"></i>
                                                     @{{ numberFormat(data.infor.coins) }}</div>
                                             </div>
                                         </div>
@@ -40,7 +40,7 @@
                                         <div class="d-flex align-items-center text-hover-warning">
                                             <div class="px-4 flex">
                                                 <small class="text-gold">Kim Cương</small>
-                                                <div data-title="tooltip" :title="data.infor.gold" class="text-gold-2 mt-2"><i class="fas fa-gem"></i>
+                                                <div data-title="tooltip" :title="numberFormatDetail(data.infor.gold)" class="text-gold-2 mt-2"><i class="fas fa-gem"></i>
                                                     @{{ numberFormat(data.infor.gold) }}</div>
                                             </div>
                                         </div>

@@ -564,7 +564,7 @@ app = new Vue({
         async useSkill(id)
         {
             this.loading = true;
-            let res = await axios.put(`${config.root}/api/v1/profile/skill/use`,{
+            let res = await axios.post(`${config.root}/api/v1/profile/skill/use`,{
                 bearer:config.bearer,
                 id:id
             },{
@@ -580,7 +580,7 @@ app = new Vue({
         async removeSkill(id)
         {
             this.loading = true;
-            let res = await axios.put(`${config.root}/api/v1/profile/skill/remove`,{
+            let res = await axios.post(`${config.root}/api/v1/profile/skill/remove`,{
                 bearer:config.bearer,
                 id:id
             },{
@@ -1268,7 +1268,7 @@ app = new Vue({
         async removeEquipment(data)
         {
             this.loading = true;
-            let res = await axios.put(`${config.root}/api/v1/profile/inventory/remove`,{
+            let res = await axios.post(`${config.root}/api/v1/profile/inventory/remove`,{
                 bearer:config.bearer,
                 id:data.pivot.id,
                 gear_id:data.id
@@ -1285,7 +1285,7 @@ app = new Vue({
         async equipment(data)
         {
             this.loading = true;
-            let res = await axios.put(`${config.root}/api/v1/profile/inventory/equipment`,{
+            let res = await axios.post(`${config.root}/api/v1/profile/inventory/equipment`,{
                 bearer:config.bearer,
                 id:data.pivot.id,
                 gear_id:data.id
@@ -1423,7 +1423,7 @@ app = new Vue({
         async ridingPet(data)
         {
             this.loading = true;
-            let res = await axios.put(`${config.root}/api/v1/profile/pet/riding`,{
+            let res = await axios.post(`${config.root}/api/v1/profile/pet/riding`,{
                 bearer:config.bearer,
                 id:data.pivot.id,
                 pet_id:data.id
@@ -1443,7 +1443,7 @@ app = new Vue({
         async petDown(data)
         {
             this.loading = true;
-            let res = await axios.put(`${config.root}/api/v1/profile/pet/pet-down`,{
+            let res = await axios.post(`${config.root}/api/v1/profile/pet/pet-down`,{
                 bearer:config.bearer,
                 id:data.pivot.id,
                 pet_id:data.id
@@ -1518,7 +1518,7 @@ app = new Vue({
             if(confirm('Sử dụng vật phẩm này ?'))
             {
                 this.loading = true;
-                let res = await axios.put(`${config.root}/api/v1/profile/item/use`,{
+                let res = await axios.post(`${config.root}/api/v1/profile/item/use`,{
                     bearer:config.bearer,
                     id:data.pivot.id,
                     item_id:data.id
@@ -1540,8 +1540,29 @@ app = new Vue({
         {
             return moment(time).locale('vi').fromNow(true);
         },
-        numberFormat(num) {
+        numberFormat(num)
+        {
+            var si = [
+                { value: 1, symbol: "" },
+                { value: 1E3, symbol: "K" },
+                { value: 1E6, symbol: "M" },
+                { value: 1E9, symbol: "G" },
+                { value: 1E12, symbol: "T" },
+                { value: 1E15, symbol: "P" },
+                { value: 1E18, symbol: "E" }
+            ];
+            var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+            var i;
+            for (i = si.length - 1; i > 0; i--) {
+                if (num >= si[i].value) {
+                    break;
+                }
+            }
+            return (num / si[i].value).toFixed(3).replace(rx, "$1") + si[i].symbol;
+        },
+        numberFormatDetail(num) {
             return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
-        }
+        },
     },
 });
+

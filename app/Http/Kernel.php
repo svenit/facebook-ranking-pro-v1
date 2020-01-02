@@ -71,7 +71,8 @@ class Kernel extends HttpKernel
         'cors' => \App\Http\Middleware\Cors::class,
         'redirect.action' => \App\Http\Middleware\RedirectIfInAction::class,
         'prevent.api' => \App\Http\Middleware\PreventActionWhenTracking::class,
-        'prevent' => \App\Http\Middleware\PreventTracking::class
+        'prevent' => \App\Http\Middleware\PreventTracking::class,
+        'maintaince' => \App\Http\Middleware\MaintainceGate::class
     ];
 
     /**

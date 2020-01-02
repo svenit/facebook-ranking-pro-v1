@@ -37,25 +37,25 @@ Route::group(['prefix' => 'v1','namespace' => 'Api\v1','middleware' => 'cors'], 
     Route::group(['prefix' => 'profile','namespace' => 'Profile'], function () {
         Route::group(['prefix' => 'inventory','namespace' => 'Inventory'], function () {
             Route::get('/','InventoryController');
-            Route::put('equipment','InventoryController@equipment');
+            Route::post('equipment','InventoryController@equipment');
             Route::post('delete','InventoryController@delete');
-            Route::put('remove','InventoryController@removeEquipment');
+            Route::post('remove','InventoryController@removeEquipment');
         });
         Route::group(['prefix' => 'pet','namespace' => 'Pet'], function () {
             Route::get('/','PetController');
-            Route::put('riding','PetController@riding');
-            Route::put('pet-down','PetController@petDown');
+            Route::post('riding','PetController@riding');
+            Route::post('pet-down','PetController@petDown');
             Route::post('drop-pet','PetController@dropPet');
         });
         Route::group(['prefix' => 'skill','namespace' => 'Skill'], function () {
             Route::get('/','SkillController');
-            Route::put('use','SkillController@useSkill');
-            Route::put('remove','SkillController@removeSkill');
+            Route::post('use','SkillController@useSkill');
+            Route::post('remove','SkillController@removeSkill');
             Route::post('delete','SkillController@deleteSkill');
         });      
         Route::group(['prefix' => 'item','namespace' => 'Item'], function () {
             Route::get('/','ItemController');
-            Route::put('use','ItemController@use');
+            Route::post('use','ItemController@use');
             Route::post('delete','ItemController@delete');
         });
     });
