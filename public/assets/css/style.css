@@ -331,3 +331,7 @@ img:hover {
 {
     z-index: 999999999;
 }
+.items
+{
+    background: transparent !important;
+}
