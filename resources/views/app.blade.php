@@ -25,9 +25,6 @@
 </head>
 <body>
 	<script>
-		$(document).ready(function(){
-			$('[data-title="tooltip"]').tooltip();   
-		});
 		config={root:"{{url('/')}}",current_url:"{{url()->current()}}",auth:{{Auth::check() ? 1 : 0}},bearer:"{{str_random(50)}}",detect:{{Auth::check() && Auth::user()->isAdmin ? 'false' : 'true'}}};
 	</script>
 	<noscript>

@@ -105,6 +105,8 @@ class FindMatchController extends BaseController
                                     ]);
                                     if(isset($updateRoom,$updateEnemy,$updateYou))
                                     {
+                                        Auth::user()->decrement('pvp_times');
+                                        Auth::user()->decrement('energy',$this->wasteEnergy);
                                         $time = 60;
                                         break;
                                     }

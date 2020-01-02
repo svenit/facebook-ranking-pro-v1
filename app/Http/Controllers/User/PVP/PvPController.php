@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Request as RouteName;
 
 class PvPController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('prevent');
+    }
     public function index()
     {
         return view('user.pvp.index');

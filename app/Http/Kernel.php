@@ -70,7 +70,8 @@ class Kernel extends HttpKernel
         'user' => \App\Http\Middleware\UserCheckPoint::class,
         'cors' => \App\Http\Middleware\Cors::class,
         'redirect.action' => \App\Http\Middleware\RedirectIfInAction::class,
-        'prevent' => \App\Http\Middleware\PreventActionWhenTracking::class
+        'prevent.api' => \App\Http\Middleware\PreventActionWhenTracking::class,
+        'prevent' => \App\Http\Middleware\PreventTracking::class
     ];
 
     /**

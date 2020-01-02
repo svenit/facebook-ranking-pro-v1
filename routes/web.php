@@ -47,6 +47,7 @@ Route::group(['middleware' => 'redirect.action'], function () {
                     Route::get('/','WheelController@index')->name('wheel');
                     Route::get('data','WheelController@data')->name('data');
                 });
+                Route::get('lucky-box','LuckyBoxController@index')->name('lucky-box');
             });
             Route::group(['prefix' => 'pvp','as' => 'pvp.','namespace' => 'PVP'], function () {
                 Route::get('list-room','PvPController@index')->name('index');

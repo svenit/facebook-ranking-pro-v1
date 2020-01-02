@@ -237,6 +237,7 @@ app = new Vue({
         }
         this.loading = false;
         this.flash = false;
+        $('[data-title="tooltip"]').tooltip();   
     },
     updated() 
     {

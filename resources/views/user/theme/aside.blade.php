@@ -46,7 +46,7 @@
                                 @{{ data.level.next_level }} 
                                 ( @{{ data.level.percent }} % )
                                 <div class="progress my-3 circle" style="height:6px">
-                                    <div class="progress-bar circle gd-info" data-title="tooltip" :title="`Người này cần ${(data.level.next_level_exp - data.level.current_user_exp)} kinh nghiệm nữa để lên cấp`" :style="{width:data.level.percent + '%'}">
+                                    <div class="progress-bar circle gd-info" data-title="tooltip" :title="`Bạn cần ${(data.level.next_level_exp - data.level.current_user_exp)} kinh nghiệm nữa để lên cấp`" :style="{width:data.level.percent + '%'}">
                                     </div>
                                 </div>
                             </div>
@@ -553,7 +553,7 @@
                                 class="nav-text">Giải Trí</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
                             <li><a href="{{ Route('user.events.wheel') }}" class=""><span class="nav-text">VQMM</span></a></li>
-                            <li><a href="#" class=""><span class="nav-text">Kho Báu</span></a></li>
+                            <li><a href="{{ Route('user.events.lucky-box') }}" class=""><span class="nav-text">Kho Báu</span></a></li>
                         </ul>
                     </li>
                     <li class="{{ Request::is('shop/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shopping-cart"></i></span> <span

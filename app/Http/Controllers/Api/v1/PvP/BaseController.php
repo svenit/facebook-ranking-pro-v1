@@ -19,6 +19,7 @@ class BaseController extends Controller
     protected $gameOver = [1,2];
     protected $parameter = 0;
     protected $percent = 1;
+    protected $wasteEnergy = 5;
 
     public function __construct(Config $config)
     {
@@ -110,27 +111,35 @@ class BaseController extends Controller
         $room = Room::where([['name',$request->room],['people',2],['is_fighting',0]])->first();
         if(isset($room))
         {
-            $toggleReady = FightRoom::where([['room_id',$room->id],['user_challenge',Auth::id()],['user_receive_challenge',null]])->update([
-                'is_ready' => $request->status == 1 ? 1 : 0,
-                'status' => null,
-                'turn' => 0
-            ]);
-            if(isset($toggleReady))
+            if(Auth::user()->energy >=  $this->wasteEnerg && Auth::user()->pvp_times > 0)
             {
-                return response()->json([
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => $request->status == 1 ? 'Sẵn sàng' : 'Đã hủy'
-                ],200);
+                $toggleReady = FightRoom::where([['room_id',$room->id],['user_challenge',Auth::id()],['user_receive_challenge',null]])->update([
+                    'is_ready' => $request->status == 1 ? 1 : 0,
+                    'status' => null,
+                    'turn' => 0
+                ]);
+                if(isset($toggleReady))
+                {
+                    return response()->json([
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => $request->status == 1 ? 'Sẵn sàng' : 'Đã hủy'
+                    ],200);
+                }
+                else
+                {
+                    return response()->json([
+                        'status' => 'error',
+                        'code' => 404,
+                        'message' => 'Đã có lỗi xảy ra'
+                    ],201);
+                }
             }
-            else
-            {
-                return response()->json([
-                    'status' => 'error',
-                    'code' => 404,
-                    'message' => 'Đã có lỗi xảy ra'
-                ],201);
-            }
+            return response()->json([
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Bạn đã hết năng lượng hoặc không đủ lượt tham gia PVP'
+            ],201);
         }
         else
         {

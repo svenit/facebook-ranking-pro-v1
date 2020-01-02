@@ -13,7 +13,7 @@ class ItemController extends Controller
 {
     public function __construct()
     {
-        return $this->middleware('prevent')->except(['__invoke']);
+        return $this->middleware('prevent.api')->except(['__invoke']);
     }
     public function __invoke()
     {

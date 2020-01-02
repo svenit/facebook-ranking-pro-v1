@@ -14,44 +14,55 @@ use Illuminate\Support\Facades\Request as RouteName;
 
 class StrangerController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('prevent')->except(['exit']);
+    }
     public function __invoke()
     {
-        $findRoom = ChatRoom::where('people',1)->first();
-        $checkRoom = ChatConversation::where('user_id',Auth::id())->first();
-        if(empty($checkRoom))
+        if(Auth::user()->stranger_chat_times > 0)
         {
-            if(isset($findRoom))
+            $findRoom = ChatRoom::where('people',1)->first();
+            $checkRoom = ChatConversation::where('user_id',Auth::id())->first();
+            if(empty($checkRoom))
             {
-                ChatConversation::create([
-                    'user_id' => Auth::id(),
-                    'room_id' => $findRoom->id
-                ]);
-                event(new JoinChatRoom($findRoom->name));
-                return redirect()->route('user.chat.stranger.room',['name' => $findRoom->name]);
+                if(isset($findRoom))
+                {
+                    ChatConversation::create([
+                        'user_id' => Auth::id(),
+                        'room_id' => $findRoom->id
+                    ]);
+                    event(new JoinChatRoom($findRoom->name));
+                    return redirect()->route('user.chat.stranger.room',['name' => $findRoom->name]);
+                }
+                else
+                {
+                    $createRoom = ChatRoom::create([
+                        'name' => uniqid().time(),
+                        'people' => 0
+                    ]);
+                    ChatConversation::create([
+                        'user_id' => Auth::id(),
+                        'room_id' => $createRoom->id
+                    ]);
+                    if(isset($createRoom))
+                    {
+                        return redirect()->route('user.chat.stranger.room',['name' => $createRoom->name]);
+                    }
+                }
             }
             else
             {
-                $createRoom = ChatRoom::create([
-                    'name' => uniqid().time(),
-                    'people' => 0
+                return redirect()->route('user.index')->with([
+                    'status' => 'error',
+                    'message' => 'Bạn đang ở trong 1 phòng khác'
                 ]);
-                ChatConversation::create([
-                    'user_id' => Auth::id(),
-                    'room_id' => $createRoom->id
-                ]);
-                if(isset($createRoom))
-                {
-                    return redirect()->route('user.chat.stranger.room',['name' => $createRoom->name]);
-                }
             }
         }
-        else
-        {
-            return redirect()->route('user.index')->with([
-                'status' => 'error',
-                'message' => 'Bạn đang ở trong 1 phòng khác'
-            ]);
-        }
+        return redirect()->route('user.index')->with([
+            'status' => 'warning',
+            'message' => 'Bạn đã hết lượt chat, xin vui lòng mua thêm trong cửa hàng'
+        ]);
     }
     public function chatRoom($name)
     {
@@ -63,6 +74,7 @@ class StrangerController extends Controller
             if(empty($tracking))
             {
                 $this->tracking(1);
+                Auth::user()->decrement('stranger_chat_times');
             }
             return view('user.chat.stranger',compact('room'));
         }
@@ -92,7 +104,6 @@ class StrangerController extends Controller
                 }
                 else
                 {
-                    Auth::user()->chat()->detach($coversation->room_id);
                     $room->decrement('people');
                     event(new ExitChatRoom($room->first()->name));
                 }

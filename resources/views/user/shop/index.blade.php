@@ -13,21 +13,21 @@
                 <div class="b-b">
                     <div class="nav-active-border b-primary bottom">
                         <ul class="nav" id="myTab" role="tablist">
-                            @foreach($gears as $key => $character)
+                            @foreach($equips as $key => $character)
                                 <li class="nav-item"><a class="nav-link {{ $character->id == Auth::user()->character->id ? 'active' : '' }}" id="{{ $character->id }}-tab" data-toggle="tab" href="#home{{ $character->id }}" role="tab" aria-controls="home{{ $character->id }}" aria-selected="{{ $key == 0 ? 'true' : 'false' }}">{{ $character->name }}</a></li>
                             @endforeach
                         </ul>
                     </div>
                 </div>
                 <div class="tab-content p-3">
-                    @foreach($gears as $key => $gear)
+                    @foreach($equips as $key => $gear)
                     <div class="tab-pane fade {{ $gear->id == Auth::user()->character->id ? 'show active' : '' }}" id="home{{ $gear->id }}" role="tabpanel" aria-labelledby="{{ $gear->id }}-tab">
                         <div class="row">
                             @if($gear->items->count() > 0)
                                 @foreach($gear->items as $key => $item)
-                                <div class="col-6 col-md-4 col-lg-3">
+                                <div data-title="tooltip" title="Click vào để xem chi tiết" class="col-6 col-md-4 col-lg-3">
                                     <div class="card vip-bordered">
-                                        <div @click="showGearsDescription({{ json_encode($item) }},0)" class="text-center hoverable">
+                                        <div @click="showequipsDescription({{ json_encode($item) }},0)" class="text-center hoverable">
                                             <div style="margin:0 auto" class="{{ $item->shop_tag }}"></div>
                                             <p :style="{color:'{{ $item->rgb }}'}">{{ $item->name }}</p>
                                         </div>
