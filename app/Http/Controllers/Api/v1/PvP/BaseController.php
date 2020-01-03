@@ -138,7 +138,7 @@ class BaseController extends Controller
             return response()->json([
                 'status' => 'error',
                 'code' => 404,
-                'message' => 'Bạn đã hết năng lượng hoặc không đủ lượt tham gia PVP'
+                'message' => 'Bạn không đủ sức khỏe hoặc lượt tham gia PVP'
             ],201);
         }
         else

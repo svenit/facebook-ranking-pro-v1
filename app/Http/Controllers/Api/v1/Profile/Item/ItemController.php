@@ -48,8 +48,7 @@ class ItemController extends Controller
                             $queries = explode('^',$userItem->item->query);
                             foreach($queries as $query)
                             {
-                                $query = str_replace("?",Auth::id(),$query);
-                                $exec = DB::statement($query);
+                                $exec = DB::statement($this->replaceStatement($query));
                             }
                             if(isset($exec))
                             {

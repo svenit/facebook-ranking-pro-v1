@@ -39,10 +39,14 @@ class CreateUsersTable extends Migration
             $table->bigInteger('armor_strength')->default(0);
             $table->bigInteger('armor_intelligent')->default(0);
             $table->bigInteger('full_power')->default(0);
+            $table->integer('pvp_points')->default(0);
             $table->tinyInteger('isVip')->default(0);
             $table->tinyInteger('isAdmin')->default(0);
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password')->nullable();
+            $table->string('lat')->nullable();
+            $table->string('lng')->nullable();
+            $table->integer('energy')->default(0);
+            $table->integer('pvp_times')->default(0);
+            $table->integer('stranger_chat_times')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

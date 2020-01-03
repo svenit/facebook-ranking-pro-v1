@@ -33,6 +33,8 @@ class CreateSkillsTable extends Migration
             $table->integer('energy')->default(0);
             $table->integer('success_rate')->default(0);
             $table->string('rgb')->nullable();
+            $table->bigInteger('price')->default(0);
+            $table->tinyInteger('price_type')->default(0);
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });

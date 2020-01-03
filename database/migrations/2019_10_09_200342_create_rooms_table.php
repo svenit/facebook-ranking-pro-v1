@@ -22,8 +22,9 @@ class CreateRoomsTable extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table->string('name');
-            $table->tinyInteger('people');
-            $table->string('password')->nullable();
+            $table->tinyInteger('people')->default(0);
+            $table->tinyInteger('is_fighting')->default(0);
+            $table->dateTime('started_at')->nullable();
             $table->timestamps();
         });
     }

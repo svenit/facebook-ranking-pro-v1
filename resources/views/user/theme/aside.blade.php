@@ -567,21 +567,21 @@
                             <li><a href="{{ Route('user.shop.index',['cate' => 'skills']) }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
                         </ul>
                     </li>
-                    {{-- <li><a href="#" class=""><span class="nav-icon"><i data-feather="activity"></i></span> <span
+                    <li class="{{ Request::is('explore/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="activity"></i></span> <span
                         class="nav-text">Khám Phá</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
                             <li><a href="#" class=""><span class="nav-text">Khu Tập Luyện</span></a></li>
                             <li><a href="#" class=""><span class="nav-text">Trường Học</span></a></li>
                             <li><a href="#" class=""><span class="nav-text">Nhiệm Vụ</span></a></li>
-                            <li><a href="#" class=""><span class="nav-text">Phòng Hồi Phục</span></a></li>
+                            <li><a href="{{ Route('user.explore.recovery-room.index') }}" class=""><span class="nav-text">Phòng Hồi Phục</span></a></li>
                         </ul>
                     </li>
-                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="zap"></i></span> <span
+                    {{-- <li><a href="#" class=""><span class="nav-icon"><i data-feather="zap"></i></span> <span
                         class="nav-text">Trinh Phạt</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
                             <li><a href="#" class=""><span class="nav-text">Farm Quái</span></a></li>
                         </ul>
-                    </li>
+                    </li> --}}
                     <li><a href="#" class=""><span class="nav-icon"><i data-feather="users"></i></span> <span
                         class="nav-text">Bang Hội</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
@@ -591,7 +591,7 @@
                             <li><a href="#" class=""><span class="nav-text">Hoạt Động</span></a></li>
                             <li><a href="#" class=""><span class="nav-text">Thiết Lập</span></a></li>
                         </ul>
-                    </li> --}}
+                    </li>
                     <li class="{{ Request::is('pvp/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
                         class="nav-text">PVP</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
@@ -620,10 +620,7 @@
         </div>
         <div class="no-shrink">
             <div class="p-3 d-flex align-items-center">
-                <div class="text-sm hidden-folded text-muted">Exp : @{{ data.level.percent }} %</div>
-                <div class="progress mx-2 flex" style="height:4px">
-                    <div class="progress-bar gd-success" :style="{width:data.level.percent + '%'}"></div>
-                </div>
+                <div class="text-sm hidden-folded {{ Auth::user()->energy >= 60 ? 'text-success' : 'text-danger' }}">Sức Khỏe : {{ Auth::user()->energy }} <i class="fas fa-walking"></i></div>
             </div>
         </div>
     </div>

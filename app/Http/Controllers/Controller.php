@@ -17,6 +17,19 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    public function replaceStatement($string)
+    {
+        $replace = $string;
+        $configs = [
+            ':id' => Auth::id(),
+            ':character_id' => Auth::user()->character->id
+        ];
+        foreach($configs as $key => $config)
+        {
+            $replace = str_replace($key,$config,$replace);
+        }
+        return $replace;
+    }
     public function tracking($redirect)
     {
         if(Auth::check())

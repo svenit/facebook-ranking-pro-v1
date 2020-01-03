@@ -31,6 +31,7 @@ class CreateFightRoomsTable extends Migration
             $table->integer('user_challenge_energy')->default(0);
             $table->integer('user_receive_challenge')->nullable();
             $table->tinyInteger('turn')->default(0);
+            $table->tinyInteger('is_ready')->default(0);
             $table->tinyInteger('status')->nullable();
             $table->timestamps();
         });

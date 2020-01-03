@@ -23,10 +23,9 @@ class SpinController extends Controller
                 if($data[0] == md5(strrev($hash)))
                 {
                     $findGif = SpinWheel::where([[DB::raw("md5(id)"),$data[1]],[DB::raw("md5(type)"),$data[2]],[DB::raw("md5(probability)"),$data[3]]])->first();
-                    if(isset($findGif))
+                    if(isset($findGif->query))
                     {
-                        $query = str_replace("?",Auth::id(),$findGif->query);
-                        $receiveGif = DB::statement($query);
+                        $receiveGif = DB::statement($this->replaceStatement($findGif->query));
                         if($receiveGif)
                         {
                             Session::forget('spinning');

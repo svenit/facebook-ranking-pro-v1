@@ -28,6 +28,9 @@ class CreatePetsTable extends Migration
             $table->integer('level_required')->default(0);
             $table->integer('vip_required')->default(0);
             $table->string('rgb')->nullable();
+            $table->tinyInteger('price_type')->default(0);
+            $table->bigInteger('price')->default(0);
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });
     }

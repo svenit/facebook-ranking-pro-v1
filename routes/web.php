@@ -77,6 +77,14 @@ Route::group(['middleware' => ['maintaince','redirect.action']], function () {
                 Route::get('skills','Skill\SkillController@index')->name('skill.index');
                 Route::get('items','Item\ItemController@index')->name('item.index');
             });
+            Route::group(['prefix' => 'explore','as' => 'explore.'], function () {
+                Route::group(['prefix' => 'recovery-room','as' => 'recovery-room.','namespace' => 'RecoveryRoom'], function () {
+                    Route::get('/','RecoveryRoomController@index')->name('index');
+                    Route::get('receive/{room_id}','RecoveryRoomController@receive')->name('receive');
+                    Route::get('join/{id}','RecoveryRoomController@join')->name('join');
+                    Route::get('cancle/{id}','RecoveryRoomController@cancle')->name('cancle');
+                });                
+            });
         });
     });
 });

@@ -16,7 +16,9 @@ class CreateConfigsTable extends Migration
         Schema::create('configs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->tinyInteger('maintaince');
-            $table->string('access_token');
+            $table->tinyInteger('limit_pvp_time_status');
+            $table->integer('limit_pvp_time');
+            $table->text('access_token');
             $table->string('group_id');
             $table->date('started_day');
             $table->integer('per_post');
