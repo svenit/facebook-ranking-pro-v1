@@ -1,4 +1,12 @@
 @auth
+@php
+    $tracking = new \App\Http\Controllers\Controller();
+@endphp
+@if($tracking->checkTracking())
+    <div style="position:fixed;top:10%;right:0px;padding:10px;z-index:99999" class="ultra-bordered card fixed-action-branch">
+        <span>Bạn đang ở trong một hoạt động</span>
+    </div>
+@endif
 <div v-if="data" class="modal fade modal-left" data-backdrop="true">
     <div style="overflow:auto" class="modal-dialog modal-left w-xl">
         <div style="min-height:100vh;background:#111 !important" class="modal-content vip-bordered no-radius">
@@ -571,7 +579,6 @@
                         class="nav-text">Khám Phá</span> <span class="nav-caret"></span></a>
                         <ul class="nav-sub nav-mega">
                             <li><a href="#" class=""><span class="nav-text">Khu Tập Luyện</span></a></li>
-                            <li><a href="#" class=""><span class="nav-text">Trường Học</span></a></li>
                             <li><a href="#" class=""><span class="nav-text">Nhiệm Vụ</span></a></li>
                             <li><a href="{{ Route('user.explore.recovery-room.index') }}" class=""><span class="nav-text">Phòng Hồi Phục</span></a></li>
                         </ul>

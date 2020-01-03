@@ -5,6 +5,7 @@
 
 @section('content')
 <div id="list-fight-room">
+    <button style="display:none" id="show-infor-user" data-toggle="modal" data-target=".modal-right" data-toggle-class="modal-open-aside" data-target="body"></button>
     <div class="page-content page-container" id="page-content">
         <div class="padding-x">
             @include('user.theme.parameter')
@@ -32,8 +33,10 @@
                                     <p style="margin-top:20px">( Trống )</p>
                                 </div>
                                 <div v-else class="chat-list">
-                                    <div v-for="(msg,index) in chat.messages" :key="index" class="chat-item" :data-class="msg.id == {{ Auth::user()->user_id }} ? 'alt' : 'null'" v-if="msg.message && msg.id && msg.name && msg.time" data-sr-id="32" style="visibility: visible; transform: none; opacity: 1; transition: transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s;">
-                                        <a v-if="msg.id != {{ Auth::user()->user_id }}" href="#" class="avatar w-40" data-pjax-state=""><img class="image" :src="`http://graph.facebook.com/${msg.id}/picture?type=normal`" alt="."></a>
+                                    <div v-for="(msg,index) in chat.messages" :key="index" class="chat-item hoverable" @click="showUserInfor(msg.id)" :data-class="msg.id == {{ Auth::user()->user_id }} ? 'alt' : 'null'" v-if="msg.message && msg.id && msg.name && msg.time" data-sr-id="32" style="visibility: visible; transform: none; opacity: 1; transition: transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s;">
+                                        <a v-if="msg.id != {{ Auth::user()->user_id }}" href="#" class="avatar w-40" data-pjax-state="">
+                                            <img class="image" :src="`http://graph.facebook.com/${msg.id}/picture?type=normal`" alt=".">
+                                        </a>
                                         <div class="chat-body">
                                             <div v-if="msg.type == 'text'" :style="{maxWidth:'300px',color:'#333',borderRadius:'25px !important',backgroundColor:msg.id == {{ Auth::user()->user_id }} ? '#e7ad55' : 'whitesmoke',}" class="chat-content rounded msg">@{{ msg.message }}</div>
                                             <div v-if="msg.type == 'attachments'" class="w-md my-3">

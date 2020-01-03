@@ -84,6 +84,6 @@ class Controller extends BaseController
     }
     public function removeAllCache()
     {
-        Artisan::call('optimize:clear');
+        Cache::flush();
     }
 }
