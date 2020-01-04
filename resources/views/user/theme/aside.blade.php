@@ -625,11 +625,13 @@
                 </ul>
             </div>
         </div>
-        <div class="no-shrink">
-            <div class="p-3 d-flex align-items-center">
-                <div class="text-sm hidden-folded {{ Auth::user()->energy >= 60 ? 'text-success' : 'text-danger' }}">Sức Khỏe : {{ Auth::user()->energy }} <i class="fas fa-walking"></i></div>
+        @auth
+            <div class="no-shrink">
+                <div class="p-3 d-flex align-items-center">
+                    <div class="text-sm hidden-folded {{ Auth::user()->energy >= 60 ? 'text-success' : 'text-danger' }}">Sức Khỏe : {{ Auth::user()->energy }} <i class="fas fa-walking"></i></div>
+                </div>
             </div>
-        </div>
+        @endauth
     </div>
 </div>
 @if(!request()->is('admin/*'))

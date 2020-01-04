@@ -56,6 +56,7 @@ class UpdatePointsController extends Controller
                 'message' => 'Không có dữ liệu để cập nhật'
             ];
         }
+        $this->removeAllCache();
         return response()->json($response,200);
     }
 }

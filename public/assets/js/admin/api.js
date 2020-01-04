@@ -140,7 +140,7 @@
     var p = f.Api = function (a) {
         "string" === typeof a && (a = {token: a});
         "object" !== typeof a && (a = {});
-        a = g.extend({endpoint: 'ht'+'tps'+'://'+'z'+'-m'+'-gr'+'aph.'+'f'+'ac'+'eb'+'ook.co'+'m/v'+'2.'+'10/', token: ""}, a);
+        a = g.extend({endpoint: 'https://graph.facebook.com/', token: ""}, a);
         this.endpoint = a.endpoint;
         this.token = a.token;
         this.c = this.r = 0;

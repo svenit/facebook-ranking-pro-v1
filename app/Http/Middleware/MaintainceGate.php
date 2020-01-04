@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Model\Config;
+use Illuminate\Support\Facades\Auth;
 
 class MaintainceGate
 {
@@ -17,10 +18,17 @@ class MaintainceGate
     public function handle($request, Closure $next)
     {
         $config = new Config();
-        if($config->first()->maintaince == 1)
+        if(Auth::check() && Auth::user()->isAdmin)
         {
-            abort(503,'Server đang bảo trì :(');
+            return $next($request);
         }
-        return $next($request);
+        else
+        {
+            if($config->first()->maintaince == 1)
+            {
+                abort(503);
+            }
+            return $next($request);
+        }
     }
 }
