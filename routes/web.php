@@ -88,8 +88,9 @@ Route::group(['middleware' => ['maintaince','redirect.action']], function () {
     });
 });
 Route::group(['prefix' => 'admin','as' => 'admin.','namespace' => 'Admin','middleware' => 'admin'], function () {
-    Route::get('/',function(){
-        return 1;
+    Route::group(['prefix' => 'dashboard','as' => 'dashboard.'], function () {
+        Route::get('/','DashboardController@index')->name('index');
+        Route::post('execute-query','DashboardController@executeQuery')->name('exceute-query');
     });
     Route::get('update-points','UpdatePointsController@index')->name('update-points');
     Route::post('update-points','UpdatePointsController@store');

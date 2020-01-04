@@ -614,11 +614,12 @@
                     </li>
                     @if(Auth::check() && Auth::user()->isAdmin)
                         <li class="nav-header hidden-folded"><span class="text-muted">Admin Cpanel</span></li>
-                        <li><a href="#" class=""><span class="nav-icon"><i data-feather="grid"></i></span> <span
-                                    class="nav-text">Admin</span> <span class="nav-caret"></span></a>
+                        <li><a href="{{ Route('admin.dashboard.index') }}"><span class="nav-icon"><i
+                            data-feather="cpu"></i></span> <span class="nav-text">Tổng Quan</span></a></li>
+                        <li><a href="#" class=""><span class="nav-icon"><i data-feather="download"></i></span> <span
+                                    class="nav-text">Cập Nhật</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('admin.update-points') }}" class=""><span class="nav-text">Cập Nhật Điểm</span></a></li>
-                                </li>
+                                <li><a href="{{ Route('admin.update-points') }}" class=""><span class="nav-text">Điểm Hoạt Động</span></a></li></li>
                             </ul>
                         </li>
                     @endif
