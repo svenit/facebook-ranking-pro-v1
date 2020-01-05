@@ -98,6 +98,13 @@ Route::group(['prefix' => 'admin','as' => 'admin.','namespace' => 'Admin','middl
         Route::get('day','AnalyticsController@baseOnDay')->name('day');
         Route::get('view-most','AnalyticsController@viewMost')->name('view-most');
     });
+    Route::group(['prefix' => 'users','as' => 'users.'], function () {
+        Route::get('list','UserController@list')->name('list');
+        Route::get('detail/{id}','UserController@detail')->name('detail');
+        Route::get('remove/{id}','UserController@remove')->name('remove');
+        Route::get('lock/{id}','UserController@lock')->name('lock');
+        Route::get('unlock/{id}','UserController@unlock')->name('unlock');
+    });
     Route::get('update-points','UpdatePointsController@index')->name('update-points');
     Route::post('update-points','UpdatePointsController@store');
 });

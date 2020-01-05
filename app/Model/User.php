@@ -137,7 +137,6 @@ class User extends Authenticatable
             $power[$key] =  collect($this->usingPets())->sum($key) + collect($this->usingGears())->sum($key) + ($this[$key]);
         }
         return collect($power);
-        return 1;
     }
     public function fullPower($id)
     {
@@ -148,5 +147,10 @@ class User extends Authenticatable
     {
         $helper = new Helper($this->id);
         return $helper->level();
+    }
+    public function nextLevel()
+    {
+        $helper = new Helper($this->id);
+        return $helper->nextLevel();
     }
 }

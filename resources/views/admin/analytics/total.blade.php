@@ -2,7 +2,7 @@
 @section('content')
 
 @section('hero','Truy Cập')
-@section('sub_hero','Lượt truy cập theo giờ')
+@section('sub_hero','Tất cả thông số')
 
 <div id="content" class="flex">
     <div id="ranking" class="">

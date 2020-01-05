@@ -15,7 +15,7 @@
             </div>
             <div class="modal-body">
                 <div class="p-4 text-center">
-                    <div  style="margin:0px 10px 35px 0px" class="character-sprites hoverable {{ Auth::user()->isVip == 1 ? 'vip-2' : '' }}">
+                    <div style="margin:0px 10px 35px 0px" class="character-sprites hoverable {{ Auth::user()->isVip == 1 ? 'vip-2' : '' }}">
                         <span v-if="data.pet" :class="`Mount_Body_${data.pet.class_tag}`"></span>
                         <span class="hair_flower_3"></span>
                         <span class="chair_none"></span>
