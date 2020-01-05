@@ -29,7 +29,7 @@ class AnalyticsController extends Controller
                 'dimensions' => 'ga:yearMonth'
             ]
         );
-        $mobileData = Analytics::performQuery(
+        $operatingSystems = Analytics::performQuery(
             Period::years(2),
             'ga:sessions',
             [
@@ -52,9 +52,7 @@ class AnalyticsController extends Controller
         $browers = Analytics::fetchTopBrowsers(Period::create(Carbon::parse(Session::get('analytics.date_start',$this->defaultStartDate)),Carbon::parse(Session::get('analytics.date_end',$this->defaultEndDate))));
         $referrers = Analytics::fetchTopReferrers(Period::create(Carbon::parse(Session::get('analytics.date_start',$this->defaultStartDate)),Carbon::parse(Session::get('analytics.date_end',$this->defaultEndDate))));
         $types = Analytics::fetchUserTypes(Period::create(Carbon::parse(Session::get('analytics.date_start',$this->defaultStartDate)),Carbon::parse(Session::get('analytics.date_end',$this->defaultEndDate))));
-
-        return $total;
-        return view('admincp.analytics.index',compact('browers','referrers','types','total','mobileData','countryData'));
+        return view('admin.analytics.total',compact('browers','referrers','types','total','operatingSystems','countryData'));
     }
     public function baseOnDay()
     {
@@ -64,12 +62,12 @@ class AnalyticsController extends Controller
     public function baseOnHour()
     {
         $analytics = Analytics::fetchVisitorsAndPageViews(Period::create(Carbon::parse(Session::get('analytics.date_start',$this->defaultStartDate)),Carbon::parse(Session::get('analytics.date_end',$this->defaultEndDate))));
-        return view('admincp.analytics.hour',compact('analytics'));
+        return view('admin.analytics.hour',compact('analytics'));
     }
     public function viewMost()
     {
         $analytics = Analytics::fetchMostVisitedPages(Period::create(Carbon::parse(Session::get('analytics.date_start',$this->defaultStartDate)),Carbon::parse(Session::get('analytics.date_end',$this->defaultEndDate))));
-        return view('admincp.analytics.most',compact('analytics'));
+        return view('admin.analytics.most',compact('analytics'));
     }
     public function setAnalyticsDays(Request $request)
     {

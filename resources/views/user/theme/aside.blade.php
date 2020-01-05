@@ -536,82 +536,78 @@
                                     data-feather="home"></i></span> <span class="nav-text">Trang Chủ</span></a></li>
                 </ul>
                 <ul class="nav">
-                    <li class="nav-header hidden-folded"><span class="text-muted">Hoạt Động</span></li>
-                    <li class="{{ Request::is('profile/*') ? 'active' : '' }}"><a href="#"><span class="nav-icon"><i data-feather="user"></i></span> <span
-                        class="nav-text">Nhân Vật</span> <span class="nav-caret"></span></a>
-                        <ul class="nav-sub nav-mega">
-                            <li><a href="{{ Route('user.profile.item.index') }}" class=""><span class="nav-text">Vật Phẩm</span></a></li>
-                            <li><a href="{{ Route('user.profile.inventory.index') }}" class=""><span class="nav-text">Trang Bị</span></a></li>
-                            <li><a href="{{ Route('user.profile.pet.index') }}" class=""><span class="nav-text">Thú Cưỡi</span></a></li>
-                            <li><a href="{{ Route('user.profile.skill.index') }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
-                        </ul>
-                    </li>
-                    <li class="{{ Request::is('top/*') ? 'active' : '' }}"><a href="#"><span class="nav-icon"><i data-feather="award"></i></span> <span
-                        class="nav-text">BXH</span> <span class="nav-caret"></span></a>
-                        <ul class="nav-sub nav-mega">
-                            <li><a href="{{ Route('user.top.power') }}" class=""><span class="nav-text">Lực Chiến</span></a></li>
-                            <li><a href="{{ Route('user.top.level') }}" class=""><span class="nav-text">Cấp Độ</span></a></li>
-                            <li><a href="{{ Route('user.top.pvp') }}" class=""><span class="nav-text">PVP</span></a></li>
-                            <li><a href="{{ Route('user.top.coin') }}" class=""><span class="nav-text">Vàng</span></a></li>
-                            <li><a href="{{ Route('user.top.gold') }}" class=""><span class="nav-text">Kim Cương</span></a></li>
-                            <li><a href="{{ Route('user.top.activities') }}" class=""><span class="nav-text">Hoạt Động</span></a></li>
-                        </ul>
-                    </li>
-                    <li class="{{ Request::is('events/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="coffee"></i></span> <span
-                                class="nav-text">Giải Trí</span> <span class="nav-caret"></span></a>
-                        <ul class="nav-sub nav-mega">
-                            <li><a href="{{ Route('user.events.wheel') }}" class=""><span class="nav-text">VQMM</span></a></li>
-                            <li><a href="{{ Route('user.events.lucky-box') }}" class=""><span class="nav-text">Kho Báu</span></a></li>
-                        </ul>
-                    </li>
-                    <li class="{{ Request::is('shop/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shopping-cart"></i></span> <span
-                        class="nav-text">Cửa Hàng</span> <span class="nav-caret"></span></a>
-                        <ul class="nav-sub nav-mega">
-                            <li><a href="{{ Route('user.shop.index',['cate' => 'items']) }}" class=""><span class="nav-text">Vật Phẩm</span></a></li>
-                            @foreach($menuShop as $menu)
-                                <li><a href="{{ Route('user.shop.index',['cate' => str_slug($menu->name)]) }}" class=""><span class="nav-text">{{ $menu->name }}</span></a></li>
-                            @endforeach
-                            <li><a href="{{ Route('user.shop.index',['cate' => 'pets']) }}" class=""><span class="nav-text">Thú Cưỡi</span></a></li>
-                            <li><a href="{{ Route('user.shop.index',['cate' => 'skills']) }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
-                        </ul>
-                    </li>
-                    <li class="{{ Request::is('explore/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="activity"></i></span> <span
-                        class="nav-text">Khám Phá</span> <span class="nav-caret"></span></a>
-                        <ul class="nav-sub nav-mega">
-                            <li><a href="#" class=""><span class="nav-text">Khu Tập Luyện</span></a></li>
-                            <li><a href="#" class=""><span class="nav-text">Nhiệm Vụ</span></a></li>
-                            <li><a href="{{ Route('user.explore.recovery-room.index') }}" class=""><span class="nav-text">Phòng Hồi Phục</span></a></li>
-                        </ul>
-                    </li>
-                    {{-- <li><a href="#" class=""><span class="nav-icon"><i data-feather="zap"></i></span> <span
-                        class="nav-text">Trinh Phạt</span> <span class="nav-caret"></span></a>
-                        <ul class="nav-sub nav-mega">
-                            <li><a href="#" class=""><span class="nav-text">Farm Quái</span></a></li>
-                        </ul>
-                    </li> --}}
-                    <li><a href="#" class=""><span class="nav-icon"><i data-feather="users"></i></span> <span
-                        class="nav-text">Bang Hội</span> <span class="nav-caret"></span></a>
-                        <ul class="nav-sub nav-mega">
-                            <li><a href="#" class=""><span class="nav-text">Tạo</span></a></li>
-                            <li><a href="#" class=""><span class="nav-text">Đại Sảnh</span></a></li>
-                            <li><a href="#" class=""><span class="nav-text">Thành Viên</span></a></li>
-                            <li><a href="#" class=""><span class="nav-text">Hoạt Động</span></a></li>
-                            <li><a href="#" class=""><span class="nav-text">Thiết Lập</span></a></li>
-                        </ul>
-                    </li>
-                    <li class="{{ Request::is('pvp/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
-                        class="nav-text">PVP</span> <span class="nav-caret"></span></a>
-                        <ul class="nav-sub nav-mega">
-                            <li><a href="{{ Route('user.pvp.index') }}" class=""><span class="nav-text">Tham Gia</span></a></li>
-                        </ul>
-                    </li>
-                    <li class="{{ Request::is('chat/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="message-circle"></i></span> <span
-                        class="nav-text">Chat</span> <span class="nav-caret"></span></a>
-                        <ul class="nav-sub nav-mega">
-                            <li><a href="{{ Route('user.chat.global') }}" class=""><span class="nav-text">Thế Giới</span></a></li>
-                            <li><a onclick="return confirm('Chat với người lạ ?')" href="{{ Route('user.chat.stranger.join') }}" class=""><span class="nav-text">CVNL</span></a></li>
-                        </ul>
-                    </li>
+                    @if(!Request::is('admin/*'))
+                        <li class="nav-header hidden-folded"><span class="text-muted">Hoạt Động</span></li>
+                        <li class="{{ Request::is('profile/*') ? 'active' : '' }}"><a href="#"><span class="nav-icon"><i data-feather="user"></i></span> <span
+                            class="nav-text">Nhân Vật</span> <span class="nav-caret"></span></a>
+                            <ul class="nav-sub nav-mega">
+                                <li><a href="{{ Route('user.profile.item.index') }}" class=""><span class="nav-text">Vật Phẩm</span></a></li>
+                                <li><a href="{{ Route('user.profile.inventory.index') }}" class=""><span class="nav-text">Trang Bị</span></a></li>
+                                <li><a href="{{ Route('user.profile.pet.index') }}" class=""><span class="nav-text">Thú Cưỡi</span></a></li>
+                                <li><a href="{{ Route('user.profile.skill.index') }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
+                            </ul>
+                        </li>
+                        <li class="{{ Request::is('top/*') ? 'active' : '' }}"><a href="#"><span class="nav-icon"><i data-feather="award"></i></span> <span
+                            class="nav-text">BXH</span> <span class="nav-caret"></span></a>
+                            <ul class="nav-sub nav-mega">
+                                <li><a href="{{ Route('user.top.power') }}" class=""><span class="nav-text">Lực Chiến</span></a></li>
+                                <li><a href="{{ Route('user.top.level') }}" class=""><span class="nav-text">Cấp Độ</span></a></li>
+                                <li><a href="{{ Route('user.top.pvp') }}" class=""><span class="nav-text">PVP</span></a></li>
+                                <li><a href="{{ Route('user.top.coin') }}" class=""><span class="nav-text">Vàng</span></a></li>
+                                <li><a href="{{ Route('user.top.gold') }}" class=""><span class="nav-text">Kim Cương</span></a></li>
+                                <li><a href="{{ Route('user.top.activities') }}" class=""><span class="nav-text">Hoạt Động</span></a></li>
+                            </ul>
+                        </li>
+                        <li class="{{ Request::is('events/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="coffee"></i></span> <span
+                                    class="nav-text">Giải Trí</span> <span class="nav-caret"></span></a>
+                            <ul class="nav-sub nav-mega">
+                                <li><a href="{{ Route('user.events.wheel') }}" class=""><span class="nav-text">VQMM</span></a></li>
+                                <li><a href="{{ Route('user.events.lucky-box') }}" class=""><span class="nav-text">Kho Báu</span></a></li>
+                            </ul>
+                        </li>
+                        <li class="{{ Request::is('shop/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shopping-cart"></i></span> <span
+                            class="nav-text">Cửa Hàng</span> <span class="nav-caret"></span></a>
+                            <ul class="nav-sub nav-mega">
+                                <li><a href="{{ Route('user.shop.index',['cate' => 'items']) }}" class=""><span class="nav-text">Vật Phẩm</span></a></li>
+                                @foreach($menuShop as $menu)
+                                    <li><a href="{{ Route('user.shop.index',['cate' => str_slug($menu->name)]) }}" class=""><span class="nav-text">{{ $menu->name }}</span></a></li>
+                                @endforeach
+                                <li><a href="{{ Route('user.shop.index',['cate' => 'pets']) }}" class=""><span class="nav-text">Thú Cưỡi</span></a></li>
+                                <li><a href="{{ Route('user.shop.index',['cate' => 'skills']) }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
+                            </ul>
+                        </li>
+                        <li class="{{ Request::is('explore/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="activity"></i></span> <span
+                            class="nav-text">Khám Phá</span> <span class="nav-caret"></span></a>
+                            <ul class="nav-sub nav-mega">
+                                <li><a href="#" class=""><span class="nav-text">Khu Tập Luyện</span></a></li>
+                                <li><a href="#" class=""><span class="nav-text">Nhiệm Vụ</span></a></li>
+                                <li><a href="{{ Route('user.explore.recovery-room.index') }}" class=""><span class="nav-text">Phòng Hồi Phục</span></a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#" class=""><span class="nav-icon"><i data-feather="users"></i></span> <span
+                            class="nav-text">Bang Hội</span> <span class="nav-caret"></span></a>
+                            <ul class="nav-sub nav-mega">
+                                <li><a href="#" class=""><span class="nav-text">Tạo</span></a></li>
+                                <li><a href="#" class=""><span class="nav-text">Đại Sảnh</span></a></li>
+                                <li><a href="#" class=""><span class="nav-text">Thành Viên</span></a></li>
+                                <li><a href="#" class=""><span class="nav-text">Hoạt Động</span></a></li>
+                                <li><a href="#" class=""><span class="nav-text">Thiết Lập</span></a></li>
+                            </ul>
+                        </li>
+                        <li class="{{ Request::is('pvp/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
+                            class="nav-text">PVP</span> <span class="nav-caret"></span></a>
+                            <ul class="nav-sub nav-mega">
+                                <li><a href="{{ Route('user.pvp.index') }}" class=""><span class="nav-text">Tham Gia</span></a></li>
+                            </ul>
+                        </li>
+                        <li class="{{ Request::is('chat/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="message-circle"></i></span> <span
+                            class="nav-text">Chat</span> <span class="nav-caret"></span></a>
+                            <ul class="nav-sub nav-mega">
+                                <li><a href="{{ Route('user.chat.global') }}" class=""><span class="nav-text">Thế Giới</span></a></li>
+                                <li><a onclick="return confirm('Chat với người lạ ?')" href="{{ Route('user.chat.stranger.join') }}" class=""><span class="nav-text">CVNL</span></a></li>
+                            </ul>
+                        </li>
+                    @endif
                     @if(Auth::check() && Auth::user()->isAdmin)
                         <li class="nav-header hidden-folded"><span class="text-muted">Admin Cpanel</span></li>
                         <li><a href="{{ Route('admin.dashboard.index') }}"><span class="nav-icon"><i
@@ -622,10 +618,13 @@
                                 <li><a href="{{ Route('admin.update-points') }}" class=""><span class="nav-text">Điểm Hoạt Động</span></a></li></li>
                             </ul>
                         </li>
-                        <li><a href="#" class=""><span class="nav-icon"><i data-feather="pie-chart"></i></span> <span
+                        <li class="{{ Request::is('admin/analytics/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="pie-chart"></i></span> <span
                             class="nav-text">Truy Cập</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
+                                <li><a href="{{ Route('admin.analytics.total') }}" class=""><span class="nav-text">Tổng Quan</span></a></li></li>
+                                <li><a href="{{ Route('admin.analytics.hour') }}" class=""><span class="nav-text">Theo Giờ</span></a></li></li>
                                 <li><a href="{{ Route('admin.analytics.day') }}" class=""><span class="nav-text">Theo Ngày</span></a></li></li>
+                                <li><a href="{{ Route('admin.analytics.view-most') }}" class=""><span class="nav-text">Xem Nhiều</span></a></li></li>
                             </ul>
                         </li>
                     @endif

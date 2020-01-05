@@ -2,7 +2,7 @@
 @section('content')
 
 @section('hero','Truy Cập')
-@section('sub_hero','Lượt truy cập theo ngày')
+@section('sub_hero','Lượt truy cập theo giờ')
 
 <div id="content" class="flex">
     <div id="ranking" class="">
@@ -44,13 +44,6 @@
     $(document).ready(() => {
         var options = {
             series: [{
-                name: 'Khách',
-                data: [
-                    @foreach($analytics as $analytic)
-                    "{{ $analytic['visitors'] }}",
-                    @endforeach
-                ]
-            }, {
                 name: 'Lượt Xem',
                 data: [
                     @foreach($analytics as $analytic)
@@ -87,17 +80,14 @@
                 horizontalAlign: 'left'
             },
             xaxis: {
-                type: 'datetime',
                 categories: [
                     @foreach($analytics as $analytic)
-                    "{{ $analytic['date'] }}",
+                        "{{ $analytic['pageTitle'] }}",
                     @endforeach
                 ]
             },
             tooltip: {
-                x: {
-                    format: 'yy-MM-dd HH:mm'
-                },
+                
             },
         };
 

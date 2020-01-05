@@ -13,7 +13,7 @@
                         <div class="col-8">
                             <div class="row row-sm">
                                 <div class="col-12">
-                                    <div class="card ultra-bordered" data-sr-id="31"
+                                    <div class="card vip-bordered" data-sr-id="31"
                                         style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
                                         <div class="card-body">
                                             <div class="row row-sm">
@@ -33,7 +33,7 @@
                             </div>
                             <div class="row row-sm">
                                 <div class="col-6 d-flex">
-                                    <div class="card flex ultra-bordered" data-sr-id="32"
+                                    <div class="card flex vip-bordered" data-sr-id="32"
                                         style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
                                         <div class="card-body"><small>Đang Online : <strong
                                                     class="text-success">{{ $users->allOnline()->count() }}</strong></small>
@@ -45,7 +45,7 @@
                                     </div>
                                 </div>
                                 <div class="col-6 d-flex">
-                                    <div class="card flex ultra-bordered" data-sr-id="33"
+                                    <div class="card flex vip-bordered" data-sr-id="33"
                                         style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
                                         <div class="card-body"><small>Online Gần Nhất : <strong
                                                     class="text-warning">{{ $users->leastRecentOnline()->count() }}</strong></small>
@@ -59,7 +59,7 @@
                             </div>
                         </div>
                         <div class="col-4 d-flex">
-                            <div class="card flex ultra-bordered" data-sr-id="34"
+                            <div class="card flex vip-bordered" data-sr-id="34"
                                 style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
                                 <div class="card-body text-center">
                                     <div class="pt-3">
@@ -93,7 +93,7 @@
                             </div>
                         </div>
                         <div class="col-4">
-                            <div class="card ultra-bordered" data-sr-id="35"
+                            <div class="card vip-bordered" data-sr-id="35"
                                 style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
                                 <div class="card-body">
                                     <div class="d-md-flex">
@@ -124,7 +124,7 @@
                             </div>
                         </div>
                         <div class="col-4">
-                            <div class="card ultra-bordered" data-sr-id="36"
+                            <div class="card vip-bordered" data-sr-id="36"
                                 style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
                                 <div class="card-body">
                                     <div class="d-md-flex">
@@ -155,7 +155,7 @@
                             </div>
                         </div>
                         <div class="col-4">
-                            <div class="card ultra-bordered" data-sr-id="37"
+                            <div class="card vip-bordered" data-sr-id="37"
                                 style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
                                 <div class="card-body">
                                     <div class="d-md-flex">
@@ -186,7 +186,7 @@
                             </div>
                         </div>
                         <div class="col-md-7">
-                            <div class="card ultra-bordered" data-sr-id="48" style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
+                            <div class="card vip-bordered" data-sr-id="48" style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
                                 <div class="p-3-4">
                                     <div class="d-flex">
                                         <div>
@@ -219,7 +219,7 @@
                         <div class="col-md-5">
                             <form method="POST" action="{{ Route('admin.dashboard.exceute-query') }}">
                                 @csrf
-                                <div class="card">
+                                <div class="card vip-bordered">
                                     <div class="card-header text-info"><strong>Câu Truy Vấn Nhanh ( SQL )</strong></div>
                                     <div class="card-body">
                                         <div class="md-form-group">
