@@ -627,6 +627,18 @@
                                 <li><a href="{{ Route('admin.analytics.view-most') }}" class=""><span class="nav-text">Xem Nhiều</span></a></li></li>
                             </ul>
                         </li>
+                        <li class="{{ Request::is('admin/users/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="users"></i></span> <span
+                            class="nav-text">Người Dùng</span> <span class="nav-caret"></span></a>
+                            <ul class="nav-sub nav-mega">
+                                <li><a href="{{ Route('admin.users.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
+                            </ul>
+                        </li>
+                        <li class="{{ Request::is('admin/settings/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="settings"></i></span> <span
+                            class="nav-text">Cài Đặt</span> <span class="nav-caret"></span></a>
+                            <ul class="nav-sub nav-mega">
+                                <li><a href="#" class=""><span class="nav-text">Cấu Hình</span></a></li></li>
+                            </ul>
+                        </li>
                     @endif
                 </ul>
             </div>

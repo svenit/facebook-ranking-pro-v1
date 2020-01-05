@@ -165,7 +165,7 @@
                                 <span class="text-success">Provider : {{ $detail->provider_id }}</span>
                             </div>
                             <div class="col-6  mt-2">
-                                <span class="text-silver">Tracking : {{ $detail->tracking->path }} ( {{ $detail->tracking->route }} ) </span>
+                                <span class="text-silver">Tracking : {{ $detail->tracking->path ?? '' }} ( {{ $detail->tracking->route ?? '' }} ) </span>
                             </div>
                         </div>
                     </div>
