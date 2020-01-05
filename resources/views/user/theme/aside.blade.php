@@ -622,6 +622,12 @@
                                 <li><a href="{{ Route('admin.update-points') }}" class=""><span class="nav-text">Điểm Hoạt Động</span></a></li></li>
                             </ul>
                         </li>
+                        <li><a href="#" class=""><span class="nav-icon"><i data-feather="pie-chart"></i></span> <span
+                            class="nav-text">Truy Cập</span> <span class="nav-caret"></span></a>
+                            <ul class="nav-sub nav-mega">
+                                <li><a href="{{ Route('admin.analytics.day') }}" class=""><span class="nav-text">Theo Ngày</span></a></li></li>
+                            </ul>
+                        </li>
                     @endif
                 </ul>
             </div>

@@ -3,12 +3,12 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>Group Game</title>
+	<title>@yield('hero')</title>
 	<meta http-equiv="x-dns-prefetch-control" content="on">
 	<link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
 	<link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
 	<link rel="dns-prefetch" href="//ajax.googleapis.com" />
-	<meta name="description" content="Facebook Group Ranking System">
+	<meta name="description" content="@yield('sub_hero')">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="{{ asset('assets/css/static.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/css/site.min.css') }}">
@@ -24,6 +24,15 @@
 	@stack('css')
 </head>
 <body>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-112101707-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-112101707-1');
+	</script>
 	<script>
 		config={root:"{{url('/')}}",current_url:"{{url()->current()}}",auth:{{Auth::check() ? 1 : 0}},bearer:"{{str_random(50)}}",detect:{{Auth::check() && Auth::user()->isAdmin ? 'false' : 'true'}}};
 	</script>

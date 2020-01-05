@@ -92,6 +92,9 @@ Route::group(['prefix' => 'admin','as' => 'admin.','namespace' => 'Admin','middl
         Route::get('/','DashboardController@index')->name('index');
         Route::post('execute-query','DashboardController@executeQuery')->name('exceute-query');
     });
+    Route::group(['prefix' => 'analytics','as' => 'analytics.'], function () {
+    Route::get('day','AnalyticsController@baseOnDay')->name('day');
+    });
     Route::get('update-points','UpdatePointsController@index')->name('update-points');
     Route::post('update-points','UpdatePointsController@store');
 });
