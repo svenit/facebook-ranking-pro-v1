@@ -191,11 +191,11 @@
                                 @if($detail->gears->count() > 0)
                                     @foreach($detail->gears as $key => $item)
                                     <div data-title="tooltip" title="Click vào để xem chi tiết" class="col-3 col-md-3 col-lg-2">
-                                        <div class="card vip-bordered">
-                                            <div @click="showGearsDescription({{ json_encode($item) }},0)" class="text-center hoverable">
-                                                <div style="margin:0 auto" class="pixel {{ $item->shop_tag }}"></div>
-                                                <p :style="{color:'{{ $item->rgb }}'}">{{ $item->name }} ( {{ $item->pivot->status == 1 ? 'Đang Mặc' : '' }} )</p>
-                                            </div>
+                                        <div class="card">
+                                            <span style="border:1px solid {{ $item->rgb }}" class="w-64 avatar gd-dark" data-toggle-class="loading">
+                                                <span class="avatar-status {{ $item->pivot->status == 1 ? 'on' : 'off' }} b-white avatar-right"></span> 
+                                                <div @click="showGearsDescription({{ json_encode($item) }},0)" class="{{ $item->shop_tag }}"></div>
+                                            </span>
                                         </div>
                                     </div>
                                     @endforeach
@@ -208,8 +208,8 @@
                             @if($detail->skills->count() > 0)
                                 @foreach($detail->skills as $key => $item)
                                 <div @click="showSkillsDescription({{ json_encode($item) }},0,'{{ $item->name }}')" data-title="tooltip" title="Click vào để xem chi tiết" class="col-3 col-md-3 col-lg-2">
-                                    <span class="w-56 avatar gd-primary" data-toggle-class="loading">
-                                        <span class="avatar-status on b-white avatar-right"></span> 
+                                    <span class="w-56 avatar gd-dark" data-toggle-class="loading">
+                                        <span class="avatar-status {{ $item->pivot->status == 1 ? 'on' : 'off' }} b-white avatar-right"></span> 
                                         <img src="{{ $item->image }}" alt=".">
                                     </span>
                                 </div>
@@ -221,9 +221,10 @@
                         <div class="tab-pane fade" id="home-pet" role="tabpanel" aria-labelledby="pet-tab">
                             @if($detail->pets->count() > 0)
                                 @foreach($detail->pets as $key => $item)
-                                    <div style="border:1px solid {{ $item->rgb }};width:68px;height:68px" class="text-center hoverable">
+                                    <span style="border:1px solid {{ $item->rgb }}" class="w-64 avatar gd-dark" data-toggle-class="loading">
+                                        <span class="avatar-status {{ $item->pivot->status == 1 ? 'on' : 'off' }} b-white avatar-right"></span> 
                                         <div @click="showInforPet({{ json_encode($item) }},0)" class="mount Mount_Icon_{{ $item->class_tag }}"></div>
-                                    </div>
+                                    </span>
                                 @endforeach
                             @else
                                 <p class="text-center">( Không có thú cưỡi nào )</p>
