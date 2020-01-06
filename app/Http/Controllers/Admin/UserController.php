@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Model\User;
+use App\Model\Tracking;
+use App\Model\Character;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Model\Tracking;
 
 class UserController extends Controller
 {
@@ -22,6 +23,7 @@ class UserController extends Controller
         $detail->using_pet = $detail->usingPets()[0]->class_tag ?? null;
         $detail->tracking = Tracking::where('user_id',$id)->first();
         $detail->level = $detail->nextLevel();
-        return view('admin.users.detail',compact('detail'));
+        $characters = Character::all();
+        return view('admin.users.detail',compact('detail','characters'));
     }
 }

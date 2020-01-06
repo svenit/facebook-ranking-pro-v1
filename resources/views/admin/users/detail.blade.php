@@ -192,8 +192,8 @@
                                     @foreach($detail->gears as $key => $item)
                                     <div data-title="tooltip" title="Click vào để xem chi tiết" class="col-3 col-md-3 col-lg-2">
                                         <div class="card">
-                                            <span style="border:1px solid {{ $item->rgb }}" class="w-64 avatar gd-dark" data-toggle-class="loading">
-                                                <span class="avatar-status {{ $item->pivot->status == 1 ? 'on' : 'off' }} b-white avatar-right"></span> 
+                                            <span style="border:1px solid {{ $item->rgb }}" class="w-64 avatar gd-dark">
+                                                <span class="avatar-status {{ $item->pivot->status == 1 ? 'on' : 'away' }} b-white avatar-right"></span> 
                                                 <div @click="showGearsDescription({{ json_encode($item) }},0)" class="{{ $item->shop_tag }}"></div>
                                             </span>
                                         </div>
@@ -208,8 +208,8 @@
                             @if($detail->skills->count() > 0)
                                 @foreach($detail->skills as $key => $item)
                                 <div @click="showSkillsDescription({{ json_encode($item) }},0,'{{ $item->name }}')" data-title="tooltip" title="Click vào để xem chi tiết" class="col-3 col-md-3 col-lg-2">
-                                    <span class="w-56 avatar gd-dark" data-toggle-class="loading">
-                                        <span class="avatar-status {{ $item->pivot->status == 1 ? 'on' : 'off' }} b-white avatar-right"></span> 
+                                    <span class="w-56 avatar gd-dark">
+                                        <span class="avatar-status {{ $item->pivot->status == 1 ? 'on' : 'away' }} b-white avatar-right"></span> 
                                         <img src="{{ $item->image }}" alt=".">
                                     </span>
                                 </div>
@@ -221,8 +221,8 @@
                         <div class="tab-pane fade" id="home-pet" role="tabpanel" aria-labelledby="pet-tab">
                             @if($detail->pets->count() > 0)
                                 @foreach($detail->pets as $key => $item)
-                                    <span style="border:1px solid {{ $item->rgb }}" class="w-64 avatar gd-dark" data-toggle-class="loading">
-                                        <span class="avatar-status {{ $item->pivot->status == 1 ? 'on' : 'off' }} b-white avatar-right"></span> 
+                                    <span style="border:1px solid {{ $item->rgb }}" class="w-64 avatar gd-dark">
+                                        <span class="avatar-status {{ $item->pivot->status == 1 ? 'on' : 'away' }} b-white avatar-right"></span> 
                                         <div @click="showInforPet({{ json_encode($item) }},0)" class="mount Mount_Icon_{{ $item->class_tag }}"></div>
                                     </span>
                                 @endforeach
@@ -231,10 +231,130 @@
                             @endif
                         </div>
                         <div class="tab-pane fade" id="home-item" role="tabpanel" aria-labelledby="item-tab">
-                            4
+                            @if($detail->items->count() > 0)
+                                @foreach($detail->items as $key => $item)
+                                    <span style="border:1px solid #eee" class="w-64 avatar gd-dark">
+                                        <span style="background:transparent;border-color:transparent !important" class="avatar-status b-white avatar-right">
+                                            x{{ $item->pivot->quantity }}
+                                        </span> 
+                                        <div @click="showInforItem({{ json_encode($item) }},0)" class="{{ $item->class_tag }}"></div>
+                                    </span>
+                                @endforeach
+                            @else
+                                <p class="text-center">( Không có vật phẩm nào )</p>
+                            @endif
                         </div>
                         <div class="tab-pane fade" id="home-edit" role="tabpanel" aria-labelledby="edit-tab">
-                            6
+                            <div class="card">
+                                <div class="card-body">
+                                    <form class="row">
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Provider ID</label>
+                                            <input type="text" class="form-control" name="provider_id" value="{{ $detail->provider_id }}" name="name" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Tên</label>
+                                            <input type="text" class="form-control" value="{{ $detail->name }}" name="name" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                        </div>
+                                        <div class="form-group col-6 ">
+                                            <label>Hệ Phái</label>
+                                            <select class="chosen form-control form-control-sm" name="character_id">
+                                                @foreach($characters as $character)
+                                                    <option {{ $character->id == $detail->character->id ? 'selected' : '' }} value="{{ $character->id }}">{{ $character->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Tiền Thưởng</label>
+                                            <input type="number" class="form-control" value="{{ $detail->income_coins }}" name="income_coins" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Kim Cương</label>
+                                            <input type="number" class="form-control" value="{{ $detail->gold }}" name="gold" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Kinh Nghiệm</label>
+                                            <input type="number" class="form-control" value="{{ $detail->exp }}" name="exp" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Sức Mạnh</label>
+                                            <input type="number" class="form-control" value="{{ $detail->strength }}" name="strength" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Trí Tuệ</label>
+                                            <input type="number" class="form-control" value="{{ $detail->intelligent }}" name="intelligent" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Nhanh Nhẹn</label>
+                                            <input type="number" class="form-control" value="{{ $detail->agility }}" name="agility" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">May Mắn</label>
+                                            <input type="number" class="form-control" value="{{ $detail->lucky }}" name="lucky" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Sinh Lực</label>
+                                            <input type="number" class="form-control" value="{{ $detail->health_points }}" name="health_points" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Kháng Công</label>
+                                            <input type="number" class="form-control" value="{{ $detail->armor_strength }}" name="armor_strength" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Kháng Phép</label>
+                                            <input type="number" class="form-control" value="{{ $detail->armor_intelligent }}" name="armor_intelligent" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Điểm PVP</label>
+                                            <input type="number" class="form-control" value="{{ $detail->pvp_points }}" name="pvp_points" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">VIP</label>
+                                            <select class="chosen form-control form-control-sm" name="isVip">
+                                                <option {{ $detail->isVip == 0 ? 'selected' : '' }} value="0">Không</option>
+                                                <option {{ $detail->isVip == 1 ? 'selected' : '' }} value="1">Có</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Admin</label>
+                                            <select class="chosen form-control form-control-sm" name="isAdmin">
+                                                <option {{ $detail->isAdmin == 0 ? 'selected' : '' }} value="0">Không</option>
+                                                <option {{ $detail->isAdmin == 1 ? 'selected' : '' }} value="1">Có</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Điểm PVP</label>
+                                            <input type="text" class="form-control" value="{{ $detail->lat }}" name="lat" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Điểm PVP</label>
+                                            <input type="text" class="form-control" value="{{ $detail->lng }}" name="lng" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Sức Khỏe</label>
+                                            <input type="number" class="form-control" value="{{ $detail->energy }}" name="energy" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Vé PVP</label>
+                                            <input type="number" class="form-control" value="{{ $detail->pvp_times }}" name="pvp_times" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Vé CVNL</label>
+                                            <input type="number" class="form-control" value="{{ $detail->stranger_chat_times }}" name="stranger_chat_times" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Trạng Thái</label>
+                                            <select class="chosen form-control form-control-sm" name="isAdmin">
+                                                <option {{ $detail->status == 0 ? 'selected' : '' }} value="0">Khóa</option>
+                                                <option {{ $detail->status == 1 ? 'selected' : '' }} value="1">Hoạt Động</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <button type="submit" class="btn btn-success">Cập Nhật</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -243,6 +363,17 @@
     </div>
 </div>
 @endsection
+@push('css')
+    <link rel="stylesheet" href="{{ asset('assets/css/plugins/chosen.css') }}">
+@endpush
 @push('js')
+    <script src="{{ asset('assets/js/plugins/chosen/chosen.jquery.js') }}"></script>
     <script src="{{ asset('assets/js/vue/app.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $('.chosen').chosen({
+                width: '100%'
+            });
+        });
+    </script>
 @endpush
