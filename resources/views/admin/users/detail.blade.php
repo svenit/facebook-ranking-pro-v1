@@ -10,7 +10,7 @@
                 <div class="row row-sm sr vip-bordered">
                     <div class="col-2">
                         <div style="margin:0px 10px 35px 0px;padding:20px" class="character-sprites hoverable {{ $detail->isVip == 1 ? 'vip-2' : '' }}">
-                            <span class="{{ $detail->using_pet ? "Mount_Head_$detail->using_pet" : '' }}"></span>
+                            <span class="{{ $detail->using_pet ? "Mount_Body_$detail->using_pet" : '' }}"></span>
                             <span class="hair_flower_3"></span>
                             <span class="chair_none"></span>
                             <span class=""></span>
@@ -33,7 +33,7 @@
                             @foreach($detail->using_gears as $gear)
                                 <span class="{{ $gear->class_tag }}"></span>
                             @endforeach
-                            <span class="{{ $detail->using_pet ? "Mount_Body_$detail->using_pet" : '' }}"></span>
+                            <span class="{{ $detail->using_pet ? "Mount_Head_$detail->using_pet" : '' }}"></span>
                         </div>
                         <p style="margin-top:80px" class="text-center">
                             {{ $detail->name }} ( {{ $detail->character->name }} )
@@ -181,7 +181,11 @@
                                 <li class="nav-item"><a class="nav-link" id="mobile-tab" data-toggle="tab" href="#home-skill" role="tab" aria-controls="home-skill" aria-selected="false">Kỹ Năng</a></li>
                                 <li class="nav-item"><a class="nav-link" id="browser-tab" data-toggle="tab" href="#home-pet" role="tab" aria-controls="home-pet" aria-selected="false">Thú Cưỡi</a></li>
                                 <li class="nav-item"><a class="nav-link" id="country-tab" data-toggle="tab" href="#home-item" role="tab" aria-controls="home-item" aria-selected="false">Vật Phẩm</a></li>
-                                <li class="nav-item"><a class="nav-link" id="country-tab" data-toggle="tab" href="#home-edit" role="tab" aria-controls="home-edit" aria-selected="false">Sửa</a></li>
+                                <li class="nav-item"><a class="nav-link" id="country-tab" data-toggle="tab" href="#home-edit" role="tab" aria-controls="home-edit" aria-selected="false">Sửa Thông Tin</a></li>
+                                <li class="nav-item"><a class="nav-link" id="country-tab" data-toggle="tab" href="#home-add-gear" role="tab" aria-controls="home-add-gear" aria-selected="false"><i data-feather="plus"></i> Trang Bị</a></li>
+                                <li class="nav-item"><a class="nav-link" id="country-tab" data-toggle="tab" href="#home-add-skill" role="tab" aria-controls="home-add-skill" aria-selected="false"><i data-feather="plus"></i> Kỹ Năng</a></li>
+                                <li class="nav-item"><a class="nav-link" id="country-tab" data-toggle="tab" href="#home-add-pet" role="tab" aria-controls="home-add-pet" aria-selected="false"><i data-feather="plus"></i> Thú Cưỡi</a></li>
+                                <li class="nav-item"><a class="nav-link" id="country-tab" data-toggle="tab" href="#home-add-item" role="tab" aria-controls="home-add-item" aria-selected="false"><i data-feather="plus"></i> Vật Phẩm</a></li>
                             </ul>
                         </div>
                     </div>
@@ -190,11 +194,12 @@
                             <div class="row">
                                 @if($detail->gears->count() > 0)
                                     @foreach($detail->gears as $key => $item)
-                                    <div data-title="tooltip" title="Click vào để xem chi tiết" class="col-3 col-md-3 col-lg-2">
+                                    <div data-title="tooltip" title="Click vào để xem chi tiết" class="hoverable col-sm-3 col-md-2 col-lg-1">
                                         <div class="card">
                                             <span style="border:1px solid {{ $item->rgb }}" class="w-64 avatar gd-dark">
                                                 <span class="avatar-status {{ $item->pivot->status == 1 ? 'on' : 'away' }} b-white avatar-right"></span> 
-                                                <div @click="showGearsDescription({{ json_encode($item) }},0)" class="{{ $item->shop_tag }}"></div>
+                                                <div @click="showGearsDescription({{ json_encode($item) }},0,)" class="pixel {{ $item->shop_tag }}"></div>
+                                                <a class="text-highlight" onclick="return confirm('Xóa trang bị này ?')" href="{{ Route('admin.users.remove-gear',['id' => $item->pivot->id,'gear' => $item->pivot->gear_id,'user' => $detail->id]) }}"><span style="background:transparent;border-color:transparent !important;top:-5px;" class="avatar-status b-white avatar-botom"><i class="fas fa-trash"></i></span></a> 
                                             </span>
                                         </div>
                                     </div>
@@ -205,49 +210,63 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="home-skill" role="tabpanel" aria-labelledby="skill-tab">
-                            @if($detail->skills->count() > 0)
-                                @foreach($detail->skills as $key => $item)
-                                <div @click="showSkillsDescription({{ json_encode($item) }},0,'{{ $item->name }}')" data-title="tooltip" title="Click vào để xem chi tiết" class="col-3 col-md-3 col-lg-2">
-                                    <span class="w-56 avatar gd-dark">
-                                        <span class="avatar-status {{ $item->pivot->status == 1 ? 'on' : 'away' }} b-white avatar-right"></span> 
-                                        <img src="{{ $item->image }}" alt=".">
-                                    </span>
-                                </div>
-                                @endforeach
-                            @else
-                                <p class="text-center">( Không có kỹ năng nào )</p>
-                            @endif
+                            <div class="row">
+                                @if($detail->skills->count() > 0)
+                                    @foreach($detail->skills as $key => $item)
+                                    <div data-title="tooltip" title="Click vào để xem chi tiết" class="hoverable col-sm-3 col-md-2 col-lg-1">
+                                        <span style="border:1px solid {{ $item->rgb }}" class="w-56 avatar gd-dark">
+                                            <span class="avatar-status {{ $item->pivot->status == 1 ? 'on' : 'away' }} b-white avatar-right"></span> 
+                                            <img @click="showSkillsDescription({{ json_encode($item) }},0,'{{ $item->name }}')" src="{{ $item->image }}" alt=".">
+                                            <a class="text-highlight" onclick="return confirm('Xóa kỹ năng này ?')" href="{{ Route('admin.users.remove-skill',['skill' => $item->pivot->skill_id,'user' => $detail->id]) }}"><span style="background:transparent;border-color:transparent !important;top:-5px;" class="avatar-status b-white avatar-botom"><i class="fas fa-trash"></i></span></a> 
+                                        </span>
+                                    </div>
+                                    @endforeach
+                                @else
+                                    <p class="text-center">( Không có kỹ năng nào )</p>
+                                @endif
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="home-pet" role="tabpanel" aria-labelledby="pet-tab">
-                            @if($detail->pets->count() > 0)
-                                @foreach($detail->pets as $key => $item)
-                                    <span style="border:1px solid {{ $item->rgb }}" class="w-64 avatar gd-dark">
-                                        <span class="avatar-status {{ $item->pivot->status == 1 ? 'on' : 'away' }} b-white avatar-right"></span> 
-                                        <div @click="showInforPet({{ json_encode($item) }},0)" class="mount Mount_Icon_{{ $item->class_tag }}"></div>
-                                    </span>
-                                @endforeach
-                            @else
-                                <p class="text-center">( Không có thú cưỡi nào )</p>
-                            @endif
+                            <div class="row">
+                                @if($detail->pets->count() > 0)
+                                    @foreach($detail->pets as $key => $item)
+                                        <div data-title="tooltip" title="Click vào để xem chi tiết" class="hoverable col-sm-3 col-md-2 col-lg-1">
+                                            <span style="border:1px solid {{ $item->rgb }}" class="w-64 avatar gd-dark">
+                                                <span class="avatar-status {{ $item->pivot->status == 1 ? 'on' : 'away' }} b-white avatar-right"></span> 
+                                                <div @click="showInforPet({{ json_encode($item) }},0)" class="pixel mount Mount_Icon_{{ $item->class_tag }}"></div>
+                                                <a class="text-highlight" onclick="return confirm('Xóa thú cưỡi này ?')" href="{{ Route('admin.users.remove-pet',['id' => $item->pivot->id,'pet' => $item->pivot->pet_id,'user' => $detail->id]) }}"><span style="background:transparent;border-color:transparent !important;top:-5px;" class="avatar-status b-white avatar-botom"><i class="fas fa-trash"></i></span></a> 
+                                            </span>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <p class="text-center">( Không có thú cưỡi nào )</p>
+                                @endif
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="home-item" role="tabpanel" aria-labelledby="item-tab">
-                            @if($detail->items->count() > 0)
-                                @foreach($detail->items as $key => $item)
-                                    <span style="border:1px solid #eee" class="w-64 avatar gd-dark">
-                                        <span style="background:transparent;border-color:transparent !important" class="avatar-status b-white avatar-right">
-                                            x{{ $item->pivot->quantity }}
-                                        </span> 
-                                        <div @click="showInforItem({{ json_encode($item) }},0)" class="{{ $item->class_tag }}"></div>
-                                    </span>
-                                @endforeach
-                            @else
-                                <p class="text-center">( Không có vật phẩm nào )</p>
-                            @endif
+                            <div class="row">
+                                @if($detail->items->count() > 0)
+                                    @foreach($detail->items as $key => $item)
+                                        <div data-title="tooltip" title="Click vào để xem chi tiết" class="hoverable col-sm-3 col-md-2 col-lg-1">
+                                            <span style="border:1px solid #eee" class="w-64 avatar gd-dark">
+                                                <span style="background:transparent;border-color:transparent !important;top:-5px" class="avatar-status b-white avatar-right">
+                                                    x{{ $item->pivot->quantity }}
+                                                </span> 
+                                                <div @click="showInforItem({{ json_encode($item) }},0)" class="pixel {{ $item->class_tag }}"></div>
+                                                 <a class="text-highlight" onclick="return confirm('Xóa vật phẩm này ?')" href="{{ Route('admin.users.remove-item',['id' => $item->pivot->id,'item' => $item->pivot->item_id,'user' => $detail->id]) }}"><span style="background:transparent;border-color:transparent !important;top:-5px;" class="avatar-status b-white avatar-botom"><i class="fas fa-trash"></i></span></a> 
+                                            </span>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <p class="text-center">( Không có vật phẩm nào )</p>
+                                @endif
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="home-edit" role="tabpanel" aria-labelledby="edit-tab">
                             <div class="card">
                                 <div class="card-body">
-                                    <form class="row">
+                                    <form method="POST" action="{{ Route('admin.users.edit',['id' => $detail->id]) }}" class="row">
+                                        @csrf
                                         <div class="form-group col-6">
                                             <label class="text-muted" for="exampleInputEmail1">Provider ID</label>
                                             <input type="text" class="form-control" name="provider_id" value="{{ $detail->provider_id }}" name="name" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
@@ -257,7 +276,7 @@
                                             <input type="text" class="form-control" value="{{ $detail->name }}" name="name" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
                                         </div>
                                         <div class="form-group col-6 ">
-                                            <label>Hệ Phái</label>
+                                            <label class="text-muted" for="exampleInputEmail1">Hệ Phái</label>
                                             <select class="chosen form-control form-control-sm" name="character_id">
                                                 @foreach($characters as $character)
                                                     <option {{ $character->id == $detail->character->id ? 'selected' : '' }} value="{{ $character->id }}">{{ $character->name }}</option>
@@ -323,11 +342,11 @@
                                             </select>
                                         </div>
                                         <div class="form-group col-6">
-                                            <label class="text-muted" for="exampleInputEmail1">Điểm PVP</label>
+                                            <label class="text-muted" for="exampleInputEmail1">Lat</label>
                                             <input type="text" class="form-control" value="{{ $detail->lat }}" name="lat" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
                                         </div>
                                         <div class="form-group col-6">
-                                            <label class="text-muted" for="exampleInputEmail1">Điểm PVP</label>
+                                            <label class="text-muted" for="exampleInputEmail1">Lng</label>
                                             <input type="text" class="form-control" value="{{ $detail->lng }}" name="lng" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
                                         </div>
                                         <div class="form-group col-6">
@@ -351,6 +370,90 @@
                                         </div>
                                         <div class="form-group col-6">
                                             <button type="submit" class="btn btn-success">Cập Nhật</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="home-add-gear" role="tabpanel" aria-labelledby="add-gear-tab">
+                            <div class="card">
+                                <div class="card-body">
+                                    <form method="POST" action="{{ Route('admin.users.add-gear',['id' => $detail->id]) }}" class="row">
+                                        @csrf
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Chọn trang bị</label>
+                                            <select placeholder="Chọn trang bị" multiple class="chosen form-control form-control-sm" name="gears[]">
+                                                @foreach($gears as $gear)
+                                                    <option value="{{ $gear->id }}">{{ $gear->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-12">
+                                            <button type="submit" class="btn btn-success">Thêm</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="home-add-skill" role="tabpanel" aria-labelledby="add-skill-tab">
+                            <div class="card">
+                                <div class="card-body">
+                                    <form method="POST" action="{{ Route('admin.users.add-skill',['id' => $detail->id]) }}" class="row">
+                                        @csrf
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Chọn kỹ năng</label>
+                                            <select placeholder="Chọn kỹ năng" multiple class="chosen form-control form-control-sm" name="skills[]">
+                                                @foreach($skills as $skill)
+                                                    <option value="{{ $skill->id }}">{{ $skill->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-12">
+                                            <button type="submit" class="btn btn-success">Thêm</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="home-add-pet" role="tabpanel" aria-labelledby="add-pet-tab">
+                            <div class="card">
+                                <div class="card-body">
+                                    <form method="POST" action="{{ Route('admin.users.add-pet',['id' => $detail->id]) }}" class="row">
+                                        @csrf
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Chọn thú cưỡi</label>
+                                            <select placeholder="Chọn thú cưỡi" multiple class="chosen form-control form-control-sm" name="pets[]">
+                                                @foreach($pets as $pet)
+                                                    <option value="{{ $pet->id }}">{{ $pet->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-12">
+                                            <button type="submit" class="btn btn-success">Thêm</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="home-add-item" role="tabpanel" aria-labelledby="add-item-tab">
+                            <div class="card">
+                                <div class="card-body">
+                                    <form method="POST" action="{{ Route('admin.users.add-item',['id' => $detail->id]) }}" class="row">
+                                        @csrf
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Chọn vật phẩm</label>
+                                            <select placeholder="Chọn vật phẩm" class="chosen form-control form-control-sm" name="item">
+                                                @foreach($items as $item)
+                                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label class="text-muted" for="exampleInputEmail1">Số Lượng</label>
+                                            <input type="number" value="1" class="form-control" name="quantity" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                        </div>
+                                        <div class="form-group col-12">
+                                            <button type="submit" class="btn btn-success">Thêm</button>
                                         </div>
                                     </form>
                                 </div>

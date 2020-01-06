@@ -122,7 +122,7 @@
                 <div class="row row-sm">
                     <div v-for="(gear,index) in data.gears" :key="index" style="margin-bottom:15px" class="col-3 d-flex" data-title="tooltip" title="Click để xem chi tiết" >
                         <div class="flex">
-                            <div @click="showGearsDescription(gear,1)" :class="`hoverable ${gear.shop_tag}`" :style="{borderRadius:'5px',border:`1px solid ${gear.rgb}`,backgroundColor:'#272727'}"></div>
+                            <div @click="showGearsDescription(gear,1)" :class="`pixel hoverable ${gear.shop_tag}`" :style="{borderRadius:'5px',border:`1px solid ${gear.rgb}`,backgroundColor:'#272727'}"></div>
                         </div>
                     </div>
                     <div v-for="n in parseInt(8 - data.gears.length)" :key="n + Math.random(1,10)" style="margin-bottom:15px" class="col-3 d-flex">
@@ -160,7 +160,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-4">
-                        <div :style="{border:`1px solid ${detailGear.data.rgb}`,margin:'0 auto'}" :class="[`text-center ${detailGear.data.shop_tag}`]"></div>
+                        <div :style="{border:`1px solid ${detailGear.data.rgb}`,margin:'0 auto'}" :class="[`pixel text-center ${detailGear.data.shop_tag}`]"></div>
                         <p :style="{fontSize:'14px',color:`${detailGear.data.rgb}`,marginTop:'20px'}" class="modal-title text-md text-center">@{{ detailGear.data.name }}</p>
                         <p :style="{fontSize:'14px',marginTop:'10px'}" class="modal-title text-md text-center">( @{{ detailGear.data.character.name }} )</p>
                     </div>
@@ -350,7 +350,7 @@
                 <div class="row">
                     <div class="col-4">
                         <div class="character-sprites" :style="{margin:'0 auto',width:'68px',height:'68px',border:'1px solid #cd8e2c'}">
-                            <div :class="detailItem.data.class_tag"></div>
+                            <div :class="`pixel ${detailItem.data.class_tag}`"></div>
                         </div>
                     </div>
                     <div class="col-8">
@@ -488,9 +488,9 @@
                 <br>
                 <p class="text-gold">Trang Bị</p>
                 <div class="row row-sm">
-                    <div v-for="(gear,index) in user.gears" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
+                    <div v-for="(gear,index) in user.gears" :key="index" style="margin-bottom:15px" class="hoverable col-3 d-flex">
                         <div class="flex">
-                            <div @click="showGearsDescription(gear,0)" :class="`${gear.shop_tag}`" :style="{borderRadius:'5px',border:`1px solid ${gear.rgb}`}"></div>
+                            <div @click="showGearsDescription(gear,0)" :class="`pixel ${gear.shop_tag}`" :style="{borderRadius:'5px',border:`1px solid ${gear.rgb}`}"></div>
                         </div>
                     </div>
                     <div v-for="n in parseInt(8 - user.gears.length)" :key="n + Math.random(1,10)" style="margin-bottom:15px" class="col-3 d-flex">

@@ -884,9 +884,13 @@
 
 .character-sprites {
     width: 90px;
-    height: 90px
+    height: 90px;
+    image-rendering: pixelated;
 }
-
+.pixel
+{
+    image-rendering: pixelated;
+}
 .character-sprites span {
     position: absolute
 }

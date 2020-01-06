@@ -22,12 +22,18 @@
                     <div v-if="data.skills" :class="[`tab-pane fade ${data.skills ? 'show active' : ''}`]" id="home-current-skills" role="tabpanel" aria-labelledby="current-skills-tab">
                         <div v-if="data.skills.length > 0" class="row">
                             <div v-for="(skills,index) in data.skills" :key="index" class="col-lg-1 col-md-2 col-sm-2">
-                                <div :style="{border:`1px solid ${skills.rgb}`,borderRadius:'5px',margin:'0 auto',width:'68px',height:'68px'}" class="text-center hoverable">
-                                    <img @click="showSkillsDescription(skills,1)" :src="skills.image">
+                                <div @click="showSkillsDescription(skills,1)" data-title="tooltip" title="Click vào để xem chi tiết" class="hoverable col-sm-3 col-md-2 col-lg-1">
+                                    <span :style="{border:`1px solid ${skills.rgb}`}" class="w-56 avatar gd-dark">
+                                        <span :class="`avatar-status ${skills.pivot.status == 1 ? 'on' : 'away'} b-white avatar-right`"></span> 
+                                        <img :src="skills.image" alt=".">
+                                    </span>
                                 </div>
                             </div>
                             <div v-for="n in 4 - data.skills.length" :key="Math.random(1,n)" class="col-lg-1 col-md-2 col-sm-2">
-                                <div class="hoverable" :style="{width:'68px',height:'68px',borderRadius:'5px',border:'1px dashed #ccc',background:'#4e4e4e'}"></div>
+                                <span :style="{border:`1px dashed #eee`}" class="w-56 avatar gd-dark">
+                                    <span class="avatar-status of b-white avatar-right"></span> 
+                                    
+                                </span>
                             </div>
                         </div>
                         <div v-else>
@@ -37,8 +43,11 @@
                     <div :class="[`tab-pane fade ${!data.skills ? 'show active' : ''}`]" id="home-list-skills" role="tabpanel" aria-labelledby="list-skills-tab">
                         <div v-if="skills.length > 0" class="row">
                             <div v-for="(skills,index) in skills" :key="index" class="col-lg-1 col-md-2 col-sm-2">
-                                <div :style="{border:`1px solid ${skills.rgb}`,borderRadius:'5px',margin:'0 auto',width:'68px',height:'68px'}" class="text-center hoverable">
-                                    <img @click="showSkillsDescription(skills,1)" :src="skills.image">
+                                <div @click="showSkillsDescription(skills,1)" data-title="tooltip" title="Click vào để xem chi tiết" class="hoverable col-sm-3 col-md-2 col-lg-1">
+                                    <span :style="{border:`1px solid ${skills.rgb}`}" class="w-56 avatar gd-dark">
+                                        <span :class="`avatar-status ${skills.pivot.status == 1 ? 'on' : 'away'} b-white avatar-right`"></span> 
+                                        <img :src="skills.image" alt=".">
+                                    </span>
                                 </div>
                             </div>
                         </div>

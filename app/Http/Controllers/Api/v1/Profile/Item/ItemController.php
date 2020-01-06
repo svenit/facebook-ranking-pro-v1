@@ -105,17 +105,35 @@ class ItemController extends Controller
             return response()->json($response,200);
         }
     }
-    public function removeItem($userItem)
+    public function delete(Request $request)
     {
-        if($userItem->quantity == 1)
+        $userItem = UserItem::where([['id',$request->id],['item_id',$request->item_id],['user_id',Auth::id()]])->first();
+        if(isset($userItem))
         {
-            Auth::user()->items()->detach($userItem->item_id);
+            if($userItem->quantity == 1)
+            {
+                Auth::user()->items()->detach($userItem->item_id);
+            }
+            else
+            {
+                Auth::user()->items()->updateExistingPivot($userItem->item_id,[
+                    'quantity' => DB::raw('quantity - 1')
+                ]);
+            }
+            $response = [
+                'code' => 200,
+                'status' => 'success',
+                'message' => 'Đã vứt bỏ vật phẩm'
+            ];
         }
         else
         {
-            Auth::user()->items()->updateExistingPivot($userItem->item_id,[
-                'quantity' => DB::raw('quantity - 1')
-            ]);
+            $response = [
+                'code' => 500,
+                'status' => 'error',
+                'message' => 'Vật phẩm không tồn tại'
+            ];
         }
+        return response()->json($response,200);
     }
 }

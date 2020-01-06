@@ -15,7 +15,7 @@
                         <div class="col-6 col-md-4 col-lg-3">
                             <div data-title="tooltip" title="Click vào để xem chi tiết" class="card vip-bordered">
                                 <div @click="showInforPet({{ json_encode($pet) }},0)" class="text-center hoverable">
-                                    <div style="margin:0 auto !important" class="mount Mount_Icon_{{ $pet->class_tag }}"></div>
+                                    <div style="margin:0 auto !important" class="pixel mount Mount_Icon_{{ $pet->class_tag }}"></div>
                                     <p style="margin-top:10px;color:{{ $pet->rgb }}">{{ $pet->name }}</p>
                                 </div>
                                 <div class="btn-group">

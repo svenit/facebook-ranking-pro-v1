@@ -15,7 +15,7 @@
                         <div data-title="tooltip" title="Click vào để xem chi tiết" class="col-6 col-md-4 col-lg-3">
                             <div class="card vip-bordered">
                                 <div class="text-center hoverable">
-                                    <div @click="showInforItem({{ json_encode($item) }},0)" style="margin:0 auto !important" class="{{ $item->class_tag }}"></div>
+                                    <div @click="showInforItem({{ json_encode($item) }},0)" style="margin:0 auto !important" class="pixel {{ $item->class_tag }}"></div>
                                     <p style="margin-top:10px;color:{{ $item->rgb }}">{{ $item->name }}</p>
                                 </div>
                                 <div class="btn-group">
