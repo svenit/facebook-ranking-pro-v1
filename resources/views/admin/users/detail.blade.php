@@ -207,12 +207,11 @@
                         <div class="tab-pane fade" id="home-skill" role="tabpanel" aria-labelledby="skill-tab">
                             @if($detail->skills->count() > 0)
                                 @foreach($detail->skills as $key => $item)
-                                <div data-title="tooltip" title="Click vào để xem chi tiết" class="col-3 col-md-3 col-lg-2">
-                                    <div class="card">
-                                        <div @click="showSkillsDescription({{ json_encode($item) }},0,'{{ $item->name }}')" class="text-center hoverable">
-                                            <img class="pixel skill-pixel" src="{{ $item->image }}">
-                                        </div>
-                                    </div>    
+                                <div @click="showSkillsDescription({{ json_encode($item) }},0,'{{ $item->name }}')" data-title="tooltip" title="Click vào để xem chi tiết" class="col-3 col-md-3 col-lg-2">
+                                    <span class="w-56 avatar gd-primary" data-toggle-class="loading">
+                                        <span class="avatar-status on b-white avatar-right"></span> 
+                                        <img src="{{ $item->image }}" alt=".">
+                                    </span>
                                 </div>
                                 @endforeach
                             @else
@@ -220,7 +219,15 @@
                             @endif
                         </div>
                         <div class="tab-pane fade" id="home-pet" role="tabpanel" aria-labelledby="pet-tab">
-                            3
+                            @if($detail->pets->count() > 0)
+                                @foreach($detail->pets as $key => $item)
+                                    <div style="border:1px solid {{ $item->rgb }};width:68px;height:68px" class="text-center hoverable">
+                                        <div @click="showInforPet({{ json_encode($item) }},0)" class="mount Mount_Icon_{{ $item->class_tag }}"></div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <p class="text-center">( Không có thú cưỡi nào )</p>
+                            @endif
                         </div>
                         <div class="tab-pane fade" id="home-item" role="tabpanel" aria-labelledby="item-tab">
                             4
