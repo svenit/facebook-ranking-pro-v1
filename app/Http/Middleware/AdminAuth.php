@@ -27,7 +27,7 @@ class AdminAuth
             {
                 return $next($request);
             }
-            return abort(404);
+            abort(404);
         }
     }
 }
