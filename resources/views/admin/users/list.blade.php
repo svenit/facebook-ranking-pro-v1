@@ -7,7 +7,7 @@
     <div class="padding-x">
         <div class="row row-sm sr">
             <div class="col-md-12 col-lg-12">
-                <div class="bootstrap-table vip-bordered">
+                <div class="bootstrap-table vip-bordered bg-dark">
                     <div class="fixed-table-container" style="padding-bottom: 0px;">
                         <div class="fixed-table-header" style="display: none;">
                             <table></table>
@@ -120,7 +120,7 @@
 @endpush
 @push('js')
 <script src="{{ asset('assets/js/plugins/datatable/datatable.min.js') }}"></script>
-<script src="{{ asset('assets/js/plugins/datatable/dataTables.bootstrap4.min') }}"></script>
+<script src="{{ asset('assets/js/plugins/datatable/dataTables.bootstrap4.min.js') }}"></script>
 <script>
     $(document).ready( function () {
         $('#myTable').DataTable({

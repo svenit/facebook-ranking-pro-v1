@@ -347,17 +347,13 @@ table.dataTable thead .sorting_desc_disabled {
   padding-bottom: 30px;
 }
 .dataTables_length {
-    position: absolute;
-    bottom: 0;
+    float: left;
 }
 .dataTables_filter label {
   margin-right: 5px;
 }
 .html5buttons {
     float: right;
-    position: absolute;
-    right: 0px;
-    top: 0;
 }
 .html5buttons a {
   border: 1px solid #000;
@@ -378,4 +374,17 @@ div.dt-button-info {
   .dataTables_length {
     float: none;
   }
+}
+.dataTables_info
+{
+    position: absolute;
+    bottom: 0;
+}
+.pixel
+{
+    image-rendering: pixelated;
+}
+.skill-pixel
+{
+    width: 80px;
 }

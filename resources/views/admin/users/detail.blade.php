@@ -35,6 +35,9 @@
                             @endforeach
                             <span class="{{ $detail->using_pet ? "Mount_Body_$detail->using_pet" : '' }}"></span>
                         </div>
+                        <p style="margin-top:80px" class="text-center">
+                            {{ $detail->name }} ( {{ $detail->character->name }} )
+                        </p>
                     </div>
                     <div style="margin-top:10px;padding:20px" class="col-4">
                         <div class="row">
@@ -169,10 +172,12 @@
                             </div>
                         </div>
                     </div>
-                    <div style="margin:20px" class="b-b">
+                </div>
+                <div style="margin-top:20px" class="vip-bordered">
+                    <div style="margin:20px" class="card b-b">
                         <div class="nav-active-border b-primary bottom">
                             <ul class="nav" id="myTab" role="tablist">
-                                <li class="nav-item"><a class="nav-link active" id="index-tab" data-toggle="tab" href="#home-gear" role="tab" aria-controls="home-gear" aria-selected="true">Trang Bị</a></li>
+                                <li class="nav-item"><a class="nav-link active" id="gear-tab" data-toggle="tab" href="#home-gear" role="tab" aria-controls="home-gear" aria-selected="true">Trang Bị</a></li>
                                 <li class="nav-item"><a class="nav-link" id="mobile-tab" data-toggle="tab" href="#home-skill" role="tab" aria-controls="home-skill" aria-selected="false">Kỹ Năng</a></li>
                                 <li class="nav-item"><a class="nav-link" id="browser-tab" data-toggle="tab" href="#home-pet" role="tab" aria-controls="home-pet" aria-selected="false">Thú Cưỡi</a></li>
                                 <li class="nav-item"><a class="nav-link" id="country-tab" data-toggle="tab" href="#home-item" role="tab" aria-controls="home-item" aria-selected="false">Vật Phẩm</a></li>
@@ -181,7 +186,47 @@
                         </div>
                     </div>
                     <div class="tab-content p-3">
-                        <div class="tab-pane fade show active" id="home-index" role="tabpanel" aria-labelledby="index-tab">
+                        <div class="tab-pane fade show active" id="home-gear" role="tabpanel" aria-labelledby="gear-tab">
+                            <div class="row">
+                                @if($detail->gears->count() > 0)
+                                    @foreach($detail->gears as $key => $item)
+                                    <div data-title="tooltip" title="Click vào để xem chi tiết" class="col-3 col-md-3 col-lg-2">
+                                        <div class="card vip-bordered">
+                                            <div @click="showGearsDescription({{ json_encode($item) }},0)" class="text-center hoverable">
+                                                <div style="margin:0 auto" class="pixel {{ $item->shop_tag }}"></div>
+                                                <p :style="{color:'{{ $item->rgb }}'}">{{ $item->name }} ( {{ $item->pivot->status == 1 ? 'Đang Mặc' : '' }} )</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                @else
+                                    <p class="text-center">( Không có trang bị nào )</p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="home-skill" role="tabpanel" aria-labelledby="skill-tab">
+                            @if($detail->skills->count() > 0)
+                                @foreach($detail->skills as $key => $item)
+                                <div data-title="tooltip" title="Click vào để xem chi tiết" class="col-3 col-md-3 col-lg-2">
+                                    <div class="card">
+                                        <div @click="showSkillsDescription({{ json_encode($item) }},0,'{{ $item->name }}')" class="text-center hoverable">
+                                            <img class="pixel skill-pixel" src="{{ $item->image }}">
+                                        </div>
+                                    </div>    
+                                </div>
+                                @endforeach
+                            @else
+                                <p class="text-center">( Không có kỹ năng nào )</p>
+                            @endif
+                        </div>
+                        <div class="tab-pane fade" id="home-pet" role="tabpanel" aria-labelledby="pet-tab">
+                            3
+                        </div>
+                        <div class="tab-pane fade" id="home-item" role="tabpanel" aria-labelledby="item-tab">
+                            4
+                        </div>
+                        <div class="tab-pane fade" id="home-edit" role="tabpanel" aria-labelledby="edit-tab">
+                            6
                         </div>
                     </div>
                 </div>
@@ -191,5 +236,5 @@
 </div>
 @endsection
 @push('js')
-
+    <script src="{{ asset('assets/js/vue/app.js') }}"></script>
 @endpush
