@@ -19,7 +19,7 @@
                             </span>
                         </div>
                         <div class="col-8">
-                            <div><strong>{{ $message->data['name'] }}</strong></div>
+                            <div><strong>{{ $message->data['name'] }} {!! $message->data['is_admin'] ? "<i class='fas fa-check-circle'></i>" : '' !!}</strong></div>
                             <small style="font-size:11px">{{ \Carbon\Carbon::parse($message->created_at)->diffForHumans() }}</small>
                         </div>
                     </div>

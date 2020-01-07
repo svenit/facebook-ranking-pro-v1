@@ -23,7 +23,7 @@
                                         <div class="th-inner text-gold sortable both">Mô Tả</div>
                                     </th>
                                     <th style="" data-field="owner">
-                                        <div class="th-inner text-gold sortable both">Danh Mục</div>
+                                        <div class="th-inner text-gold sortable both">Hệ Phái</div>
                                     </th>
                                     <th data-field="project">
                                         <div class="th-inner text-gold sortable both">Trang Bị</div>
@@ -40,7 +40,7 @@
                                         <td style=""><small class="text-muted">{{ $key + 1 }}</small></td>
                                         <td style=""><small class="text-muted">{{ $item->name }}</small></td>
                                         <td style=""><small class="text-muted">{{ $item->description }}</small></td>
-                                        <td style=""><small class="text-muted">{{ $detail->name }}</small></td>
+                                        <td style=""><small class="text-muted">{{ $item->character->name }}</small></td>
                                         <td style="">
                                             <small class="text-muted">
                                                 <div class="pixel {{ $item->shop_tag }}"></div>

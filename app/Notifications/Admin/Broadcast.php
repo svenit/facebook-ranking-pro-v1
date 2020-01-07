@@ -60,7 +60,8 @@ class Broadcast extends Notification
             'title' => $this->data['title'],
             'message' => $this->data['message'],
             'user_id' => $this->data['user_id'],
-            'name' => $this->data['name']
+            'name' => $this->data['name'],
+            'is_admin' => $this->data['is_admin']
         ];
     }
 }

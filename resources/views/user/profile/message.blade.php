@@ -20,7 +20,7 @@
                                         {{ $message->data['title'] ?? '( Không có tiêu đề )' }}
                                     </a>
                                         <div class="item-except text-muted text-sm h-1x">
-                                            {{ strip_tags(Str::words($message->data['message'] ?? '',10)) }}
+                                            {{ $message->data['name'] }} {!! $message->data['is_admin'] ? "<i class='fas fa-check-circle'></i>" : '' !!}
                                         </div>
                                     </div>
                                     <div class="no-wrap">

@@ -153,7 +153,8 @@ class UserController extends Controller
             'message' => $request->message,
             'title' => $request->title,
             'user_id' => Auth::user()->user_id,
-            'name' => Auth::user()->name
+            'name' => 'Admin',
+            'is_admin' => true
         ]));
         return redirect()->back()->with([
             'status' => 'success',
