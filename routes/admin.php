@@ -10,6 +10,8 @@ Route::group(['as' => 'admin.','namespace' => 'Admin'], function () {
         Route::get('hour','AnalyticsController@baseOnHour')->name('hour');
         Route::get('day','AnalyticsController@baseOnDay')->name('day');
         Route::get('view-most','AnalyticsController@viewMost')->name('view-most');
+        Route::get('setting','AnalyticsController@setting')->name('setting.index');
+        Route::post('setting','AnalyticsController@setAnalyticsDays')->name('setting.update');
     });
     Route::group(['prefix' => 'users','as' => 'users.'], function () {
         Route::get('list','UserController@list')->name('list');
@@ -23,6 +25,7 @@ Route::group(['as' => 'admin.','namespace' => 'Admin'], function () {
         Route::get('remove-pet/{id}/{pet}/{user}','UserController@removePet')->name('remove-pet');
         Route::post('add-item/{id}','UserController@addItem')->name('add-item');
         Route::get('remove-item/{id}/{pet}/{user}','UserController@removeItem')->name('remove-item');
+        Route::post('send-message/{id}','UserController@sendMessage')->name('send-message');
         Route::get('delete/{id}','UserController@deleteAccount')->name('delete');
         Route::get('lock/{id}','UserController@lock')->name('lock');
         Route::get('unlock/{id}','UserController@unlock')->name('unlock');

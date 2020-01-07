@@ -75,6 +75,8 @@ Route::group(['middleware' => ['maintaince','redirect.action']], function () {
                 Route::get('pets','Pet\PetController@index')->name('pet.index');
                 Route::get('skills','Skill\SkillController@index')->name('skill.index');
                 Route::get('items','Item\ItemController@index')->name('item.index');
+                Route::get('messages','Message\MessageController@index')->name('message.index');
+                Route::get('messages/{id}','Message\MessageController@detail')->name('message.detail');
             });
             Route::group(['prefix' => 'explore','as' => 'explore.'], function () {
                 Route::group(['prefix' => 'recovery-room','as' => 'recovery-room.','namespace' => 'RecoveryRoom'], function () {

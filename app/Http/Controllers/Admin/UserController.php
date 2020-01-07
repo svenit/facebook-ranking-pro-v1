@@ -15,6 +15,7 @@ use App\Model\Character;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Notifications\Admin\Broadcast;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -35,8 +36,8 @@ class UserController extends Controller
         $detail->level = $detail->nextLevel();
 
         $characters = Character::all();
-        $gears = Gear::where('character_id',$detail->character_id)->get()->load('character');
-        $skills = Skill::whereNotIn('id',$detail->skills->pluck('id'))->where('character_id',$detail->character->id)->get();
+        $gears = Gear::all()->load('character');
+        $skills = Skill::whereNotIn('id',$detail->skills->pluck('id'))->get();
         $pets = Pet::all();
         $items = Item::all();
 
@@ -140,6 +141,21 @@ class UserController extends Controller
         return redirect()->back()->with([
             'status' => 'success',
             'message' => 'Thành Công'
+        ]);
+    }
+    public function sendMessage(Request $request,$id)
+    {
+        $this->validate($request,[
+            'message' => 'required',
+            'title' => 'required'
+        ]);
+        User::findOrFail($id)->notify(new Broadcast([
+            'message' => $request->message,
+            'title' => $request->title
+        ]));
+        return redirect()->back()->with([
+            'status' => 'success',
+            'message' => 'Gửi tin nhắn thành công'
         ]);
     }
 }

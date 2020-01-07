@@ -16,9 +16,11 @@ class Broadcast extends Notification
      *
      * @return void
      */
-    public function __construct()
+    public $data;
+
+    public function __construct($data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -29,7 +31,7 @@ class Broadcast extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['database'];
     }
 
     /**
@@ -55,7 +57,8 @@ class Broadcast extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'title' => $this->data['title'],
+            'message' => $this->data['message']
         ];
     }
 }

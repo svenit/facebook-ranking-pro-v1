@@ -40,22 +40,27 @@
                 </div>
             </li>
             <li class="nav-item dropdown"><a class="nav-link px-2 mr-lg-2" data-toggle="dropdown"><i
-                        data-feather="bell"></i> <span class="badge badge-pill badge-up bg-primary">8</span></a>
-                <div class="dropdown-menu dropdown-menu-right mt-3 w-md animate fadeIn p-0">
+                        data-feather="bell"></i> <span class="badge badge-pill badge-up bg-primary">{{ $notifications['unread'] }}</span></a>
+                <div style="width:500px" class="dropdown-menu dropdown-menu-right mt-3 w-md animate fadeIn p-0">
                     <div class="scrollable hover" style="max-height: 250px">
                         <div class="list list-row">
-                            <div class="list-item" data-id="10">
-                                <div><a href="#"><span class="w-32 avatar gd-danger"><img
-                                                src="{{ asset('assets/img/a10.jpg') }}" alt="."></span></a></div>
-                                <div class="flex">
-                                    <div class="item-feed h-2x">Developers of <a href="#">@iAI</a>, the AI
-                                        assistant based on Free Software</div>
-                                </div>
-                            </div>
+                            @if($notifications['data'])
+                                @foreach($notifications['data'] as $noti)
+                                    <div style="background:{{ $noti->read_at ? '' : 'rgba(135,150,165,.1)' }}" class="list-item" data-id="10">
+                                        <div>
+                                            <a href="{{ Route('user.profile.message.detail',['id' => $noti->id]) }}"><span class="w-32 avatar gd-dark">
+                                                <img src="https://image.flaticon.com/icons/svg/1040/1040216.svg" alt="."></span></a></div>
+                                        <div class="flex">
+                                            <a class="text-muted" href="{{ Route('user.profile.message.detail',['id' => $noti->id]) }}"><div style="font-size:13px" class="item-feed h-2x">{{ $noti->data['title'] ?? '' }}</div></a>
+                                        </div>
+                                        <span style="font-size:13px">{{ \Carbon\Carbon::parse($noti->created_at)->diffForHumans() }}</span>
+                                    </div>
+                                @endforeach
+                            @endif
                         </div>
                     </div>
                     <div class="d-flex px-3 py-2 b-t">
-                        <div class="flex"><span>6 Notifications</span></div><a href="page.setting.html">See all
+                        <div class="flex"><span>{{ $notifications['unread'] }} Tin Nhắn</span></div><a class="text-silver" href="{{ Route('user.profile.message.index') }}">Xem Tất Cả
                             <i class="fa fa-angle-right text-muted"></i></a>
                     </div>
                 </div>

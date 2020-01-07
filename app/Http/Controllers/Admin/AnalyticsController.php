@@ -72,21 +72,22 @@ class AnalyticsController extends Controller
     public function setAnalyticsDays(Request $request)
     {
         $this->validate($request,[
-            'type' => 'required',
             'date_start' => 'required|date|before:'.now(),
             'date_end' => 'required|date|after:date_start|before:'.now()
         ],[
-            'type.required' => 'Bạn chưa chọn kiểu hiển thị',
             'date_start.required' => 'Bạn chưa chọn ngày bắt đầu',
             'date_start.before' => 'Ngày bắt đầu phải nhỏ hơn hiện tại',
             'date_end.required' => 'Bạn chưa chọn ngày kết thúc',
             'date_end.after' => 'Ngày kết thúc phải lớn hơn ngày bắt đầu',
             'date_end.before' => 'Ngày kết thúc phải nhỏ hơn hiện tại'
         ]);
-        Session::put('analytics.type',$request->type);
         Session::put('analytics.date_start',$request->date_start);
         Session::put('analytics.date_end',$request->date_end);
 
         return back();
+    }
+    public function setting()
+    {
+        return view('admin.analytics.setting');
     }
 }

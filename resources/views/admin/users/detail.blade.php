@@ -174,6 +174,13 @@
                     </div>
                 </div>
                 <div style="margin-top:20px" class="vip-bordered">
+                    @if($errors->any())
+                        <div class="alert bg-danger">
+                            @foreach($errors->all() as $error)
+                                <div>{{ $error }}</div>
+                            @endforeach
+                        </div>
+                    @endif
                     <div style="margin:20px" class="card b-b">
                         <div class="nav-active-border b-primary bottom">
                             <ul class="nav" id="myTab" role="tablist">
@@ -186,6 +193,7 @@
                                 <li class="nav-item"><a class="nav-link" id="country-tab" data-toggle="tab" href="#home-add-skill" role="tab" aria-controls="home-add-skill" aria-selected="false"><i data-feather="plus"></i> Kỹ Năng</a></li>
                                 <li class="nav-item"><a class="nav-link" id="country-tab" data-toggle="tab" href="#home-add-pet" role="tab" aria-controls="home-add-pet" aria-selected="false"><i data-feather="plus"></i> Thú Cưỡi</a></li>
                                 <li class="nav-item"><a class="nav-link" id="country-tab" data-toggle="tab" href="#home-add-item" role="tab" aria-controls="home-add-item" aria-selected="false"><i data-feather="plus"></i> Vật Phẩm</a></li>
+                                <li class="nav-item"><a class="nav-link" id="country-tab" data-toggle="tab" href="#home-add-message" role="tab" aria-controls="home-add-message" aria-selected="false"><i data-feather="plus"></i> Tin Nhắn</a></li>
                             </ul>
                         </div>
                     </div>
@@ -384,7 +392,7 @@
                                             <label class="text-muted" for="exampleInputEmail1">Chọn trang bị</label>
                                             <select placeholder="Chọn trang bị" multiple class="chosen form-control form-control-sm" name="gears[]">
                                                 @foreach($gears as $gear)
-                                                    <option value="{{ $gear->id }}">{{ $gear->name }}</option>
+                                                    <option value="{{ $gear->id }}">{{ $gear->name }} ( {{ $gear->character->name }} )</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -404,7 +412,7 @@
                                             <label class="text-muted" for="exampleInputEmail1">Chọn kỹ năng</label>
                                             <select placeholder="Chọn kỹ năng" multiple class="chosen form-control form-control-sm" name="skills[]">
                                                 @foreach($skills as $skill)
-                                                    <option value="{{ $skill->id }}">{{ $skill->name }}</option>
+                                                    <option value="{{ $skill->id }}">{{ $skill->name }} ( {{ $skill->character->name }} )</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -459,6 +467,26 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="tab-pane fade" id="home-add-message" role="tabpanel" aria-labelledby="add-message-tab">
+                            <div class="card">
+                                <div class="card-body">
+                                    <form method="POST" action="{{ Route('admin.users.send-message',['id' => $detail->id]) }}" class="row">
+                                        @csrf
+                                        <div class="form-group col-12">
+                                            <label class="text-muted" for="exampleInputEmail1">Tiêu Đề</label>
+                                            <input type="text" class="form-control" name="title" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                        </div>
+                                        <div class="form-group col-12">
+                                            <label class="text-muted" for="exampleInputEmail1">Nhập tin nhắn</label>
+                                            <textarea id="editor" name="message" class="form-control" rows="7"></textarea>
+                                        </div>
+                                        <div class="form-group col-12">
+                                            <button type="submit" class="btn btn-success">Gửi</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -470,10 +498,28 @@
     <link rel="stylesheet" href="{{ asset('assets/css/plugins/chosen.css') }}">
 @endpush
 @push('js')
+    <script src="https://cdn.tiny.cloud/1/p56re1ll6yrfkisr7rvwr2l4vnnya546q555cibp202ritgh/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
     <script src="{{ asset('assets/js/plugins/chosen/chosen.jquery.js') }}"></script>
     <script src="{{ asset('assets/js/vue/app.js') }}"></script>
     <script>
         $(document).ready(function () {
+            tinymce.init({
+                selector:'textarea',
+                skin: 'oxide-dark',
+                content_css: 'dark',
+                plugins: [
+                    'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
+                    'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+                    'table emoticons template paste help'
+                ],
+                toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify |' +
+                    ' bullist numlist outdent indent | link image | print preview media fullpage | ' +
+                    'forecolor backcolor emoticons | help',
+                menu: {
+                    favs: {title: 'My Favorites', items: 'code visualaid | searchreplace | spellchecker | emoticons'}
+                },
+                menubar: 'favs file edit view insert format tools table help',
+            });
             $('.chosen').chosen({
                 width: '100%'
             });
