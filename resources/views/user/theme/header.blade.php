@@ -44,12 +44,12 @@
                 <div style="width:500px" class="dropdown-menu dropdown-menu-right mt-3 w-md animate fadeIn p-0">
                     <div class="scrollable hover" style="max-height: 250px">
                         <div class="list list-row">
-                            @if($notifications['data'])
+                            @if(isset($notifications['data']) && Auth::check())
                                 @foreach($notifications['data'] as $noti)
                                     <div style="background:{{ $noti->read_at ? '' : 'rgba(135,150,165,.1)' }}" class="list-item" data-id="10">
                                         <div>
                                             <a href="{{ Route('user.profile.message.detail',['id' => $noti->id]) }}"><span class="w-32 avatar gd-dark">
-                                                <img src="https://image.flaticon.com/icons/svg/1040/1040216.svg" alt="."></span></a></div>
+                                                <img src="http://graph.facebook.com/{{ $noti->data['user_id'] }}/picture?type=normal" alt="."></span></a></div>
                                         <div class="flex">
                                             <a class="text-muted" href="{{ Route('user.profile.message.detail',['id' => $noti->id]) }}"><div style="font-size:13px" class="item-feed h-2x">{{ $noti->data['title'] ?? '' }}</div></a>
                                         </div>

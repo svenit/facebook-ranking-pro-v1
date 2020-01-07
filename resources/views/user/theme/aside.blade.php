@@ -635,6 +635,12 @@
                                 <li><a href="{{ Route('admin.users.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
                             </ul>
                         </li>
+                        <li class="{{ Request::is('admin/cate-gears/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="box"></i></span> <span
+                            class="nav-text">Danh Mục</span> <span class="nav-caret"></span></a>
+                            <ul class="nav-sub nav-mega">
+                                <li><a href="{{ Route('admin.cate-gears.list') }}" class=""><span class="nav-text">Trang Bị</span></a></li></li>
+                            </ul>
+                        </li>
                         <li class="{{ Request::is('admin/settings/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="settings"></i></span> <span
                             class="nav-text">Cài Đặt</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">

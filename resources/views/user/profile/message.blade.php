@@ -15,7 +15,7 @@
                         <div class="list list-row">
                             @foreach($messages as $key => $message)
                                 <div class="list-item" data-id="9" data-sr-id="2" style="visibility: visible; transform: none; opacity: 1; transition: transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s;background:{{ $message->read_at ? '' : '#333' }}">
-                                    <div><a href="{{ Route('user.profile.message.detail',['id' => $message->id]) }}" data-pjax-state=""><span class="w-24 avatar gd-dark" data-toggle-class="loading"><img src="https://image.flaticon.com/icons/svg/1040/1040216.svg" alt="."></span></a></div>
+                                    <div><a href="{{ Route('user.profile.message.detail',['id' => $message->id]) }}" data-pjax-state=""><span class="w-40 avatar gd-dark" data-toggle-class="loading"><img src="http://graph.facebook.com/{{ $message->data['user_id'] }}/picture?type=normal" alt="."></span></a></div>
                                     <div class="flex"><a href="{{ Route('user.profile.message.detail',['id' => $message->id]) }}" class="item-title text-color h-1x" data-pjax-state="">
                                         {{ $message->data['title'] ?? '( Không có tiêu đề )' }}
                                     </a>

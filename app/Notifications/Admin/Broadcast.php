@@ -58,7 +58,9 @@ class Broadcast extends Notification
     {
         return [
             'title' => $this->data['title'],
-            'message' => $this->data['message']
+            'message' => $this->data['message'],
+            'user_id' => $this->data['user_id'],
+            'name' => $this->data['name']
         ];
     }
 }

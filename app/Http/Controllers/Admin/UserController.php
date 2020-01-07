@@ -151,7 +151,9 @@ class UserController extends Controller
         ]);
         User::findOrFail($id)->notify(new Broadcast([
             'message' => $request->message,
-            'title' => $request->title
+            'title' => $request->title,
+            'user_id' => Auth::user()->user_id,
+            'name' => Auth::user()->name
         ]));
         return redirect()->back()->with([
             'status' => 'success',
