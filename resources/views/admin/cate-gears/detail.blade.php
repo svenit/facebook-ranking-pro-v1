@@ -19,14 +19,14 @@
                                     <th style="" data-field="owner">
                                         <div class="th-inner text-gold sortable both">Tên</div>
                                     </th>
-                                    <th style="" data-field="owner">
-                                        <div class="th-inner text-gold sortable both">Mô Tả</div>
+                                    <th data-field="project">
+                                        <div class="th-inner text-gold sortable both">Trang Bị</div>
                                     </th>
                                     <th style="" data-field="owner">
                                         <div class="th-inner text-gold sortable both">Hệ Phái</div>
                                     </th>
-                                    <th data-field="project">
-                                        <div class="th-inner text-gold sortable both">Trang Bị</div>
+                                    <th style="" data-field="owner">
+                                        <div class="th-inner text-gold sortable both">Mô Tả</div>
                                     </th>
                                     <th style="width:100px" data-field="task">
                                         <div class="th-inner text-gold"><span class="d-none d-sm-block">Hành Động</span>
@@ -39,18 +39,20 @@
                                     <tr>
                                         <td style=""><small class="text-muted">{{ $key + 1 }}</small></td>
                                         <td style=""><small class="text-muted">{{ $item->name }}</small></td>
-                                        <td style=""><small class="text-muted">{{ $item->description }}</small></td>
-                                        <td style=""><small class="text-muted">{{ $item->character->name }}</small></td>
-                                        <td style="">
+                                        <td @click="showGearsDescription({{ json_encode($gear) }},0)" style="">
                                             <small class="text-muted">
                                                 <div class="pixel {{ $item->shop_tag }}"></div>
-                                            </small></td>
+                                            </small>
+                                        </td>
+                                        <td style=""><small class="text-muted">{{ $item->character->name }}</small></td>
+                                        <td style=""><small class="text-muted">{{ $item->description }}</small></td>
                                         <td class="flex" style="">
                                             <div class="dropdown mb-2"><button class="btn btn-white dropdown-toggle" data-toggle="dropdown"
                                                 aria-expanded="false">Hành Động</button>
                                                 <div class="dropdown-menu bg-dark" role="menu" x-placement="bottom-start"
                                                     style="position: absolute; transform: translate3d(0px, 34px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                                    
+                                                    <a href="#" class="dropdown-item">Xem</a>
+                                                    <a href="#" class="dropdown-item">Xóa</a>
                                                 </div>
                                             </div>
                                         </td>
@@ -68,6 +70,7 @@
 @push('js')
 <script src="{{ asset('assets/js/plugins/datatable/datatable.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/datatable/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('assets/js/vue/app.js') }}"></script>
 <script>
     $(document).ready( function () {
         $('#myTable').DataTable({

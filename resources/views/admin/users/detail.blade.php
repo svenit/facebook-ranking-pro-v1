@@ -10,7 +10,7 @@
                 <div class="row row-sm sr vip-bordered">
                     <div class="col-2">
                         <div style="margin:0px 10px 35px 0px;padding:20px" class="character-sprites hoverable {{ $detail->isVip == 1 ? 'vip-2' : '' }}">
-                            <span class="{{ $detail->using_pet ? "Mount_Body_$detail->using_pet" : '' }}"></span>
+                            <span class="{{ $detail->using_pet ? "Mount_Body_".$detail->using_pet->class_tag : '' }}"></span>
                             <span class="hair_flower_3"></span>
                             <span class="chair_none"></span>
                             <span class=""></span>
@@ -33,11 +33,12 @@
                             @foreach($detail->using_gears as $gear)
                                 <span class="{{ $gear->class_tag }}"></span>
                             @endforeach
-                            <span class="{{ $detail->using_pet ? "Mount_Head_$detail->using_pet" : '' }}"></span>
+                            <span class="{{ $detail->using_pet ? "Mount_Head_".$detail->using_pet->class_tag : '' }}"></span>
                         </div>
                         <p style="margin-top:80px" class="text-center">
                             {{ $detail->name }} ( {{ $detail->character->name }} )
                         </p>
+                        <p class="alert bg-dark">{!! $detail->status == 0 ? '<span class="text-danger">Đã Khóa</span>' : '<span class="text-success">Hoạt Động</span>' !!}</p>
                     </div>
                     <div style="margin-top:10px;padding:20px" class="col-4">
                         <div class="row">

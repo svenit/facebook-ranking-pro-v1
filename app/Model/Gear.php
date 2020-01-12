@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Gear extends Model
 {
+    protected $fillable = [
+        'name','class_tag','shop_tag','character_id','cate_gear_id',
+        'strength','intelligent','agility','lucky','armor_strength',
+        'armor_intelligent','heath_points','description','rgb','level_required',
+        'price','price_type','status'
+    ];
     protected $hidden = [
         'character_id','cate_gear_id','status','created_at','updated_at'
     ];
@@ -19,6 +25,6 @@ class Gear extends Model
     }
     public function cates()
     {
-        return $this->belongsTo('App\Model\CateGear');
+        return $this->belongsTo('App\Model\CateGear','cate_gear_id','id');
     }
 }

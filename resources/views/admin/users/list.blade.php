@@ -73,8 +73,8 @@
                                     <div class="dropdown-menu bg-dark" role="menu" x-placement="bottom-start"
                                         style="position: absolute; transform: translate3d(0px, 34px, 0px); top: 0px; left: 0px; will-change: transform;">
                                         <a href="{{ Route('admin.users.detail',['id' => $user->id]) }}" class="dropdown-item">Xem Chi Tiết</a>
-                                        <a href="#" class="dropdown-item">{{ $user->status == 0 ? 'Mở Khóa' : 'Khóa' }}</a>
-                                        <a href="#" class="dropdown-item">Xóa</a>
+                                        <a href="{{ $user->status == 1 ? Route('admin.users.lock',['id' => $user->id]) : Route('admin.users.unlock',['id' => $user->id])  }}" class="dropdown-item">{{ $user->status == 0 ? 'Mở Khóa' : 'Khóa' }}</a>
+                                        <a onclick="return confirm('Xóa tài khoản này ?')" href="{{ Route('admin.users.delete',['id' => $user->id]) }}" class="dropdown-item">Xóa</a>
                                     </div>
                                 </div>
                             </td>

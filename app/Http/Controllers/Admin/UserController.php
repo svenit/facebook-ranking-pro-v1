@@ -30,7 +30,7 @@ class UserController extends Controller
         $detail = User::findOrFail($id);
         $detail->using_skills = $detail->usingSkills();
         $detail->using_gears = $detail->usingGears();
-        $detail->using_pet = $detail->usingPets()[0]->class_tag ?? null;
+        $detail->using_pet = $detail->usingPets()->first() ?? null;
         $detail->gears = $detail->gears->load('character');
         $detail->tracking = Tracking::where('user_id',$id)->first();
         $detail->level = $detail->nextLevel();
@@ -156,9 +156,47 @@ class UserController extends Controller
             'name' => 'Admin',
             'is_admin' => true
         ]));
+        $this->removeCache("user.profile.message.user-id-$id");
         return redirect()->back()->with([
             'status' => 'success',
             'message' => 'Gửi tin nhắn thành công'
         ]);
+    }
+    public function lock($id)
+    {
+        $user = User::findOrFail($id)->update([
+            'status' => 0
+        ]);
+        if(isset($user))
+        {
+            return redirect()->back()->with([
+                'status' => 'success',
+                'message' => "Đã khóa tài khoản thành công"
+            ]);
+        }
+    }
+    public function unlock($id)
+    {
+        $user = User::findOrFail($id)->update([
+            'status' => 1
+        ]);
+        if(isset($user))
+        {
+            return redirect()->back()->with([
+                'status' => 'success',
+                'message' => "Mở khóa tài khoản công"
+            ]);
+        }
+    }
+    public function deleteAccount($id)
+    {
+        $user = User::findOrFail($id)->delete();
+        if(isset($user))
+        {
+            return redirect()->back()->with([
+                'status' => 'success',
+                'message' => "Xóa khóa tài khoản công"
+            ]);
+        }
     }
 }

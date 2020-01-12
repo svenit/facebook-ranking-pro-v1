@@ -16,7 +16,6 @@ class ShopController extends Controller
         $equips = Cache::rememberForever("shop.$cate", function () use ($cate) {
             $allCates = CateGear::all();
             $gears = false;
-            $avaiableRows = false;
             foreach($allCates as $key => $cates)
             {
                 if($cate == Str::slug($cates->name))

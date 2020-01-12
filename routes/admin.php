@@ -33,8 +33,15 @@ Route::group(['as' => 'admin.','namespace' => 'Admin'], function () {
     Route::group(['prefix' => 'cate-gears','as' => 'cate-gears.'], function () {
         Route::get('list','CateGearController@list')->name('list');
         Route::post('store','CateGearController@store')->name('store');
-        Route::get('detail/{id}','CateGearController@detail')->name('detail');
         Route::get('delete/{id}','CateGearController@delete')->name('delete');
+        Route::get('detail/{id}','CateGearController@detail')->name('detail');
+    });
+    Route::group(['prefix' => 'gears','as' => 'gears.'], function () {
+        Route::get('list','GearController@list')->name('list');
+        Route::post('store','GearController@store')->name('store');
+        Route::get('edit/{id}','GearController@edit')->name('edit');
+        Route::post('update/{id}','GearController@update')->name('update');
+        Route::get('delete/{id}','GearController@delete')->name('delete');
     });
     Route::get('update-points','UpdatePointsController@index')->name('update-points');
     Route::post('update-points','UpdatePointsController@store');

@@ -39,8 +39,9 @@
                     </div>
                 </div>
             </li>
+            @auth
             <li class="nav-item dropdown"><a class="nav-link px-2 mr-lg-2" data-toggle="dropdown"><i
-                        data-feather="bell"></i> <span class="badge badge-pill badge-up bg-primary">{{ $notifications['unread'] }}</span></a>
+                        data-feather="bell"></i> <span class="badge badge-pill badge-up bg-primary">{{ $notifications['unread'] ?? 0 }}</span></a>
                 <div style="width:500px" class="dropdown-menu dropdown-menu-right mt-3 w-md animate fadeIn p-0">
                     <div class="scrollable hover" style="max-height: 250px">
                         <div class="list list-row">
@@ -65,6 +66,7 @@
                     </div>
                 </div>
             </li>
+            @endauth
             <li class="nav-item dropdown"><a href="#" data-toggle="dropdown"
                     class="nav-link d-flex align-items-center px-2 text-color"><span class="avatar w-24"
                         style="margin: -2px"><img src="{{ Auth::check() ? 'http://graph.facebook.com/'.Auth::user()->user_id.'/picture?type=normal' : 'https://image.flaticon.com/icons/png/512/149/149071.png' }}" alt="..."></span></a>

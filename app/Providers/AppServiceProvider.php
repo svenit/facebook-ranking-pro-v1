@@ -57,7 +57,7 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('notifications', [
                     'data' => Auth::user()->notifications,
                     'all' => Auth::user()->notifications->count(),
-                    'unread' => Auth::user()->readNotifications->count(),
+                    'read' => Auth::user()->readNotifications->count(),
                     'unread' => Auth::user()->unreadNotifications->count()
                 ]);   
             });

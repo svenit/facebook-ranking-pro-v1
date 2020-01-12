@@ -86,4 +86,8 @@ class Controller extends BaseController
     {
         Cache::flush();
     }
+    public function test(Request $request)
+    {
+        return $request->all();
+    }
 }

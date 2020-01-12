@@ -180,7 +180,9 @@ app = new Vue({
         inventory:{},
         pets:[],
         skills:[],
-        items:[]
+        items:[],
+        shop_tag:'',
+        rgb:''
     },
     async created()
     {
