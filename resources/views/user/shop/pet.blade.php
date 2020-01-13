@@ -12,7 +12,7 @@
             <div class="vip-bordered row">                    
                 @if($pets->count() > 0)
                     @foreach($pets as $key => $pet)
-                        <div class="col-6 col-md-4 col-lg-3">
+                        <div style="margin:15px 0px" class="col-6 col-md-4 col-lg-3">
                             <div data-title="tooltip" title="Click vào để xem chi tiết" class="card vip-bordered">
                                 <div @click="showInforPet({{ json_encode($pet) }},0)" class="text-center hoverable">
                                     <div style="margin:0 auto !important" class="pixel mount Mount_Icon_{{ $pet->class_tag }}"></div>

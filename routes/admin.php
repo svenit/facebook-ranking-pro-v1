@@ -42,7 +42,9 @@ Route::group(['as' => 'admin.','namespace' => 'Admin'], function () {
         Route::post('store','GearController@store')->name('store');
         Route::get('edit/{id}','GearController@edit')->name('edit');
         Route::post('update/{id}','GearController@update')->name('update');
+        Route::get('replicate/{id}','GearController@replicate')->name('replicate');
         Route::get('delete/{id}','GearController@delete')->name('delete');
+        Route::post('delete-multi','GearController@deleteMulti')->name('delete-multi');
     });
     Route::group(['prefix' => 'pets','as' => 'pets.'], function () {
         Route::view('add','admin.pets.add')->name('add');
@@ -50,7 +52,9 @@ Route::group(['as' => 'admin.','namespace' => 'Admin'], function () {
         Route::post('store','PetController@store')->name('store');
         Route::get('edit/{id}','PetController@edit')->name('edit');
         Route::post('update/{id}','PetController@update')->name('update');
+        Route::get('replicate/{id}','PetController@replicate')->name('replicate');
         Route::get('delete/{id}','PetController@delete')->name('delete');
+        Route::post('delete-multi','PetController@deleteMulti')->name('delete-multi');
     });
     Route::get('update-points','UpdatePointsController@index')->name('update-points');
     Route::post('update-points','UpdatePointsController@store');

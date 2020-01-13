@@ -18,9 +18,13 @@
                     </div>
                     <div class="tab-content p-3">
                         <div class="tab-pane fade show active" id="home-index" role="tabpanel" aria-labelledby="index-tab">
+                            <button v-if="selected.length > 0" form="form" type="submit" class="btn bg-danger-lt">Xóa ( @{{ selected.length }} )</button>
                             <table id="myTable" class="table table-striped">
                                 <thead>
                                     <tr>
+                                        <th style="" data-field="owner">
+                                            <div class="th-inner text-gold sortable both">Chọn</div>
+                                        </th>
                                         <th style="" data-field="owner">
                                             <div class="th-inner text-gold sortable both">#</div>
                                         </th>
@@ -33,6 +37,15 @@
                                         <th style="" data-field="owner">
                                             <div class="th-inner text-gold sortable both">SLTV Sở Hữu</div>
                                         </th>
+                                        <th style="" data-field="owner">
+                                            <div class="th-inner text-gold sortable both">Level YC</div>
+                                        </th>
+                                        <th style="" data-field="owner">
+                                            <div class="th-inner text-gold sortable both">Giá</div>
+                                        </th>
+                                        <th style="" data-field="owner">
+                                            <div class="th-inner text-gold sortable both">Trạng Thái</div>
+                                        </th>
                                         <th style="width:100px" data-field="task">
                                             <div class="th-inner text-gold"><span class="d-none d-sm-block">Hành Động</span>
                                             </div>
@@ -42,17 +55,29 @@
                                 <tbody>
                                     @foreach($pets as $key => $pet)
                                         <tr>
+                                            <td>
+                                                <div class="checkbox">
+                                                    <label class="ui-check ui-check-md">
+                                                        <input value="{{ $pet->id }}" type="checkbox" v-model="selected"> 
+                                                        <i class="dark-white"></i>
+                                                    </label>
+                                                </div>
+                                            </td>
                                             <td style=""><small class="text-muted">{{ $key + 1 }}</small></td>
                                             <td style=""><small class="text-muted">{{ $pet->name }}</small></td>
                                             <td @click="showInforPet({{ json_encode($pet) }},0)" style=""><div style="" class="pixel mount Mount_Icon_{{ $pet->class_tag }}"></div></td>
                                             <td style=""><small class="text-muted">{{ $pet->users->count() }}</small></td>
+                                            <td style=""><small class="text-muted">{{ $pet->level_required }}</small></td>
+                                            <td style=""><small class="text-{{ $pet->price_type == 0 ? 'gold' : 'info' }}">{{ $pet->price }} {{ $pet->price_type == 0 ? 'Vàng' : 'KC' }}</small></td>
+                                            <td style=""><small class="text-{{ $pet->status == 1 ? 'success' : 'danger' }}">{{ $pet->status == 1 ? 'Hiện' : 'Ẩn' }}</small></td>
                                             <td class="flex" style="">
                                                 <div class="dropdown mb-2"><button class="btn btn-white dropdown-toggle" data-toggle="dropdown"
                                                     aria-expanded="false">Hành Động</button>
                                                     <div class="dropdown-menu bg-dark" role="menu" x-placement="bottom-start"
                                                         style="position: absolute; transform: translate3d(0px, 34px, 0px); top: 0px; left: 0px; will-change: transform;">
                                                         <a href="{{ Route('admin.pets.edit',['id' => $pet->id]) }}" class="dropdown-item">Xem & Sửa</a>
-                                                        <a href="{{ Route('admin.pets.delete',['id' => $pet->id]) }}" class="dropdown-item">Xóa</a>
+                                                        <a onclick="return confirm('Sao chép ?')" href="{{ Route('admin.pets.replicate',['id' => $pet->id]) }}" class="dropdown-item">Sao Chép</a>
+                                                        <a onclick="return confirm('Xóa ?')" href="{{ Route('admin.pets.delete',['id' => $pet->id]) }}" class="dropdown-item">Xóa</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -60,6 +85,10 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            <form id="form" class="form" action="{{ Route('admin.pets.delete-multi') }}" method="POST">
+                                @csrf
+                                <input style="display:none" v-model="selected" type="text" name="selected[]">
+                            </form>
                         </div>
                     </div>
                 </div>

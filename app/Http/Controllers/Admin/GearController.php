@@ -90,19 +90,49 @@ class GearController extends Controller
         $update = Gear::findOrFail($id)->update($request->except('_token'));
         if(isset($update))
         {
+            $this->removeAllCache();
             return redirect()->back()->with([
                 'status' => 'success',
                 'message' => 'Cập nhật trang bị thành công'
             ]);
         }
     }
-
+    public function replicate($id)
+    {
+        $gear = Gear::findOrFail($id);
+        $newGear = $gear->replicate();
+        $newGear->save();
+        $this->removeCache("shop.".Str::slug($gear->name));
+        return redirect()->route('admin.gears.edit',['id' => $newGear->id])->with([
+            'status' => 'success',
+            'message' => 'Đã sao chép'
+        ]);
+    }
     public function delete($id)
     {
         Gear::findOrFail($id)->delete();
+        $this->removeAllCache();
         return redirect()->back()->with([
             'status' => 'success',
             'message' => 'Xóa trang bị thành công'
         ]);
+    }
+    public function deleteMulti(Request $request)
+    {
+        if(isset($request->selected))
+        {
+            foreach(explode(",",$request->selected[0]) as $selected)
+            {
+                $delete = Gear::findOrFail($selected)->delete();
+            }
+            if($delete)
+            {
+                $this->removeAllCache();
+                return redirect()->back()->with([
+                    'status' => 'success',
+                    'message' => "Đã xóa trang bị"
+                ]);
+            }
+        }
     }
 }

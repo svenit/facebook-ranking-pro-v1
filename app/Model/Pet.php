@@ -9,7 +9,7 @@ class Pet extends Model
     protected $fillable = [
         'name','class_tag',
         'strength','intelligent','agility','lucky','armor_strength',
-        'armor_intelligent','heath_points','description','rgb','level_required',
+        'armor_intelligent','health_points','description','rgb','level_required',
         'price','price_type','status'
     ];
     public function users()

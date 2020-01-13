@@ -46,7 +46,7 @@ class ShopController extends Controller
     public function pet()
     {
         $pets = Cache::rememberForever('shop.pet', function () {
-            return Pet::where('status',1)->orderBy('level_required','desc')->get();
+            return Pet::where('status',1)->get();
         });
         return view('user.shop.pet',compact('pets'));
     }

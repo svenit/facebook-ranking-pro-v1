@@ -182,8 +182,10 @@ app = new Vue({
         pets:[],
         skills:[],
         items:[],
+        /* Admin */
         shop_tag:'',
-        rgb:''
+        rgb:'',
+        selected:[]
     },
     async created()
     {
@@ -1266,6 +1268,7 @@ app = new Vue({
                 await this.invetory();
                 this.index();
                 this.notify(res.data.message);
+                this.loading = false;
             }
         },
         async removeEquipment(data)
@@ -1284,6 +1287,7 @@ app = new Vue({
             await this.invetory();
             this.index();
             this.notify(res.data.message);
+            this.loading = false;
         },
         async equipment(data)
         {
@@ -1301,6 +1305,7 @@ app = new Vue({
             await this.index();
             this.invetory();
             this.notify(res.data.message);
+            this.loading = false;
         },
         async buyEquip(id,e)
         {
@@ -1324,6 +1329,7 @@ app = new Vue({
                 {
                     e.target.innerHTML = 'Đã mua';
                 }
+                this.loading = false;
             }
         },
         async buySkill(id,e)
@@ -1348,6 +1354,7 @@ app = new Vue({
                 {
                     e.target.innerHTML = 'Đã mua';
                 }
+                this.loading = false;
             }
         },
         async buyPet(id,e)
@@ -1372,6 +1379,7 @@ app = new Vue({
                 {
                     e.target.innerHTML = 'Đã mua';
                 }
+                this.loading = false;
             }
         },
         async buyItem(id,e)
@@ -1406,6 +1414,7 @@ app = new Vue({
                 {
                     this.notify('Số lượng quá lớn hoặc không hợp lệ');
                 }
+                this.loading = false;
             }
         },
         async pet()
@@ -1442,6 +1451,7 @@ app = new Vue({
                 this.pet();
             }
             this.notify(res.data.message);
+            this.loading = false;
         },
         async petDown(data)
         {
@@ -1462,6 +1472,7 @@ app = new Vue({
                 this.pet();
             }
             this.notify(res.data.message);
+            this.loading = false;
         },
         async dropPet(data)
         {
@@ -1484,6 +1495,7 @@ app = new Vue({
                     this.pet();
                 }
                 this.notify(res.data.message);
+                this.loading = false;
             }
         },
         async skill()
@@ -1537,6 +1549,7 @@ app = new Vue({
                     this.item();
                 }
                 this.notify(res.data.message);
+                this.loading = false;
             }
         },
         async deleteItem(data)
@@ -1560,6 +1573,7 @@ app = new Vue({
                     this.item();
                 }
                 this.notify(res.data.message);
+                this.loading = false;
             }
         },
         timeAgo(time)

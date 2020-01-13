@@ -638,7 +638,7 @@
                             </ul>
                         </li>
                         <li class="{{ Request::is('admin/cate-gears/*') ? 'active' : '' }}"><a href="{{ Route('admin.cate-gears.list') }}" class=""><span class="nav-icon"><i data-feather="box"></i></span> <span
-                            class="nav-text">Danh Mục Trang Bị</span> <span class="nav-caret"></span></a>
+                            class="nav-text">Danh Mục</span></a>
                             
                         </li>
                         <li class="{{ Request::is('admin/gears/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="archive"></i></span> <span

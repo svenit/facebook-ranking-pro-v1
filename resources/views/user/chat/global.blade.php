@@ -34,7 +34,7 @@
                                 </div>
                                 <div v-else class="chat-list">
                                     <div v-for="(msg,index) in chat.messages" :key="index" class="chat-item hoverable" @click="showUserInfor(msg.id)" :data-class="msg.id == {{ Auth::user()->user_id }} ? 'alt' : 'null'" v-if="msg.message && msg.id && msg.name && msg.time" data-sr-id="32" style="visibility: visible; transform: none; opacity: 1; transition: transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s;">
-                                        <a v-if="msg.id != {{ Auth::user()->user_id }}" href="#" class="avatar w-40" data-pjax-state="">
+                                        <a v-if="msg.id != {{ Auth::user()->user_id }}" class="avatar w-40" data-pjax-state="">
                                             <img class="image" :src="`http://graph.facebook.com/${msg.id}/picture?type=normal`" alt=".">
                                         </a>
                                         <div class="chat-body">

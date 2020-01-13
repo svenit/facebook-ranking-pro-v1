@@ -67,18 +67,49 @@ class PetController extends Controller
         $update = Pet::findOrFail($id)->update($request->except('_token'));
         if(isset($update))
         {
+            $this->removeCache("shop.pet");
             return redirect()->back()->with([
                 'status' => 'success',
                 'message' => 'Cập nhật thú cưỡi thành công'
             ]);
         }
     }
+    public function replicate($id)
+    {
+        $pet = Pet::findOrFail($id);
+        $newPet = $pet->replicate();
+        $newPet->save();
+        $this->removeCache("shop.pet");
+        return redirect()->route('admin.pets.edit',['id' => $newPet->id])->with([
+            'status' => 'success',
+            'message' => 'Đã sao chép'
+        ]);
+    }
     public function delete($id)
     {
         Pet::findOrFail($id)->delete();
+        $this->removeCache("shop.pet");
         return redirect()->back()->with([
             'status' => 'success',
             'message' => 'Đã xóa thú cưỡi'
         ]);
+    }
+    public function deleteMulti(Request $request)
+    {
+        if(isset($request->selected))
+        {
+            foreach(explode(",",$request->selected[0]) as $selected)
+            {
+                $delete = Pet::findOrFail($selected)->delete();
+            }
+            if($delete)
+            {
+                $this->removeCache("shop.pet");
+                return redirect()->back()->with([
+                    'status' => 'success',
+                    'message' => 'Đã xóa thú cưỡi'
+                ]);
+            }
+        }
     }
 }
