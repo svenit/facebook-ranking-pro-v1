@@ -94,7 +94,7 @@
                                                 <label class="text-muted" for="exampleInputEmail1">Trạng Thái</label>
                                                 <select placeholder="Chọn trang bị" class="chosen form-control form-control-sm" name="status">
                                                     <option {{ $pet->status == 0 ? 'selected' : '' }} value="0">Ẩn</option>
-                                                    <option {{ $pet->status == 1 ? 'selected' : '' }} selected value="1">Hiện</option>
+                                                    <option {{ $pet->status == 1 ? 'selected' : '' }} value="1">Hiện</option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-12">

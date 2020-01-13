@@ -68,7 +68,7 @@
                                             <td @click="showInforPet({{ json_encode($pet) }},0)" style=""><div style="" class="pixel mount Mount_Icon_{{ $pet->class_tag }}"></div></td>
                                             <td style=""><small class="text-muted">{{ $pet->users->count() }}</small></td>
                                             <td style=""><small class="text-muted">{{ $pet->level_required }}</small></td>
-                                            <td style=""><small class="text-{{ $pet->price_type == 0 ? 'gold' : 'info' }}">{{ $pet->price }} {{ $pet->price_type == 0 ? 'Vàng' : 'KC' }}</small></td>
+                                            <td style=""><small class="text-{{ $pet->price_type == 0 ? 'gold' : 'info' }}">{{ number_format($pet->price) }} {{ $pet->price_type == 0 ? 'Vàng' : 'KC' }}</small></td>
                                             <td style=""><small class="text-{{ $pet->status == 1 ? 'success' : 'danger' }}">{{ $pet->status == 1 ? 'Hiện' : 'Ẩn' }}</small></td>
                                             <td class="flex" style="">
                                                 <div class="dropdown mb-2"><button class="btn btn-white dropdown-toggle" data-toggle="dropdown"

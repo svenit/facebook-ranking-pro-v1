@@ -72,7 +72,7 @@
                                             <td style=""><small class="text-muted">{{ $gear->cates->name }}</small></td>
                                             <td style=""><small class="text-muted">{{ $gear->character->name }}</small></td>
                                             <td style=""><small class="text-muted">{{ $gear->users->count() }}</small></td>
-                                            <td style=""><small class="text-{{ $gear->price_type == 0 ? 'gold' : 'info' }}">{{ $gear->price }} {{ $gear->price_type == 0 ? 'Vàng' : 'KC' }}</small></td>
+                                            <td style=""><small class="text-{{ $gear->price_type == 0 ? 'gold' : 'info' }}">{{ number_format($gear->price) }} {{ $gear->price_type == 0 ? 'Vàng' : 'KC' }}</small></td>
                                             <td style=""><small class="text-{{ $gear->status == 1 ? 'success' : 'danger' }}">{{ $gear->status == 1 ? 'Hiện' : 'Ẩn' }}</small></td>
                                             <td class="flex" style="">
                                                 <div class="dropdown mb-2"><button class="btn btn-white dropdown-toggle" data-toggle="dropdown"
