@@ -31,7 +31,7 @@ class UserController extends Controller
         $detail->using_skills = $detail->usingSkills();
         $detail->using_gears = $detail->usingGears();
         $detail->using_pet = $detail->usingPets()->first() ?? null;
-        $detail->gears = $detail->gears->load('character');
+        $detail->gears = $detail->gears->load('character','cates');
         $detail->tracking = Tracking::where('user_id',$id)->first();
         $detail->level = $detail->nextLevel();
 

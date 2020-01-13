@@ -33,6 +33,7 @@ class AppServiceProvider extends ServiceProvider
         URL::forceScheme('https');
         Carbon::setLocale('vi');
         Schema::defaultStringLength(191);
+        
         if(Schema::hasTable('configs'))
         {
             View::composer('*', function ($view) 
@@ -54,12 +55,15 @@ class AppServiceProvider extends ServiceProvider
         {
             View::composer('*', function ($view) 
             {
-                $view->with('notifications', [
-                    'data' => Auth::user()->notifications,
-                    'all' => Auth::user()->notifications->count(),
-                    'read' => Auth::user()->readNotifications->count(),
-                    'unread' => Auth::user()->unreadNotifications->count()
-                ]);   
+                if(Auth::check())
+                {
+                    $view->with('notifications', [
+                        'data' => Auth::user()->notifications,
+                        'all' => Auth::user()->notifications->count(),
+                        'read' => Auth::user()->readNotifications->count(),
+                        'unread' => Auth::user()->unreadNotifications->count()
+                    ]);
+                }   
             });
         }
     }

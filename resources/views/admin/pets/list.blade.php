@@ -1,8 +1,8 @@
 @extends('app')
 @section('content')
 
-@section('hero','Danh Sách Trang Bị')
-@section('sub_hero','Danh Sách Trang Bị')
+@section('hero','Thú Cưỡi')
+@section('sub_hero','Thú Cưỡi')
 
 <div id="content" class="flex">
     <div id="ranking" class="">
@@ -28,13 +28,7 @@
                                             <div class="th-inner text-gold sortable both">Tên</div>
                                         </th>
                                         <th data-field="project">
-                                            <div class="th-inner text-gold sortable both">Trang Bị</div>
-                                        </th>
-                                        <th data-field="project">
-                                            <div class="th-inner text-gold sortable both">Loại</div>
-                                        </th>
-                                        <th style="" data-field="owner">
-                                            <div class="th-inner text-gold sortable both">Hệ Phái</div>
+                                            <div class="th-inner text-gold sortable both">Hình Ảnh</div>
                                         </th>
                                         <th style="" data-field="owner">
                                             <div class="th-inner text-gold sortable both">SLTV Sở Hữu</div>
@@ -46,21 +40,19 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($gears as $key => $gear)
+                                    @foreach($pets as $key => $pet)
                                         <tr>
                                             <td style=""><small class="text-muted">{{ $key + 1 }}</small></td>
-                                            <td style=""><small class="text-muted">{{ $gear->name }}</small></td>
-                                            <td @click="showGearsDescription({{ json_encode($gear) }},0)" style=""><div style="border:1px solid {{ $gear->rgb }}" class="pixel {{ $gear->shop_tag }}"></div></td>
-                                            <td style=""><small class="text-muted">{{ $gear->cates->name }}</small></td>
-                                            <td style=""><small class="text-muted">{{ $gear->character->name }}</small></td>
-                                            <td style=""><small class="text-muted">{{ $gear->users->count() }}</small></td>
+                                            <td style=""><small class="text-muted">{{ $pet->name }}</small></td>
+                                            <td @click="showInforPet({{ json_encode($pet) }},0)" style=""><div style="" class="pixel mount Mount_Icon_{{ $pet->class_tag }}"></div></td>
+                                            <td style=""><small class="text-muted">{{ $pet->users->count() }}</small></td>
                                             <td class="flex" style="">
                                                 <div class="dropdown mb-2"><button class="btn btn-white dropdown-toggle" data-toggle="dropdown"
                                                     aria-expanded="false">Hành Động</button>
                                                     <div class="dropdown-menu bg-dark" role="menu" x-placement="bottom-start"
                                                         style="position: absolute; transform: translate3d(0px, 34px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                                        <a href="{{ Route('admin.gears.edit',['id' => $gear->id]) }}" class="dropdown-item">Xem & Sửa</a>
-                                                        <a href="{{ Route('admin.gears.delete',['id' => $gear->id]) }}" class="dropdown-item">Xóa</a>
+                                                        <a href="{{ Route('admin.pets.edit',['id' => $pet->id]) }}" class="dropdown-item">Xem & Sửa</a>
+                                                        <a href="{{ Route('admin.pets.delete',['id' => $pet->id]) }}" class="dropdown-item">Xóa</a>
                                                     </div>
                                                 </div>
                                             </td>

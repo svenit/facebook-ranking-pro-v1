@@ -29,97 +29,78 @@
                                             @endforeach
                                         </div>
                                         @endif
-                                        <div v-if="shop_tag" style="margin:10px 0px" class="preview">
-                                            <div :style="{border:`1px solid ${rgb}`}" :class="`pixel ${shop_tag}`"></div>
+                                        <div v-if="class_tag" style="margin:10px 0px;margin-bottom:60px" class="preview character-sprites">
+                                            <span :class="`Mount_Body_${class_tag}`"></span>
+                                            <span :class="`Mount_Head_${class_tag}`"></span>
                                         </div>
-                                        <form method="POST" action="{{ Route('admin.gears.update',['id' => $gear->id]) }}" class="row">
+                                        <form method="POST" action="{{ Route('admin.pets.update',['id' => $pet->id]) }}" class="row">
                                             @csrf
                                             <div class="form-group col-6">
-                                                <label class="text-muted" for="exampleInputEmail1">Tên Trang Bị</label>
-                                                <input type="text" value="{{ $gear->name }}" class="form-control" name="name" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                                <label class="text-muted" for="exampleInputEmail1">Tên</label>
+                                                <input type="text" value="{{ $pet->name }}" class="form-control" name="name" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
                                             </div>
                                             <div class="form-group col-6">
                                                 <label class="text-muted" for="exampleInputEmail1">Class Tag</label>
-                                                <input type="text" value="{{ $gear->class_tag }}" class="form-control" name="class_tag" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
-                                            </div>
-                                            <div class="form-group col-6">
-                                                <label class="text-muted" for="exampleInputEmail1">Shop Tag</label>
-                                                <input v-model="shop_tag" type="text" value="{{ $gear->shop_tag }}" class="form-control" name="shop_tag" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
-                                            </div>
-                                            <div class="form-group col-6">
-                                                <label class="text-muted" for="exampleInputEmail1">Hệ Phái</label>
-                                                <select placeholder="Chọn trang bị" class="chosen form-control form-control-sm" name="character_id">
-                                                    @foreach($characters as $character)
-                                                        <option {{ $gear->character_id == $character->id ? 'selected' : '' }} value="{{ $character->id }}">{{ $character->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="form-group col-6">
-                                                <label class="text-muted" for="exampleInputEmail1">Bộ Trang Bị</label>
-                                                <select placeholder="Chọn trang bị" class="chosen form-control form-control-sm" name="cate_gear_id">
-                                                    @foreach($cateGears as $cate)
-                                                        <option {{ $gear->cate_gear_id == $cate->id ? 'selected' : '' }} value="{{ $cate->id }}">{{ $cate->name }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <input v-model="class_tag" type="text" value="{{ $pet->class_tag }}" class="form-control" name="class_tag" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
                                             </div>
                                             <div class="form-group col-6">
                                                 <label class="text-muted" for="exampleInputEmail1">Sức Mạnh</label>
-                                                <input type="number" value="{{ $gear->strength }}" class="form-control" name="strength" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                                <input type="number" value="{{ $pet->strength }}" class="form-control" name="strength" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
                                             </div>
                                             <div class="form-group col-6">
                                                 <label class="text-muted" for="exampleInputEmail1">Trí Tuệ</label>
-                                                <input type="number" value="{{ $gear->intelligent }}" class="form-control" name="intelligent" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                                <input type="number" value="{{ $pet->intelligent }}" class="form-control" name="intelligent" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
                                             </div>
                                             <div class="form-group col-6">
                                                 <label class="text-muted" for="exampleInputEmail1">Nhanh Nhẹn</label>
-                                                <input type="number" value="{{ $gear->agility }}" class="form-control" name="agility" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                                <input type="number" value="{{ $pet->agility }}" class="form-control" name="agility" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
                                             </div>
                                             <div class="form-group col-6">
                                                 <label class="text-muted" for="exampleInputEmail1">May Mắn</label>
-                                                <input type="number" value="{{ $gear->lucky }}" class="form-control" name="lucky" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                                <input type="number" value="{{ $pet->lucky }}" class="form-control" name="lucky" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
                                             </div>
                                             <div class="form-group col-6">
                                                 <label class="text-muted" for="exampleInputEmail1">Sinh Lực</label>
-                                                <input type="number" value="{{ $gear->health_points }}" class="form-control" name="health_points" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                                <input type="number" value="{{ $pet->health_points }}" class="form-control" name="health_points" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
                                             </div>
                                             <div class="form-group col-6">
                                                 <label class="text-muted" for="exampleInputEmail1">Kháng Công</label>
-                                                <input type="number" value="{{ $gear->armor_strength }}" class="form-control" name="armor_strength" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                                <input type="number" value="{{ $pet->armor_strength }}" class="form-control" name="armor_strength" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
                                             </div>
                                             <div class="form-group col-6">
                                                 <label class="text-muted" for="exampleInputEmail1">Kháng Phép</label>
-                                                <input type="number" value="{{ $gear->armor_intelligent }}" class="form-control" name="armor_intelligent" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                                <input type="number" value="{{ $pet->armor_intelligent }}" class="form-control" name="armor_intelligent" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
                                             </div>
                                             <div class="form-group col-6">
                                                 <label class="text-muted" for="exampleInputEmail1">RGB</label>
-                                                <input type="text" v-model="rgb" value="{{ $gear->rgb }}" class="form-control" name="rgb" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                                <input type="text" v-model="rgb" value="{{ $pet->rgb }}" class="form-control" name="rgb" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
                                             </div>
                                             <div class="form-group col-6">
                                                 <label class="text-muted" for="exampleInputEmail1">Cấp Độ Yêu Cầu</label>
-                                                <input type="number" value="{{ $gear->level_required }}" class="form-control" name="level_required" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                                <input type="number" value="{{ $pet->level_required }}" class="form-control" name="level_required" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
                                             </div>
                                             <div class="form-group col-6">
                                                 <label class="text-muted" for="exampleInputEmail1">Giá</label>
-                                                <input type="number" value="{{ $gear->price }}" class="form-control" name="price" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                                <input type="number" value="{{ $pet->price }}" class="form-control" name="price" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
                                             </div>
                                             <div class="form-group col-6">
                                                 <label class="text-muted" for="exampleInputEmail1">ĐVTT</label>
                                                 <select placeholder="Chọn trang bị" class="chosen form-control form-control-sm" name="price_type">
-                                                    <option {{ $gear->price_type == 0 ? 'selected' : '' }} value="0">Vàng</option>
-                                                    <option {{ $gear->price_type == 1 ? 'selected' : '' }} value="1">KC</option>
+                                                    <option {{ $pet->price_type == 0 ? 'selected' : '' }} value="0">Vàng</option>
+                                                    <option {{ $pet->price_type == 1 ? 'selected' : '' }} value="1">KC</option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-6">
                                                 <label class="text-muted" for="exampleInputEmail1">Trạng Thái</label>
                                                 <select placeholder="Chọn trang bị" class="chosen form-control form-control-sm" name="status">
-                                                    <option {{ $gear->status == 0 ? 'selected' : '' }} value="0">Ẩn</option>
-                                                    <option {{ $gear->status == 1 ? 'selected' : '' }} selected value="1">Hiện</option>
+                                                    <option {{ $pet->status == 0 ? 'selected' : '' }} value="0">Ẩn</option>
+                                                    <option {{ $pet->status == 1 ? 'selected' : '' }} selected value="1">Hiện</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group col-6">
+                                            <div class="form-group col-12">
                                                 <label class="text-muted" for="exampleInputEmail1">Mô Tả</label>
-                                                <textarea rows="1" class="form-control" name="description">
-                                                    {!! $gear->description !!}
+                                                <textarea rows="4" class="form-control" name="description">
+                                                    {!! $pet->description !!}
                                                 </textarea>
                                             </div>
                                             <div class="form-group col-12">
@@ -153,7 +134,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($gear->users as $key => $user)
+                                    @foreach($pet->users as $key => $user)
                                         <tr>
                                             <td style=""><small class="text-muted">{{ $key + 1 }}</small></td>
                                             <td>
@@ -227,8 +208,8 @@
     new Vue({
         el:'#ranking',
         data:{
-            shop_tag:"{{ $gear->shop_tag }}",
-            rgb:"{{ $gear->rgb }}"
+            class_tag:"{{ $pet->class_tag }}",
+            rgb:"{{ $pet->rgb }}"
         },
     });
 </script>

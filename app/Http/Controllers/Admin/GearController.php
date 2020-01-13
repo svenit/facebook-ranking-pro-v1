@@ -14,9 +14,13 @@ class GearController extends Controller
     public function list()
     {
         $gears = Gear::with('character','cates','users')->get();
+        return view('admin.gears.list',compact('gears'));
+    }
+    public function add()
+    {
         $characters = Character::where('id','!=',0)->get();
         $cateGears = CateGear::all();
-        return view('admin.gears.list',compact('gears','characters','cateGears'));
+        return view('admin.gears.add',compact('characters','cateGears'));
     }
     public function store(Request $request)
     {
@@ -95,8 +99,7 @@ class GearController extends Controller
 
     public function delete($id)
     {
-        $delete = Gear::findOrFail($id)->delete();
-
+        Gear::findOrFail($id)->delete();
         return redirect()->back()->with([
             'status' => 'success',
             'message' => 'Xóa trang bị thành công'

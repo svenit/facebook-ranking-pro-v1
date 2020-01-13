@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Config;
 use App\Income\Helper;
 use App\Model\Tracking;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
@@ -86,8 +86,9 @@ class Controller extends BaseController
     {
         Cache::flush();
     }
-    public function test(Request $request)
+    public function config()
     {
-        return $request->all();
+        $config = new Config();
+        return $config->first();
     }
 }

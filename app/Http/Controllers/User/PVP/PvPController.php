@@ -28,28 +28,38 @@ class PvPController extends Controller
         ],[
             'g-recaptcha-response.required' => 'Bạn chưa xác nhập recaptcha'
         ]);
-        $checkRoom = Room::whereUserCreateId(Auth::id())->first();
-        $checkFightRoom = FightRoom::whereUserChallenge(Auth::id())->first();
-        if(empty($checkRoom) && empty($checkFightRoom))
+        if($this->config()->open_pvp == 1)
         {
-            $room = new Room();
-            $room->user_create_id = Auth::id();
-            $room->name = uniqid().time();
-            $room->people = 0;
-            $room->save();
-
-            $fightRoom = new FightRoom();
-            $fightRoom->room_id = $room->id;
-            $fightRoom->user_challenge = Auth::id();
-            $fightRoom->user_challenge_hp = Auth::user()->power()['health_points'];
-            $fightRoom->user_challenge_energy = Auth::user()->character->default_energy;
-            $fightRoom->save();
-
-            if(isset($room,$fightRoom))
+            $checkRoom = Room::whereUserCreateId(Auth::id())->first();
+            $checkFightRoom = FightRoom::whereUserChallenge(Auth::id())->first();
+            if(empty($checkRoom) && empty($checkFightRoom))
             {
-                return redirect()->route('user.pvp.room',['id' => $room->name])->with([
-                    'message' => 'Tạo phòng thành công',
-                    'status' => 'success'
+                $room = new Room();
+                $room->user_create_id = Auth::id();
+                $room->name = uniqid().time();
+                $room->people = 0;
+                $room->save();
+
+                $fightRoom = new FightRoom();
+                $fightRoom->room_id = $room->id;
+                $fightRoom->user_challenge = Auth::id();
+                $fightRoom->user_challenge_hp = Auth::user()->power()['health_points'];
+                $fightRoom->user_challenge_energy = Auth::user()->character->default_energy;
+                $fightRoom->save();
+
+                if(isset($room,$fightRoom))
+                {
+                    return redirect()->route('user.pvp.room',['id' => $room->name])->with([
+                        'message' => 'Tạo phòng thành công',
+                        'status' => 'success'
+                    ]);
+                }
+            }
+            else
+            {
+                return back()->with([
+                    'status' => 'error',
+                    'message' => 'Bạn đang ở trong 1 trận chiến khác'
                 ]);
             }
         }
@@ -57,7 +67,7 @@ class PvPController extends Controller
         {
             return back()->with([
                 'status' => 'error',
-                'message' => 'Bạn đang ở trong 1 trận chiến khác'
+                'message' => 'PVP chưa mở, mời bạn quay lại sau'
             ]);
         }
     }

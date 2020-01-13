@@ -29,6 +29,7 @@ class InventoryController extends Controller
                 if($gear->cate_gear_id == $cate->id)
                 {
                     $gear->character = $gear->character;
+                    $gear->cates = $gear->cates;
                     $data[Str::slug($cate->name)][$key] = $gear;
                 }
             }

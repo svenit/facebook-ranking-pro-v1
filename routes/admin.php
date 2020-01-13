@@ -37,11 +37,20 @@ Route::group(['as' => 'admin.','namespace' => 'Admin'], function () {
         Route::get('detail/{id}','CateGearController@detail')->name('detail');
     });
     Route::group(['prefix' => 'gears','as' => 'gears.'], function () {
+        Route::get('add','GearController@add')->name('add');
         Route::get('list','GearController@list')->name('list');
         Route::post('store','GearController@store')->name('store');
         Route::get('edit/{id}','GearController@edit')->name('edit');
         Route::post('update/{id}','GearController@update')->name('update');
         Route::get('delete/{id}','GearController@delete')->name('delete');
+    });
+    Route::group(['prefix' => 'pets','as' => 'pets.'], function () {
+        Route::view('add','admin.pets.add')->name('add');
+        Route::get('list','PetController@list')->name('list');
+        Route::post('store','PetController@store')->name('store');
+        Route::get('edit/{id}','PetController@edit')->name('edit');
+        Route::post('update/{id}','PetController@update')->name('update');
+        Route::get('delete/{id}','PetController@delete')->name('delete');
     });
     Route::get('update-points','UpdatePointsController@index')->name('update-points');
     Route::post('update-points','UpdatePointsController@store');

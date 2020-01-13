@@ -90,7 +90,7 @@ class User extends Authenticatable
         {
             if($skill->pivot->status == 1)
             {
-                $skill->character = $skill->load('character');
+                $skill->character = $skill->character;
                 array_push($data,$skill);
             }
         }
@@ -99,12 +99,12 @@ class User extends Authenticatable
     public function usingGears()
     {
         $data = [];
-        foreach($this->gears as $key => $gear)
+        foreach($this->gears as $gear)
         {
             if($gear->pivot->status == 1)
             {
-                $gear->set = explode(',',$gear->class_tag);
                 $gear->character = $gear->character;
+                $gear->cates = $gear->cates;
                 array_push($data,$gear);
             }
         }

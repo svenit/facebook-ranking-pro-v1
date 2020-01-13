@@ -37,7 +37,7 @@
                         <span class="shield_base_0"></span>
                         <span class=""></span>
                         <span v-for="(gear,index) in data.gears" :key="index">
-                            <span v-for="(set,index) in gear.set" :class="set"></span>
+                            <span :class="gear.class_tag"></span>
                         </span>
                         <span v-if="data.pet" :class="`Mount_Head_${data.pet.class_tag}`"></span>
                     </div>
@@ -162,7 +162,7 @@
                     <div class="col-4">
                         <div :style="{border:`1px solid ${detailGear.data.rgb}`,margin:'0 auto'}" :class="[`pixel text-center ${detailGear.data.shop_tag}`]"></div>
                         <p :style="{fontSize:'14px',color:`${detailGear.data.rgb}`,marginTop:'20px'}" class="modal-title text-md text-center">@{{ detailGear.data.name }}</p>
-                        <p :style="{fontSize:'14px',marginTop:'10px'}" class="modal-title text-md text-center">( @{{ detailGear.data.character.name }} )</p>
+                        <p :style="{fontSize:'14px',marginTop:'10px'}" class="modal-title text-md text-center">( @{{ detailGear.data.character.name }} - @{{ detailGear.data.cates.name }} )</p>
                     </div>
                     <div class="col-8">
                         <div class="row">
@@ -190,7 +190,7 @@
                             <div class="col-6 d-flex mt-2">
                                 <div class="flex">
                                     <div class="text-success"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
-                                        class="text-success">@{{ detailGear.data.intelligent }}</strong></small>
+                                        class="text-success">+ @{{ detailGear.data.intelligent }}</strong></small>
                                     </div>
                                 </div>
                             </div>
@@ -285,7 +285,7 @@
                             <div class="col-6 d-flex mt-2">
                                 <div class="flex">
                                     <div class="text-success"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
-                                        class="text-success">@{{ detailPet.data.intelligent }}</strong></small>
+                                        class="text-success">+ @{{ detailPet.data.intelligent }}</strong></small>
                                     </div>
                                 </div>
                             </div>
@@ -404,7 +404,7 @@
                         <span class="shield_base_0"></span>
                         <span class=""></span>
                         <span v-for="(gear,index) in user.gears" :key="index">
-                            <span v-for="(set,index) in gear.set" :class="set"></span>
+                            <span :class="gear.class_tag"></span>
                         </span>
                         <span v-if="user.pet" :class="`Mount_Head_${user.pet.class_tag}`"></span>
                     </div>
@@ -637,16 +637,22 @@
                                 <li><a href="{{ Route('admin.users.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
                             </ul>
                         </li>
-                        <li class="{{ Request::is('admin/cate-gears/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="box"></i></span> <span
-                            class="nav-text">Danh Mục</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('admin.cate-gears.list') }}" class=""><span class="nav-text">Trang Bị</span></a></li></li>
-                            </ul>
+                        <li class="{{ Request::is('admin/cate-gears/*') ? 'active' : '' }}"><a href="{{ Route('admin.cate-gears.list') }}" class=""><span class="nav-icon"><i data-feather="box"></i></span> <span
+                            class="nav-text">Danh Mục Trang Bị</span> <span class="nav-caret"></span></a>
+                            
                         </li>
                         <li class="{{ Request::is('admin/gears/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="archive"></i></span> <span
                             class="nav-text">Trang Bị</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
+                                <li><a href="{{ Route('admin.gears.add') }}" class=""><span class="nav-text">Thêm</span></a></li></li>
                                 <li><a href="{{ Route('admin.gears.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
+                            </ul>
+                        </li>
+                        <li class="{{ Request::is('admin/pets/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="gitlab"></i></span> <span
+                            class="nav-text">Thú Cưỡi</span> <span class="nav-caret"></span></a>
+                            <ul class="nav-sub nav-mega">
+                                <li><a href="{{ Route('admin.pets.add') }}" class=""><span class="nav-text">Thêm</span></a></li></li>
+                                <li><a href="{{ Route('admin.pets.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
                             </ul>
                         </li>
                         <li class="{{ Request::is('admin/settings/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="settings"></i></span> <span

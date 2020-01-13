@@ -38,7 +38,7 @@
                         <p style="margin-top:80px" class="text-center">
                             {{ $detail->name }} ( {{ $detail->character->name }} )
                         </p>
-                        <p class="alert bg-dark">{!! $detail->status == 0 ? '<span class="text-danger">Đã Khóa</span>' : '<span class="text-success">Hoạt Động</span>' !!}</p>
+                        <p style="margin:0 auto" class="text-center badge badge-{{ $detail->status == 1 ? 'success' : 'danger' }}">{!! $detail->status == 0 ? 'Đã Khóa' : 'Hoạt Động' !!}</p>
                     </div>
                     <div style="margin-top:10px;padding:20px" class="col-4">
                         <div class="row">

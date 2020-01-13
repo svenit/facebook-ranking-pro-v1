@@ -39,7 +39,7 @@
                                     <tr>
                                         <td style=""><small class="text-muted">{{ $key + 1 }}</small></td>
                                         <td style=""><small class="text-muted">{{ $item->name }}</small></td>
-                                        <td @click="showGearsDescription({{ json_encode($gear) }},0)" style="">
+                                        <td @click="showGearsDescription({{ json_encode($item) }},0)" style="">
                                             <small class="text-muted">
                                                 <div class="pixel {{ $item->shop_tag }}"></div>
                                             </small>
@@ -51,8 +51,8 @@
                                                 aria-expanded="false">Hành Động</button>
                                                 <div class="dropdown-menu bg-dark" role="menu" x-placement="bottom-start"
                                                     style="position: absolute; transform: translate3d(0px, 34px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                                    <a href="#" class="dropdown-item">Xem</a>
-                                                    <a href="#" class="dropdown-item">Xóa</a>
+                                                    <a href="{{ Route('admin.gears.edit',['id' => $item->id]) }}" class="dropdown-item">Xem</a>
+                                                    <a onclick="return confirm('Xóa ?')" href="{{ Route('admin.gears.delete',['id' => $item->id]) }}" class="dropdown-item">Xóa</a>
                                                 </div>
                                             </div>
                                         </td>

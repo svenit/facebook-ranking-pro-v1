@@ -16,15 +16,14 @@ class ShopController extends Controller
         $equips = Cache::rememberForever("shop.$cate", function () use ($cate) {
             $allCates = CateGear::all();
             $gears = false;
-            foreach($allCates as $key => $cates)
+            foreach($allCates as $cates)
             {
                 if($cate == Str::slug($cates->name))
                 {
-                    $avaiableRows = true;
                     $gears = Character::with('gears')->where('id','!=',0)->get();
                     foreach($gears as $i => $gear)
                     {
-                        $gears[$i]->items = Gear::with('character')->where([['status',1],['cate_gear_id',$cates->id],['character_id',$gear->id]])->get();
+                        $gears[$i]->items = Gear::with('character','cates')->where([['status',1],['cate_gear_id',$cates->id],['character_id',$gear->id]])->orderBy('level_required','desc')->get();
                     }
                     break;
                 }
@@ -47,7 +46,7 @@ class ShopController extends Controller
     public function pet()
     {
         $pets = Cache::rememberForever('shop.pet', function () {
-            return Pet::where('status',1)->get();
+            return Pet::where('status',1)->orderBy('level_required','desc')->get();
         });
         return view('user.shop.pet',compact('pets'));
     }

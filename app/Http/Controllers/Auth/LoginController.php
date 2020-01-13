@@ -50,10 +50,17 @@ class LoginController extends Controller
 
         if(isset($userAuthentication))
         {
-            Auth::loginUsingId($userAuthentication->id,TRUE);
-            return redirect()->route('user.index')->with([
-                'status' => 'success',
-                'message' => 'Đăng nhập thành công'
+            if($userAuthentication->status == 1)
+            {
+                Auth::loginUsingId($userAuthentication->id,TRUE);
+                return redirect()->route('user.index')->with([
+                    'status' => 'success',
+                    'message' => 'Đăng nhập thành công'
+                ]);
+            }
+            return redirect()->route('oauth.index')->with([
+                'status' => 'error',
+                'message' => 'Tài khoản của bạn đã bị khóa'
             ]);
         }
         return redirect()->route('oauth.show-confirm')->with([

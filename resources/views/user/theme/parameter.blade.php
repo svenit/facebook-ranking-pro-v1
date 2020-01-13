@@ -76,7 +76,7 @@
 	<span class="shield_base_0"></span>
     <span class=""></span>
     <span v-for="(gear,index) in data.gears" :key="index">
-        <span v-for="(set,index) in gear.set" :class="set"></span>
+        <span :class="gear.class_tag"></span>
     </span>
     <span v-if="data.pet" :class="`Mount_Head_${data.pet.class_tag}`"></span>
 </div>

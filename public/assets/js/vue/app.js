@@ -18,7 +18,8 @@ app = new Vue({
         token:'',
         detailGear:{
             data:{
-                character:{}
+                character:{},
+                cates:{}
             },
             permission:0
         },
