@@ -887,10 +887,11 @@
     height: 90px;
     image-rendering: pixelated;
 }
-.pixel
-{
+
+.pixel {
     image-rendering: pixelated;
 }
+
 .character-sprites span {
     position: absolute
 }
@@ -61385,4 +61386,311 @@
 .Pet_Currency_Gem {
     margin-top: 5px;
     margin-bottom: 5px
+}
+
+.Pet_Food_Cake_Base {
+    background-position: -69px -1507px
+}
+
+.Pet_Food_Cake_Base,
+.Pet_Food_Cake_CottonCandyBlue {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    width: 68px;
+    height: 68px
+}
+
+.Pet_Food_Cake_CottonCandyBlue {
+    background-position: 0 -1507px
+}
+
+.Pet_Food_Cake_CottonCandyPink {
+    background-position: -1518px -1438px
+}
+
+.Pet_Food_Cake_CottonCandyPink,
+.Pet_Food_Cake_Desert {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    width: 68px;
+    height: 68px
+}
+
+.Pet_Food_Cake_Desert {
+    background-position: -1449px -1438px
+}
+
+.Pet_Food_Cake_Golden {
+    background-position: -1380px -1438px
+}
+
+.Pet_Food_Cake_Golden,
+.Pet_Food_Cake_Red {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    width: 68px;
+    height: 68px
+}
+
+.Pet_Food_Cake_Red {
+    background-position: -1311px -1438px
+}
+
+.Pet_Food_Cake_Shade {
+    background-position: -1242px -1438px
+}
+
+.Pet_Food_Cake_Shade,
+.Pet_Food_Cake_Skeleton {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    width: 68px;
+    height: 68px
+}
+
+.Pet_Food_Cake_Skeleton {
+    background-position: -1173px -1438px
+}
+
+.Pet_Food_Cake_White {
+    background-position: -1104px -1438px
+}
+
+.Pet_Food_Cake_White,
+.Pet_Food_Cake_Zombie {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    width: 68px;
+    height: 68px
+}
+
+.Pet_Food_Cake_Zombie {
+    background-position: -1035px -1438px
+}
+
+.Pet_Food_Candy_Base {
+    background-position: -966px -1438px
+}
+
+.Pet_Food_Candy_Base,
+.Pet_Food_Candy_CottonCandyBlue {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    width: 68px;
+    height: 68px
+}
+
+.Pet_Food_Candy_CottonCandyBlue {
+    background-position: -897px -1438px
+}
+
+.Pet_Food_Candy_CottonCandyPink {
+    background-position: -828px -1438px
+}
+
+.Pet_Food_Candy_CottonCandyPink,
+.Pet_Food_Candy_Desert {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    width: 68px;
+    height: 68px
+}
+
+.Pet_Food_Candy_Desert {
+    background-position: -759px -1438px
+}
+
+.Pet_Food_Candy_Golden {
+    background-position: -690px -1438px
+}
+
+.Pet_Food_Candy_Golden,
+.Pet_Food_Candy_Red {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    width: 68px;
+    height: 68px
+}
+
+.Pet_Food_Candy_Red {
+    background-position: -621px -1438px
+}
+
+.Pet_Food_Candy_Shade {
+    background-position: -552px -1438px
+}
+
+.Pet_Food_Candy_Shade,
+.Pet_Food_Candy_Skeleton {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    width: 68px;
+    height: 68px
+}
+
+.Pet_Food_Candy_Skeleton {
+    background-position: -483px -1438px
+}
+
+.Pet_Food_Candy_White {
+    background-position: -414px -1438px
+}
+
+.Pet_Food_Candy_White,
+.Pet_Food_Candy_Zombie {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    width: 68px;
+    height: 68px
+}
+
+.Pet_Food_Candy_Zombie {
+    background-position: -345px -1438px
+}
+
+.Pet_Food_Chocolate {
+    background-position: -276px -1438px
+}
+
+.Pet_Food_Chocolate,
+.Pet_Food_CottonCandyBlue {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    width: 68px;
+    height: 68px
+}
+
+.Pet_Food_CottonCandyBlue {
+    background-position: -207px -1438px
+}
+
+.Pet_Food_CottonCandyPink {
+    background-position: -138px -1438px
+}
+
+.Pet_Food_CottonCandyPink,
+.Pet_Food_Fish {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    width: 68px;
+    height: 68px
+}
+
+.Pet_Food_Fish {
+    background-position: -69px -1438px
+}
+
+.Pet_Food_Honey {
+    background-position: 0 -1438px
+}
+
+.Pet_Food_Honey,
+.Pet_Food_Meat {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    width: 68px;
+    height: 68px
+}
+
+.Pet_Food_Meat {
+    background-position: -1514px -1316px
+}
+
+.Pet_Food_Milk {
+    background-position: -1514px -1247px
+}
+
+.Pet_Food_Milk,
+.Pet_Food_Pie_Base {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    width: 68px;
+    height: 68px
+}
+
+.Pet_Food_Pie_Base {
+    background-position: -1514px -1178px
+}
+
+.Pet_Food_Pie_CottonCandyBlue {
+    background-position: -1514px -1109px
+}
+
+.Pet_Food_Pie_CottonCandyBlue,
+.Pet_Food_Pie_CottonCandyPink {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    width: 68px;
+    height: 68px
+}
+
+.Pet_Food_Pie_CottonCandyPink {
+    background-position: -1514px -1040px
+}
+
+.Pet_Food_Pie_Desert {
+    background-position: -1514px -971px
+}
+
+.Pet_Food_Pie_Desert,
+.Pet_Food_Pie_Golden {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    width: 68px;
+    height: 68px
+}
+
+.Pet_Food_Pie_Golden {
+    background-position: -1514px -902px
+}
+
+.Pet_Food_Pie_Red {
+    background-position: -1514px -833px
+}
+
+.Pet_Food_Pie_Red,
+.Pet_Food_Pie_Shade {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    width: 68px;
+    height: 68px
+}
+
+.Pet_Food_Pie_Shade {
+    background-position: -1514px -764px
+}
+
+.Pet_Food_Pie_Skeleton {
+    background-position: -1514px -695px
+}
+
+.Pet_Food_Pie_Skeleton,
+.Pet_Food_Pie_White {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    width: 68px;
+    height: 68px
+}
+
+.Pet_Food_Pie_White {
+    background-position: -1514px -626px
+}
+
+.Pet_Food_Pie_Zombie {
+    background-position: -1514px -557px
+}
+
+.Pet_Food_Pie_Zombie,
+.Pet_Food_Potatoe {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    width: 68px;
+    height: 68px
+}
+
+.Pet_Food_Potatoe {
+    background-position: -1514px -488px
+}
+
+.Pet_Food_RottenMeat {
+    background-position: -1514px -419px
+}
+
+.Pet_Food_RottenMeat,
+.Pet_Food_Saddle {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    width: 68px;
+    height: 68px
+}
+
+.Pet_Food_Saddle {
+    background-position: -1514px -350px
+}
+
+.Pet_Food_Strawberry {
+    background-image: url('../../assets/images/icon-pack/spritesmith-main-14.png');
+    background-position: -1620px -552px;
+    width: 68px;
+    height: 68px
 }

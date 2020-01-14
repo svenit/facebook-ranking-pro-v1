@@ -56,6 +56,16 @@ Route::group(['as' => 'admin.','namespace' => 'Admin'], function () {
         Route::get('delete/{id}','PetController@delete')->name('delete');
         Route::post('delete-multi','PetController@deleteMulti')->name('delete-multi');
     });
+    Route::group(['prefix' => 'items','as' => 'items.'], function () {
+        Route::view('add','admin.items.add')->name('add');
+        Route::get('list','ItemController@list')->name('list');
+        Route::post('store','ItemController@store')->name('store');
+        Route::get('edit/{id}','ItemController@edit')->name('edit');
+        Route::post('update/{id}','ItemController@update')->name('update');
+        Route::get('replicate/{id}','ItemController@replicate')->name('replicate');
+        Route::get('delete/{id}','ItemController@delete')->name('delete');
+        Route::post('delete-multi','ItemController@deleteMulti')->name('delete-multi');
+    });
     Route::get('update-points','UpdatePointsController@index')->name('update-points');
     Route::post('update-points','UpdatePointsController@store');
 });

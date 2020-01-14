@@ -105,21 +105,25 @@ class ItemController extends Controller
             return response()->json($response,200);
         }
     }
+    public function removeItem($item)
+    {
+        if($item->quantity == 1)
+        {
+            Auth::user()->items()->detach($item->item_id);
+        }
+        else
+        {
+            Auth::user()->items()->updateExistingPivot($item->item_id,[
+                'quantity' => DB::raw('quantity - 1')
+            ]);
+        }
+    }
     public function delete(Request $request)
     {
         $userItem = UserItem::where([['id',$request->id],['item_id',$request->item_id],['user_id',Auth::id()]])->first();
         if(isset($userItem))
         {
-            if($userItem->quantity == 1)
-            {
-                Auth::user()->items()->detach($userItem->item_id);
-            }
-            else
-            {
-                Auth::user()->items()->updateExistingPivot($userItem->item_id,[
-                    'quantity' => DB::raw('quantity - 1')
-                ]);
-            }
+            $this->removeItem($userItem);
             $response = [
                 'code' => 200,
                 'status' => 'success',

@@ -10,7 +10,7 @@
             @include('user.theme.parameter')
             @include('user.profile.base')
             <div class="vip-bordered row">                    
-                <div style="padding:20px" v-if="items.length > 0" v-for="(item,index) in items" :key="index" class="col-4 col-md-3 col-lg-2" data-title="tooltip" title="Click vào để sử dụng" @click="showInforItem(item,1)">
+                <div style="padding:20px" v-if="items.length > 0" v-for="(item,index) in items" :key="index" class="col-3 col-md-2 col-lg-1" data-title="tooltip" title="Click vào để sử dụng" @click="showInforItem(item,1)">
                     <div data-title="tooltip" title="Click vào để xem chi tiết" class="hoverable col-sm-3 col-md-2 col-lg-1">
                         <span style="border:1px solid #eee" class="w-64 avatar gd-dark">
                             <span style="background:transparent;border-color:transparent !important" class="avatar-status b-white avatar-right">
