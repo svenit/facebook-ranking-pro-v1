@@ -23,7 +23,7 @@ class ShopController extends Controller
                     $gears = Character::with('gears')->where('id','!=',0)->get();
                     foreach($gears as $i => $gear)
                     {
-                        $gears[$i]->items = Gear::with('character','cates')->where([['status',1],['cate_gear_id',$cates->id],['character_id',$gear->id]])->orderBy('level_required','desc')->get();
+                        $gears[$i]->items = Gear::with('character','cates')->where([['status',1],['cate_gear_id',$cates->id],['character_id',$gear->id]])->get();
                     }
                     break;
                 }
