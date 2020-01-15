@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>@yield('hero')</title>
+	<title>{{ env('APP_NAME') }} - @yield('hero')</title>
 	<meta http-equiv="x-dns-prefetch-control" content="on">
 	<link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
 	<link rel="dns-prefetch" href="//cdn.jsdelivr.net" />

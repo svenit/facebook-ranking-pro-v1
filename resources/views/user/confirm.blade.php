@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Lockme | Basik - Bootstrap 4 Web Application</title>
+    <title>{{ env('APP_NAME') }} - Xác Nhận</title>
     <link rel="stylesheet" href="{{ asset('assets/css/site.min.css') }}">
     <link href="{{ asset('cdn/css/all.min.css') }}" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}" />

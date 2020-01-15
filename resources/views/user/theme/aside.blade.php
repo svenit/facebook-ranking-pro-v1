@@ -527,7 +527,7 @@
                             d="M200.043 106.067c-40.631 15.171-73.434 46.382-90.717 85.933H256l-55.957-85.933zM412.797 288A160.723 160.723 0 0 0 416 256c0-36.624-12.314-70.367-33.016-97.334L311 288h101.797zM359.973 134.395C332.007 110.461 295.694 96 256 96c-7.966 0-15.794.591-23.448 1.715L310.852 224l49.121-89.605zM99.204 224A160.65 160.65 0 0 0 96 256c0 36.639 12.324 70.394 33.041 97.366L201 224H99.204zM311.959 405.932c40.631-15.171 73.433-46.382 90.715-85.932H256l55.959 85.932zM152.046 377.621C180.009 401.545 216.314 416 256 416c7.969 0 15.799-.592 23.456-1.716L201.164 288l-49.118 89.621z">
                         </path>
                     </g>
-                </svg> <span class="hidden-folded d-inline l-s-n-1x">Game</span></a></div>
+                </svg> <span class="hidden-folded d-inline l-s-n-1x">{{ env('APP_NAME') }}</span></a></div>
         <div class="flex scrollable hover">
             <div class="nav-active-text-primary" data-nav>
                 <ul class="nav bg">
@@ -587,7 +587,7 @@
                                 <li><a href="{{ Route('user.explore.recovery-room.index') }}" class=""><span class="nav-text">Phòng Hồi Phục</span></a></li>
                             </ul>
                         </li>
-                        <li><a href="#" class=""><span class="nav-icon"><i data-feather="users"></i></span> <span
+                        {{-- <li><a href="#" class=""><span class="nav-icon"><i data-feather="users"></i></span> <span
                             class="nav-text">Bang Hội</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="#" class=""><span class="nav-text">Tạo</span></a></li>
@@ -596,7 +596,7 @@
                                 <li><a href="#" class=""><span class="nav-text">Hoạt Động</span></a></li>
                                 <li><a href="#" class=""><span class="nav-text">Thiết Lập</span></a></li>
                             </ul>
-                        </li>
+                        </li> --}}
                         <li class="{{ Request::is('pvp/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
                             class="nav-text">PVP</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
@@ -662,25 +662,25 @@
                         <li class="{{ Request::is('admin/skills/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="book-open"></i></span> <span
                             class="nav-text">Kỹ Năng</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('admin.pets.add') }}" class=""><span class="nav-text">Thêm</span></a></li></li>
-                                <li><a href="{{ Route('admin.pets.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
+                                <li><a href="{{ Route('admin.skills.add') }}" class=""><span class="nav-text">Thêm</span></a></li></li>
+                                <li><a href="{{ Route('admin.skills.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
                             </ul>
                         </li>
-                        <li class="{{ Request::is('admin/pushers/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="trending-up"></i></span> <span
+                        <li class="{{ Request::is('admin/levels/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="trending-up"></i></span> <span
                             class="nav-text">Cấp Độ</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('admin.pets.add') }}" class=""><span class="nav-text">Thêm</span></a></li></li>
                                 <li><a href="{{ Route('admin.pets.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
                             </ul>
                         </li>
-                        <li class="{{ Request::is('admin/pushers/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="user"></i></span> <span
+                        <li class="{{ Request::is('admin/characters/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="user"></i></span> <span
                             class="nav-text">Nhân Vật</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('admin.pets.add') }}" class=""><span class="nav-text">Thêm</span></a></li></li>
                                 <li><a href="{{ Route('admin.pets.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
                             </ul>
                         </li>
-                        <li class="{{ Request::is('admin/pushers/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="rss"></i></span> <span
+                        <li class="{{ Request::is('admin/recovery-rooms/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="rss"></i></span> <span
                             class="nav-text">Phòng Hồi Phục</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('admin.pets.add') }}" class=""><span class="nav-text">Thêm</span></a></li></li>
@@ -701,16 +701,16 @@
                                 <li><a href="{{ Route('admin.pets.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
                             </ul>
                         </li>
-                        <li class="{{ Request::is('admin/events/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="message-square"></i></span> <span
+                        <li class="{{ Request::is('admin/chats/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="message-square"></i></span> <span
                             class="nav-text">Chat</span></span></a>
                         </li>
-                        <li class="{{ Request::is('admin/events/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
+                        <li class="{{ Request::is('admin/pvps/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
                             class="nav-text">PVP</span></span></a>
                         </li>
-                        <li class="{{ Request::is('admin/events/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="play"></i></span> <span
+                        <li class="{{ Request::is('admin/trackings/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="play"></i></span> <span
                             class="nav-text">Theo Dõi</span></span></a>
                         </li>
-                        <li class="{{ Request::is('admin/events/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="image"></i></span> <span
+                        <li class="{{ Request::is('admin/sliders/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="image"></i></span> <span
                             class="nav-text">Slider</span></span></a>
                         </li>
                         <li class="{{ Request::is('admin/settings/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="settings"></i></span> <span

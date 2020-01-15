@@ -74,7 +74,7 @@ class ItemController extends Controller
     public function delete($id)
     {
         Item::findOrFail($id)->delete();
-        $this->removeCache("shop..item");
+        $this->removeCache("shop.item");
         return redirect()->back()->with([
             'status' => 'success',
             'message' => 'Xóa vật phẩm thành công'

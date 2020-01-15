@@ -66,6 +66,26 @@ Route::group(['as' => 'admin.','namespace' => 'Admin'], function () {
         Route::get('delete/{id}','ItemController@delete')->name('delete');
         Route::post('delete-multi','ItemController@deleteMulti')->name('delete-multi');
     });
+    Route::group(['prefix' => 'skills','as' => 'skills.'], function () {
+        Route::get('add','SkillController@add')->name('add');
+        Route::get('list','SkillController@list')->name('list');
+        Route::post('store','SkillController@store')->name('store');
+        Route::get('edit/{id}','SkillController@edit')->name('edit');
+        Route::post('update/{id}','SkillController@update')->name('update');
+        Route::get('replicate/{id}','SkillController@replicate')->name('replicate');
+        Route::get('delete/{id}','SkillController@delete')->name('delete');
+        Route::post('delete-multi','SkillController@deleteMulti')->name('delete-multi');
+    });
+    Route::group(['prefix' => 'levels','as' => 'levels.'], function () {
+        Route::view('add','admin.levels.add')->name('add');
+        Route::get('list','LevelController@list')->name('list');
+        Route::post('store','LevelController@store')->name('store');
+        Route::get('edit/{id}','LevelController@edit')->name('edit');
+        Route::post('update/{id}','LevelController@update')->name('update');
+        Route::get('replicate/{id}','LevelController@replicate')->name('replicate');
+        Route::get('delete/{id}','LevelController@delete')->name('delete');
+        Route::post('delete-multi','LevelController@deleteMulti')->name('delete-multi');
+    });
     Route::get('update-points','UpdatePointsController@index')->name('update-points');
     Route::post('update-points','UpdatePointsController@store');
 });

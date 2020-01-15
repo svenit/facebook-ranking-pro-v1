@@ -73,7 +73,7 @@
                                                 <label class="text-muted" for="exampleInputEmail1">Trạng Thái</label>
                                                 <select placeholder="Chọn trang bị" class="chosen form-control form-control-sm" name="status">
                                                     <option {{ $item->status == 0 ? 'selected' : '' }} value="0">Ẩn</option>
-                                                    <option {{ $item->status == 1 ? 'selected' : '' }} selected value="1">Hiện</option>
+                                                    <option {{ $item->status == 1 ? 'selected' : '' }} value="1">Hiện</option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-12">
@@ -148,7 +148,33 @@
 </div>
 @endsection
 @push('js')
+<script src="{{ asset('assets/js/plugins/datatable/datatable.min.js') }}"></script>
+<script src="{{ asset('assets/js/plugins/datatable/dataTables.bootstrap4.min.js') }}"></script>
 <script>
+    $(document).ready( function () {
+        $('#myTable').DataTable({
+            pageLength: 10,
+            responsive: true,
+            dom: '<"html5buttons"B>lTfgitp',
+            buttons: [
+                { extend: 'copy'},
+                {extend: 'csv'},
+                {extend: 'excel', title: 'ExampleFile'},
+                {extend: 'pdf', title: 'ExampleFile'},
+
+                {extend: 'print',
+                    customize: function (win){
+                        $(win.document.body).addClass('white-bg');
+                        $(win.document.body).css('font-size', '10px');
+
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                }
+            ]
+        });
+    });
     new Vue({
         el:'#ranking',
         data:{
