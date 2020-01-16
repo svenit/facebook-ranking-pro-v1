@@ -8,7 +8,7 @@
     <div class="padding-x">
         <div class="row row-sm sr">
             @foreach($characters as $key => $character)
-                <div class="col-md-3 col-3">
+                <div class="col-auto">
                     <div class="card">
                         <div style="position:relative;left:28%" class="character-sprites hoverable">
                             <span class="hair_flower_3"></span>

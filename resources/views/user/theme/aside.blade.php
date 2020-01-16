@@ -666,12 +666,8 @@
                                 <li><a href="{{ Route('admin.skills.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
                             </ul>
                         </li>
-                        <li class="{{ Request::is('admin/levels/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="trending-up"></i></span> <span
-                            class="nav-text">Cấp Độ</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('admin.pets.add') }}" class=""><span class="nav-text">Thêm</span></a></li></li>
-                                <li><a href="{{ Route('admin.pets.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
-                            </ul>
+                        <li class="{{ Request::is('admin/levels/*') ? 'active' : '' }}"><a href="{{ Route('admin.levels.list') }}" class=""><span class="nav-icon"><i data-feather="trending-up"></i></span> <span
+                            class="nav-text">Cấp Độ</span></a>
                         </li>
                         <li class="{{ Request::is('admin/characters/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="user"></i></span> <span
                             class="nav-text">Nhân Vật</span> <span class="nav-caret"></span></a>
@@ -687,12 +683,8 @@
                                 <li><a href="{{ Route('admin.pets.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
                             </ul>
                         </li>
-                        <li class="{{ Request::is('admin/pushers/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="database"></i></span> <span
-                            class="nav-text">Pushers</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('admin.pets.add') }}" class=""><span class="nav-text">Thêm</span></a></li></li>
-                                <li><a href="{{ Route('admin.pets.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
-                            </ul>
+                        <li class="{{ Request::is('admin/pushers/*') ? 'active' : '' }}"><a href="{{ Route('admin.pets.list') }}" class=""><span class="nav-icon"><i data-feather="database"></i></span> <span
+                            class="nav-text">Pushers</span></a>
                         </li>
                         <li class="{{ Request::is('admin/events/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="gift"></i></span> <span
                             class="nav-text">Giải Trí</span> <span class="nav-caret"></span></a>
@@ -710,13 +702,11 @@
                         <li class="{{ Request::is('admin/trackings/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="play"></i></span> <span
                             class="nav-text">Theo Dõi</span></span></a>
                         </li>
-                        <li class="{{ Request::is('admin/sliders/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="image"></i></span> <span
-                            class="nav-text">Slider</span></span></a>
-                        </li>
                         <li class="{{ Request::is('admin/settings/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="settings"></i></span> <span
                             class="nav-text">Cài Đặt</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
-                                <li><a href="#" class=""><span class="nav-text">Cấu Hình</span></a></li></li>
+                                <li><a href="{{ Route('admin.settings.config') }}" class=""><span class="nav-text">Cấu Hình</span></a></li></li>
+                                <li><a href="#" class=""><span class="nav-text">Slider</span></a></li></li>
                             </ul>
                         </li>
                     @endif

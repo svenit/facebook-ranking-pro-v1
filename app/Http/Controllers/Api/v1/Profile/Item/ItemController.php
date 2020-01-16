@@ -55,7 +55,7 @@ class ItemController extends Controller
                                 $response = [
                                     'code' => 200,
                                     'status' => 'success',
-                                    'message' => 'Sử dụng vật phẩm thành công'
+                                    'message' => "Sử dụng ".$userItem->item->name." thành công"
                                 ];
                             }
                             else

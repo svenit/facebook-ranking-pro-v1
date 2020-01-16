@@ -75,7 +75,7 @@ class Helper
     }
     public function nextLevel()
     {
-        $currentLevel = Level::findOrFail($this->level());
+        $currentLevel = Level::whereLevel($this->level())->first();
         $nextLevel = Level::where('id', '>', $currentLevel->id)->first();
         return [
             'next_level' => isset($nextLevel) ? $nextLevel->level : 'MAX',

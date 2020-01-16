@@ -65,7 +65,7 @@ class SpinController extends Controller
         }
         else
         {
-            $log = " => ".now()." - ID : ".Auth::id()." - UID : ".Auth::user()->user_id;
+            $log = " => ".now()." - ID : ".Auth::id()." - UID : ".Auth::user()->user_id . "\n";
             Storage::append('public/spin/'.date('d-m-Y').'.txt',$log);
             $response = [
                 'code' => 500,

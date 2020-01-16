@@ -166,9 +166,9 @@ class HitController extends BaseController
                                             }
                                             if($enemy->first()->user_challenge_hp - $destroy <= 0 || $enemy->first()->user_challenge_hp <= 0)
                                             {
-                                                $exp = 250;
-                                                $coins = 2000;
-                                                $pvpPoints = 50;
+                                                $exp = 100;
+                                                $coins = 300;
+                                                $pvpPoints = 5;
 
                                                 $youWin = Auth::user();
 

@@ -88,6 +88,7 @@
 	<script src="{{ asset('assets/js/plugins/speed/refresh.min.js') }}"></script>
 	<script src="{{ asset('assets/js/plugins/speed/trasher.js') }}"></script>
 	<script src="{{ asset('assets/js/plugins/speed/lite.min.js') }}"></script>
+	<script src="{{ asset('assets/js/plugins/firebase/firebase.js') }}"></script>
 	<script src="{{ asset('assets/js/site.min.js') }}"></script>
 	<script src="{{ asset('assets/js/plugins/axios/axios.min.js') }}"></script>
 	<script src="{{ asset('assets/js/vue/vue.js') }}"></script>

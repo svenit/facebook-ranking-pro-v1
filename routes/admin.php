@@ -77,14 +77,32 @@ Route::group(['as' => 'admin.','namespace' => 'Admin'], function () {
         Route::post('delete-multi','SkillController@deleteMulti')->name('delete-multi');
     });
     Route::group(['prefix' => 'levels','as' => 'levels.'], function () {
-        Route::view('add','admin.levels.add')->name('add');
         Route::get('list','LevelController@list')->name('list');
         Route::post('store','LevelController@store')->name('store');
         Route::get('edit/{id}','LevelController@edit')->name('edit');
         Route::post('update/{id}','LevelController@update')->name('update');
-        Route::get('replicate/{id}','LevelController@replicate')->name('replicate');
         Route::get('delete/{id}','LevelController@delete')->name('delete');
         Route::post('delete-multi','LevelController@deleteMulti')->name('delete-multi');
+    });
+    Route::group(['prefix' => 'pushers','as' => 'pushers.'], function () {
+        Route::get('list','PusherController@list')->name('list');
+        Route::post('store','PusherController@store')->name('store');
+        Route::get('select/{id}','PusherController@selectPusher')->name('select');
+        Route::get('delete/{id}','PusherController@delete')->name('delete');
+        Route::post('delete-multi','PusherController@deleteMulti')->name('delete-multi');
+    });
+    Route::group(['prefix' => 'events','as' => 'events.'], function () {
+        Route::view('add','admin.spin-wheel.add')->name('add');
+        Route::get('list','SpinWheelController@list')->name('list');
+        Route::post('store','SpinWheelController@store')->name('store');
+        Route::get('edit/{id}','SpinWheelController@edit')->name('edit');
+        Route::post('update/{id}','SpinWheelController@update')->name('update');
+        Route::get('replicate/{id}','SpinWheelController@replicate')->name('replicate');
+        Route::get('delete/{id}','SpinWheelController@delete')->name('delete');
+        Route::post('delete-multi','SpinWheelController@deleteMulti')->name('delete-multi');
+    });
+    Route::group(['prefix' => 'settings','as' => 'settings.'], function () {
+        Route::get('config','SettingController@config')->name('config');
     });
     Route::get('update-points','UpdatePointsController@index')->name('update-points');
     Route::post('update-points','UpdatePointsController@store');
