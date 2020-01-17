@@ -83,6 +83,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Model\ChatRoom','chat_conversations','user_id','room_id');
     }
+    public function giftcode()
+    {
+        return $this->belongsToMany('App\Model\GiftCode','user_gift_codes','user_id','gift_code_id');
+    }
     public function usingSkills()
     {
         $data = [];

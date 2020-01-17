@@ -57,6 +57,7 @@ Route::group(['prefix' => 'v1','namespace' => 'Api\v1','middleware' => 'cors'], 
             Route::get('/','ItemController');
             Route::post('use','ItemController@use');
             Route::post('delete','ItemController@delete');
+            Route::post('delete-all','ItemController@deleteAll');
         });
     });
 });

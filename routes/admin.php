@@ -103,6 +103,7 @@ Route::group(['as' => 'admin.','namespace' => 'Admin'], function () {
     });
     Route::group(['prefix' => 'settings','as' => 'settings.'], function () {
         Route::get('config','SettingController@config')->name('config');
+        Route::post('update-config','SettingController@updateConfig')->name('config-update');
     });
     Route::get('update-points','UpdatePointsController@index')->name('update-points');
     Route::post('update-points','UpdatePointsController@store');

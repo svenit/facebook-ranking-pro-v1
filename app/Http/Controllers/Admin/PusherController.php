@@ -17,9 +17,9 @@ class PusherController extends Controller
     {
         $this->validate($request,[
             'app_id' => 'required|numeric|unique:pushers,app_id',
-            'app_key' => 'required|numeric|unique:pushers,app_key',
-            'app_secret' => 'required|numeric|unique:pushers,app_secret',
-            'cluster' => 'required|numeric|unique:pushers,cluster',
+            'app_key' => 'required|unique:pushers,app_key',
+            'app_secret' => 'required|unique:pushers,app_secret',
+            'cluster' => 'required',
         ]);
         $store = Pusher::create($request->except('_token'));
         if(isset($store))

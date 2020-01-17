@@ -17,7 +17,7 @@ class CustomeConnection
             $pusher = $connect->prepare("SELECT * FROM pushers WHERE selected = ?");
             $pusher->execute([1]);
 
-            return $pusher->fetchAll(PDO::FETCH_ASSOC)[0];
+            return $pusher->fetchAll(PDO::FETCH_ASSOC)[0] ?? null;
         }
         catch(PDOException $e)
         {

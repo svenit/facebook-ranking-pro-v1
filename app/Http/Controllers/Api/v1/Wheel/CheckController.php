@@ -9,7 +9,7 @@ use Session;
 
 class CheckController extends Controller
 {
-    private $price = 1000;
+    private $price = 2000;
 
     public function __invoke(Request $request)
     {

@@ -14,4 +14,12 @@ class SettingController extends Controller
         $config = $config->first();
         return view('admin.settings.config',compact('config'));
     }
+    public function updateConfig(Request $request)
+    {
+        Config::first()->update($request->except('_token'));
+        return redirect()->back()->with([
+            'status' => 'success',
+            'message' => 'Cập nhật thành công'
+        ]);
+    }
 }

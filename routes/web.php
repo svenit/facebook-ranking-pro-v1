@@ -86,6 +86,10 @@ Route::group(['middleware' => ['maintaince','redirect.action']], function () {
                     Route::get('cancle/{id}','RecoveryRoomController@cancle')->name('cancle');
                 });                
             });
+            Route::group(['prefix' => 'gift-code','as' => 'giftcode.','namespace' => 'GiftCode'], function () {
+                Route::view('/','user.giftcode.index')->name('index');
+                Route::post('/','GiftCodeController@submit')->name('submit');
+            });
         });
     });
 });

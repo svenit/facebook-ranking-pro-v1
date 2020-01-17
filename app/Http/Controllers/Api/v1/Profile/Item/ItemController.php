@@ -52,6 +52,7 @@ class ItemController extends Controller
                             }
                             if(isset($exec))
                             {
+                                $this->updatePower();
                                 $response = [
                                     'code' => 200,
                                     'status' => 'success',
@@ -128,6 +129,28 @@ class ItemController extends Controller
                 'code' => 200,
                 'status' => 'success',
                 'message' => 'Đã vứt bỏ vật phẩm'
+            ];
+        }
+        else
+        {
+            $response = [
+                'code' => 500,
+                'status' => 'error',
+                'message' => 'Vật phẩm không tồn tại'
+            ];
+        }
+        return response()->json($response,200);
+    }
+    public function deleteAll(Request $request)
+    {
+        $userItem = UserItem::where([['id',$request->id],['item_id',$request->item_id],['user_id',Auth::id()]])->first();
+        if(isset($userItem))
+        {
+            Auth::user()->items()->detach($userItem->item_id);
+            $response = [
+                'code' => 200,
+                'status' => 'success',
+                'message' => 'Đã vứt bỏ hết vật phẩm này'
             ];
         }
         else

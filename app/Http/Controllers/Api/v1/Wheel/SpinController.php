@@ -25,7 +25,11 @@ class SpinController extends Controller
                     $findGif = SpinWheel::where([[DB::raw("md5(id)"),$data[1]],[DB::raw("md5(type)"),$data[2]],[DB::raw("md5(probability)"),$data[3]]])->first();
                     if(isset($findGif->query))
                     {
-                        $receiveGif = DB::statement($this->replaceStatement($findGif->query));
+                        $queries = explode("^",$findGif->query);
+                        foreach($queries as $query)
+                        {
+                            $receiveGif = DB::statement($this->replaceStatement($query));
+                        }
                         if($receiveGif)
                         {
                             Session::forget('spinning');
@@ -39,9 +43,9 @@ class SpinController extends Controller
                     else
                     {
                         $response = [
-                            'code' => 500,
-                            'status' => 'error',
-                            'message' => 'Không tìm thấy phần thưởng'
+                            'code' => 200,
+                            'status' => 'success',
+                            'message' => 'Chúc bạn may mắn lần sau'
                         ];
                     }
                 }

@@ -10,7 +10,7 @@
             @foreach($characters as $key => $character)
                 <div class="col-auto">
                     <div class="card">
-                        <div style="position:relative;left:28%" class="character-sprites hoverable">
+                        <div style="position:relative;margin:0 auto" class="character-sprites hoverable">
                             <span class="hair_flower_3"></span>
                             <span class="chair_none"></span>
                             <span class=""></span>
@@ -32,7 +32,7 @@
                             <span class=""></span>
                         </div>
                         <div class="card-body">
-                            <p class="card-title text-gold text-center">{{ $character->name }}</p>
+                            <p  class="card-title text-gold text-center">{{ $character->name }}</p>
                             <div id="{{ str_slug($character->name) }}"></div>
                             <center><a class="text-center" onclick="return confirm('Bạn có chắc chắn muốn chọn nhân vật này ?')" style="margin-left:-10px" href="{{ Route('user.character.set',['id' => $character->id]) }}">
                                 <button class="btn w-sm mb-1 bg-dark"><span class="mx-1">Chọn</span></button>

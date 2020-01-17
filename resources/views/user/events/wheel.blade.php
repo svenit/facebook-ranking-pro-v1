@@ -8,6 +8,7 @@
         @include('user.theme.parameter')
         <div class="row row-sm sr">
             <div class="col-md-12 col-lg-12">        
+                <p class="btn vip-bordered">Mỗi lượt quay mất 2K Vàng ( Lưu ý : Không tải lại trang trong khi quay )</p>
                 <div class="wheelContainer">
                     <svg style="transform:translate(-50%, 0%) matrix(1, 0, 0, 1, 0, 0)" class="wheelSVG" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" text-rendering="optimizeSpeed">
                         <defs>

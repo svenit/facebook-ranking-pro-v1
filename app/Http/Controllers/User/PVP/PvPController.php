@@ -24,9 +24,10 @@ class PvPController extends Controller
     public function createRoom(Request $request)
     {
         $this->validate($request,[
-            'g-recaptcha-response' => 'required'
+            'g-recaptcha-response' => 'required|recaptcha'
         ],[
-            'g-recaptcha-response.required' => 'Bạn chưa xác nhập recaptcha'
+            'g-recaptcha-response.required' => 'Bạn chưa xác nhập recaptcha',
+            'g-recaptcha-response.recaptcha' => 'Captcha không hợp lệ'
         ]);
         if($this->config()->open_pvp == 1)
         {
@@ -66,7 +67,7 @@ class PvPController extends Controller
         else
         {
             return back()->with([
-                'status' => 'error',
+                'status' => 'warning',
                 'message' => 'PVP chưa mở, mời bạn quay lại sau'
             ]);
         }

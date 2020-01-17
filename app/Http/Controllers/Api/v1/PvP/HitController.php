@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1\PvP;
 
-use App\Events\PvPHitEnemy;
 use Carbon\Carbon;
 use App\Model\Room;
 use App\Model\User;
 use App\Model\Skill;
 use App\Model\FightRoom;
 use App\Model\UserSkill;
+use App\Events\PvPHitEnemy;
+use App\Model\FightRoomLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -175,6 +176,11 @@ class HitController extends BaseController
                                                 $youWin->increment('exp',$exp);
                                                 $youWin->increment('income_coins',$coins);
                                                 $youWin->increment('pvp_points',$pvpPoints);
+
+                                                FightRoomLog::create([
+                                                    'user_win_id' => Auth::id(),
+                                                    'user_lose_id' => $enemy->first()->user_receive_challenge
+                                                ]);
 
                                                 if(isset($youWin))
                                                 {

@@ -13,6 +13,7 @@
                         <div class="nav-active-border b-primary bottom">
                             <ul class="nav" id="myTab" role="tablist">
                                 <li class="nav-item"><a class="nav-link active" id="index-tab" data-toggle="tab" href="#home-index" role="tab" aria-controls="home-index" aria-selected="true">Danh Sách</a></li>
+                                <li class="nav-item"><a class="nav-link" id="own-tab" data-toggle="tab" href="#home-own" role="tab" aria-controls="home-own" aria-selected="false">Log</a></li>
                             </ul>
                         </div>
                     </div>
@@ -73,10 +74,42 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <form id="form" class="form" action="{{ Route('admin.pushers.delete-multi') }}" method="POST">
+                            <form id="form" class="form" action="{{ Route('admin.events.delete-multi') }}" method="POST">
                                 @csrf
                                 <input style="display:none" v-model="selected" type="text" name="selected[]">
                             </form>
+                        </div>
+                        <div class="tab-pane fade" id="home-own" role="tabpanel" aria-labelledby="own-tab">
+                            <table id="myTable" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="" data-field="owner">
+                                            <div class="th-inner text-gold sortable both">#</div>
+                                        </th>
+                                        <th style="" data-field="owner">
+                                            <div class="th-inner text-gold sortable both">File</div>
+                                        </th>
+                                        <th style="" data-field="owner">
+                                            <div class="th-inner text-gold sortable both">Log</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($logs as $key => $log)
+                                        <tr>
+                                            <td style=""><small class="text-muted">{{ $key + 1 }}</small></td>
+                                            <td style=""><small class="text-muted">{{ $log['file'] }}</small></td>
+                                            <td style="">
+                                                <small class="text-muted">
+                                                    @foreach($log['data'] as $data)
+                                                    <p>{{ $data }}</p>
+                                                    @endforeach
+                                                </small>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

@@ -63,7 +63,7 @@ class StrangerController extends Controller
             }
             return redirect()->route('user.index')->with([
                 'status' => 'warning',
-                'message' => 'Bạn đã hết lượt chat, xin vui lòng mua thêm trong cửa hàng'
+                'message' => 'Bạn đã hết vé chat, xin vui lòng mua thêm trong cửa hàng'
             ]);
         }
         else

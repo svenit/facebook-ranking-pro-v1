@@ -363,11 +363,14 @@
                 </div>
             </div>
             <div v-if="detailItem.permission == 1" class="modal-footer">
+                <button type="button" @click="deleteAllItem(detailItem.data)" class="btn bg-danger-lt" data-dismiss="modal">
+                    Vứt Bỏ Hết
+                </button>
                 <button type="button" @click="deleteItem(detailItem.data)" class="btn bg-danger-lt" data-dismiss="modal">
-                    Vứt Bỏ
+                    Vứt Bỏ x1
                 </button>
                 <button type="button" @click="useItem(detailItem.data)" class="btn btn-success" data-dismiss="modal">
-                    Dùng
+                    Dùng x1
                 </button>
             </div>
         </div>
@@ -598,17 +601,20 @@
                             </ul>
                         </li> --}}
                         <li class="{{ Request::is('pvp/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
-                            class="nav-text">PVP</span> <span class="nav-caret"></span></a>
+                            class="nav-text">PVP</span><span class="nav-badge"><b class="badge-circle xs text-{{ $user->config->open_pvp == 1 ? 'success' : 'warning' }}"></b></span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('user.pvp.index') }}" class=""><span class="nav-text">Tham Gia</span></a></li>
                             </ul>
                         </li>
                         <li class="{{ Request::is('chat/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="message-circle"></i></span> <span
-                            class="nav-text">Chat</span> <span class="nav-caret"></span></a>
+                            class="nav-text">Chat</span> <span class="nav-badge"><b class="badge-circle xs text-{{ $user->config->open_chat == 1 ? 'success' : 'warning' }}"></b></span><span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('user.chat.global') }}" class=""><span class="nav-text">Thế Giới</span></a></li>
-                                <li><a onclick="return confirm('Chat với người lạ ?')" href="{{ Route('user.chat.stranger.join') }}" class=""><span class="nav-text">CVNL</span></a></li>
+                                <li><a onclick="return confirm('Bạn đang có {{ Auth::user()->stranger_chat_times }} vé chat ! Tham gia ?')" href="{{ Route('user.chat.stranger.join') }}" class=""><span class="nav-text">CVNL</span></a></li>
                             </ul>
+                        </li>
+                        <li><a href="{{ Route('user.giftcode.index') }}" class=""><span class="nav-icon"><i data-feather="gift"></i></span> <span
+                            class="nav-text">GiftCode</span></a>
                         </li>
                     @endif
                     @if(Auth::check() && Auth::user()->isAdmin)
@@ -683,14 +689,14 @@
                                 <li><a href="{{ Route('admin.pets.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
                             </ul>
                         </li>
-                        <li class="{{ Request::is('admin/pushers/*') ? 'active' : '' }}"><a href="{{ Route('admin.pets.list') }}" class=""><span class="nav-icon"><i data-feather="database"></i></span> <span
+                        <li class="{{ Request::is('admin/pushers/*') ? 'active' : '' }}"><a href="{{ Route('admin.pushers.list') }}" class=""><span class="nav-icon"><i data-feather="database"></i></span> <span
                             class="nav-text">Pushers</span></a>
                         </li>
                         <li class="{{ Request::is('admin/events/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="gift"></i></span> <span
                             class="nav-text">Giải Trí</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('admin.pets.add') }}" class=""><span class="nav-text">Thêm</span></a></li></li>
-                                <li><a href="{{ Route('admin.pets.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
+                                <li><a href="{{ Route('admin.events.add') }}" class=""><span class="nav-text">Thêm</span></a></li></li>
+                                <li><a href="{{ Route('admin.events.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
                             </ul>
                         </li>
                         <li class="{{ Request::is('admin/chats/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="message-square"></i></span> <span

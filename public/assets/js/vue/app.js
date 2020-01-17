@@ -1566,6 +1566,30 @@ app = new Vue({
                 this.loading = false;
             }
         },
+        async deleteAllItem(data)
+        {
+            if(confirm('Vứt bỏ hết vật phẩm này ?'))
+            {
+                this.loading = true;
+                let res = await axios.post(`${config.root}/api/v1/profile/item/delete-all`,{
+                    bearer:config.bearer,
+                    id:data.pivot.id,
+                    item_id:data.id
+                },{
+                    headers:{
+                        pragma:this.token
+                    }
+                });
+                await this.refreshToken(res);
+                if(res.data.code == 200)
+                {
+                    await this.index();
+                    this.item();
+                }
+                this.notify(res.data.message);
+                this.loading = false;
+            }
+        },
         timeAgo(time)
         {
             return moment(time).locale('vi').fromNow(true);

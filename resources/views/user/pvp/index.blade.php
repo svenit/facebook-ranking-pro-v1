@@ -8,9 +8,10 @@
     <div class="page-content page-container" id="page-content">
         <div class="padding-x">
             @include('user.theme.parameter')
-            <a class="text-gold">
+            <p class="text-gold">
                 <button id='fight-button' data-toggle="modal" data-target="#modal" style="width:300px" class="vip-bordered">Tạo Phòng</button>
-            </a>
+                <button style="width:300px" class="vip-bordered">SL : {{ Auth::user()->pvp_times }}</button>
+            </p>
             <div style="margin-top:20px" class="row">
                 <div v-for="(room,index) in pvp.rooms" :key="index" class="col-6 col-md-4 col-lg-3">
                     <a :href="`pvp/join/${room.name}`">

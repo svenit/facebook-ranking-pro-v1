@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
         URL::forceScheme('https');
         Carbon::setLocale('vi');
         Schema::defaultStringLength(191);
+        Validator::extend('recaptcha', 'App\Validators\Recaptcha@validate');
         
         if(Schema::hasTable('configs'))
         {

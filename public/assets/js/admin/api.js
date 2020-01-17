@@ -1,285 +1,593 @@
-(function (n) {
-    var f = "object" == typeof self && self.self === self && self || "object" == typeof global && global.global === global && global;
-    f.Facebook = n(f, {}, f._, f.jQuery || f.Zepto || f.ender || f.$)
-})(function (n, f, g, r) {
-    var x = n.Facebook;
-    f.VERSION = "4.0";
-    f.$ = r;
-    f.noConflict = function () {
-        n.Facebook = x;
-        return this
+'use strict';
+(function(factory) {
+  var root = "object" == typeof self && self.self === self && self || "object" == typeof global && global.global === global && global;
+  root.Facebook = factory(root, {}, root._, root.jQuery || root.Zepto || root.ender || root.$);
+})(function($scope, exports, _, $) {
+  var dojoEvents = $scope.Facebook;
+  /** @type {string} */
+  exports.VERSION = "4.0";
+  /** @type {!Object} */
+  exports.$ = $;
+  /**
+   * @return {?}
+   */
+  exports.noConflict = function() {
+    $scope.Facebook = dojoEvents;
+    return this;
+  };
+  var Events = exports.Events = {};
+  /** @type {!RegExp} */
+  var eventSplitter = /\s+/;
+  /**
+   * @param {!Function} iteratee
+   * @param {?} events
+   * @param {string} name
+   * @param {!Object} callback
+   * @param {!Object} opts
+   * @return {?}
+   */
+  var eventsApi = function(iteratee, events, name, callback, opts) {
+    /** @type {number} */
+    var i = 0;
+    var names;
+    if (name && "object" === typeof name) {
+      if (void 0 !== callback && "context" in opts && void 0 === opts.context) {
+        /** @type {!Object} */
+        opts.context = callback;
+      }
+      names = _.keys(name);
+      for (; i < names.length; i++) {
+        events = eventsApi(iteratee, events, names[i], name[names[i]], opts);
+      }
+    } else {
+      if (name && eventSplitter.test(name)) {
+        names = name.split(eventSplitter);
+        for (; i < names.length; i++) {
+          events = iteratee(events, names[i], callback, opts);
+        }
+      } else {
+        events = iteratee(events, name, callback, opts);
+      }
+    }
+    return events;
+  };
+  /**
+   * @param {string} name
+   * @param {!Object} callback
+   * @param {!Object} context
+   * @return {?}
+   */
+  Events.on = function(name, callback, context) {
+    return internalOn(this, name, callback, context);
+  };
+  /**
+   * @param {!Object} obj
+   * @param {string} name
+   * @param {!Object} callback
+   * @param {!Object} context
+   * @param {!Object} listening
+   * @return {?}
+   */
+  var internalOn = function(obj, name, callback, context, listening) {
+    obj._events = eventsApi(onApi, obj._events || {}, name, callback, {
+      context : context,
+      ctx : obj,
+      listening : listening
+    });
+    if (listening) {
+      /** @type {!Object} */
+      (obj._listeners || (obj._listeners = {}))[listening.id] = listening;
+    }
+    return obj;
+  };
+  /**
+   * @param {!Object} obj
+   * @param {string} name
+   * @param {!Object} callback
+   * @return {?}
+   */
+  Events.listenTo = function(obj, name, callback) {
+    if (!obj) {
+      return this;
+    }
+    var id = obj._listenId || (obj._listenId = _.uniqueId("l"));
+    var listeningTo = this._listeningTo || (this._listeningTo = {});
+    var listening = listeningTo[id];
+    if (!listening) {
+      listening = this._listenId || (this._listenId = _.uniqueId("l"));
+      listening = listeningTo[id] = {
+        obj : obj,
+        objId : id,
+        id : listening,
+        listeningTo : listeningTo,
+        count : 0
+      };
+    }
+    internalOn(obj, name, callback, this, listening);
+    return this;
+  };
+  /**
+   * @param {!Window} widget_class
+   * @param {!Array} events
+   * @param {!Function} callback
+   * @param {!Object} options
+   * @return {?}
+   */
+  var onApi = function(widget_class, events, callback, options) {
+    if (callback) {
+      events = widget_class[events] || (widget_class[events] = []);
+      var context = options.context;
+      var ctx = options.ctx;
+      if (options = options.listening) {
+        options.count++;
+      }
+      events.push({
+        callback : callback,
+        context : context,
+        ctx : context || ctx,
+        listening : options
+      });
+    }
+    return widget_class;
+  };
+  /**
+   * @param {string} name
+   * @param {!Object} callback
+   * @param {string} context
+   * @return {?}
+   */
+  Events.off = function(name, callback, context) {
+    if (!this._events) {
+      return this;
+    }
+    this._events = eventsApi(offApi, this._events, name, callback, {
+      context : context,
+      listeners : this._listeners
+    });
+    return this;
+  };
+  /**
+   * @param {string} obj
+   * @param {string} event
+   * @param {!Object} callback
+   * @return {?}
+   */
+  Events.stopListening = function(obj, event, callback) {
+    var index = this._listeningTo;
+    if (!index) {
+      return this;
+    }
+    obj = obj ? [obj._listenId] : _.keys(index);
+    /** @type {number} */
+    var j = 0;
+    for (; j < obj.length; j++) {
+      var p = index[obj[j]];
+      if (!p) {
+        break;
+      }
+      p.obj.off(event, callback, this);
+    }
+    return this;
+  };
+  /**
+   * @param {!Object} events
+   * @param {!Object} name
+   * @param {!Object} callback
+   * @param {!Object} listeners
+   * @return {?}
+   */
+  var offApi = function(events, name, callback, listeners) {
+    if (events) {
+      /** @type {number} */
+      var i = 0;
+      var context = listeners.context;
+      listeners = listeners.listeners;
+      if (name || callback || context) {
+        var parts = name ? [name] : _.keys(events);
+        for (; i < parts.length; i++) {
+          name = parts[i];
+          var spheres = events[name];
+          if (!spheres) {
+            break;
+          }
+          /** @type {!Array} */
+          var listener = [];
+          /** @type {number} */
+          var iter_sph = 0;
+          for (; iter_sph < spheres.length; iter_sph++) {
+            var listening = spheres[iter_sph];
+            if (callback && callback !== listening.callback && callback !== listening.callback._callback || context && context !== listening.context) {
+              listener.push(listening);
+            } else {
+              if ((listening = listening.listening) && 0 === --listening.count) {
+                delete listeners[listening.id];
+                delete listening.listeningTo[listening.objId];
+              }
+            }
+          }
+          if (listener.length) {
+            /** @type {!Array} */
+            events[name] = listener;
+          } else {
+            delete events[name];
+          }
+        }
+        return events;
+      }
+      events = _.keys(listeners);
+      for (; i < events.length; i++) {
+        listening = listeners[events[i]];
+        delete listeners[listening.id];
+        delete listening.listeningTo[listening.objId];
+      }
+    }
+  };
+  /**
+   * @param {string} name
+   * @param {!Object} callback
+   * @param {!Object} obj
+   * @return {?}
+   */
+  Events.once = function(name, callback, obj) {
+    var events = eventsApi(onceMap, {}, name, callback, _.bind(this.off, this));
+    if ("string" === typeof name && null === obj) {
+      callback = void 0;
+    }
+    return this.on(events, callback, obj);
+  };
+  /**
+   * @param {!Object} obj
+   * @param {string} name
+   * @param {!Object} callback
+   * @return {?}
+   */
+  Events.listenToOnce = function(obj, name, callback) {
+    name = eventsApi(onceMap, {}, name, callback, _.bind(this.stopListening, this, obj));
+    return this.listenTo(obj, name);
+  };
+  /**
+   * @param {!NodeList} map
+   * @param {number} name
+   * @param {!Function} callback
+   * @param {?} offer
+   * @return {?}
+   */
+  var onceMap = function(map, name, callback, offer) {
+    if (callback) {
+      var once = map[name] = _.once(function() {
+        offer(name, once);
+        callback.apply(this, arguments);
+      });
+      /** @type {!Function} */
+      once._callback = callback;
+    }
+    return map;
+  };
+  /**
+   * @param {string} type
+   * @return {?}
+   */
+  Events.trigger = function(type) {
+    if (!this._events) {
+      return this;
+    }
+    /** @type {number} */
+    var _len = Math.max(0, arguments.length - 1);
+    /** @type {!Array} */
+    var args = Array(_len);
+    /** @type {number} */
+    var _i = 0;
+    for (; _i < _len; _i++) {
+      args[_i] = arguments[_i + 1];
+    }
+    eventsApi(callback, this._events, type, void 0, args);
+    return this;
+  };
+  /**
+   * @param {!Object} data
+   * @param {string} index
+   * @param {string} item
+   * @param {!Array} file
+   * @return {?}
+   */
+  var callback = function(data, index, item, file) {
+    if (data) {
+      item = data[index];
+      var filter = data.all;
+      if (item && filter) {
+        filter = filter.slice();
+      }
+      if (item) {
+        done(item, file);
+      }
+      if (filter) {
+        done(filter, [index].concat(file));
+      }
+    }
+    return data;
+  };
+  /**
+   * @param {string} f
+   * @param {!Array} values
+   * @return {undefined}
+   */
+  var done = function(f, values) {
+    var self;
+    /** @type {number} */
+    var lang = -1;
+    var V = f.length;
+    var a = values[0];
+    var med = values[1];
+    var optValues = values[2];
+    switch(values.length) {
+      case 0:
+        for (; ++lang < V;) {
+          (self = f[lang]).callback.call(self.ctx);
+        }
+        break;
+      case 1:
+        for (; ++lang < V;) {
+          (self = f[lang]).callback.call(self.ctx, a);
+        }
+        break;
+      case 2:
+        for (; ++lang < V;) {
+          (self = f[lang]).callback.call(self.ctx, a, med);
+        }
+        break;
+      case 3:
+        for (; ++lang < V;) {
+          (self = f[lang]).callback.call(self.ctx, a, med, optValues);
+        }
+        break;
+      default:
+        for (; ++lang < V;) {
+          (self = f[lang]).callback.apply(self.ctx, values);
+        }
+    }
+  };
+  /** @type {function(string, !Object, !Object): ?} */
+  Events.bind = Events.on;
+  /** @type {function(string, !Object, string): ?} */
+  Events.unbind = Events.off;
+  _.extend(exports, Events);
+  /** @type {function(string): undefined} */
+  var api = exports.Api = function(options) {
+    if ("string" === typeof options) {
+      options = {
+        token : options
+      };
+    }
+    if ("object" !== typeof options) {
+      options = {};
+    }
+    options = _.extend({
+      endpoint : "https://graph.facebook.com/",
+      token : ""
+    }, options);
+    this.endpoint = options.endpoint;
+    /** @type {string} */
+    this.token = options.token;
+    /** @type {number} */
+    this.c = this.r = 0;
+    this.initialize.apply(this, arguments);
+    if (!this.token) {
+      throw Error("No Token");
+    }
+  };
+  _.extend(api.prototype, Events, {
+    initialize : function() {
+    },
+    get : function(url, data, c) {
+      if ("function" === typeof data) {
+        /** @type {string} */
+        var prefix = c;
+        /** @type {string} */
+        c = data;
+        data = prefix;
+      }
+      var self = this;
+      this.r++;
+      if (-1 === url.indexOf("https")) {
+        url = this.endpoint + url;
+      }
+      data = data || {};
+      data.access_token = this.token;
+      return $.ajax(url, {
+        dataType : "jsonp",
+        data : data
+      }).then(function(lookupSoFar) {
+        return lookupSoFar;
+      }).then(function(results) {
+        if (c) {
+          c(results);
+        }
+        self.c++;
+        return results;
+      }).then(function(options) {
+        self.trigger("progress", self.c, self.r, self);
+        if (options && options.paging && options.paging.next) {
+          return self.get(options.paging.next, [], c);
+        }
+        if (self.r === self.c) {
+          self.trigger("complete", self);
+          self.trigger("done", self);
+        }
+      });
+    }
+  });
+  /** @type {function(string, (Uint8Array|number)): undefined} */
+  var target = exports.Feed = function(url, params) {
+    /** @type {string} */
+    this.id = url;
+    var config;
+    if (!(config = params)) {
+      throw Error("No Token");
+    }
+    this.api = new api(config);
+    /** @type {string} */
+    this._since = "";
+    /** @type {number} */
+    this.limit = 500;
+    this.args = {
+      info : false,
+      post : false,
+      reaction : false,
+      comment : false,
+      share : false
     };
-    var k = f.Events = {}, t = /\s+/, m = function (a, b, c, d, e) {
-        var h = 0, f;
-        if (c && "object" === typeof c) for (void 0 !== d && ("context" in e) && void 0 === e.context && (e.context = d), f = g.keys(c); h < f.length; h++) b = m(a, b, f[h], c[f[h]], e); else if (c &&
-            t.test(c)) for (f = c.split(t); h < f.length; h++) b = a(b, f[h], d, e); else b = a(b, c, d, e);
-        return b
-    };
-    k.on = function (a, b, c) {
-        return u(this, a, b, c)
-    };
-    var u = function (a, b, c, d, e) {
-        a._events = m(y, a._events || {}, b, c, {context: d, ctx: a, listening: e});
-        e && ((a._listeners || (a._listeners = {}))[e.id] = e);
-        return a
-    };
-    k.listenTo = function (a, b, c) {
-        if (!a) return this;
-        var d = a._listenId || (a._listenId = g.uniqueId("l")), e = this._listeningTo || (this._listeningTo = {}),
-            h = e[d];
-        h || (h = this._listenId || (this._listenId = g.uniqueId("l")), h = e[d] = {
-            obj: a, objId: d, id: h,
-            listeningTo: e, count: 0
+    this.initialize.apply(this, arguments);
+  };
+  _.extend(target.prototype, Events, {
+    initialize : function() {
+    },
+    progress : function(name) {
+      this.api.on("progress", name);
+      return this;
+    },
+    done : function(callback) {
+      this.api.on("done", callback);
+      return this;
+    },
+    since : function(value) {
+      /** @type {!Date} */
+      var returnDate = new Date;
+      returnDate.setDate(returnDate.getDate() - value);
+      /** @type {string} */
+      this._since = value = returnDate.toISOString();
+      return this;
+    },
+    limit : function(limit) {
+      /** @type {number} */
+      this.limit = limit;
+      return this;
+    },
+    withPost : function(callback, numberOfLogs) {
+      return this["with"]("post", callback, numberOfLogs);
+    },
+    withComment : function(callback, comment) {
+      return this["with"]("comment", callback, comment);
+    },
+    withReaction : function(callback, _userIds) {
+      return this["with"]("reaction", callback, _userIds);
+    },
+    withShare : function(callback, _userIds) {
+      return this["with"]("share", callback, _userIds);
+    },
+    "with" : function(key, options, val) {
+      if (_.isFunction(val)) {
+        /** @type {!Object} */
+        var method = val;
+        options = options || {};
+      } else {
+        /** @type {!Object} */
+        method = options;
+        options = val || {};
+      }
+      if (!_.isObject(options)) {
+        options = {};
+      }
+      /** @type {!Object} */
+      this.args[key] = options;
+      if (_.isFunction(method)) {
+        this.on(key, method);
+      }
+      return this;
+    },
+    get : function() {
+      this.run();
+    },
+    run : function() {
+      var ctrl = this;
+      var args = this.args;
+      var data = {
+        fields : "from"
+      };
+      if (this._since) {
+        data.since = this._since;
+      }
+      if (args.post) {
+        _.extend(data, args.post);
+        this.api.get(this.id + "/feed", data, function(b) {
+          _.each(b.data, function(id) {
+            ctrl.trigger("post", id);
+            ctrl.loadPost(id);
+          });
         });
-        u(a, b, c, this, h);
-        return this
+      }
+      return this;
+    },
+    loadPost : function(id) {
+      var self = this;
+      var data = this.args;
+      if (data.comment) {
+        var d = _.extend({
+          limit : self.limit,
+          fields : "from,message"
+        }, data.comment);
+        self.api.get(id.id + "/comments", d, function(c) {
+          _.each(c.data, function(legalInfo) {
+            self.trigger("comment", legalInfo, id);
+          });
+        });
+      }
+      if (data.reaction) {
+        d = _.extend({
+          limit : self.limit
+        }, data.reaction);
+        self.api.get("v2.6/"+id.id + "/reactions", d, function(c) {
+          _.each(c.data, function(legalInfo) {
+            self.trigger("reaction", legalInfo, id);
+          });
+        });
+      }
+      if (data.share) {
+        data = _.extend({
+          limit : self.limit,
+          fields : "from"
+        }, data.share);
+        self.api.get(id.id + "/sharedposts", data, function(c) {
+          _.each(c.data, function(legalInfo) {
+            self.trigger("share", legalInfo, id);
+          });
+        });
+      }
+    }
+  });
+  /** @type {function(!Function, string): ?} */
+  api.extend = target.extend = function(protoProps, staticProps) {
+    var parent = this;
+    var child = protoProps && _.has(protoProps, "constructor") ? protoProps.constructor : function() {
+      return parent.apply(this, arguments);
     };
-    var y = function (a, b, c, d) {
-        if (c) {
-            b = a[b] || (a[b] = []);
-            var e = d.context, h = d.ctx;
-            (d = d.listening) && d.count++;
-            b.push({callback: c, context: e, ctx: e || h, listening: d})
-        }
-        return a
-    };
-    k.off = function (a, b, c) {
-        if (!this._events) return this;
-        this._events = m(z, this._events, a, b, {context: c, listeners: this._listeners});
-        return this
-    };
-    k.stopListening = function (a, b, c) {
-        var d = this._listeningTo;
-        if (!d) return this;
-        a = a ? [a._listenId] : g.keys(d);
-        for (var e = 0; e < a.length; e++) {
-            var h = d[a[e]];
-            if (!h) break;
-            h.obj.off(b, c, this)
-        }
-        return this
-    };
-    var z = function (a, b, c, d) {
-        if (a) {
-            var e = 0, h = d.context;
-            d = d.listeners;
-            if (b || c || h) {
-                for (var f = b ? [b] : g.keys(a); e < f.length; e++) {
-                    b = f[e];
-                    var k = a[b];
-                    if (!k) break;
-                    for (var m = [], n = 0; n < k.length; n++) {
-                        var l = k[n];
-                        c && c !== l.callback && c !== l.callback._callback || h && h !== l.context ? m.push(l) : (l = l.listening) && 0 === --l.count && (delete d[l.id], delete l.listeningTo[l.objId])
-                    }
-                    m.length ? a[b] = m : delete a[b]
-                }
-                return a
-            }
-            for (a = g.keys(d); e < a.length; e++) l = d[a[e]], delete d[l.id], delete l.listeningTo[l.objId]
-        }
-    };
-    k.once = function (a, b, c) {
-        var d = m(v, {}, a, b, g.bind(this.off, this));
-        "string" === typeof a && null === c && (b = void 0);
-        return this.on(d, b, c)
-    };
-    k.listenToOnce = function (a, b, c) {
-        b = m(v, {}, b, c, g.bind(this.stopListening, this, a));
-        return this.listenTo(a, b)
-    };
-    var v = function (a, b, c, d) {
-        if (c) {
-            var e = a[b] = g.once(function () {
-                d(b, e);
-                c.apply(this, arguments)
-            });
-            e._callback = c
-        }
-        return a
-    };
-    k.trigger = function (a) {
-        if (!this._events) return this;
-        for (var b = Math.max(0, arguments.length - 1), c = Array(b), d = 0; d < b; d++) c[d] = arguments[d + 1];
-        m(A, this._events,
-            a, void 0, c);
-        return this
-    };
-    var A = function (a, b, c, d) {
-        if (a) {
-            c = a[b];
-            var e = a.all;
-            c && e && (e = e.slice());
-            c && w(c, d);
-            e && w(e, [b].concat(d))
-        }
-        return a
-    }, w = function (a, b) {
-        var c, d = -1, e = a.length, h = b[0], f = b[1], g = b[2];
-        switch (b.length) {
-            case 0:
-                for (; ++d < e;) (c = a[d]).callback.call(c.ctx);
-                break;
-            case 1:
-                for (; ++d < e;) (c = a[d]).callback.call(c.ctx, h);
-                break;
-            case 2:
-                for (; ++d < e;) (c = a[d]).callback.call(c.ctx, h, f);
-                break;
-            case 3:
-                for (; ++d < e;) (c = a[d]).callback.call(c.ctx, h, f, g);
-                break;
-            default:
-                for (; ++d < e;) (c = a[d]).callback.apply(c.ctx, b)
-        }
-    };
-    k.bind =
-        k.on;
-    k.unbind = k.off;
-    g.extend(f, k);
-    var p = f.Api = function (a) {
-        "string" === typeof a && (a = {token: a});
-        "object" !== typeof a && (a = {});
-        a = g.extend({endpoint: 'https://graph.facebook.com/', token: ""}, a);
-        this.endpoint = a.endpoint;
-        this.token = a.token;
-        this.c = this.r = 0;
-        this.initialize.apply(this, arguments);
-        if (!this.token) throw Error("No Token");
-    };
-    g.extend(p.prototype, k, {
-        initialize: function () {
-        }, get: function (a, b, c) {
-            if ("function" === typeof b) {
-                var d = c;
-                c = b;
-                b = d
-            }
-            var e = this;
-            this.r++;
-            -1 === a.indexOf("https") && (a = this.endpoint +
-                a);
-            b = b || {};
-            b.access_token = this.token;
-            return r.ajax(a, {dataType: "jsonp", data: b}).then(function (a) {
-                return a
-            }).then(function (a) {
-                c && c(a);
-                e.c++;
-                return a
-            }).then(function (a) {
-                e.trigger("progress", e.c, e.r, e);
-                if (a && a.paging && a.paging.next) return e.get(a.paging.next, [], c);
-                e.r === e.c && (e.trigger("complete", e), e.trigger("done", e))
-            })
-        }
-    });
-    var q = f.Feed = function (a, b) {
-        this.id = a;
-        var c;
-        if (!(c = b)) throw Error("No Token");
-        this.api = new p(c);
-        this._since = "";
-        this.limit = 500;
-        this.args = {info: !1, post: !1, reaction: !1, comment: !1, share: !1};
-        this.initialize.apply(this, arguments)
-    };
-    g.extend(q.prototype, k, {
-        initialize: function () {
-        }, progress: function (a) {
-            this.api.on("progress", a);
-            return this
-        }, done: function (a) {
-            this.api.on("done", a);
-            return this
-        }, since: function (a) {
-            var b = new Date;
-            b.setDate(b.getDate() - a);
-            this._since = a = b.toISOString();
-            return this
-        }, limit: function (a) {
-            this.limit = a;
-            return this
-        }, withPost: function (a, b) {
-            return this["with"]("post", a, b)
-        }, withComment: function (a, b) {
-            return this["with"]("comment", a, b)
-        }, withReaction: function (a, b) {
-            return this["with"]("reaction",
-                a, b)
-        }, withShare: function (a, b) {
-            return this["with"]("share", a, b)
-        }, "with": function (a, b, c) {
-            if (g.isFunction(c)) {
-                var d = c;
-                b = b || {}
-            } else d = b, b = c || {};
-            g.isObject(b) || (b = {});
-            this.args[a] = b;
-            if (g.isFunction(d)) this.on(a, d);
-            return this
-        }, get: function () {
-            this.run()
-        }, run: function () {
-            var a = this, b = this.args, c = {fields: "from"};
-            this._since && (c.since = this._since);
-            b.post && (g.extend(c, b.post), this.api.get(this.id + "/feed", c, function (b) {
-                g.each(b.data, function (b) {
-                    a.trigger("post", b);
-                    a.loadPost(b)
-                })
-            }));
-            return this
-        }, loadPost: function (a) {
-            var b =
-                this, c = this.args;
-            if (c.comment) {
-                var d = g.extend({limit: b.limit, fields: "from,message"}, c.comment);
-                b.api.get(a.id + "/comments", d, function (c) {
-                    g.each(c.data, function (c) {
-                        b.trigger("comment", c, a)
-                    })
-                })
-            }
-            c.reaction && (d = g.extend({limit: b.limit}, c.reaction), b.api.get(a.id + "/reactions", d, function (c) {
-                g.each(c.data, function (c) {
-                    b.trigger("reaction", c, a)
-                })
-            }));
-            c.share && (c = g.extend({
-                limit: b.limit,
-                fields: "from"
-            }, c.share), b.api.get(a.id + "/sharedposts", c, function (c) {
-                g.each(c.data, function (c) {
-                    b.trigger("share", c, a)
-                })
-            }))
-        }
-    });
-    p.extend = q.extend = function (a, b) {
-        var c = this;
-        var d = a && g.has(a, "constructor") ? a.constructor : function () {
-            return c.apply(this, arguments)
-        };
-        g.extend(d, c, b);
-        d.prototype = g.create(c.prototype, a);
-        d.prototype.constructor = d;
-        d.__super__ = c.prototype;
-        return d
-    };
-    f.Post = q.extend({
-        run: function () {
-            var a = this, b = this.args, c = {fields: "from"};
-            this._since && (c.since = this._since);
-            b.post && (g.extend(c, b.post), this.api.get(this.id, c, function (b) {
-                a.trigger("post", b);
-                a.loadPost(b)
-            }));
-            return this
-        }, loaded: function (a, b) {
-            return this.withPost(a,
-                b)
-        }
-    });
-    return f
+    _.extend(child, parent, staticProps);
+    child.prototype = _.create(parent.prototype, protoProps);
+    child.prototype.constructor = child;
+    child.__super__ = parent.prototype;
+    return child;
+  };
+  exports.Post = target.extend({
+    run : function() {
+      var ctrl = this;
+      var args = this.args;
+      var data = {
+        fields : "from"
+      };
+      if (this._since) {
+        data.since = this._since;
+      }
+      if (args.post) {
+        _.extend(data, args.post);
+        this.api.get(this.id, data, function(id) {
+          ctrl.trigger("post", id);
+          ctrl.loadPost(id);
+        });
+      }
+      return this;
+    },
+    loaded : function(callback, numberOfLogs) {
+      return this.withPost(callback, numberOfLogs);
+    }
+  });
+  return exports;
 });
