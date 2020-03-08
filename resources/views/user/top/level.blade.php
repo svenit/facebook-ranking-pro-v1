@@ -9,6 +9,11 @@
         @include('user.theme.parameter')
         <div class="row row-sm sr">
             <div class="col-md-12 col-lg-12">
+                <div style="margin-bottom: 10px" class="vip-bordered">
+                    <form action="" method="GET">
+                        <input style="border:none" name="search" placeholder="Tìm kiếm" type="text" class="form-control">
+                    </form>
+                </div>
                 <div class="bootstrap-table vip-bordered">
                     <div class="fixed-table-container" style="padding-bottom: 0px;">
                         <div class="fixed-table-header" style="display: none;">
@@ -48,7 +53,10 @@
                                 <tbody>
                                     @foreach($ranks as $key => $rank)
                                         <tr onclick="showInfor({{ $rank->id }})" class="{{ Auth::check() && Auth::id() == $rank->id ? 'bg-secondary' : '' }}">
-                                            <td style=""><small class="text-muted">{{ $key + 1 }}</small></td>
+                                            @php
+                                                $page = request()->page && request()->page != 1 ? request()->page - 1 : 0;
+                                            @endphp
+                                            <td style=""><small class="text-muted">{{ $page * 10 + $key + 1}}</small></td>
                                             <td>
                                                 <a target="_blank" href="https://fb.com/{{ $rank->user_id }}">
                                                     <span style="width:50px" class="avatar">
@@ -83,7 +91,7 @@
                         </div>
                     </div>
                 <div class="clearfix"></div>
-                {{ $ranks->onEachSide(1)->links() }}
+                {{ $ranks->appends(request()->query())->onEachSide(1)->links() }}
             </div>
         </div>
     </div>

@@ -20,9 +20,13 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function list()
+    public function list(Request $request)
     {
-       $users = User::with('character')->get();
+       $search = $request->search;
+       $users = User::with('character')->where('name','LIKE',"%{$search}%")
+        ->orWhere('user_id',$search)
+        ->orWhere('provider_id',$search)
+        ->paginate(25);
        return view('admin.users.list',compact('users'));
     }
     public function detail($id)

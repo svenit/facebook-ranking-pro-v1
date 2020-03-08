@@ -10,6 +10,7 @@ use App\Model\FightRoom;
 use App\Model\UserSkill;
 use App\Events\PvPHitEnemy;
 use App\Model\FightRoomLog;
+use App\Constants\SkillType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -80,23 +81,23 @@ class HitController extends BaseController
                                             ];
                                             switch($skill->type)
                                             {
-                                                case 'strength':
+                                                case SkillType::ATTACK_STRENGTH:
                                                     $destroy = $this->renderDestroy(Auth::user()->power()['strength'],$skill) - $getEnemyInfor->power()['armor_strength'] <= 0 ? 0 : $this->renderDestroy(Auth::user()->power()['strength'],$skill) - $getEnemyInfor->power()['armor_strength'];
                                                     $message = "[ $skill->name ] Bạn đã gây $destroy sát thương vật lí cho đối thủ";
                                                 break;
-                                                case 'intelligent':
+                                                case SkillType::ATTACK_INTELLIGENT:
                                                     $destroy = $this->renderDestroy(Auth::user()->power()['intelligent'],$skill) - $getEnemyInfor->power()['armor_intelligent'] <= 0 ? 0 : $this->renderDestroy(Auth::user()->power()['intelligent'],$skill) - $getEnemyInfor->power()['armor_intelligent'];
                                                     $message = "[ $skill->name ] Bạn đã gây $destroy sát thương phép thuật cho đối thủ";
                                                 break;
-                                                case 'crit':
+                                                case SkillType::ATTACK_CRIT:
                                                     $destroy = $this->renderDestroy(Auth::user()->power()['strength'],$skill) * 2;
                                                     $message = "[ $skill->name ] Bạn đã gây $destroy sát thương chí mạng cho đối thủ";
                                                 break;
-                                                case 'half-hp':
+                                                case SkillType::ATTACK_HALF_HP:
                                                     $destroy = (int)$enemy->first()->user_challenge_hp/2;
                                                     $message = "[ $skill->name ] Bạn đã gây $destroy sát thương tinh thần cho đối thủ";
                                                 break;
-                                                case 'health_points':
+                                                case SkillType::HEALTH_HP:
                                                     if($skill->power_type == $this->parameter)
                                                     {
                                                         $hp = (int)($findMatch->first()->user_challenge_hp + $skill->power_value) < Auth::user()->power()['health_points'] ? $skill->power_value : (int)(Auth::user()->power()['health_points'] - $findMatch->first()->user_challenge_hp);
@@ -148,14 +149,14 @@ class HitController extends BaseController
                                                 {
                                                     switch($enemyPassiveSkill->type)
                                                     {
-                                                        case 'armor_strength':
+                                                        case SkillType::ARMOR_STRENGTH:
                                                             if($skill->type == 'strength')
                                                             {
                                                                 $destroy = $this->renderPassive($destroy,$enemyPassiveSkill) < 0 ? 0 : $this->renderPassive($destroy,$enemyPassiveSkill);
                                                                 $message = "[ $skill->name ] Đối thủ có kĩ năng bị động giảm sát thương vật lí ! Sát thương của bạn gây ra chỉ còn lại $destroy";
                                                             }
                                                         break;
-                                                        case 'armor_intelligent':
+                                                        case SkillType::ARMOR_INTELLIGENT:
                                                             if($skill->type == 'intelligent')
                                                             {
                                                                 $destroy = $this->renderPassive($destroy,$enemyPassiveSkill) < 0 ? 0 : $this->renderPassive($destroy,$enemyPassiveSkill);

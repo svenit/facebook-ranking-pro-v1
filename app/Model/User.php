@@ -94,8 +94,7 @@ class User extends Authenticatable
         {
             if($skill->pivot->status == 1)
             {
-                $skill->character = $skill->character;
-                array_push($data,$skill);
+                $data[] = $skill->load('character');
             }
         }
         return $data;
@@ -103,13 +102,14 @@ class User extends Authenticatable
     public function usingGears()
     {
         $data = [];
-        foreach($this->gears as $gear)
+        foreach($this->gears as $key => $gear)
         {
             if($gear->pivot->status == 1)
             {
-                $gear->character = $gear->character;
-                $gear->cates = $gear->cates;
-                array_push($data,$gear);
+                $gear->userGears->each(function($userGear, $key){
+                    $userGear->gems->load('gemItem');
+                });
+                $data[] = $gear->load(['character','cates']);;
             }
         }
         return $data;

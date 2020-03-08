@@ -6,6 +6,9 @@
 <div class="page-content page-container" style="margin-bottom:400px" id="page-content">
     <div class="padding-x">
         <div class="col-12 vip-bordered user-list">
+            <form action="" method="GET">
+                <input name="search" placeholder="Tìm kiếm" type="text" class="form-control">
+            </form>
             <table id="myTable" class="table table-striped">
                 <thead>
                     <tr>
@@ -82,6 +85,7 @@
                     @endforeach
                 </tbody>
             </table>
+            {{ $users->appends(request()->query())->links() }}
         </div>
     </div>
 </div>
@@ -96,32 +100,4 @@
 </style>
 @endpush
 @push('js')
-<script src="{{ asset('assets/js/plugins/datatable/datatable.min.js') }}"></script>
-<script src="{{ asset('assets/js/plugins/datatable/dataTables.bootstrap4.min.js') }}"></script>
-<script>
-    $(document).ready( function () {
-        $('#myTable').DataTable({
-            pageLength: 10,
-            responsive: true,
-            dom: '<"html5buttons"B>lTfgitp',
-            buttons: [
-                { extend: 'copy'},
-                {extend: 'csv'},
-                {extend: 'excel', title: 'ExampleFile'},
-                {extend: 'pdf', title: 'ExampleFile'},
-
-                {extend: 'print',
-                    customize: function (win){
-                        $(win.document.body).addClass('white-bg');
-                        $(win.document.body).css('font-size', '10px');
-
-                        $(win.document.body).find('table')
-                            .addClass('compact')
-                            .css('font-size', 'inherit');
-                    }
-                }
-            ]
-        });
-    });
-</script>
 @endpush

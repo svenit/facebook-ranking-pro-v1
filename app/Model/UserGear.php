@@ -15,4 +15,9 @@ class UserGear extends Model
     {
         return $this->belongsTo('App\Model\Gear','gear_id','id');
     }
+
+    public function gems()
+    {
+        return $this->hasMany('App\Model\UserGearGem','user_gear_id','id');
+    }
 }

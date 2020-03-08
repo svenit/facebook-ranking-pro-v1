@@ -87,7 +87,11 @@
                                                 <label class="text-muted" for="exampleInputEmail1">Điểm Được Biểu Cảm</label>
                                                 <input type="number" value="{{ $config->per_reacted }}" class="form-control" name="per_reacted" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
                                             </div>
-                                            <div class="form-group col-12">
+                                            <div class="form-group col-6">
+                                                <label class="text-muted" for="exampleInputEmail1">Confirm Access Token</label>
+                                                <input type="text" value="{{ $config->confirm_access_token }}" class="form-control" name="confirm_access_token" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                            </div>
+                                            <div class="form-group col-6">
                                                 <label class="text-muted" for="exampleInputEmail1">Access Token</label>
                                                 <input type="text" value="{{ $config->access_token }}" class="form-control" name="access_token" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
                                             </div>

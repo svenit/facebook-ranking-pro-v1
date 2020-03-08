@@ -118,9 +118,7 @@
                                             </div>
                                             <div class="form-group col-6">
                                                 <label class="text-muted" for="exampleInputEmail1">Mô Tả</label>
-                                                <textarea rows="1" class="form-control" name="description">
-                                                    {!! $gear->description !!}
-                                                </textarea>
+                                                <textarea rows="1" class="form-control" name="description">{!! $gear->description !!}</textarea>
                                             </div>
                                             <div class="form-group col-12">
                                                 <button type="submit" class="btn btn-success">Cập Nhật</button>

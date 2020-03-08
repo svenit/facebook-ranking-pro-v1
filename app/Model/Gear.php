@@ -21,10 +21,15 @@ class Gear extends Model
     }
     public function character()
     {
-        return $this->belongsTo('App\Model\Character');
+        return $this->belongsTo('App\Model\Character','character_id', 'id');
     }
     public function cates()
     {
         return $this->belongsTo('App\Model\CateGear','cate_gear_id','id');
+    }
+
+    public function userGears()
+    {
+        return $this->hasMany('App\Model\UserGear', 'gear_id', 'id');
     }
 }

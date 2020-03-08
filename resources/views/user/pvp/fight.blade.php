@@ -39,7 +39,7 @@
                             <span class="shield_base_0"></span>
                             <span class=""></span>
                             <span v-for="(gear,index) in data.gears" :key="index">
-                                <span v-for="(set,index) in gear.set" :class="set"></span>
+                                <span :class="gear.class_tag"></span>
                             </span>
                             <span v-if="data.pet" :class="`Mount_Head_${data.pet.class_tag}`"></span>
                         </div>
@@ -102,7 +102,7 @@
                         <span class="shield_base_0"></span>
                         <span class=""></span>
                         <span v-for="(gear,index) in pvp.match.enemy.gears" :key="index">
-                            <span v-for="(set,index) in gear.set" :class="set"></span>
+                            <span :class="gear.class_tag"></span>
                         </span>
                         <span v-if="pvp.match.enemy.pet" :class="`Mount_Head_${pvp.match.enemy.pet.class_tag}`"></span>
                     </div>
@@ -148,7 +148,7 @@
 </div>
 @endsection
 @push('js')
-<script src="https://js.pusher.com/5.0/pusher.min.js"></script>
+<script src="https://js.pusher.com/5.1/pusher.min.js"></script>
 <script>
     const page = {
         room:{

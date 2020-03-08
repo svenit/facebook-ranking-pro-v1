@@ -107,7 +107,7 @@ class LoginController extends Controller
                     {
                         $getComment = $getComment[1];
                         $helper = new Helper(User::first());
-                        $endpoint = "https://graph.facebook.com/v4.0/$getComment?access_token=".$helper->config->access_token;
+                        $endpoint = "https://graph.facebook.com/$getComment?access_token=".$helper->config->confirm_access_token;
                         $api = json_decode($helper->requestRaw($endpoint),TRUE);
                         if(isset($api) && empty($api['error']))
                         {

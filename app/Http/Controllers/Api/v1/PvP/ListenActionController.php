@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1\PvP;
 use Carbon\Carbon;
 use App\Model\Room;
 use App\Model\FightRoom;
+use App\Constants\SkillType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -45,41 +46,10 @@ class ListenActionController extends BaseController
                         $time++;
                         if($time == $timeLimit)
                         {
-                            $hp = 0;
-                            foreach(Auth::user()->usingSkills() as $key => $yourPassiveSkill)
-                            {
-                                if($yourPassiveSkill->passive == 1 && $yourPassiveSkill->success_rate <= rand(0,100))
-                                {
-                                    switch($yourPassiveSkill->type)
-                                    {
-                                        case 'health_points':
-                                            if($yourPassiveSkill->power_type == 0)
-                                            {
-                                                $hp = $yourPassiveSkill->power_value;
-                                            }
-                                            elseif($yourPassiveSkill->power_type == 1)
-                                            {
-                                                $hp = ($you->first()->user_challenge_hp * $yourPassiveSkill->power_value)/100;
-                                            }
-                                            else
-                                            {
-                                                $hp = 0;
-                                            }
-                                        break;
-                                        default:
-                                            $hp = 0;
-                                        break;
-                                    }
-                                }
-                            }
-                            $you->update([
-                                'turn' => 1,
-                                'user_challenge_energy' => DB::raw("user_challenge_energy + ".$this->energyRecovery = $you->first()->user_challenge_energy + $this->energyRecovery > Auth::user()->character->default_energy ? Auth::user()->character->default_energy - $you->first()->user_challenge_energy : $this->energyRecovery),
-                                'user_challenge_hp' => DB::raw("user_challenge_hp +".$hp = $you->first()->user_challenge_hp + $hp > Auth::user()->power()['health_points'] ? Auth::user()->power()['health_points'] - $you->first()->user_challenge_hp : $hp)
-                            ]);
                             $enemy->update([
                                 'turn' => 0
                             ]);
+                            break;
                         }
                         elseif(collect($this->gameOver)->contains(FightRoom::where('user_challenge',Auth::id())->first()->status))
                         {
@@ -124,6 +94,38 @@ class ListenActionController extends BaseController
                     $getEnemy = FightRoom::where('user_challenge',$findMatch->user_receive_challenge);
                     if($getEnemy->first()->turn == 0)
                     {
+                        $hp = 0;
+                        foreach(Auth::user()->usingSkills() as $key => $yourPassiveSkill)
+                        {
+                            if($yourPassiveSkill->passive == 1 && $yourPassiveSkill->success_rate <= rand(0,100))
+                            {
+                                switch($yourPassiveSkill->type)
+                                {
+                                    case SkillType::HEALTH_HP:
+                                        if($yourPassiveSkill->power_type == 0)
+                                        {
+                                            $hp = $yourPassiveSkill->power_value;
+                                        }
+                                        elseif($yourPassiveSkill->power_type == 1)
+                                        {
+                                            $hp = ($you->first()->user_challenge_hp * $yourPassiveSkill->power_value)/100;
+                                        }
+                                        else
+                                        {
+                                            $hp = 0;
+                                        }
+                                    break;
+                                    default:
+                                        $hp = 0;
+                                    break;
+                                }
+                            }
+                        }
+                        $you->update([
+                            'turn' => 1,
+                            'user_challenge_energy' => DB::raw("user_challenge_energy + ".$this->energyRecovery = $you->first()->user_challenge_energy + $this->energyRecovery > Auth::user()->character->default_energy ? Auth::user()->character->default_energy - $you->first()->user_challenge_energy : $this->energyRecovery),
+                            'user_challenge_hp' => DB::raw("user_challenge_hp +".$hp = $you->first()->user_challenge_hp + $hp > Auth::user()->power()['health_points'] ? Auth::user()->power()['health_points'] - $you->first()->user_challenge_hp : $hp)
+                        ]);
                         $you = FightRoom::where('user_challenge',Auth::id());
                         $enemy = FightRoom::where('user_challenge',$findMatch->user_receive_challenge);
                         $userApi = new IndexController();

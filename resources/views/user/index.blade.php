@@ -75,23 +75,23 @@
                 </ol>
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <div class="media media-16x9 gd-primary">
-                            <div class="media-content" style="background-image:url(https://www.gamemonday.com/wp-content/uploads/2016/04/ton-000.jpg)"></div>
-                        </div>
-                        <div class="carousel-caption text-align-auto"><span class="badge badge-outline">MỚI</span>
-                            <h2 class="text-white display-5 font-weight-500 my-4">Mùa 1 đã bắt đầu
-                            </h2>
-                            <p class="text-fade d-none d-md-block">Nhanh chân</p>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
                         <div class="media media-16x9 gd-info">
-                            <div class="media-content" style="background-image:url(https://www.gamemonday.com/wp-content/uploads/2016/04/ton-000.jpg)"></div>
+                            <div class="media-content" style="background-image:url(https://images2.alphacoders.com/104/1042143.jpg)"></div>
                         </div>
                         <div class="carousel-caption text-align-auto"><span class="badge badge-outline">POPULAR</span>
                             <h2 class="text-white display-5 font-weight-500 my-4">Popular front-end library.</h2>
                             <p class="text-fade d-none d-md-block">Quickly prototype your ideas or build your entire app
                                 with prebuilt components.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="media media-16x9 gd-primary">
+                            <div class="media-content" style="background-image:url(https://vectormienphi.com/wp-content/uploads/2020/01/T%E1%BB%95ng-h%E1%BB%A3p-h%C3%ACnh-%E1%BA%A3nh-Solo-Leveling-%C4%91%E1%BA%B9p-nh%E1%BA%A5t-1.jpg)"></div>
+                        </div>
+                        <div class="carousel-caption text-align-auto"><span class="badge badge-outline">MỚI</span>
+                            <h2 class="text-white display-5 font-weight-500 my-4">Mùa 1 đã bắt đầu
+                            </h2>
+                            <p class="text-fade d-none d-md-block">Nhanh chân</p>
                         </div>
                     </div>
                 </div>

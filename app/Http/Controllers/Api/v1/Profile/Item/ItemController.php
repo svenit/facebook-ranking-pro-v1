@@ -23,7 +23,8 @@ class ItemController extends Controller
     {
         $validate = Validator::make($request->all(),[
             'item_id' => 'required|numeric|exists:items,id',
-            'id' => 'required|numeric|exists:user_items,id'
+            'id' => 'required|numeric|exists:user_items,id',
+            'quantity' => 'required|numeric|min:0|max:9999'
         ]);
         if($validate->fails())
         {
@@ -40,39 +41,42 @@ class ItemController extends Controller
             {
                 if($userItem->quantity >= 1)
                 {
-                    if(isset($userItem->item->query))
+                    if($userItem->quantity >= $request->quantity)
                     {
-                        $this->removeItem($userItem);
-                        if($userItem->item->success_rate >= rand(0,100))
+                        if(isset($userItem->item->query))
                         {
-                            $queries = explode('^',$userItem->item->query);
-                            foreach($queries as $query)
+                            $this->removeItem($userItem, $request->quantity);
+                            for($i = 0; $i < $request->quantity; $i++)
                             {
-                                $exec = DB::statement($this->replaceStatement($query));
-                            }
-                            if(isset($exec))
-                            {
-                                $this->updatePower();
-                                $response = [
-                                    'code' => 200,
-                                    'status' => 'success',
-                                    'message' => "Sử dụng ".$userItem->item->name." thành công"
-                                ];
-                            }
-                            else
-                            {
-                                $response = [
-                                    'code' => 500,
-                                    'status' => 'error',
-                                    'message' => 'Đã có lỗi xảy ra'
-                                ];
+                                if($userItem->item->success_rate >= rand(0,100))
+                                {
+                                    $queries = explode('^',$userItem->item->query);
+                                    foreach($queries as $query)
+                                    {
+                                        $exec = DB::statement($this->replaceStatement($query));
+                                    }      
+                                    $this->updatePower();
+                                    $response = [
+                                        'code' => 200,
+                                        'status' => 'success',
+                                        'message' => "Sử dụng ".$userItem->item->name." thành công"
+                                    ];
+                                }
+                                else
+                                {
+                                    $response = [
+                                        'code' => 200,
+                                        'status' => 'success',
+                                        'message' => 'Sử dụng vật phẩm thất bại :('
+                                    ];
+                                }
                             }
                         }
                         else
                         {
                             $response = [
-                                'code' => 200,
-                                'status' => 'success',
+                                'code' => 500,
+                                'status' => 'error',
                                 'message' => 'Sử dụng vật phẩm thất bại :('
                             ];
                         }
@@ -80,9 +84,9 @@ class ItemController extends Controller
                     else
                     {
                         $response = [
-                            'code' => 200,
-                            'status' => 'success',
-                            'message' => 'OK'
+                            'code' => 500,
+                            'status' => 'error',
+                            'message' => 'Số lượng vật phẩm không đủ'
                         ];
                     }
                 }
@@ -106,17 +110,15 @@ class ItemController extends Controller
             return response()->json($response,200);
         }
     }
-    public function removeItem($item)
+    public function removeItem($item, $quantity)
     {
-        if($item->quantity == 1)
+        if($item->quantity == 1 || $item->quantity == $quantity)
         {
-            Auth::user()->items()->detach($item->item_id);
+            $item->delete();
         }
         else
         {
-            Auth::user()->items()->updateExistingPivot($item->item_id,[
-                'quantity' => DB::raw('quantity - 1')
-            ]);
+            $item->decrement('quantity', $quantity);
         }
     }
     public function delete(Request $request)

@@ -59,7 +59,7 @@ class BaseController extends Controller
                     if(isset($leaveRoom,$target,$updateMaster))
                     {
                         $this->removeTracking();
-                        return $data = [
+                        $data = [
                             'room' => [
                                 'name' => $room->name,
                                 'id' => $room->id
@@ -111,7 +111,7 @@ class BaseController extends Controller
         $room = Room::where([['name',$request->room],['people',2],['is_fighting',0]])->first();
         if(isset($room))
         {
-            if(Auth::user()->energy >=  $this->wasteEnerg && Auth::user()->pvp_times > 0)
+            if(Auth::user()->energy >=  $this->wasteEnergy && Auth::user()->pvp_times > 0)
             {
                 $toggleReady = FightRoom::where([['room_id',$room->id],['user_challenge',Auth::id()],['user_receive_challenge',null]])->update([
                     'is_ready' => $request->status == 1 ? 1 : 0,

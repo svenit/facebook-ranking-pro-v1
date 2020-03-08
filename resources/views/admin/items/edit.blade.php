@@ -44,15 +44,11 @@
                                             </div>
                                             <div class="form-group col-6">
                                                 <label class="text-muted" for="exampleInputEmail1">SQL Queries</label>
-                                                <textarea rows="4" class="form-control" name="query">
-                                                    {!! $item->query !!}
-                                                </textarea>
+                                                <textarea rows="4" class="form-control" name="query">{!! $item->query !!}</textarea>
                                             </div>
                                             <div class="form-group col-6">
                                                 <label class="text-muted" for="exampleInputEmail1">Mô Tả</label>
-                                                <textarea rows="4" class="form-control" name="description">
-                                                    {{ $item->description }}
-                                                </textarea>
+                                                <textarea rows="4" class="form-control" name="description">{{ $item->description }}</textarea>
                                             </div>
                                             <div class="form-group col-6">
                                                 <label class="text-muted" for="exampleInputEmail1">Tỉ Lệ Thành Công</label>
