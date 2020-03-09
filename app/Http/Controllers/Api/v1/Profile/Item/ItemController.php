@@ -24,14 +24,16 @@ class ItemController extends Controller
         $validate = Validator::make($request->all(),[
             'item_id' => 'required|numeric|exists:items,id',
             'id' => 'required|numeric|exists:user_items,id',
-            'quantity' => 'required|numeric|min:0|max:9999'
+            'quantity' => 'required|numeric|between:0,20'
+        ],[
+            'quantity.between' => 'Số lượng nhập chỉ được từ 0 - 20 cho mỗi lượt'
         ]);
         if($validate->fails())
         {
             return response()->json([
                 'code' => 500,
                 'status' => 'error',
-                'message' => 'Vật phẩm không tồn tại'
+                'message' => $validate->errors()->first()
             ],200);
         }
         else
@@ -126,7 +128,7 @@ class ItemController extends Controller
         $userItem = UserItem::where([['id',$request->id],['item_id',$request->item_id],['user_id',Auth::id()]])->first();
         if(isset($userItem))
         {
-            $this->removeItem($userItem);
+            $this->removeItem($userItem, 1);
             $response = [
                 'code' => 200,
                 'status' => 'success',

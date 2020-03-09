@@ -1,4 +1,5 @@
 <a href="{{ Route('user.shop.index',['cate' => 'items']) }}" class="{{ Request::is("shop/items") ? 'active' : '' }} btn btn-dark">Vật Phẩm</a>
+<a href="{{ Route('user.shop.index',['cate' => 'gems']) }}" class="{{ Request::is("shop/gems") ? 'active' : '' }} btn btn-dark">Ngọc Tinh Luyện</a>
 @foreach($menuShop as $menu)
     <a href="{{ Route('user.shop.index',['cate' => str_slug($menu->name)]) }}" class="{{ Request::is("shop/".str_slug($menu->name)) ? 'active' : '' }} btn btn-dark">{{ $menu->name }}</a>
 @endforeach

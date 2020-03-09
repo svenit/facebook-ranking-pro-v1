@@ -20,6 +20,10 @@ app = new Vue({
             data: {},
             permission: 0
         },
+        detailGem:{
+            data: {},
+            permission: 0
+        },
         data: {
             infor: {
                 name: "",
@@ -454,6 +458,18 @@ app = new Vue({
                     this.findEnemy();
                 }
             }
+        },
+        showGem(data, permission)
+        {
+            this.detailGem = {
+                data: data,
+                permission: permission
+            };
+            $('#trigger-gem').click();
+            var gear = document.getElementById('gear');
+            gear.classList.remove('show');
+            gear.style.display = 'nonde';
+            document.getElementsByClassName('modal-backdrop')[1].remove();
         },
         showInforItem(data, permission) {
             this.detailItem = {

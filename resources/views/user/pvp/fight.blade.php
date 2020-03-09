@@ -39,7 +39,8 @@
                             <span class="shield_base_0"></span>
                             <span class=""></span>
                             <span v-for="(gear,index) in data.gears" :key="index">
-                                <span :class="gear.class_tag"></span>
+                                <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="e"></span>
+                                <span v-else :class="gear.class_tag"></span>
                             </span>
                             <span v-if="data.pet" :class="`Mount_Head_${data.pet.class_tag}`"></span>
                         </div>
@@ -102,7 +103,8 @@
                         <span class="shield_base_0"></span>
                         <span class=""></span>
                         <span v-for="(gear,index) in pvp.match.enemy.gears" :key="index">
-                            <span :class="gear.class_tag"></span>
+                            <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="e"></span>
+                            <span v-else :class="gear.class_tag"></span>
                         </span>
                         <span v-if="pvp.match.enemy.pet" :class="`Mount_Head_${pvp.match.enemy.pet.class_tag}`"></span>
                     </div>

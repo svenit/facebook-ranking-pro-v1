@@ -67,6 +67,7 @@ Route::group(['middleware' => ['maintaince','redirect.action']], function () {
                 Route::get('pets','ShopController@pet')->name('pet');
                 Route::get('skills','ShopController@skill')->name('skill');
                 Route::get('items','ShopController@item')->name('item');
+                Route::get('gems','ShopController@gem')->name('gem');
                 Route::get('{cate}',"ShopController@index")->name('index');
             });
             Route::group(['prefix' => 'profile','as' => 'profile.','namespace' => 'Profile'], function () {

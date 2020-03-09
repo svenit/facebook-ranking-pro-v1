@@ -64,11 +64,6 @@
 	<span class="head_0"></span>
 	<span class="broad_armor_base_0"></span>
 	<span class=""></span>
-	<span class="hair_bangs_0_black"></span>
-	<span class="hair_base_0_black"></span>
-	<span class="hair_mustache_0_black"></span>
-	<span class="hair_beard_0_black"></span>
-	<span class=""></span>
 	<span class="eyewear_base_0"></span>
 	<span class="head_base_0"></span>
 	<span class=""></span>
@@ -76,7 +71,8 @@
 	<span class="shield_base_0"></span>
     <span class=""></span>
     <span v-for="(gear,index) in data.gears" :key="index">
-        <span :class="gear.class_tag"></span>
+        <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="e"></span>
+        <span v-else :class="gear.class_tag"></span>
     </span>
     <span v-if="data.pet" :class="`Mount_Head_${data.pet.class_tag}`"></span>
 </div>

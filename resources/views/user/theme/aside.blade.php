@@ -37,12 +37,13 @@
                         <span class="shield_base_0"></span>
                         <span class=""></span>
                         <span v-for="(gear,index) in data.gears" :key="index">
-                            <span :class="gear.class_tag"></span>
+                            <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="e"></span>
+                            <span v-else :class="gear.class_tag"></span>
                         </span>
                         <span v-if="data.pet" :class="`Mount_Head_${data.pet.class_tag}`"></span>
                     </div>
                     <div style="margin-bottom:60px" v-if="data.pet"></div>
-                    <p style="margin-top:20px" class="text-gold">@{{ data.infor.name }} ( @{{ data.infor.character.name }})</p>
+                    <p style="margin-top:20px" class="text-gold">@{{ data.infor.name }} ( @{{ data.infor.character.name }} )</p>
                 </div>
                 <div class="row row-sm">
                     <div class="col-12 d-flex">
@@ -227,7 +228,7 @@
                     <div style="margin:20px 5px" class="col-12">
                         <div class="row">
                             <div class="col-3" v-for="(userGear, index) in detailGear.data.user_gears" :key="index">
-                                <img v-for="gem in userGear.gems" :style="{border:`1px solid ${gem.gem_item.rgb}`,margin:'3px'}" :src="gem.gem_item.image" width="40px">
+                                <img v-for="gem in userGear.gems" :style="{border:`1px solid ${gem.gem_item.rgb}`,margin:'3px'}" :src="gem.gem_item.image" @click="showGem(gem.gem_item,detailGear.permission)" width="40px">
                             </div>
                         </div>
                     </div>
@@ -237,6 +238,100 @@
                 </div>
             </div>
             <div v-if="detailGear.permission == 1" class="modal-footer">
+                <button type="button" @click="deleteEquipment(detailGear.data)" class="btn bg-danger-lt" data-dismiss="modal">
+                    Vứt Bỏ
+                </button>
+                <button v-if="detailGear.data.pivot.status == 0" type="button" @click="equipment(detailGear.data)" class="btn btn-success" data-dismiss="modal">
+                    Trang bị
+                </button>
+                <button v-else type="button" @click="removeEquipment(detailGear.data)" class="btn btn-secondary" data-dismiss="modal">
+                    Tháo
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+<div id="gem" v-if="detailGem.data" class="modal fade gear top-off" data-backdrop="true" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-4">
+                        <center>
+                            <img class="pixel text-center" :style="{border:`1px solid ${detailGem.data.rgb}`,margin:'0 auto'}" :src="detailGem.data.image" width="60px">
+                        </center>
+                        <p :style="{fontSize:'14px',color:`${detailGem.data.rgb}`,marginTop:'20px'}" class="modal-title text-md text-center">@{{ detailGem.data.name }}</p>
+                    </div>
+                    <div class="col-8">
+                        <div class="row">
+                            <div class="col-6 d-flex">
+                                <div class="flex">
+                                    <div class="text-light"><small><i class="fas fa-chevron-double-up"></i> Level yêu cầu : <strong
+                                        class="text-light">@{{ detailGem.data.level_required }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex">
+                                <div class="flex">
+                                    <div class="text-info"><small><i class="fas fa-heart"></i> Sinh Lực <strong
+                                        class="text-info">+ @{{ detailGem.data.health_points }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex mt-2">
+                                <div class="flex">
+                                    <div class="text-danger"><small><i class="fas fa-swords"></i> Sức Mạnh <strong
+                                        class="text-danger">+ @{{ detailGem.data.strength }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex mt-2">
+                                <div class="flex">
+                                    <div class="text-success"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
+                                        class="text-success">+ @{{ detailGem.data.intelligent }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex mt-2">
+                                <div class="flex">
+                                    <div class="text-primary"><small><i class="fas fa-bolt"></i> Nhanh Nhẹn <strong
+                                        class="text-primary">+ @{{ detailGem.data.agility }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex mt-2">
+                                <div class="flex">
+                                    <div class="text-warning"><small><i class="fas fa-stars"></i> May Mắn <strong
+                                        class="text-warning">+ @{{ detailGem.data.lucky }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex mt-2">
+                                <div class="flex">
+                                    <div class="text-silver"><small><i class="fas fa-shield"></i> Kháng Công <strong
+                                        class="text-silver">+ @{{ detailGem.data.armor_strength }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex mt-2">
+                                <div class="flex">
+                                    <div class="text-purple"><small><i class="fal fa-dice-d20"></i> Kháng Phép <strong
+                                        class="text-purple">+ @{{ detailGem.data.armor_intelligent }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin:20px 10px" class="col-12">
+                        <p>@{{ detailGem.data.description }}</p>
+                    </div>
+                </div>
+            </div>
+            <div v-if="detailGem.permission == 1" class="modal-footer">
                 <button type="button" @click="deleteEquipment(detailGear.data)" class="btn bg-danger-lt" data-dismiss="modal">
                     Vứt Bỏ
                 </button>
@@ -414,7 +509,8 @@
                         <span class="shield_base_0"></span>
                         <span class=""></span>
                         <span v-for="(gear,index) in user.gears" :key="index">
-                            <span :class="gear.class_tag"></span>
+                            <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="e"></span>
+                            <span v-else :class="gear.class_tag"></span>
                         </span>
                         <span v-if="user.pet" :class="`Mount_Head_${user.pet.class_tag}`"></span>
                     </div>
@@ -547,6 +643,7 @@
                             class="nav-text">Nhân Vật</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('user.profile.item.index') }}" class=""><span class="nav-text">Vật Phẩm</span></a></li>
+                                <li><a href="{{ Route('user.profile.item.index') }}" class=""><span class="nav-text">Ngọc Tinh Luyện</span></a></li>
                                 <li><a href="{{ Route('user.profile.inventory.index') }}" class=""><span class="nav-text">Trang Bị</span></a></li>
                                 <li><a href="{{ Route('user.profile.pet.index') }}" class=""><span class="nav-text">Thú Cưỡi</span></a></li>
                                 <li><a href="{{ Route('user.profile.skill.index') }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
@@ -577,6 +674,7 @@
                             class="nav-text">Cửa Hàng</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('user.shop.index',['cate' => 'items']) }}" class=""><span class="nav-text">Vật Phẩm</span></a></li>
+                                <li><a href="{{ Route('user.shop.index',['cate' => 'gems']) }}" class=""><span class="nav-text">Ngọc Tinh Luyện</span></a></li>
                                 @foreach($menuShop as $menu)
                                     <li><a href="{{ Route('user.shop.index',['cate' => str_slug($menu->name)]) }}" class=""><span class="nav-text">{{ $menu->name }}</span></a></li>
                                 @endforeach
@@ -584,15 +682,23 @@
                                 <li><a href="{{ Route('user.shop.index',['cate' => 'skills']) }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
                             </ul>
                         </li>
-                        <li class="{{ Request::is('explore/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="activity"></i></span> <span
-                            class="nav-text">Khám Phá</span> <span class="nav-caret"></span></a>
+                        <li class="{{ Request::is('forge/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="git-branch"></i></span> <span
+                            class="nav-text">Lò Rèn</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
-                                <li><a href="#" class=""><span class="nav-text">Khu Tập Luyện</span></a></li>
+                                <li><a href="#" class=""><span class="nav-text">Tinh Luyện</span></a></li>
                                 <li><a href="#" class=""><span class="nav-text">Nhiệm Vụ</span></a></li>
                                 <li><a href="{{ Route('user.explore.recovery-room.index') }}" class=""><span class="nav-text">Phòng Hồi Phục</span></a></li>
                             </ul>
                         </li>
-                        {{-- <li><a href="#" class=""><span class="nav-icon"><i data-feather="users"></i></span> <span
+                        <li class="{{ Request::is('explore/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="activity"></i></span> <span
+                            class="nav-text">Khám Phá</span> <span class="nav-caret"></span></a>
+                            <ul class="nav-sub nav-mega">
+                                <li><a href="#" class=""><span class="nav-text">Dungeon</span></a></li>
+                                <li><a href="#" class=""><span class="nav-text">Nhiệm Vụ</span></a></li>
+                                <li><a href="{{ Route('user.explore.recovery-room.index') }}" class=""><span class="nav-text">Phòng Hồi Phục</span></a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#" class=""><span class="nav-icon"><i data-feather="users"></i></span> <span
                             class="nav-text">Bang Hội</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="#" class=""><span class="nav-text">Tạo</span></a></li>
@@ -601,7 +707,7 @@
                                 <li><a href="#" class=""><span class="nav-text">Hoạt Động</span></a></li>
                                 <li><a href="#" class=""><span class="nav-text">Thiết Lập</span></a></li>
                             </ul>
-                        </li> --}}
+                        </li>
                         <li class="{{ Request::is('pvp/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
                             class="nav-text">PVP</span><span class="nav-badge"><b class="badge-circle xs text-{{ Auth::check() && $user->config->open_pvp == 1 ? 'success' : 'warning' }}"></b></span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
@@ -749,3 +855,4 @@
 <button class="btn btn-white btn-block mb-2" style="display:none" id="trigger-gear" data-toggle="modal" data-target="#gear"></button>
 <button class="btn btn-white btn-block mb-2" style="display:none" id="trigger-pet" data-toggle="modal" data-target="#pet"></button>
 <button class="btn btn-white btn-block mb-2" style="display:none" id="trigger-item" data-toggle="modal" data-target="#item"></button>
+<button class="btn btn-white btn-block mb-2" style="display:none" id="trigger-gem" data-toggle="modal" data-target="#gem"></button>

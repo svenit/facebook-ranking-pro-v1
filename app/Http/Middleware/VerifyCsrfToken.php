@@ -19,6 +19,8 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        'pvp/create-room'
+        'pvp/create-room',
+        'gift-code',
+        'admin/*'
     ];
 }

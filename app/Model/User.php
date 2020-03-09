@@ -112,7 +112,7 @@ class User extends Authenticatable
                 $data[] = $gear->load(['character','cates']);;
             }
         }
-        return $data;
+        return array_reverse($data);
     }
     public function usingPets()
     {
@@ -120,6 +120,19 @@ class User extends Authenticatable
             return $status->pivot->status == 1;
         });
     }
+
+    public function gems()
+    {
+        return $this->belongsToMany('App\Model\Gem', 'user_gems', 'user_id', 'gem_id')->withPivot(['status']);
+    }
+
+    public function usingGems()
+    {
+        return $this->gems->filter(function($item, $key){
+            return $item->pivot->status == 1;
+        });
+    }
+
     public function power()
     {
         return $this->getPower();
@@ -138,7 +151,7 @@ class User extends Authenticatable
         $power = [];
         foreach($properties as $key => $property)
         {
-            $power[$key] =  collect($this->usingPets())->sum($key) + collect($this->usingGears())->sum($key) + ($this[$key]);
+            $power[$key] =  collect($this->usingPets())->sum($key) + collect($this->usingGears())->sum($key) + collect($this->usingGems())->sum($key) + ($this[$key]);
         }
         return collect($power);
     }

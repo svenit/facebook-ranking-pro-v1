@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\User\Shop;
+use App\Model\Gem;
 use App\Model\Pet;
 use App\Model\Gear;
 use App\Model\Item;
@@ -56,5 +57,13 @@ class ShopController extends Controller
             return Item::where('status',1)->get();
         });
         return view('user.shop.item',compact('items'));
+    }
+
+    public function gem()
+    {
+        $gems = Cache::rememberForever('gem.item', function () {
+            return Gem::where('status',1)->get();
+        });
+        return view('user.shop.gem',compact('gems'));
     }
 }
