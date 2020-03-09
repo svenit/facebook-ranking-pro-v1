@@ -70,8 +70,8 @@
                     </div>
                     <div class="col-6 d-flex">
                         <div class="flex">
-                            <div class="text-info"><small><i class="fas fa-heart"></i> Sinh Lực <strong
-                                        class="text-info">@{{ data.power.hp }}</strong></small>
+                            <div class="text-success"><small><i class="fas fa-heart"></i> Sinh Lực <strong
+                                        class="text-success">@{{ data.power.hp }}</strong></small>
                             </div>
                         </div>
                     </div>
@@ -84,8 +84,8 @@
                     </div>
                     <div class="col-6 d-flex mt-2">
                         <div class="flex">
-                            <div class="text-success"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
-                                        class="text-success">@{{ data.power.intelligent }}</strong></small>
+                            <div class="text-info"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
+                                        class="text-info">@{{ data.power.intelligent }}</strong></small>
                             </div>
                         </div>
                     </div>
@@ -147,6 +147,8 @@
                         </div>
                     </div>
                 </div>
+                <p class="text-gold">Chỉ Số ( Điểm : @{{ numberFormat(data.stats.used) }}/@{{ numberFormat(data.stats.available) }} )</p>
+                <div id="stats"></div>
             </div>
         </div>
     </div>
@@ -176,8 +178,8 @@
                             </div>
                             <div class="col-6 d-flex">
                                 <div class="flex">
-                                    <div class="text-info"><small><i class="fas fa-heart"></i> Sinh Lực <strong
-                                        class="text-info">+ @{{ detailGear.data.health_points }}</strong></small>
+                                    <div class="text-success"><small><i class="fas fa-heart"></i> Sinh Lực <strong
+                                        class="text-success">+ @{{ detailGear.data.health_points }}</strong></small>
                                     </div>
                                 </div>
                             </div>
@@ -190,8 +192,8 @@
                             </div>
                             <div class="col-6 d-flex mt-2">
                                 <div class="flex">
-                                    <div class="text-success"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
-                                        class="text-success">+ @{{ detailGear.data.intelligent }}</strong></small>
+                                    <div class="text-info"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
+                                        class="text-info">+ @{{ detailGear.data.intelligent }}</strong></small>
                                     </div>
                                 </div>
                             </div>
@@ -277,8 +279,8 @@
                             </div>
                             <div class="col-6 d-flex">
                                 <div class="flex">
-                                    <div class="text-info"><small><i class="fas fa-heart"></i> Sinh Lực <strong
-                                        class="text-info">+ @{{ detailGem.data.health_points }}</strong></small>
+                                    <div class="text-success"><small><i class="fas fa-heart"></i> Sinh Lực <strong
+                                        class="text-success">+ @{{ detailGem.data.health_points }}</strong></small>
                                     </div>
                                 </div>
                             </div>
@@ -291,8 +293,8 @@
                             </div>
                             <div class="col-6 d-flex mt-2">
                                 <div class="flex">
-                                    <div class="text-success"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
-                                        class="text-success">+ @{{ detailGem.data.intelligent }}</strong></small>
+                                    <div class="text-info"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
+                                        class="text-info">+ @{{ detailGem.data.intelligent }}</strong></small>
                                     </div>
                                 </div>
                             </div>
@@ -335,7 +337,7 @@
                 <button type="button" @click="deleteEquipment(detailGear.data)" class="btn bg-danger-lt" data-dismiss="modal">
                     Vứt Bỏ
                 </button>
-                <button v-if="detailGear.data.pivot.status == 0" type="button" @click="equipment(detailGear.data)" class="btn btn-success" data-dismiss="modal">
+                <button v-if="detailGem.data.pivot.status == 0" type="button" @click="equipment(detailGear.data)" class="btn btn-success" data-dismiss="modal">
                     Trang bị
                 </button>
                 <button v-else type="button" @click="removeEquipment(detailGear.data)" class="btn btn-secondary" data-dismiss="modal">
@@ -372,8 +374,8 @@
                             </div>
                             <div class="col-6 d-flex">
                                 <div class="flex">
-                                    <div class="text-info"><small><i class="fas fa-heart"></i> Sinh Lực <strong
-                                        class="text-info">+ @{{ detailPet.data.health_points }}</strong></small>
+                                    <div class="text-success"><small><i class="fas fa-heart"></i> Sinh Lực <strong
+                                        class="text-success">+ @{{ detailPet.data.health_points }}</strong></small>
                                     </div>
                                 </div>
                             </div>
@@ -386,8 +388,8 @@
                             </div>
                             <div class="col-6 d-flex mt-2">
                                 <div class="flex">
-                                    <div class="text-success"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
-                                        class="text-success">+ @{{ detailPet.data.intelligent }}</strong></small>
+                                    <div class="text-info"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
+                                        class="text-info">+ @{{ detailPet.data.intelligent }}</strong></small>
                                     </div>
                                 </div>
                             </div>
@@ -543,8 +545,8 @@
                     </div>
                     <div class="col-6 d-flex">
                         <div class="flex">
-                            <div class="text-info"><small><i class="fas fa-heart"></i> Sinh Lực <strong
-                                        class="text-info">@{{ user.power.hp }}</strong></small>
+                            <div class="text-success"><small><i class="fas fa-heart"></i> Sinh Lực <strong
+                                        class="text-success">@{{ user.power.hp }}</strong></small>
                             </div>
                         </div>
                     </div>
@@ -557,8 +559,8 @@
                     </div>
                     <div class="col-6 d-flex mt-2">
                         <div class="flex">
-                            <div class="text-success"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
-                                        class="text-success">@{{ user.power.intelligent }}</strong></small>
+                            <div class="text-info"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
+                                        class="text-info">@{{ user.power.intelligent }}</strong></small>
                             </div>
                         </div>
                     </div>
@@ -626,7 +628,7 @@
 </div>
 <div id="aside-left" class="page-sidenav no-shrink bg-light nav-dropdown fade" aria-hidden="true">
     <div class="sidenav h-100 modal-dialog bg-light normal-bordered">
-        <div class="navbar"><a href="index.html" class="navbar-brand">
+        <div class="navbar"><a href="{{ Route('user.index') }}" class="navbar-brand">
             <img src="https://dslv9ilpbe7p1.cloudfront.net/8nAm-YsBbxDswigGmEWqpA_store_logo_image.png">
             <span class="hidden-folded d-inline l-s-n-1x">{{ env('APP_NAME') }}</span></a></div>
         <div class="flex scrollable hover">
@@ -643,10 +645,11 @@
                             class="nav-text">Nhân Vật</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('user.profile.item.index') }}" class=""><span class="nav-text">Vật Phẩm</span></a></li>
-                                <li><a href="{{ Route('user.profile.item.index') }}" class=""><span class="nav-text">Ngọc Tinh Luyện</span></a></li>
+                                <li><a href="{{ Route('user.profile.gem.index') }}" class=""><span class="nav-text">Ngọc Tinh Luyện</span></a></li>
                                 <li><a href="{{ Route('user.profile.inventory.index') }}" class=""><span class="nav-text">Trang Bị</span></a></li>
                                 <li><a href="{{ Route('user.profile.pet.index') }}" class=""><span class="nav-text">Thú Cưỡi</span></a></li>
                                 <li><a href="{{ Route('user.profile.skill.index') }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
+                                <li><a href="{{ Route('user.profile.stat.index') }}" class=""><span class="nav-text">Chỉ Số</span></a></li>
                                 @auth
                                     <li><a href="{{ Route('user.profile.message.index') }}" class=""><span class="nav-text">Tin Nhắn @if(isset($notifications) && $notifications['unread'] > 0)<span class="nav-badge"><b class="badge badge-pill gd-warning">{{ $notifications['unread'] ?? 0 }}</b></span>@endif</span></a></li>
                                 @endauth
@@ -686,8 +689,6 @@
                             class="nav-text">Lò Rèn</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="#" class=""><span class="nav-text">Tinh Luyện</span></a></li>
-                                <li><a href="#" class=""><span class="nav-text">Nhiệm Vụ</span></a></li>
-                                <li><a href="{{ Route('user.explore.recovery-room.index') }}" class=""><span class="nav-text">Phòng Hồi Phục</span></a></li>
                             </ul>
                         </li>
                         <li class="{{ Request::is('explore/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="activity"></i></span> <span
@@ -722,7 +723,7 @@
                             </ul>
                         </li>
                         <li><a href="{{ Route('user.giftcode.index') }}" class=""><span class="nav-icon"><i data-feather="gift"></i></span> <span
-                            class="nav-text">GiftCode</span></a>
+                            class="nav-text">Gift Code</span></a>
                         </li>
                     @endif
                     @if(Auth::check() && Auth::user()->isAdmin)
@@ -849,6 +850,70 @@
     </div>
 </div>
 @push('js')
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest"></script>
+    <script>
+        $(document).ready(() => {
+            var options = {
+                chart: {
+                    sparkline: {
+                        enabled: false,
+                    },
+                    height: 250,
+                    type: 'radar',
+                    toolbar:{
+                        show:false
+                    }
+                },
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: 'dark',
+                        type: "horizontal",
+                        shadeIntensity: 0.5,
+                        gradientToColors: undefined, // optional, if not defined - uses the shades of same color in series
+                        inverseColors: true,
+                        opacityFrom: 1,
+                        opacityTo: 0.8,
+                        stops: [0, 50, 100],
+                        colorStops: []
+                    }
+                },
+                theme: {
+                    mode: 'dark', 
+                    palette: 'palette1', 
+                    monochrome: {
+                        enabled: false,
+                        color: '#333',
+                        shadeTo: 'dark',
+                        shadeIntensity: 1
+                    },
+                },
+                series: [{
+                    name: 'Chỉ Số',
+                    data: [
+                        {{ Auth::user()->stats()['strength'] }},
+                        {{ Auth::user()->stats()['intelligent'] }},
+                        {{ Auth::user()->stats()['agility'] }},
+                        {{ Auth::user()->stats()['lucky'] }},
+                        {{ Auth::user()->stats()['armor_strength'] }},
+                        {{ Auth::user()->stats()['armor_intelligent'] }}
+                    ],
+                }],
+                labels: ['Sức Mạnh', 'Trí Tuệ', 'Nhanh Nhẹn', 'May Mắn', 'Thủ Công', 'Thủ Phép','Sinh Lực','Mana']
+            }
+
+            var chart = new ApexCharts(
+                document.querySelector("#stats"),
+                options
+            );
+            chart.render();
+            var chart = new ApexCharts(
+                document.querySelector("#stats-infor"),
+                options
+            );
+            chart.render();
+        })
+    </script>
     <script src="{{ asset('assets/js/vue/app.js') }}"></script>
 @endpush
 @endif

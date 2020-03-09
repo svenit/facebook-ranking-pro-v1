@@ -119,6 +119,16 @@ class Helper
         });
         return $this->rankPower;
     }
+
+    public function stats()
+    {
+        return [
+            'data' => $this->user()->stats(),
+            'used' => $this->user()->usedStats(),
+            'available' => $this->user()->availableStats()
+        ];
+    }
+
     public function requestRaw($url)
     {
         $ch = curl_init();

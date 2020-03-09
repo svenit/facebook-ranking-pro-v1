@@ -71,12 +71,14 @@ Route::group(['middleware' => ['maintaince','redirect.action']], function () {
                 Route::get('{cate}',"ShopController@index")->name('index');
             });
             Route::group(['prefix' => 'profile','as' => 'profile.','namespace' => 'Profile'], function () {
-                Route::get('inventories','Inventory\InventoryController@index')->name('inventory.index');
-                Route::get('pets','Pet\PetController@index')->name('pet.index');
-                Route::get('skills','Skill\SkillController@index')->name('skill.index');
-                Route::get('items','Item\ItemController@index')->name('item.index');
-                Route::get('messages','Message\MessageController@index')->name('message.index');
-                Route::get('messages/{id}','Message\MessageController@detail')->name('message.detail');
+                Route::get('inventories','InventoryController@index')->name('inventory.index');
+                Route::get('pets','PetController@index')->name('pet.index');
+                Route::get('skills','SkillController@index')->name('skill.index');
+                Route::get('items','ItemController@index')->name('item.index');
+                Route::get('messages','MessageController@index')->name('message.index');
+                Route::get('messages/{id}','MessageController@detail')->name('message.detail');
+                Route::get('stats','StatController@index')->name('stat.index');
+                Route::get('gems','GemController@index')->name('gem.index');
             });
             Route::group(['prefix' => 'explore','as' => 'explore.'], function () {
                 Route::group(['prefix' => 'recovery-room','as' => 'recovery-room.','namespace' => 'RecoveryRoom'], function () {

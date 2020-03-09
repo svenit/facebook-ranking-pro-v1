@@ -22,7 +22,7 @@ class User extends Authenticatable
     protected $fillable = [
         'user_id','provider_id','character_id','posts','reactions','comments','coins',
         'income_coins','exp','isVip','isAdmin',
-        'name', 'email', 'password','lng','lat','status'
+        'name', 'email', 'password','lng','lat','status','stats','stat_points'
     ];
 
     /**
@@ -41,6 +41,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'stats' => 'array'
     ];
 
     public function scopeIsAdmin($query)
@@ -151,7 +152,7 @@ class User extends Authenticatable
         $power = [];
         foreach($properties as $key => $property)
         {
-            $power[$key] =  collect($this->usingPets())->sum($key) + collect($this->usingGears())->sum($key) + collect($this->usingGems())->sum($key) + ($this[$key]);
+            $power[$key] = collect($this->usingPets())->sum($key) + collect($this->usingGears())->sum($key) + collect($this->usingGems())->sum($key) + ($this->stats()[$key] ?? 0) + ($this[$key]);
         }
         return collect($power);
     }
@@ -160,6 +161,7 @@ class User extends Authenticatable
         $helper = new Helper($id);
         return $this->power()->sum() * $helper->level();
     }
+    
     public function level()
     {
         $helper = new Helper($this->id);
@@ -169,5 +171,29 @@ class User extends Authenticatable
     {
         $helper = new Helper($this->id);
         return $helper->nextLevel();
+    }
+
+    public function stats()
+    {
+        return is_array($this->stats) ? $this->stats : [
+            'strength' => 0,
+            'intelligent' => 0,
+            'agility' => 0,
+            'lucky' => 0,
+            'health_points' => 0,
+            'armor_strength' => 0,
+            'armor_intelligent' => 0
+        ];
+    }
+
+    public function availableStats()
+    {
+        $statPerLevel = 5;
+        return $allStat = ($this->level() * $statPerLevel) + $this->stat_points;
+    }
+
+    public function usedStats()
+    {
+        return collect(array_values($this->stats()))->sum();
     }
 }

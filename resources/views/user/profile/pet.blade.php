@@ -40,8 +40,8 @@
                                     </div>
                                     <div class="col-6 d-flex">
                                         <div class="flex">
-                                            <div class="text-info"><small><i class="fas fa-heart"></i> Sinh Lực <strong
-                                                class="text-info">+ @{{ data.pet.health_points }}</strong></small>
+                                            <div class="text-success"><small><i class="fas fa-heart"></i> Sinh Lực <strong
+                                                class="text-success">+ @{{ data.pet.health_points }}</strong></small>
                                             </div>
                                         </div>
                                     </div>
@@ -54,8 +54,8 @@
                                     </div>
                                     <div class="col-6 d-flex mt-2">
                                         <div class="flex">
-                                            <div class="text-success"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
-                                                class="text-success">@{{ data.pet.intelligent }}</strong></small>
+                                            <div class="text-info"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
+                                                class="text-info">@{{ data.pet.intelligent }}</strong></small>
                                             </div>
                                         </div>
                                     </div>
@@ -96,7 +96,7 @@
                     </div>
                     <div :class="[`tab-pane fade ${!data.pet ? 'show active' : ''}`]" id="home-list-pet" role="tabpanel" aria-labelledby="list-pet-tab">
                         <div style="padding-top:20px" v-if="pets.length > 0" class="row">
-                            <div v-for="(pet,index) in pets" :key="index" data-title="tooltip" title="Click vào để xem chi tiết" class="hoverable col-sm-3 col-md-2 col-lg-1">
+                            <div v-for="(pet,index) in pets" :key="index" data-title="tooltip" title="Click vào để xem chi tiết" class="hoverable col-auto">
                                 <div class="card">
                                     <span :style="{border:`1px solid ${pet.rgb}`}" class="w-64 avatar gd-dark">
                                         <span :class="`avatar-status ${pet.pivot.status == 1 ? 'on' : 'away'} b-white avatar-right`"></span> 

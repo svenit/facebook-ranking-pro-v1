@@ -42,6 +42,11 @@ app = new Vue({
                 facebook_id: "0",
                 active: ""
             },
+            stats:{
+                data:{},
+                used:0,
+                available:0
+            },
             rank: {
                 power: 'Đang tải...',
                 rich: 0
@@ -227,12 +232,12 @@ app = new Vue({
         $('[data-title="tooltip"]').tooltip();
     },
     updated() {
-        if (config.detect) {
-            window.addEventListener('devtoolschange', event => {
-                this.detect = event.detail.isOpen;
-            });
-            this.detect = window.devtools.isOpen;
-        }
+        // if (config.detect) {
+        //     window.addEventListener('devtoolschange', event => {
+        //         this.detect = event.detail.isOpen;
+        //     });
+        //     this.detect = window.devtools.isOpen;
+        // }
     },
     watch: {
         'pvp.isReady'() {
@@ -461,10 +466,7 @@ app = new Vue({
         },
         showGem(data, permission)
         {
-            this.detailGem = {
-                data: data,
-                permission: permission
-            };
+            this.detailGem = {data, permission};
             $('#trigger-gem').click();
             var gear = document.getElementById('gear');
             gear.classList.remove('show');
@@ -1391,6 +1393,29 @@ app = new Vue({
                 }
                 this.notify(res.data.message);
                 this.loading = false;
+            }
+        },
+        async incrementStat(stat)
+        {
+            var point = prompt('Nhập số điểm bạn muốn cộng');
+            point = parseInt(point);
+            if(point && typeof point == 'number' && point > 0) {
+                if(point > this.data.stats.available)
+                {
+                    this.notify('Bạn không đủ điểm');
+                }
+                else
+                {
+                    this.loading = true;
+                    let res = await axios.post(`${config.root}/api/v1/profile/stat/increment`,{stat,point});
+                    this.notify(res.data.message);
+                    await this.index();
+                    this.loading = false;
+                }
+            }
+            else
+            {
+                this.notify('Giá trị lỗi');
             }
         },
         timeAgo(time) {

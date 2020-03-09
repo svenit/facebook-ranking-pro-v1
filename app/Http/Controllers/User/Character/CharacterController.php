@@ -37,6 +37,15 @@ class CharacterController extends Controller
             $user->health_points = $character->health_points;
             $user->armor_strength = $character->armor_strength;
             $user->armor_intelligent = $character->armor_intelligent;
+            $user->stats = [
+                'strength' => 0,
+                'intelligent' => 0,
+                'agility' => 0,
+                'lucky' => 0,
+                'health_points' => 0,
+                'armor_strength' => 0,
+                'armor_intelligent' => 0
+            ];
             
             $user->save();
             return redirect()->route('user.index')->with([

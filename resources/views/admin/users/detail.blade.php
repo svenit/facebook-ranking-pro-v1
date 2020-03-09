@@ -66,8 +66,8 @@
                             </div>
                             <div class="col-6 d-flex">
                                 <div class="flex">
-                                    <div class="text-info"><small><i class="fas fa-heart"></i> Sinh Lực <strong
-                                                class="text-info"> {{ $detail->power()['health_points'] }}</strong></small>
+                                    <div class="text-success"><small><i class="fas fa-heart"></i> Sinh Lực <strong
+                                                class="text-success"> {{ $detail->power()['health_points'] }}</strong></small>
                                     </div>
                                 </div>
                             </div>
@@ -80,8 +80,8 @@
                             </div>
                             <div class="col-6 d-flex mt-2">
                                 <div class="flex">
-                                    <div class="text-success"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
-                                                class="text-success">{{ $detail->power()['intelligent'] }}</strong></small>
+                                    <div class="text-info"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
+                                                class="text-info">{{ $detail->power()['intelligent'] }}</strong></small>
                                     </div>
                                 </div>
                             </div>
