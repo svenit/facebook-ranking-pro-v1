@@ -41,8 +41,7 @@ class IndexController extends Controller
                     'vip' => $findUser->isVip == 1 ? true : false,
                 ],
                 'rank' => [
-                    'power' => $helper->rankPower(),
-                    'rich' => $helper->rankCoin()
+                    'power' => $helper->rankPower()
                 ],
                 'stats' => Auth::id() == $findUser->id ? $helper->stats() : [],
                 'level' => $helper->nextLevel(),

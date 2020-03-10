@@ -8,6 +8,7 @@ use App\Model\CateGear;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
@@ -36,26 +37,19 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
         Validator::extend('recaptcha', 'App\Validators\ReCaptcha@validate');
         
-        if(Schema::hasTable('configs'))
-        {
-            View::composer('*', function ($view) 
-            {
-                if(Auth::check())
-                {
-                    $view->with('user', new Helper(Auth::id()));    
-                }
-            });
-        }
         if(Schema::hasTable('cate_gears'))
         {
             View::composer('*', function ($view) 
             {
-                $view->with('menuShop', CateGear::all());   
+                $cateGears = Cache::rememberForever('menuShop', function () use($view) {
+                    return CateGear::all();
+                });  
+                $view->with('menuShop', $cateGears);  
             });
         }
         if(Schema::hasTable('notifications'))
         {
-            View::composer('*', function ($view) 
+            View::composer('user.theme.*', function ($view) 
             {
                 if(Auth::check())
                 {

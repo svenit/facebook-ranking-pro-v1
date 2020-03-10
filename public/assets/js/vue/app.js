@@ -180,6 +180,7 @@ app = new Vue({
         pets: [],
         skills: [],
         items: [],
+        gems:[],
         /* Admin */
         shop_tag: '',
         rgb: '',
@@ -222,6 +223,9 @@ app = new Vue({
                         break;
                     case 'item.index':
                         await this.item();
+                        break;
+                    case 'gem.index':
+                        await this.gem();
                         break;
                 }
             }
@@ -467,6 +471,11 @@ app = new Vue({
         showGem(data, permission)
         {
             this.detailGem = {data, permission};
+            if(data.gems)
+            {
+                this.detailGem.data = data.gem_item;
+                this.detailGem.data.pivot = data.gems;
+            }
             $('#trigger-gem').click();
             var gear = document.getElementById('gear');
             gear.classList.remove('show');
@@ -1334,6 +1343,20 @@ app = new Vue({
             this.skills = res.data;
             this.loading = false;
         },
+        async gem() {
+            this.loading = true;
+            let res = await axios.get(`${config.root}/api/v1/profile/gem`, {
+                params: {
+                    bearer: config.bearer,
+                },
+                headers: {
+                    pragma: this.token
+                }
+            });
+            await this.refreshToken(res);
+            this.gems = res.data;
+            this.loading = false;
+        },
         async item() {
             this.loading = true;
             let res = await axios.get(`${config.root}/api/v1/profile/item`, {
@@ -1376,23 +1399,28 @@ app = new Vue({
         },
         async deleteItem(data) {
             if (confirm('Vứt bỏ vật phẩm này ?')) {
-                this.loading = true;
-                let res = await axios.post(`${config.root}/api/v1/profile/item/delete`, {
-                    bearer: config.bearer,
-                    id: data.pivot.id,
-                    item_id: data.id
-                }, {
-                    headers: {
-                        pragma: this.token
+                var quantity = prompt('Nhập số lượng ');
+                quantity = parseInt(quantity);
+                if (quantity && typeof quantity == 'number' && quantity > 0) {
+                    this.loading = true;
+                    let res = await axios.post(`${config.root}/api/v1/profile/item/delete`, {
+                        bearer: config.bearer,
+                        id: data.pivot.id,
+                        item_id: data.id,
+                        quantity
+                    }, {
+                        headers: {
+                            pragma: this.token
+                        }
+                    });
+                    await this.refreshToken(res);
+                    if (res.data.code == 200) {
+                        await this.index();
+                        this.item();
                     }
-                });
-                await this.refreshToken(res);
-                if (res.data.code == 200) {
-                    await this.index();
-                    this.item();
+                    this.notify(res.data.message);
+                    this.loading = false;
                 }
-                this.notify(res.data.message);
-                this.loading = false;
             }
         },
         async incrementStat(stat)
@@ -1407,7 +1435,16 @@ app = new Vue({
                 else
                 {
                     this.loading = true;
-                    let res = await axios.post(`${config.root}/api/v1/profile/stat/increment`,{stat,point});
+                    let res = await axios.post(`${config.root}/api/v1/profile/stat/increment`,{
+                        bearer: config.bearer,
+                        stat,
+                        point
+                    },{
+                        headers: {
+                            pragma: this.token
+                        }
+                    });
+                    await this.refreshToken(res);
                     this.notify(res.data.message);
                     await this.index();
                     this.loading = false;

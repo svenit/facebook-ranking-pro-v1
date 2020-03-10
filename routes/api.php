@@ -57,10 +57,12 @@ Route::group(['prefix' => 'v1','namespace' => 'Api','middleware' => ['cors','aut
             Route::get('/','ItemController');
             Route::post('use','ItemController@use');
             Route::post('delete','ItemController@delete');
-            Route::post('delete-all','ItemController@deleteAll');
         });
         Route::group(['prefix' => 'stat'], function () {
             Route::post('increment','StatController@increment');
+        });
+        Route::group(['prefix' => 'gem'], function () {
+            Route::get('/','GemController');
         });
     });
 });

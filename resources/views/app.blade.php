@@ -34,7 +34,7 @@
 		gtag('config', 'UA-112101707-1');
 	</script>
 	<script>
-		config={root:"{{url('/')}}",current_url:"{{url()->current()}}",auth:{{Auth::check() ? 1 : 0}},bearer:"{{str_random(50)}}",detect:{{Auth::check() && Auth::user()->isAdmin ? 'false' : 'true'}}};
+		config={socketHost:"{{ env('SOCKET_HOST') }}",root:"{{url('/')}}",current_url:"{{url()->current()}}",auth:{{Auth::check() ? 1 : 0}},bearer:"{{str_random(50)}}",detect:{{Auth::check() && Auth::user()->isAdmin ? 'false' : 'true'}}};
 	</script>
 	<noscript>
 		<style type="text/css">
@@ -84,14 +84,13 @@
 </body>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.2/dist/sweetalert2.all.min.js"></script>	
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-	<script src="{{ asset('assets/js/plugins/moment/moment.js') }}"></script>
-	<script src="{{ asset('assets/js/plugins/speed/refresh.min.js') }}"></script>
-	<script src="{{ asset('assets/js/plugins/speed/trasher.js') }}"></script>
-	<script src="{{ asset('assets/js/plugins/speed/lite.min.js') }}"></script>
-	<script src="{{ asset('assets/js/plugins/firebase/firebase.js') }}"></script>
-	<script src="{{ asset('assets/js/site.min.js') }}"></script>
-	<script src="{{ asset('assets/js/plugins/axios/axios.min.js') }}"></script>
-	<script src="{{ asset('assets/js/vue/vue.js') }}"></script>
+	<script src="{{ asset('js/vendor.js') }}"></script>
+	<script>
+		var socket = io(config.socketHost);
+		socket.on('App\\Events\\BroadcastToEveryone',(data) => {
+			Swal.fire('THÔNG BÁO',data.message,'info')
+		})
+	</script>
 	@stack('js')
 	@if(session('message'))
 		<script>

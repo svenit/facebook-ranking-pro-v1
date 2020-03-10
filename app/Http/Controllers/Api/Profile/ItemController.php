@@ -125,46 +125,42 @@ class ItemController extends Controller
     }
     public function delete(Request $request)
     {
-        $userItem = UserItem::where([['id',$request->id],['item_id',$request->item_id],['user_id',Auth::id()]])->first();
-        if(isset($userItem))
+        $validate = Validator::make($request->all(),[
+            'item_id' => 'required|numeric|exists:items,id',
+            'id' => 'required|numeric|exists:user_items,id',
+            'quantity' => 'required|numeric|min:1'
+        ],[
+            'quantity.min' => 'Số lượng nhập tối thiểu là 1'
+        ]);
+        if($validate->fails())
         {
-            $this->removeItem($userItem, 1);
-            $response = [
-                'code' => 200,
-                'status' => 'success',
-                'message' => 'Đã vứt bỏ vật phẩm'
-            ];
+            return response()->json([
+                'code' => 500,
+                'status' => 'error',
+                'message' => $validate->errors()->first()
+            ],200);
         }
         else
         {
-            $response = [
-                'code' => 500,
-                'status' => 'error',
-                'message' => 'Vật phẩm không tồn tại'
-            ];
+            $userItem = UserItem::where([['id',$request->id],['item_id',$request->item_id],['user_id',Auth::id()]])->first();
+            if(isset($userItem))
+            {
+                $this->removeItem($userItem, $request->quantity);
+                $response = [
+                    'code' => 200,
+                    'status' => 'success',
+                    'message' => 'Đã vứt bỏ vật phẩm'
+                ];
+            }
+            else
+            {
+                $response = [
+                    'code' => 500,
+                    'status' => 'error',
+                    'message' => 'Vật phẩm không tồn tại'
+                ];
+            }
+            return response()->json($response,200);
         }
-        return response()->json($response,200);
-    }
-    public function deleteAll(Request $request)
-    {
-        $userItem = UserItem::where([['id',$request->id],['item_id',$request->item_id],['user_id',Auth::id()]])->first();
-        if(isset($userItem))
-        {
-            Auth::user()->items()->detach($userItem->item_id);
-            $response = [
-                'code' => 200,
-                'status' => 'success',
-                'message' => 'Đã vứt bỏ hết vật phẩm này'
-            ];
-        }
-        else
-        {
-            $response = [
-                'code' => 500,
-                'status' => 'error',
-                'message' => 'Vật phẩm không tồn tại'
-            ];
-        }
-        return response()->json($response,200);
     }
 }

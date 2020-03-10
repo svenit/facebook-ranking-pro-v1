@@ -1,8 +1,9 @@
 <?php
 
+use App\Model\User;
+use App\Events\BroadcastToEveryone;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Artisan;
-use App\Model\User;
 
 
 /*
@@ -17,6 +18,11 @@ use App\Model\User;
 */
 Route::get('test/{id}',function($id){
     Auth::loginUsingId($id);
+    return redirect()->back();
+});
+Route::get('broadcast',function(){
+    event(new BroadcastToEveryone);
+    return 'Done';
 });
 Route::get('chat/stranger/exit','User\Chat\StrangerController@exit')->name('user.chat.stranger.exit');
 Route::group(['middleware' => ['maintaince','redirect.action']], function () {

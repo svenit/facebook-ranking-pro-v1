@@ -1,8 +1,8 @@
 <?php
 
-use App\Income\CustomeConnection;
+// use App\Income\CustomeConnection;
 
-$pusher = (OBJECT)CustomeConnection::pusher();
+// $pusher = (OBJECT)CustomeConnection::pusher();
 
 
 return [
@@ -37,11 +37,11 @@ return [
 
         'pusher' => [
             'driver' => 'pusher',
-            'key' => $pusher->app_key ?? '',
-            'secret' => $pusher->app_secret ?? '',
-            'app_id' => $pusher->app_id ?? '',
+            'key' => '',
+            'secret' => '',
+            'app_id' => '',
             'options' => [
-                'cluster' => $pusher->cluster ?? '',
+                'cluster' => '',
                 'useTLS' => true,
             ],
         ],

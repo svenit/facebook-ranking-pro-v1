@@ -2,9 +2,6 @@
 
 use Illuminate\Support\Str;
 
-$postgresUrl = 'postgres://oddliwicslgwbi:9eb680080657d8701488f379189de635d9c4910e21b76741f7e8c7bfdba46cbc@ec2-174-129-33-30.compute-1.amazonaws.com:5432/d9n13fa07kg9pp';
-$postgres = parse_url($postgresUrl);
-
 return [
 
     /*
@@ -68,12 +65,12 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'url' => $postgresUrl,
-            'host' => $postgres['host'],
-            'port' => $postgres['port'],
-            'database' => ltrim($postgres['path'],'/'),
-            'username' => $postgres['user'],
-            'password' => $postgres['pass'],
+            'url' => '',
+            'host' => '',
+            'port' => '',
+            'database' => '',
+            'username' => '',
+            'password' => '',
             'charset' => 'utf8',
             'prefix' => '',
         ],
@@ -123,7 +120,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'predis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX',''),
         ],
 
         'default' => [

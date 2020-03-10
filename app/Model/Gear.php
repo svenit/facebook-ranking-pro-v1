@@ -32,4 +32,9 @@ class Gear extends Model
     {
         return $this->hasMany('App\Model\UserGear', 'gear_id', 'id');
     }
+
+    public function gems()
+    {
+        return $this->hasManyThrough('App\Model\UserGearGem','App\Model\UserGear','gear_id', 'user_gear_id', 'id');
+    }
 }

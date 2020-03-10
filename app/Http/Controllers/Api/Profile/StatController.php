@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Validator;
 
 class StatController extends Controller
 {
+    public function __construct()
+    {
+        return $this->middleware('prevent.api')->except(['__invoke']);
+    }
+    
     public function increment(Request $request)
     {
         $validate = Validator::make($request->all(),[

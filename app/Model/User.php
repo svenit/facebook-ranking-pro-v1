@@ -107,9 +107,7 @@ class User extends Authenticatable
         {
             if($gear->pivot->status == 1)
             {
-                $gear->userGears->each(function($userGear, $key){
-                    $userGear->gems->load('gemItem');
-                });
+                $gear->gems->load(['gems', 'gemItem']);
                 $data[] = $gear->load(['character','cates']);;
             }
         }
@@ -141,18 +139,18 @@ class User extends Authenticatable
     public function getPower()
     {
         $properties = [
-            'strength' => 20,
-            'agility' => 15,
-            'intelligent' => 20,
-            'lucky' => 10,
-            'health_points' => 8,
-            'armor_strength' => 5,
-            'armor_intelligent' => 5
+            'strength' => 1,
+            'agility' => 1,
+            'intelligent' => 1,
+            'lucky' => 1,
+            'health_points' => 2,
+            'armor_strength' => 1,
+            'armor_intelligent' => 1
         ];
         $power = [];
         foreach($properties as $key => $property)
         {
-            $power[$key] = collect($this->usingPets())->sum($key) + collect($this->usingGears())->sum($key) + collect($this->usingGems())->sum($key) + ($this->stats()[$key] ?? 0) + ($this[$key]);
+            $power[$key] = (collect($this->usingPets())->sum($key) + collect($this->usingGears())->sum($key) + collect($this->usingGems())->sum($key) + ($this->stats()[$key] ?? 0) + ($this[$key])) * $property;
         }
         return collect($power);
     }

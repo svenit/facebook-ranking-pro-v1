@@ -10,12 +10,12 @@
             @include('user.theme.parameter')
             @include('user.profile.base')
             <div class="mx-2 card vip-bordered">
-                <div style="font-size:12px;padding:4px 10px" class="alert alert-warning">
+                <div style="font-size:12px;padding:4px 10px" class="bg bg-dark">
                     Bấm vào <button class="btn btn-dark"><i class="fas fa-arrow-up"></i></button>
                     để chọn chỉ số bạn muốn tăng.
                 </div>
-                <div style="margin-left: 10px">
-                    Điểm : @{{ numberFormat(data.stats.available) }}
+                <div class="text-gold" style="margin: 20px">
+                    Điểm : <strong>@{{ numberFormat(data.stats.available) }}</strong>
                 </div>
                 <div class="row">
                     <div class="col-lg-6 col-md-12 col-sm-12">
@@ -86,10 +86,10 @@
                     </div>
                     <div style="margin-left:20px" class="col-12">
                         <p style="margin-top:15px" class="text-muted"><strong>TÔI CÓ THỂ KIẾM ĐIỂM CHỈ SỐ Ở ĐÂU ?</strong></p>
-                        <li class="mb-2">Mỗi lần lên 1 Level bạn sẽ nhận được 5 điểm chỉ số</li>
-                        <li class="mb-2">Hoàn thành nhiệm vụ mỗi ngày</li>
-                        <li class="mb-2">Tiến vào Dungeon</li>
-                        <li class="mb-2">Tham gia sự kiện</li>
+                        <li class="mb-2 text-muted">Mỗi lần lên 1 Level bạn sẽ nhận được 5 điểm chỉ số</li>
+                        <li class="mb-2 text-muted">Hoàn thành nhiệm vụ mỗi ngày</li>
+                        <li class="mb-2 text-muted">Tiến vào Dungeon</li>
+                        <li class="mb-2 text-muted">Tham gia sự kiện</li>
                     </div>
                 </div>
             </div>

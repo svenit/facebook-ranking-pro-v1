@@ -227,11 +227,9 @@
                             </div>
                         </div>
                     </div>
-                    <div style="margin:20px 5px" class="col-12">
-                        <div class="row">
-                            <div class="col-3" v-for="(userGear, index) in detailGear.data.user_gears" :key="index">
-                                <img v-for="gem in userGear.gems" :style="{border:`1px solid ${gem.gem_item.rgb}`,margin:'3px'}" :src="gem.gem_item.image" @click="showGem(gem.gem_item,detailGear.permission)" width="40px">
-                            </div>
+                    <div style="margin:10px 20px" class="row">
+                        <div v-for="(gem, index) in detailGear.data.gems" :key="index" style="padding:5px" class="col-auto">
+                            <img :style="{border:`1px solid ${gem.gem_item.rgb}`}" :src="gem.gem_item.image" @click="showGem(gem,detailGear.permission)" width="40px">
                         </div>
                     </div>
                     <div style="margin:20px 10px" class="col-12">
@@ -334,13 +332,10 @@
                 </div>
             </div>
             <div v-if="detailGem.permission == 1" class="modal-footer">
-                <button type="button" @click="deleteEquipment(detailGear.data)" class="btn bg-danger-lt" data-dismiss="modal">
+                <button type="button" @click="deleteGem(detailGem.data)" class="btn bg-danger-lt" data-dismiss="modal">
                     Vứt Bỏ
                 </button>
-                <button v-if="detailGem.data.pivot.status == 0" type="button" @click="equipment(detailGear.data)" class="btn btn-success" data-dismiss="modal">
-                    Trang bị
-                </button>
-                <button v-else type="button" @click="removeEquipment(detailGear.data)" class="btn btn-secondary" data-dismiss="modal">
+                <button v-if="detailGem.data.pivot.status == 1" type="button" @click="removeGem(detailGem.data)" class="btn btn-secondary" data-dismiss="modal">
                     Tháo
                 </button>
             </div>
@@ -467,11 +462,8 @@
                 </div>
             </div>
             <div v-if="detailItem.permission == 1" class="modal-footer">
-                <button type="button" @click="deleteAllItem(detailItem.data)" class="btn bg-danger-lt" data-dismiss="modal">
-                    Vứt Bỏ Hết
-                </button>
                 <button type="button" @click="deleteItem(detailItem.data)" class="btn bg-danger-lt" data-dismiss="modal">
-                    Vứt Bỏ x1
+                    Vứt bỏ
                 </button>
                 <button type="button" @click="useItem(detailItem.data)" class="btn btn-success" data-dismiss="modal">
                     Dùng
@@ -634,9 +626,9 @@
         <div class="flex scrollable hover">
             <div class="nav-active-text-primary" data-nav>
                 <ul class="nav bg">
-                    <li class="nav-header hidden-folded"><span class="text-muted">Trang Chủ</span></li>
+                    <li class="nav-header hidden-folded"><span class="text-muted">Hệ Thống</span></li>
                     <li><a href="{{ Route('user.index') }}"><span class="nav-icon"><i
-                                    data-feather="home"></i></span> <span class="nav-text">Trang Chủ</span></a></li>
+                                    data-feather="box"></i></span> <span class="nav-text">Hệ Thống</span></a></li>
                 </ul>
                 <ul class="nav">
                     @if(!Request::is('admin/*'))
@@ -691,7 +683,7 @@
                                 <li><a href="#" class=""><span class="nav-text">Tinh Luyện</span></a></li>
                             </ul>
                         </li>
-                        <li class="{{ Request::is('explore/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="activity"></i></span> <span
+                        <li class="{{ Request::is('explore/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="zap"></i></span> <span
                             class="nav-text">Khám Phá</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="#" class=""><span class="nav-text">Dungeon</span></a></li>
@@ -710,13 +702,13 @@
                             </ul>
                         </li>
                         <li class="{{ Request::is('pvp/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
-                            class="nav-text">PVP</span><span class="nav-badge"><b class="badge-circle xs text-{{ Auth::check() && $user->config->open_pvp == 1 ? 'success' : 'warning' }}"></b></span> <span class="nav-caret"></span></a>
+                            class="nav-text">PVP</span><span class="nav-badge"><b class="badge-circle xs text-success"></b></span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('user.pvp.index') }}" class=""><span class="nav-text">Tham Gia</span></a></li>
                             </ul>
                         </li>
                         <li class="{{ Request::is('chat/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="message-circle"></i></span> <span
-                            class="nav-text">Chat</span> <span class="nav-badge"><b class="badge-circle xs text-{{ Auth::check() && $user->config->open_chat == 1 ? 'success' : 'warning' }}"></b></span><span class="nav-caret"></span></a>
+                            class="nav-text">Chat</span> <span class="nav-badge"><b class="badge-circle xs text-success"></b></span><span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('user.chat.global') }}" class=""><span class="nav-text">Thế Giới</span></a></li>
                                 <li><a onclick="return confirm('Bạn đang có {{ Auth::user()->stranger_chat_times ?? 0 }} vé chat ! Tham gia ?')" href="{{ Route('user.chat.stranger.join') }}" class=""><span class="nav-text">CVNL</span></a></li>
@@ -850,6 +842,7 @@
     </div>
 </div>
 @push('js')
+    @auth
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest"></script>
     <script>
         $(document).ready(() => {
@@ -914,6 +907,7 @@
             chart.render();
         })
     </script>
+    @endauth
     <script src="{{ asset('assets/js/vue/app.js') }}"></script>
 @endpush
 @endif

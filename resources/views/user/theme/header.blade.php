@@ -1,7 +1,5 @@
 <div id="header" class="page-header">
-    <div class="navbar navbar-expand-lg"><a href="#" class="navbar-brand d-lg-none">
-        <img src="https://vignette.wikia.nocookie.net/solo-leveling/images/8/89/Wiki-wordmark.png/revision/latest/scale-to-width-down/212?cb=20200303164914&path-prefix=vi">
-        <span class="hidden-folded d-inline l-s-n-1x d-lg-none">{{ env('APP_NAME') }}</span></a>
+    <div class="navbar navbar-expand-lg"><a href="#" class="navbar-brand d-lg-none"></a>
         <ul class="nav navbar-menu order-1 order-lg-2">
             <li class="nav-item d-none d-sm-block"><a class="nav-link px-2" data-toggle="fullscreen"
                     data-plugin="fullscreen"><i data-feather="maximize"></i></a></li>
