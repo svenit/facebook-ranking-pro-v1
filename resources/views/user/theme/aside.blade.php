@@ -17,30 +17,15 @@
                 <div class="p-4 text-center">
                     <div style="margin:0px 10px 35px 0px" class="character-sprites hoverable {{ Auth::user()->isVip == 1 ? 'vip-2' : '' }}">
                         <span v-if="data.pet" :class="`Mount_Body_${data.pet.class_tag}`"></span>
-                        <span class="hair_flower_3"></span>
-                        <span class="chair_none"></span>
-                        <span class=""></span>
-                        <span class="skin_f5a76e"></span>
-                        <span class="broad_shirt_black"></span>
-                        <span class="head_0"></span>
-                        <span class="broad_armor_base_0"></span>
-                        <span class=""></span>
-                        <span class="hair_bangs_0_black"></span>
-                        <span class="hair_base_0_black"></span>
-                        <span class="hair_mustache_0_black"></span>
-                        <span class="hair_beard_0_black"></span>
-                        <span class=""></span>
-                        <span class="eyewear_base_0"></span>
-                        <span class="head_base_0"></span>
-                        <span class=""></span>
-                        <span class="hair_flower_0"></span>
-                        <span class="shield_base_0"></span>
+                        <span style="z-index:2" class="skin_f5a76e"></span>
+                        <span style="z-index:2" class="broad_shirt_black"></span>
+                        <span style="z-index:2" class="head_0"></span>
                         <span class=""></span>
                         <span v-for="(gear,index) in data.gears" :key="index">
-                            <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="e"></span>
-                            <span v-else :class="gear.class_tag"></span>
+                            <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="e" :style="{zIndex:gear.cates.z_index}"></span>
+                            <span v-else :class="gear.class_tag" :style="{zIndex:gear.cates.z_index}"></span>
                         </span>
-                        <span v-if="data.pet" :class="`Mount_Head_${data.pet.class_tag}`"></span>
+                        <span v-if="data.pet" style="z-index:50" :class="`Mount_Head_${data.pet.class_tag}`"></span>
                     </div>
                     <div style="margin-bottom:60px" v-if="data.pet"></div>
                     <p style="margin-top:20px" class="text-gold">@{{ data.infor.name }} ( @{{ data.infor.character.name }} )</p>
@@ -483,30 +468,15 @@
                 <div class="p-4 text-center">
                     <div title="Nhấp vào để xem thông số" style="margin:0px 10px 35px 0px" class="character-sprites hoverable" :class="user.infor.vip ? 'vip-2' : ''">
                         <span v-if="user.pet" :class="`Mount_Body_${user.pet.class_tag}`"></span>
-                        <span class="hair_flower_3"></span>
-                        <span class="chair_none"></span>
-                        <span class=""></span>
-                        <span class="skin_f5a76e"></span>
-                        <span class="broad_shirt_black"></span>
-                        <span class="head_0"></span>
-                        <span class="broad_armor_base_0"></span>
-                        <span class=""></span>
-                        <span class="hair_bangs_0_black"></span>
-                        <span class="hair_base_0_black"></span>
-                        <span class="hair_mustache_0_black"></span>
-                        <span class="hair_beard_0_black"></span>
-                        <span class=""></span>
-                        <span class="eyewear_base_0"></span>
-                        <span class="head_base_0"></span>
-                        <span class=""></span>
-                        <span class="hair_flower_0"></span>
-                        <span class="shield_base_0"></span>
+                        <span style="z-index:2" class="skin_f5a76e"></span>
+                        <span style="z-index:2" class="broad_shirt_black"></span>
+                        <span style="z-index:2" class="head_0"></span>
                         <span class=""></span>
                         <span v-for="(gear,index) in user.gears" :key="index">
-                            <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="e"></span>
-                            <span v-else :class="gear.class_tag"></span>
+                            <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="e" :style="{zIndex:gear.cates.z_index}"></span>
+                            <span v-else :class="gear.class_tag" :style="{zIndex:gear.cates.z_index}"></span>
                         </span>
-                        <span v-if="user.pet" :class="`Mount_Head_${user.pet.class_tag}`"></span>
+                        <span v-if="user.pet" style="z-index: 50" :class="`Mount_Head_${user.pet.class_tag}`"></span>
                     </div>
                     <div style="margin-bottom:60px" v-if="user.pet"></div>
                     <p style="margin-top:20px" class="text-gold">@{{ user.infor.name }} ( @{{ user.infor.character.name }})</p>
@@ -843,7 +813,7 @@
 </div>
 @push('js')
     @auth
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         $(document).ready(() => {
             var options = {
@@ -855,6 +825,16 @@
                     type: 'radar',
                     toolbar:{
                         show:false
+                    }
+                },
+                yaxis: {
+                    show: false,
+                },
+                dataLabels: {
+                    enabled: true,
+                    background: {
+                        enabled: true,
+                        borderRadius:2,
                     }
                 },
                 fill: {
@@ -894,7 +874,6 @@
                 }],
                 labels: ['Sức Mạnh', 'Trí Tuệ', 'Nhanh Nhẹn', 'May Mắn', 'Thủ Công', 'Thủ Phép','Sinh Lực','Mana']
             }
-
             var chart = new ApexCharts(
                 document.querySelector("#stats"),
                 options

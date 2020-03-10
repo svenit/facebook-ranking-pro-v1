@@ -1,3 +1,5 @@
 {
-    "/js/vendor.js": "/js/vendor.js"
+    "/js/vendor.min.js": "/js/vendor.min.js",
+    "/js/w.min.js": "/js/w.min.js",
+    "/css/app.min.css": "/css/app.min.css"
 }

@@ -21,9 +21,9 @@ class BroadcastToEveryone implements ShouldBroadcast
      */
     public $message;
 
-    public function __construct()
+    public function __construct($message)
     {
-        $this->message = 'PVP đã mở mời anh em vào chơi :<';
+        $this->message = $message;
     }
 
     /**
@@ -33,6 +33,16 @@ class BroadcastToEveryone implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return [];
+        return ['channel'];
     }
+
+    public function broadcastAs()
+    {
+        return 'notify-global';
+    }
+
+    
+
+    
+
 }

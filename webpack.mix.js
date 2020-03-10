@@ -17,13 +17,20 @@ mix.scripts([
     'public/assets/js/plugins/moment/moment.js',
     'public/assets/js/plugins/speed/lite.min.js',
     'public/assets/js/plugins/speed/refresh.min.js',
-    'public/assets/js/plugins/speed/trasher.js',
+    'public/assets/js/plugins/speed/trasher.min.js',
     'public/assets/js/vue/vue.js',
-    'public/assets/js/wheel/index.js',
-    'public/assets/js/wheel/throw.js',
-    'public/assets/js/wheel/wheel.js',
     'public/assets/js/site.min.js',
-],'public/js/vendor.js');
+],'public/js/vendor.min.js');
 
 
+mix.scripts([
+    'public/assets/js/wheel/throw.min.js',
+    'public/assets/js/wheel/wheel.js',
+    'public/assets/js/wheel/index.js',
+],'public/js/w.min.js');
 
+mix.styles([
+    'public/assets/css/site.min.css',
+    'public/assets/css/static.css',
+    'public/assets/css/style.css'
+],'public/css/app.min.css');

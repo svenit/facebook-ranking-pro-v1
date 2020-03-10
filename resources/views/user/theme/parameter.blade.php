@@ -56,25 +56,15 @@
 </div>
 <div @click="index()"  data-title="tooltip" title="Click để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px" class="character-sprites hoverable {{ Auth::user()->isVip == 1 ? 'vip-2' : '' }}">
     <span v-if="data.pet" :class="`Mount_Body_${data.pet.class_tag}`"></span>
-	<span class="hair_flower_3"></span>
-	<span class="chair_none"></span>
-	<span class=""></span>
-	<span class="skin_f5a76e"></span>
-	<span class="broad_shirt_black"></span>
-	<span class="head_0"></span>
-	<span class="broad_armor_base_0"></span>
-	<span class=""></span>
-	<span class="eyewear_base_0"></span>
-	<span class="head_base_0"></span>
-	<span class=""></span>
-	<span class="hair_flower_0"></span>
-	<span class="shield_base_0"></span>
+    <span style="z-index:2" class="skin_f5a76e"></span>
+    <span style="z-index:2" class="broad_shirt_black"></span>
+    <span style="z-index:2" class="head_0"></span>
     <span class=""></span>
     <span v-for="(gear,index) in data.gears" :key="index">
-        <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="e"></span>
-        <span v-else :class="gear.class_tag"></span>
+        <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="e" :style="{zIndex:gear.cates.z_index}"></span>
+        <span v-else :class="gear.class_tag" :style="{zIndex:gear.cates.z_index}"></span>
     </span>
-    <span v-if="data.pet" :class="`Mount_Head_${data.pet.class_tag}`"></span>
+    <span v-if="data.pet" style="z-index:50" :class="`Mount_Head_${data.pet.class_tag}`"></span>
 </div>
 <div style="margin-bottom:60px" v-if="data.pet"></div>
 @endauth

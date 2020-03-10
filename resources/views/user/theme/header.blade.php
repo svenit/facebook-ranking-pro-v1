@@ -1,5 +1,8 @@
 <div id="header" class="page-header">
-    <div class="navbar navbar-expand-lg"><a href="#" class="navbar-brand d-lg-none"></a>
+    <div class="navbar navbar-expand-lg">
+        <a href="#" class="navbar-brand">
+            <small class="badge badge-warning" style="font-weight:initial;font-size:12px"><span id="user-count"></span> Đang Online</small>
+        </a>
         <ul class="nav navbar-menu order-1 order-lg-2">
             <li class="nav-item d-none d-sm-block"><a class="nav-link px-2" data-toggle="fullscreen"
                     data-plugin="fullscreen"><i data-feather="maximize"></i></a></li>

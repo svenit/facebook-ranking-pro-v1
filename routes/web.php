@@ -21,7 +21,7 @@ Route::get('test/{id}',function($id){
     return redirect()->back();
 });
 Route::get('broadcast',function(){
-    event(new BroadcastToEveryone);
+    event(new BroadcastToEveryone('Hello'));
     return 'Done';
 });
 Route::get('chat/stranger/exit','User\Chat\StrangerController@exit')->name('user.chat.stranger.exit');

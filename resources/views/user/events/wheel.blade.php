@@ -47,7 +47,7 @@
 </div>
 @endsection
 @push('css')
-    <link rel="stylesheet" href="{{ asset('assets/css/wheel.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/wheel.min.css') }}">
 @endpush
 @push('js')
     <script>
@@ -57,8 +57,6 @@
     </script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/utils/Draggable.min.js'></script>
-    <script src="{{ asset('assets/js/wheel/throw.min.js') }}"></script>
-    <script src="{{ asset('assets/js/wheel/wheel.js') }}"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/TextPlugin.min.js'></script>
-    <script src="{{ asset('assets/js/wheel/index.js') }}"></script>
+    <script src="{{ asset('js/w.min.js') }}"></script>
 @endpush

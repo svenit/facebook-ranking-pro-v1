@@ -9,10 +9,9 @@
 	<link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
 	<link rel="dns-prefetch" href="//ajax.googleapis.com" />
 	<meta name="description" content="@yield('sub_hero')">
+	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link rel="stylesheet" href="{{ asset('assets/css/static.css') }}">
-	<link rel="stylesheet" href="{{ asset('assets/css/site.min.css') }}">
-	<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/app.min.css') }}">
 	<link href="{{ asset('cdn/css/all.min.css') }}" rel="stylesheet">
 	<link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
 	<meta name="csrf-token" content="{{ csrf_token() }}"/>
@@ -84,12 +83,15 @@
 </body>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.2/dist/sweetalert2.all.min.js"></script>	
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-	<script src="{{ asset('js/vendor.js') }}"></script>
+	<script src="{{ asset('js/vendor.min.js') }}"></script>
 	<script>
-		var socket = io(config.socketHost);
-		socket.on('App\\Events\\BroadcastToEveryone',(data) => {
+		var socket = io.connect(config.socketHost);
+		socket.on('notify-global',(data) => {
 			Swal.fire('THÔNG BÁO',data.message,'info')
 		})
+		socket.on('user-count',(data) => {
+			document.getElementById('user-count').innerHTML = data;
+		});
 	</script>
 	@stack('js')
 	@if(session('message'))
