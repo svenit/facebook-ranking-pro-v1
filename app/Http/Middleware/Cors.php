@@ -21,7 +21,7 @@ class Cors
         {
             if(isset($request->bearer))
             {
-                $token = md5(hash('sha256',md5($this->encode(strrev(csrf_token().'VYDEPTRAI')))));
+                $token = md5(hash('sha256',md5($this->encode(strrev(csrf_token().'..$!@{a-z0-9}-VYDEPTRAI&*@!LX&&$PHP?1+1')))));
                 if($request->header('host') == env('APP_DOMAIN') && $request->header('pragma') == $token)
                 {
                     $newToken = Str::random(40);

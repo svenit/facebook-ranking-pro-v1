@@ -46,14 +46,8 @@
 	<div id="app" class="layout-row" v-if="!detect">
 		@if(!request()->is('admin/*'))
 			<div v-if="flash" id="loader" class="loading-screen">
-				<div class="flash-screen">
-					<div class="text-center">
-						<img style="width:100px" src="{{ asset('assets/images/loader.jpg') }}">
-					</div>
-					<div class="progress-screen">
-						<div class="indeterminate"></div>
-					</div>
-				</div>
+				<div class="loading-spinner" style=""><div class="loading-spinner-box"><div class="cube"><div class="side"></div><div class="side"></div><div class="side"></div><div class="side"></div><div class="side"></div><div class="side"></div></div><div class="loading-spinner-ment">
+					<p class="mt-5">Đang tải dữ liệu...</p></div></div></div>
 			</div>
 		@endif
 		

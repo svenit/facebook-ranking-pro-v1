@@ -9,7 +9,7 @@
         <div class="padding-x">
             @include('user.theme.parameter')
             @include('user.profile.base')
-            <div class="mx-2 card vip-bordered">
+            <div style="padding:20px" class="card vip-bordered">
                 <div style="font-size:12px;padding:4px 10px" class="bg bg-dark">
                     Bấm vào <button class="btn btn-dark"><i class="fas fa-arrow-up"></i></button>
                     để chọn chỉ số bạn muốn tăng.
@@ -18,10 +18,10 @@
                     Điểm : <strong>@{{ numberFormat(data.stats.available) }}</strong>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6 col-md-12 col-sm-12">
+                    <div class="col-lg-5 col-md-12 col-sm-12">
                         <div id="stats-infor"></div>
                     </div>
-                    <div class="col-lg-6 col-md-12 col-sm-12">
+                    <div style="padding:20px 50px" class="ultra-bordered card col-lg-7 col-md-12 col-sm-12">
                         <p style="margin-top:15px" class="text-gold"><strong>CHỈ SỐ THUỘC TÍNH</strong></p>
                         <div class="row">
                             <div class="col-6 d-flex mt-2">
@@ -83,13 +83,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div style="margin-left:20px" class="col-12">
-                        <p style="margin-top:15px" class="text-muted"><strong>TÔI CÓ THỂ KIẾM ĐIỂM CHỈ SỐ Ở ĐÂU ?</strong></p>
-                        <li class="mb-2 text-muted">Mỗi lần lên 1 Level bạn sẽ nhận được 5 điểm chỉ số</li>
-                        <li class="mb-2 text-muted">Hoàn thành nhiệm vụ mỗi ngày</li>
-                        <li class="mb-2 text-muted">Tiến vào Dungeon</li>
-                        <li class="mb-2 text-muted">Tham gia sự kiện</li>
                     </div>
                 </div>
             </div>

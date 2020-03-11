@@ -42,7 +42,7 @@ class StatController extends Controller
                 'stats' => $stats,
                 'stat_points' =>  DB::raw("stat_points - {$request->point}")
             ]);
-
+            $this->updatePower();
             return response()->json([
                 'code' => 200,
                 'status' => 'success',

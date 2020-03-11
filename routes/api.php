@@ -63,6 +63,7 @@ Route::group(['prefix' => 'v1','namespace' => 'Api','middleware' => ['cors','aut
         });
         Route::group(['prefix' => 'gem'], function () {
             Route::get('/','GemController');
+            Route::post('remove','GemController@remove');
         });
     });
 });

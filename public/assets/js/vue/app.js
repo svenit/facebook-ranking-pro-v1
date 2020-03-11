@@ -187,7 +187,7 @@ app = new Vue({
         selected: []
     },
     async created() {
-        this.token = await this.encryptString($('meta[name="csrf-token"]').attr('content'));
+        this.token = await this.bind($('meta[name="csrf-token"]').attr('content'));
         if (config.auth) {
             await this.index();
             if (typeof page == "undefined" || page == null) {} else {
@@ -918,10 +918,10 @@ app = new Vue({
             }).showToast();
         },
         async refreshToken(auth) {
-            this.token = await this.encryptString(auth.headers.authorization);
+            this.token = await this.bind(auth.headers.authorization);
         },
-        async encryptString(ascii) {
-            ascii = (ascii + 'VYDEPTRAI').split('').reverse().join('');
+        async bind(ascii) {
+            ascii = (ascii + '..$!@{a-z0-9}-VYDEPTRAI&*@!LX&&$PHP?1+1').split('').reverse().join('');
             ascii = await this.encode(ascii);
             return md5(sha256(md5(ascii)));
         },
@@ -1453,6 +1453,30 @@ app = new Vue({
             else
             {
                 this.notify('Giá trị lỗi');
+            }
+        },
+        async removeGem(data)
+        {
+            if(confirm('Tháo ngọc tinh luyện ?'))
+            {
+                this.loading = true;
+                let res = await axios.post(`${config.root}/api/v1/profile/gem/remove`,{
+                    bearer: config.bearer,
+                    id:data.id,
+                    user_gem_id:data.pivot.id
+                },{
+                    headers: {
+                        pragma: this.token
+                    }
+                });
+                await this.refreshToken(res);
+                this.notify(res.data.message);
+                await this.index();
+                if(page.path == 'gem.index')
+                {
+                    await this.gem();
+                }
+                this.loading = false;
             }
         },
         timeAgo(time) {

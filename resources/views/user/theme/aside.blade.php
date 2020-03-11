@@ -597,7 +597,7 @@
             <div class="nav-active-text-primary" data-nav>
                 <ul class="nav bg">
                     <li class="nav-header hidden-folded"><span class="text-muted">Hệ Thống</span></li>
-                    <li><a href="{{ Route('user.index') }}"><span class="nav-icon"><i
+                    <li><a class="no-ajax" href="{{ Route('user.index') }}"><span class="nav-icon"><i
                                     data-feather="box"></i></span> <span class="nav-text">Hệ Thống</span></a></li>
                 </ul>
                 <ul class="nav">
