@@ -40,7 +40,6 @@ class CreateUsersTable extends Migration
             $table->bigInteger('armor_intelligent')->default(0);
             $table->bigInteger('full_power')->default(0);
             $table->integer('pvp_points')->default(0);
-            $table->tinyInteger('isVip')->default(0);
             $table->tinyInteger('isAdmin')->default(0);
             $table->string('lat')->nullable();
             $table->string('lng')->nullable();

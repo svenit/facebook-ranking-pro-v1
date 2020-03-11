@@ -10,7 +10,6 @@ class GemController extends Controller
 {
     public function index()
     {
-        $gems = Auth::user()->gems;
-        return view('user.profile.gem', compact('gems'));
+        return view('user.profile.gem');
     }
 }

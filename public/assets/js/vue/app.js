@@ -40,7 +40,8 @@ app = new Vue({
                     comments: 0
                 },
                 facebook_id: "0",
-                active: ""
+                active: "",
+                pvp_points:0
             },
             stats:{
                 data:{},
@@ -177,6 +178,7 @@ app = new Vue({
             block: true
         },
         inventory: {},
+        gears:[],
         pets: [],
         skills: [],
         items: [],
@@ -225,6 +227,10 @@ app = new Vue({
                         await this.item();
                         break;
                     case 'gem.index':
+                        await this.gem();
+                        break;
+                    case 'oven.gem':
+                        await this.inventoryAvailable();
                         await this.gem();
                         break;
                 }
@@ -1110,6 +1116,21 @@ app = new Vue({
             });
             await this.refreshToken(res);
             this.inventory = res.data;
+            this.loading = false;
+        },
+        async inventoryAvailable()
+        {
+            this.loading = true;
+            let res = await axios.get(`${config.root}/api/v1/profile/inventory/available`, {
+                params: {
+                    bearer: config.bearer,
+                },
+                headers: {
+                    pragma: this.token
+                }
+            });
+            await this.refreshToken(res);
+            this.gears = res.data;
             this.loading = false;
         },
         async deleteEquipment(data) {

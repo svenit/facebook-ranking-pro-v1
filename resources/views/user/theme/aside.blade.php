@@ -15,7 +15,8 @@
             </div>
             <div class="modal-body">
                 <div class="p-4 text-center">
-                    <div style="margin:0px 10px 35px 0px" class="character-sprites hoverable {{ Auth::user()->isVip == 1 ? 'vip-2' : '' }}">
+                    <span class="pixel-font text-gold">{{ Auth::user()->config['rank'] }} RANK</span>
+                    <div style="margin:0px 10px 35px 0px" class="character-sprites hoverable">
                         <span v-if="data.pet" :class="`Mount_Body_${data.pet.class_tag}`"></span>
                         <span style="z-index:2" class="skin_f5a76e"></span>
                         <span style="z-index:2" class="broad_shirt_black"></span>
@@ -653,7 +654,7 @@
                                 <li><a href="#" class=""><span class="nav-text">Tinh Luyện</span></a></li>
                             </ul>
                         </li>
-                        <li class="{{ Request::is('explore/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="zap"></i></span> <span
+                        <li class="{{ Request::is('explore/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="map"></i></span> <span
                             class="nav-text">Khám Phá</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="#" class=""><span class="nav-text">Dungeon</span></a></li>
@@ -685,7 +686,10 @@
                             </ul>
                         </li>
                         <li><a href="{{ Route('user.giftcode.index') }}" class=""><span class="nav-icon"><i data-feather="gift"></i></span> <span
-                            class="nav-text">Gift Code</span></a>
+                            class="nav-text">Quà Tặng</span></a>
+                        </li>
+                        <li><a href="{{ Route('user.giftcode.index') }}" class=""><span class="nav-icon"><i data-feather="dollar-sign"></i></span> <span
+                            class="nav-text">Donate</span></a>
                         </li>
                     @endif
                     @if(Auth::check() && Auth::user()->isAdmin)

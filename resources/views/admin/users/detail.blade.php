@@ -9,7 +9,7 @@
             <div class="padding-x">
                 <div class="row row-sm sr vip-bordered">
                     <div class="col-2">
-                        <div style="margin:0px 10px 35px 0px;padding:20px" class="character-sprites hoverable {{ $detail->isVip == 1 ? 'vip-2' : '' }}">
+                        <div style="margin:0px 10px 35px 0px;padding:20px" class="character-sprites hoverable">
                             <span class="{{ $detail->using_pet ? "Mount_Body_".$detail->using_pet->class_tag : '' }}"></span>
                             <span class="hair_flower_3"></span>
                             <span class="chair_none"></span>
@@ -335,13 +335,6 @@
                                         <div class="form-group col-6">
                                             <label class="text-muted" for="exampleInputEmail1">Điểm PVP</label>
                                             <input type="number" class="form-control" value="{{ $detail->pvp_points }}" name="pvp_points" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
-                                        </div>
-                                        <div class="form-group col-6">
-                                            <label class="text-muted" for="exampleInputEmail1">VIP</label>
-                                            <select class="chosen form-control form-control-sm" name="isVip">
-                                                <option {{ $detail->isVip == 0 ? 'selected' : '' }} value="0">Không</option>
-                                                <option {{ $detail->isVip == 1 ? 'selected' : '' }} value="1">Có</option>
-                                            </select>
                                         </div>
                                         <div class="form-group col-6">
                                             <label class="text-muted" for="exampleInputEmail1">Admin</label>

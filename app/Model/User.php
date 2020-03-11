@@ -21,8 +21,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'user_id','provider_id','character_id','posts','reactions','comments','coins',
-        'income_coins','exp','isVip','isAdmin',
-        'name', 'email', 'password','lng','lat','status','stats','stat_points'
+        'income_coins','exp','isAdmin','config',
+        'name', 'email', 'password','location','status','stats','stat_points'
     ];
 
     /**
@@ -41,7 +41,9 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'stats' => 'array'
+        'stats' => 'array',
+        'location' => 'array',
+        'config' => 'array'
     ];
 
     public function scopeIsAdmin($query)

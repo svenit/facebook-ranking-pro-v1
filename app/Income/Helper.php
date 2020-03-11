@@ -100,22 +100,20 @@ class Helper
     public function rankCoin() : int
     {
         $userCompare = $this->coins();
-        User::where('character_id','!=',0)->chunkById(100,function($users) use($userCompare){
-            foreach($users as $user)
-            {
+        User::where('character_id','!=',0)->chunkById(2000,function($users) use($userCompare){
+            $users->each(function($user) use($userCompare) {
                 $userCompare < $this->coinsCustom($user->coins,$user->income_coins) ? $this->rankCoin++ : $this->rankCoin; 
-            }
+            });
         });
         return $this->rankCoin;
     }
     public function rankPower()
     {
         $userCompare = $this->user()->full_power;
-        User::where('character_id','!=',0)->whereNotNull('provider_id')->chunkById(1000,function($users) use($userCompare){
-            foreach($users as $user)
-            {
-                $userCompare < $user->full_power ? $this->rankPower++ : $this->rankPower; 
-            }
+        User::where('character_id','!=',0)->whereNotNull('provider_id')->chunkById(2000,function($users) use($userCompare){
+            $users->each(function($user) use ($userCompare){
+                $userCompare < $user->full_power ? $this->rankPower++ : $this->rankPower;
+            });
         });
         return $this->rankPower;
     }

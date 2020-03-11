@@ -8,17 +8,17 @@
                         <div class="card vip-bordered" style="padding-top:50px;">
                             <h2 data-title="tooltip" title="Click để xem thông số" class="ribbon"> <button @click="index()" style="background:transparent;border:none" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body">{{ Auth::user()->name }}</button></h2>
                             <div class="card-body">
-                                <div class="row row-sm">
-                                    <div class="col-sm-6 col-md-6 col-lg-3">
+                                <div class="row row-sm" style="margin:0 auto">
+                                    <div class="my-2 col-sm-6 col-md-6 col-lg-2">
                                         <div class="d-flex align-items-center text-hover-success">
                                             <div class="text-center px-4 flex">
-                                                <small class="text-gold">Xếp Hạng LC</small>
+                                                <small class="text-gold">TOP</small>
                                                 <div class="text-gold-2 mt-2"><i class="fas fa-trophy"></i>
                                                     @{{ numberFormatDetail(data.rank.power) }}</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6 col-md-6 col-lg-3">
+                                    <div class="my-2 col-sm-6 col-md-6 col-lg-2">
                                         <div class="d-flex align-items-center text-hover-warning">
                                             <div class="text-center px-4 flex">
                                                 <small class="text-gold">Lực Chiến</small>
@@ -27,7 +27,17 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6 col-md-6 col-lg-3">
+                                    <div class="my-2 col-sm-6 col-md-6 col-lg-2">
+                                        <div class="d-flex align-items-center text-hover-success">
+                                            <div class="text-center px-4 flex">
+                                                <small class="text-gold">Xếp Hạng</small>
+                                                <div class="text-gold-2 mt-2">
+                                                    {{ Auth::user()->config['rank'] }} Rank
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="my-2 col-sm-6 col-md-6 col-lg-2">
                                         <div class="d-flex align-items-center text-hover-warning">
                                             <div class="text-center px-4 flex">
                                                 <small class="text-gold">Vàng</small>
@@ -36,12 +46,21 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6 col-md-6 col-lg-3">
+                                    <div class="my-2 col-sm-6 col-md-6 col-lg-2">
                                         <div class="d-flex align-items-center text-hover-warning">
                                             <div class="text-center px-4 flex">
                                                 <small class="text-gold">Kim Cương</small>
                                                 <div data-title="tooltip" :title="numberFormatDetail(data.infor.gold)" class="text-gold-2 mt-2"><i class="fas fa-gem"></i>
                                                     @{{ numberFormat(data.infor.gold) }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="my-2 col-sm-6 col-md-6 col-lg-2">
+                                        <div class="d-flex align-items-center text-hover-warning">
+                                            <div class="text-center px-4 flex">
+                                                <small class="text-gold">Điểm PVP</small>
+                                                <div data-title="tooltip" :title="numberFormatDetail(data.infor.pvp_points)" class="text-gold-2 mt-2"><i class="fas fa-khanda"></i>
+                                                    @{{ numberFormat(data.infor.pvp_points) }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -54,7 +73,7 @@
         </div>
     </div>
 </div>
-<div @click="index()"  data-title="tooltip" title="Click để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px" class="character-sprites hoverable {{ Auth::user()->isVip == 1 ? 'vip-2' : '' }}">
+<div @click="index()"  data-title="tooltip" title="Click để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px" class="character-sprites hoverable">
     <span v-if="data.pet" :class="`Mount_Body_${data.pet.class_tag}`"></span>
     <span style="z-index:2" class="skin_f5a76e"></span>
     <span style="z-index:2" class="broad_shirt_black"></span>

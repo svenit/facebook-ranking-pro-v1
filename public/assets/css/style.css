@@ -1,3 +1,19 @@
+
+@font-face {
+    font-family: 'pixel';
+    src: url("../assets/pixel/font.woff2") format("woff2");
+    src: url("../assets/pixel/font.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+*{
+    cursor: url(../assets/images/cursor.png), auto;
+}
+
+.pixel-font
+{
+    font-family: 'pixel' !important;
+}
 .vip-bordered {
     position: relative;
     margin: 0 auto;
@@ -140,9 +156,7 @@ img:hover {
     color: #9b44bf;
 }
 
-.hoverable:hover {
-    cursor: pointer;
-}
+
 
 .gear-description {
     font-size: 11px;

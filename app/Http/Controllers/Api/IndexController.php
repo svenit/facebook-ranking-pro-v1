@@ -38,7 +38,7 @@ class IndexController extends Controller
                     ],
                     'facebook_id' => $findUser->user_id,
                     'active' => isset($findUser->provider_id) ? true : false,
-                    'vip' => $findUser->isVip == 1 ? true : false,
+                    'pvp_points' => $helper->user()->pvp_points
                 ],
                 'rank' => [
                     'power' => $helper->rankPower()

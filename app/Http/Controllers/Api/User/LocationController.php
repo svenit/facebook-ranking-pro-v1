@@ -23,8 +23,7 @@ class LocationController extends Controller
         else
         {
             User::findOrFail(Auth::id())->update([
-                'lat' => $request->lat,
-                'lng' => $request->lng
+                'location' => $request->only(['lat', 'lng'])
             ]);
         }
     }

@@ -13,7 +13,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="{{ asset('css/app.min.css') }}">
 	<link href="{{ asset('cdn/css/all.min.css') }}" rel="stylesheet">
-	<link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+	{{-- <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" /> --}}
 	<meta name="csrf-token" content="{{ csrf_token() }}"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
@@ -69,7 +69,7 @@
 			</div>
 			<div id="footer" style="margin-top:0px" class="page-footer">
 				<div class="d-flex p-3"><span class="text-sm text-muted flex">&copy; Copyright {{ date('Y') }} Coded by <a href="https://facebook.com/sven307">Sven</a></span>
-					<div class="text-sm text-muted">Version 1.0.0</div>
+					<div style="font-family: pixel !important" class="text-sm text-muted">Version 1.0.0</div>
 				</div>
 			</div>
 		</div>

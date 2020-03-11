@@ -37,6 +37,7 @@ Route::group(['prefix' => 'v1','namespace' => 'Api','middleware' => ['cors','aut
     Route::group(['prefix' => 'profile','namespace' => 'Profile'], function () {
         Route::group(['prefix' => 'inventory'], function () {
             Route::get('/','InventoryController');
+            Route::get('available','InventoryController@available');
             Route::post('equipment','InventoryController@equipment');
             Route::post('delete','InventoryController@delete');
             Route::post('remove','InventoryController@removeEquipment');

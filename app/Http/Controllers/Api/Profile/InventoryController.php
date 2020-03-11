@@ -36,6 +36,10 @@ class InventoryController extends Controller
         }
         return response()->json($data,200); 
     }
+    public function available()
+    {
+        return response()->json(Auth::user()->gears->where('pivot.status',0)->load('cates','character'));
+    }
     public function delete(Request $request)
     {
         $find = UserGear::where([['user_id',Auth::id()],['id',$request->id],['gear_id',$request->gear_id]]);

@@ -22,6 +22,7 @@ class PetController extends Controller
     public function riding(Request $request)
     {
         $validate = Validator::make($request->all(),[
+            'id' => 'required|exists:user_pets,id',
             'pet_id' => 'required|numeric|exists:pets,id'
         ]);
         if($validate->fails())
@@ -34,10 +35,11 @@ class PetController extends Controller
         }
         else
         { 
-            $findPet = UserPet::where([['user_id',Auth::id()],['id',$request->id],['pet_id',$request->pet_id]]);
-            if(isset($findPet) && $findPet->first()->status == 0)
+            $findPet = UserPet::where([['user_id',Auth::id()],['id',$request->id],['pet_id',$request->pet_id],['status', 0]]);
+            if($findPet->exists())
             {
-                if($findPet->first()->load('pets')->pets->level_required <= Auth::user()->level())
+                $pet = $findPet->first()->load('pets')->pets;
+                if($pet->level_required <= Auth::user()->level())
                 {
                     UserPet::where([['user_id',Auth::id()],['status',1]])->update([
                         'status' => 0
@@ -51,7 +53,7 @@ class PetController extends Controller
                         $response = [
                             'code' => 200,
                             'status' => 'success',
-                            'message' => "Đã sử dụng thú cưỡi ".$findPet->first()->load('pets')->pets->name." thành công !"
+                            'message' => "Đã sử dụng thú cưỡi ".$pet->name." thành công !"
                         ];
                     }
                     else
@@ -122,7 +124,7 @@ class PetController extends Controller
     public function dropPet(Request $request)
     {
         $findPet = UserPet::where([['user_id',Auth::id()],['id',$request->id],['pet_id',$request->pet_id]]);
-        if(isset($findPet))
+        if($findPet->exists())
         {
             $dropPet = $findPet->delete();
             if(isset($dropPet))
@@ -131,7 +133,7 @@ class PetController extends Controller
                 $response = [
                     'code' => 200,
                     'status' => 'success',
-                    'message' => "Thú cưỡi đã về với tự nhiên, cảm ơn tấm lòng tốt bụng của bạn"
+                    'message' => "Bạn đã thả thú cưỡi về với tự nhiên"
                 ];
             }
             else
