@@ -117,4 +117,9 @@
         Swal.fire('', "{{ session('message') }}", "{{ session('status') }}");
     </script>
     @endif
+    <script>
+        const page = {
+            path:'home'
+        }
+    </script>
 @endpush

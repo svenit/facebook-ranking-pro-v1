@@ -608,7 +608,7 @@
                             class="nav-text">Nhân Vật</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('user.profile.item.index') }}" class=""><span class="nav-text">Vật Phẩm</span></a></li>
-                                <li><a href="{{ Route('user.profile.gem.index') }}" class=""><span class="nav-text">Ngọc Tinh Luyện</span></a></li>
+                                <li><a href="{{ Route('user.profile.gem.index') }}" class=""><span class="nav-text">Ngọc Bổ Trợ</span></a></li>
                                 <li><a href="{{ Route('user.profile.inventory.index') }}" class=""><span class="nav-text">Trang Bị</span></a></li>
                                 <li><a href="{{ Route('user.profile.pet.index') }}" class=""><span class="nav-text">Thú Cưỡi</span></a></li>
                                 <li><a href="{{ Route('user.profile.skill.index') }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
@@ -640,7 +640,7 @@
                             class="nav-text">Cửa Hàng</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('user.shop.index',['cate' => 'items']) }}" class=""><span class="nav-text">Vật Phẩm</span></a></li>
-                                <li><a href="{{ Route('user.shop.index',['cate' => 'gems']) }}" class=""><span class="nav-text">Ngọc Tinh Luyện</span></a></li>
+                                <li><a href="{{ Route('user.shop.index',['cate' => 'gems']) }}" class=""><span class="nav-text">Ngọc Bổ Trợ</span></a></li>
                                 @foreach($menuShop as $menu)
                                     <li><a href="{{ Route('user.shop.index',['cate' => str_slug($menu->name)]) }}" class=""><span class="nav-text">{{ $menu->name }}</span></a></li>
                                 @endforeach
@@ -648,10 +648,10 @@
                                 <li><a href="{{ Route('user.shop.index',['cate' => 'skills']) }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
                             </ul>
                         </li>
-                        <li class="{{ Request::is('forge/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="git-branch"></i></span> <span
-                            class="nav-text">Lò Rèn</span> <span class="nav-caret"></span></a>
+                        <li class="{{ Request::is('oven/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="git-branch"></i></span> <span
+                            class="nav-text">Tiệm Rèn</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
-                                <li><a href="#" class=""><span class="nav-text">Tinh Luyện</span></a></li>
+                                <li><a href="{{ Route('user.oven.gem') }}" class=""><span class="nav-text">Khảm Ngọc</span></a></li>
                             </ul>
                         </li>
                         <li class="{{ Request::is('explore/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="map"></i></span> <span

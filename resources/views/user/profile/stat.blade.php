@@ -96,4 +96,9 @@
             Swal.fire('',"{{ $errors->first() }}",'error');
         </script>
     @endif
+    <script>
+        const page = {
+            path:'profile.stat'
+        };
+    </script>
 @endpush

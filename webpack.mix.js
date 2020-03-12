@@ -13,10 +13,10 @@ const mix = require('laravel-mix');
 mix.scripts([
     'public/assets/js/plugins/socket/socket.io.js',
     'public/assets/js/plugins/axios/axios.min.js',
-    'public/assets/js/plugins/firebase/firebase.js',
     'public/assets/js/plugins/moment/moment.js',
-    'public/assets/js/plugins/speed/lite.min.js',
     'public/assets/js/plugins/speed/refresh.min.js',
+    'public/assets/js/plugins/firebase/firebase.js',
+    'public/assets/js/plugins/speed/lite.min.js',
     'public/assets/js/plugins/speed/trasher.min.js',
     'public/assets/js/vue/vue.js',
     'public/assets/js/site.min.js',

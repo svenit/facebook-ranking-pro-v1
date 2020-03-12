@@ -152,7 +152,7 @@ class User extends Authenticatable
         $power = [];
         foreach($properties as $key => $property)
         {
-            $power[$key] = (collect($this->usingPets())->sum($key) + collect($this->usingGears())->sum($key) + collect($this->usingGems())->sum($key) + ($this->stats()[$key] ?? 0) + ($this[$key])) * $property;
+            $power[$key] = ((collect($this->usingPets())->sum($key) + collect($this->usingGears())->sum($key) + collect($this->usingGems())->sum($key) + ($this->stats()[$key] ?? 0) + ($this[$key])) * $property) * $this->relife();
         }
         return collect($power);
     }
@@ -186,10 +186,15 @@ class User extends Authenticatable
         ];
     }
 
+    public function relife()
+    {
+        return isset($this->config['relife']) && $this->config['relife'] ? 2 : 1;
+    }
+
     public function availableStats()
     {
         $statPerLevel = 5;
-        return $allStat = ($this->level() * $statPerLevel) + $this->stat_points;
+        return $allStats = ($this->level() * $statPerLevel) + $this->stat_points + $this->relife();
     }
 
     public function usedStats()

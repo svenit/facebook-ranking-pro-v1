@@ -966,3 +966,19 @@ div.table-responsive>div.dataTables_wrapper>div.row>div[class^="col-"]:last-chil
         transform: translatez(.5em)
     }
 }
+.btn-pixel {
+    border:0px;
+    display: inline-block;
+    width: 106px;
+    height: 76px;
+    padding-right: 20px;
+    line-height: normal;
+    white-space: pre-line;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    color: #fff;
+    background: url(https://darktown.itam.store/_nuxt/img/90251bf.png) no-repeat 50%;
+    background-size: contain;
+    text-shadow: 0 0 4px #0a0167;
+}

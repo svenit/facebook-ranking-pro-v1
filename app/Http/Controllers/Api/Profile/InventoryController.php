@@ -19,7 +19,7 @@ class InventoryController extends Controller
     }
     public function __invoke()
     {
-        $inventories = User::find(Auth::id())->load('gears');
+        $inventories = Auth::user()->load('gears');
         $cates = CateGear::all();
         $data = [];
         foreach($inventories->gears as $key => $gear)
@@ -28,9 +28,8 @@ class InventoryController extends Controller
             {
                 if($gear->cate_gear_id == $cate->id)
                 {
-                    $gear->character = $gear->character;
-                    $gear->cates = $gear->cates;
-                    $data[Str::slug($cate->name)][$key] = $gear;
+                    $gear->gems->load(['gems', 'gemItem']);
+                    $data[Str::slug($cate->name)][$key] = $gear->load('cates','character');
                 }
             }
         }

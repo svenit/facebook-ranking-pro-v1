@@ -95,7 +95,7 @@ Route::group(['middleware' => ['maintaince','redirect.action']], function () {
                 });                
             });
             Route::group(['prefix' => 'oven','as' => 'oven.'], function () {
-                Route::view('gem','user.oven.gem');
+                Route::view('gem','user.oven.gem')->name('gem');
             });
             Route::group(['prefix' => 'gift-code','as' => 'giftcode.','namespace' => 'GiftCode'], function () {
                 Route::view('/','user.giftcode.index')->name('index');

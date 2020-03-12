@@ -183,6 +183,11 @@ app = new Vue({
         skills: [],
         items: [],
         gems:[],
+        oven:{
+            gem:{},
+            gear:{},
+            action:false
+        },
         /* Admin */
         shop_tag: '',
         rgb: '',
@@ -487,6 +492,7 @@ app = new Vue({
             gear.classList.remove('show');
             gear.style.display = 'nonde';
             document.getElementsByClassName('modal-backdrop')[1].remove();
+            document.getElementsByClassName('modal-backdrop')[0].remove();
         },
         showInforItem(data, permission) {
             this.detailItem = {
@@ -1146,7 +1152,10 @@ app = new Vue({
                     }
                 });
                 await this.refreshToken(res);
-                await this.invetory();
+                if(page.path == 'inventory.index')
+                {
+                    await this.invetory();
+                }
                 this.index();
                 this.notify(res.data.message);
                 this.loading = false;
@@ -1164,7 +1173,14 @@ app = new Vue({
                 }
             });
             await this.refreshToken(res);
-            await this.invetory();
+            if(page.path == 'inventory.index')
+            {
+                await this.invetory();
+            }
+            if(page.path == 'oven.gem')
+            {
+                this.inventoryAvailable();
+            }
             this.index();
             this.notify(res.data.message);
             this.loading = false;
@@ -1182,7 +1198,10 @@ app = new Vue({
             });
             await this.refreshToken(res);
             await this.index();
-            this.invetory();
+            if(page.path == 'inventory.index')
+            {
+                await this.invetory();
+            }
             this.notify(res.data.message);
             this.loading = false;
         },
@@ -1250,32 +1269,30 @@ app = new Vue({
             }
         },
         async buyItem(id, e) {
-            if (confirm('Mua vật phẩm này ?')) {
-                var quantity = prompt('Nhập số lượng cần mua');
-                quantity = parseInt(quantity);
-                if (quantity && typeof quantity == 'number' && quantity > 0 && quantity <= 99999) {
-                    let res = await axios.post(`${config.root}/api/v1/shop/buy-item`, {
-                        bearer: config.bearer,
-                        id: id,
-                        quantity: quantity
-                    }, {
-                        headers: {
-                            pragma: this.token
-                        }
-                    })
-                    await this.refreshToken(res);
-                    if (res.data.code == 200) {
-                        await this.index();
+            var quantity = prompt('Nhập số lượng cần mua');
+            quantity = parseInt(quantity);
+            if (quantity && typeof quantity == 'number' && quantity > 0 && quantity <= 99999) {
+                let res = await axios.post(`${config.root}/api/v1/shop/buy-item`, {
+                    bearer: config.bearer,
+                    id: id,
+                    quantity: quantity
+                }, {
+                    headers: {
+                        pragma: this.token
                     }
-                    this.notify(res.data.message);
-                    if (res.data.code == 200) {
-                        e.target.innerHTML = 'Đã mua';
-                    }
-                } else {
-                    this.notify('Số lượng quá lớn hoặc không hợp lệ');
+                })
+                await this.refreshToken(res);
+                if (res.data.code == 200) {
+                    await this.index();
                 }
-                this.loading = false;
+                this.notify(res.data.message);
+                if (res.data.code == 200) {
+                    e.target.innerHTML = 'Đã mua';
+                }
+            } else {
+                this.notify('Số lượng quá lớn hoặc không hợp lệ');
             }
+            this.loading = false;
         },
         async pet() {
             this.loading = true;
@@ -1393,55 +1410,51 @@ app = new Vue({
             this.loading = false;
         },
         async useItem(data) {
-            if (confirm('Sử dụng vật phẩm này ?')) {
-                var quantity = prompt('Nhập số lượng ');
-                quantity = parseInt(quantity);
-                if (quantity && typeof quantity == 'number' && quantity > 0 && quantity <= 99999) {
-                    this.loading = true;
-                    let res = await axios.post(`${config.root}/api/v1/profile/item/use`, {
-                        bearer: config.bearer,
-                        id: data.pivot.id,
-                        item_id: data.id,
-                        quantity
-                    }, {
-                        headers: {
-                            pragma: this.token
-                        }
-                    });
-                    await this.refreshToken(res);
-                    if (res.data.code == 200) {
-                        await this.index();
-                        this.item();
+            var quantity = prompt('Nhập số lượng ');
+            quantity = parseInt(quantity);
+            if (quantity && typeof quantity == 'number' && quantity > 0 && quantity <= 99999) {
+                this.loading = true;
+                let res = await axios.post(`${config.root}/api/v1/profile/item/use`, {
+                    bearer: config.bearer,
+                    id: data.pivot.id,
+                    item_id: data.id,
+                    quantity
+                }, {
+                    headers: {
+                        pragma: this.token
                     }
-                    this.notify(res.data.message);
-                    this.loading = false;
+                });
+                await this.refreshToken(res);
+                if (res.data.code == 200) {
+                    await this.index();
+                    this.item();
                 }
+                this.notify(res.data.message);
+                this.loading = false;
             }
         },
         async deleteItem(data) {
-            if (confirm('Vứt bỏ vật phẩm này ?')) {
-                var quantity = prompt('Nhập số lượng ');
-                quantity = parseInt(quantity);
-                if (quantity && typeof quantity == 'number' && quantity > 0) {
-                    this.loading = true;
-                    let res = await axios.post(`${config.root}/api/v1/profile/item/delete`, {
-                        bearer: config.bearer,
-                        id: data.pivot.id,
-                        item_id: data.id,
-                        quantity
-                    }, {
-                        headers: {
-                            pragma: this.token
-                        }
-                    });
-                    await this.refreshToken(res);
-                    if (res.data.code == 200) {
-                        await this.index();
-                        this.item();
+            var quantity = prompt('Nhập số lượng ');
+            quantity = parseInt(quantity);
+            if (quantity && typeof quantity == 'number' && quantity > 0) {
+                this.loading = true;
+                let res = await axios.post(`${config.root}/api/v1/profile/item/delete`, {
+                    bearer: config.bearer,
+                    id: data.pivot.id,
+                    item_id: data.id,
+                    quantity
+                }, {
+                    headers: {
+                        pragma: this.token
                     }
-                    this.notify(res.data.message);
-                    this.loading = false;
+                });
+                await this.refreshToken(res);
+                if (res.data.code == 200) {
+                    await this.index();
+                    this.item();
                 }
+                this.notify(res.data.message);
+                this.loading = false;
             }
         },
         async incrementStat(stat)
@@ -1493,11 +1506,79 @@ app = new Vue({
                 await this.refreshToken(res);
                 this.notify(res.data.message);
                 await this.index();
-                if(page.path == 'gem.index')
+                if(page.path == 'gem.index' || page.path == 'oven.gem')
                 {
                     await this.gem();
                 }
+                if(page.path == 'inventory.index')
+                {
+                    await this.invetory();
+                }
                 this.loading = false;
+            }
+        },
+        async buyGem(gem)
+        {
+            var quantity = prompt('Nhập số lượng cần mua');
+            quantity = parseInt(quantity);
+            if (quantity && typeof quantity == 'number' && quantity > 0 && quantity <= 10) {
+                let res = await axios.post(`${config.root}/api/v1/shop/buy-gem`, {
+                    bearer: config.bearer,
+                    id: gem,
+                    quantity: quantity
+                }, {
+                    headers: {
+                        pragma: this.token
+                    }
+                })
+                await this.refreshToken(res);
+                if (res.data.code == 200) {
+                    await this.index();
+                }
+                this.notify(res.data.message);
+                if (res.data.code == 200) {
+                    e.target.innerHTML = 'Đã mua';
+                }
+            } else {
+                this.notify('Số lượng quá lớn hoặc không hợp lệ');
+            }
+            this.loading = false;
+        },
+        async insertGemToGear()
+        {
+            if(this.oven.gear.id && this.oven.gem.id)
+            {
+                if(this.oven.gear.pivot.status == 0 && this.oven.gem.pivot.status == 0)
+                {
+                    this.oven.action = true;
+                    let res = await axios.post(`${config.root}/api/v1/oven/insert-gem-to-gear`,{
+                        bearer: config.bearer,
+                        gear_id:this.oven.gear.id,
+                        user_gear_id:this.oven.gear.pivot.id,
+                        gem_id:this.oven.gem.id
+                    },{
+                        headers: {
+                            pragma: this.token
+                        }
+                    });
+                    await this.refreshToken(res);
+                    this.notify(res.data.message);
+                    if(res.data.code == 200)
+                    {
+                        await this.gem();
+                        this.index();
+                        this.oven.gem = {};
+                    }
+                    this.oven.action = false;
+                }
+                else
+                {
+                    this.notify('Ngọc bổ trợ hoặc trang bị đã được sử dụng');
+                }
+            }
+            else
+            {
+                this.notify('Xin vui lòng chọn trang bị & ngọc bổ trợ');
             }
         },
         timeAgo(time) {

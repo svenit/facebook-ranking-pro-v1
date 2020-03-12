@@ -24,7 +24,7 @@
                                     <button type="button" class="btn btn-secondary active">
                                         {{ number_format($gem->price) }} {{ $gem->price_type == 0 ? 'Vàng' : 'KC' }}
                                     </button> 
-                                    <button @click="buyPet({{ $gem->id }},$event)" style="border-top-left-radius:0px;border-bottom-left-radius:0px" type="button" class="btn btn-secondary">Mua</button>
+                                    <button @click="buyGem({{ $gem->id }},$event)" style="border-top-left-radius:0px;border-bottom-left-radius:0px" type="button" class="btn btn-secondary">Mua</button>
                                 </div>
                             </div>
                         </div>

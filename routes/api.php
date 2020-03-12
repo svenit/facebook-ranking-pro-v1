@@ -33,6 +33,7 @@ Route::group(['prefix' => 'v1','namespace' => 'Api','middleware' => ['cors','aut
         Route::post('buy-skill','ShopController@buySkill');
         Route::post('buy-pet','ShopController@buyPet');
         Route::post('buy-item','ShopController@buyItem');
+        Route::post('buy-gem','ShopController@buyGem');
     });
     Route::group(['prefix' => 'profile','namespace' => 'Profile'], function () {
         Route::group(['prefix' => 'inventory'], function () {
@@ -66,5 +67,8 @@ Route::group(['prefix' => 'v1','namespace' => 'Api','middleware' => ['cors','aut
             Route::get('/','GemController');
             Route::post('remove','GemController@remove');
         });
+    });
+    Route::group(['prefix' => 'oven','namespace' => 'Oven'], function () {
+        Route::post('insert-gem-to-gear','InsertGemToGearController@insert');
     });
 });

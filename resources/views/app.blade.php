@@ -17,9 +17,6 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-	<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-database.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	@stack('css')
 </head>
 <body>
@@ -75,17 +72,25 @@
 		</div>
 	</div>
 </body>
+	<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-database.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.2/dist/sweetalert2.all.min.js"></script>	
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 	<script src="{{ asset('js/vendor.min.js') }}"></script>
 	<script>
 		var socket = io.connect(config.socketHost);
 		socket.on('notify-global',(data) => {
-			Swal.fire('THÔNG BÁO',data.message,'info')
+			Swal.fire(data.title,data.message,data.type)
 		})
 		socket.on('user-count',(data) => {
 			document.getElementById('user-count').innerHTML = data;
 		});
+		@if(Auth::check())
+			socket.on("notify-to-{{ Auth::id() }}",(data) => {
+				Swal.fire(data.title,data.message,data.type)
+			})
+		@endif
 	</script>
 	@stack('js')
 	@if(session('message'))

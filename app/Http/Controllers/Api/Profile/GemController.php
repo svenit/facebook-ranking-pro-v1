@@ -35,7 +35,7 @@ class GemController extends Controller
             return response()->json([
                 'code' => 500,
                 'status' => 'error',
-                'message' => 'Ngọc tinh luyện không tồn tại'
+                'message' => 'Ngọc bổ trợ không tồn tại'
             ]);
         }
         else
@@ -56,7 +56,7 @@ class GemController extends Controller
                     $response = [
                         'code' => 200,
                         'status' => 'success',
-                        'message' => 'Đã tháo ngọc tinh luyện khỏi vũ khí'
+                        'message' => 'Đã tháo ngọc bổ trợ ra khỏi trang bị'
                     ];
                 }
             }
@@ -65,7 +65,7 @@ class GemController extends Controller
                 $response = [
                     'code' => 500,
                     'status' => 'error',
-                    'message' => 'Ngọc tinh luyện không tồn tại'
+                    'message' => 'Ngọc bổ trợ không tồn tại'
                 ];
             }
             return response()->json($response);
