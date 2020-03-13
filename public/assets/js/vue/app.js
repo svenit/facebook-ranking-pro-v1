@@ -195,9 +195,10 @@ app = new Vue({
     },
     async created() {
         this.token = await this.bind($('meta[name="csrf-token"]').attr('content'));
-        if (config.auth) {
+        if(config.auth) 
+        {
             await this.index();
-            if (typeof page == "undefined" || page == null) {} else {
+            if(typeof page == "undefined" || page == null) {} else {
                 switch (page.path) {
                     case 'pvp.list':
                         await this.listFightRoom();

@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>{{ env('APP_NAME') }} - @yield('hero')</title>
+	<title>{{ env('APP_NAME','Solo Leveling') }} - @yield('hero')</title>
 	<meta http-equiv="x-dns-prefetch-control" content="on">
 	<link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
 	<link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
@@ -81,15 +81,15 @@
 	<script>
 		var socket = io.connect(config.socketHost);
 		socket.on('notify-global',(data) => {
-			Swal.fire(data.title,data.message,data.type)
-		})
+			Swal.fire(data.title,data.message,data.type);
+		});
 		socket.on('user-count',(data) => {
 			document.getElementById('user-count').innerHTML = data;
 		});
 		@if(Auth::check())
 			socket.on("notify-to-{{ Auth::id() }}",(data) => {
-				Swal.fire(data.title,data.message,data.type)
-			})
+				Swal.fire(data.title,data.message,data.type);
+			});
 		@endif
 	</script>
 	@stack('js')

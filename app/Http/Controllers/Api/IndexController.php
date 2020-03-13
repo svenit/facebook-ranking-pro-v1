@@ -31,13 +31,6 @@ class IndexController extends Controller
                     'exp' => (int)$helper->user()->exp,
                     'coins' => $helper->coins(),
                     'gold' => $helper->gold(),
-                    'activities' => [
-                        'posts' => (int)$findUser->posts,
-                        'reactions' => (int)$findUser->reactions,
-                        'comments' => (int)$findUser->comments,
-                    ],
-                    'facebook_id' => $findUser->user_id,
-                    'active' => isset($findUser->provider_id) ? true : false,
                     'pvp_points' => $helper->user()->pvp_points
                 ],
                 'rank' => [

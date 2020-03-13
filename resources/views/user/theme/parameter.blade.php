@@ -32,7 +32,7 @@
                                             <div class="text-center px-4 flex">
                                                 <small class="text-gold">Xếp Hạng</small>
                                                 <div class="text-gold-2 mt-2">
-                                                    {{ Auth::user()->config['rank'] }} Rank
+                                                    {{ isset(Auth::user()->config['rank']) ? Auth::user()->config['rank'] : 'ERROR' }} Rank
                                                 </div>
                                             </div>
                                         </div>

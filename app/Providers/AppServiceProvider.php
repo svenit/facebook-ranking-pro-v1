@@ -39,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
         
         if(Schema::hasTable('cate_gears'))
         {
-            View::composer('*', function ($view) 
+            View::composer(['user.shop.base','user.theme.aside'], function ($view) 
             {
                 $cateGears = Cache::rememberForever('menuShop', function () use($view) {
                     return CateGear::all();

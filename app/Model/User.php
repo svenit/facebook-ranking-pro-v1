@@ -201,4 +201,9 @@ class User extends Authenticatable
     {
         return collect(array_values($this->stats()))->sum();
     }
+
+    public function guild()
+    {
+        return $this->hasOne('App\Model\GuildMember', 'member_id', 'id');
+    }
 }

@@ -15,7 +15,7 @@
             </div>
             <div class="modal-body">
                 <div class="p-4 text-center">
-                    <span class="pixel-font text-gold">{{ Auth::user()->config['rank'] }} RANK</span>
+                    <span class="pixel-font text-gold">{{ isset(Auth::user()->config['rank']) ? Auth::user()->config['rank'] : 'ERROR' }} RANK</span>
                     <div style="margin:0px 10px 35px 0px" class="character-sprites hoverable">
                         <span v-if="data.pet" :class="`Mount_Body_${data.pet.class_tag}`"></span>
                         <span style="z-index:2" class="skin_f5a76e"></span>
@@ -665,11 +665,14 @@
                         <li><a href="#" class=""><span class="nav-icon"><i data-feather="users"></i></span> <span
                             class="nav-text">Bang Hội</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
-                                <li><a href="#" class=""><span class="nav-text">Tạo</span></a></li>
-                                <li><a href="#" class=""><span class="nav-text">Đại Sảnh</span></a></li>
-                                <li><a href="#" class=""><span class="nav-text">Thành Viên</span></a></li>
-                                <li><a href="#" class=""><span class="nav-text">Hoạt Động</span></a></li>
-                                <li><a href="#" class=""><span class="nav-text">Thiết Lập</span></a></li>
+                                @if(empty(Auth::user()->guild))
+                                    <li><a href="{{ Route('user.guild.create.form') }}" class=""><span class="nav-text">Tạo</span></a></li>
+                                @else
+                                    <li><a href="{{ Route('user.guild.lobby') }}" class=""><span class="nav-text">Đại Sảnh</span></a></li>
+                                    <li><a href="#" class=""><span class="nav-text">Thành Viên</span></a></li>
+                                    <li><a href="#" class=""><span class="nav-text">Hoạt Động</span></a></li>
+                                    <li><a href="#" class=""><span class="nav-text">Thiết Lập</span></a></li>
+                                @endif
                             </ul>
                         </li>
                         <li class="{{ Request::is('pvp/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
@@ -820,75 +823,8 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         $(document).ready(() => {
-            var options = {
-                chart: {
-                    sparkline: {
-                        enabled: false,
-                    },
-                    height: 250,
-                    type: 'radar',
-                    toolbar:{
-                        show:false
-                    }
-                },
-                yaxis: {
-                    show: false,
-                },
-                dataLabels: {
-                    enabled: true,
-                    background: {
-                        enabled: true,
-                        borderRadius:2,
-                    }
-                },
-                fill: {
-                    type: 'gradient',
-                    gradient: {
-                        shade: 'dark',
-                        type: "horizontal",
-                        shadeIntensity: 0.5,
-                        gradientToColors: undefined, // optional, if not defined - uses the shades of same color in series
-                        inverseColors: true,
-                        opacityFrom: 1,
-                        opacityTo: 0.8,
-                        stops: [0, 50, 100],
-                        colorStops: []
-                    }
-                },
-                theme: {
-                    mode: 'dark', 
-                    palette: 'palette1', 
-                    monochrome: {
-                        enabled: false,
-                        color: '#333',
-                        shadeTo: 'dark',
-                        shadeIntensity: 1
-                    },
-                },
-                series: [{
-                    name: 'Chỉ Số',
-                    data: [
-                        {{ Auth::user()->stats()['strength'] }},
-                        {{ Auth::user()->stats()['intelligent'] }},
-                        {{ Auth::user()->stats()['agility'] }},
-                        {{ Auth::user()->stats()['lucky'] }},
-                        {{ Auth::user()->stats()['armor_strength'] }},
-                        {{ Auth::user()->stats()['armor_intelligent'] }}
-                    ],
-                }],
-                labels: ['Sức Mạnh', 'Trí Tuệ', 'Nhanh Nhẹn', 'May Mắn', 'Thủ Công', 'Thủ Phép','Sinh Lực','Mana']
-            }
-            var chart = new ApexCharts(
-                document.querySelector("#stats"),
-                options
-            );
-            chart.render();
-            var chart = new ApexCharts(
-                document.querySelector("#stats-infor"),
-                options
-            );
-            chart.render();
-        })
+            var options={chart:{sparkline:{enabled:!1},height:250,type:"radar",toolbar:{show:!1}},yaxis:{show:!1},dataLabels:{enabled:!0,background:{enabled:!0,borderRadius:2}},fill:{type:"gradient",gradient:{shade:"dark",type:"horizontal",shadeIntensity:.5,gradientToColors:void 0,inverseColors:!0,opacityFrom:1,opacityTo:.8,stops:[0,50,100],colorStops:[]}},theme:{mode:"dark",palette:"palette1",monochrome:{enabled:!1,color:"#333",shadeTo:"dark",shadeIntensity:1}},series:[{name:"Ch\u1EC9 S\u1ED1",data:[{{ Auth::user()->stats()['strength'] }},{{ Auth::user()->stats()['intelligent'] }},{{ Auth::user()->stats()['agility'] }},{{ Auth::user()->stats()['lucky'] }},{{ Auth::user()->stats()['armor_strength'] }},{{ Auth::user()->stats()['armor_intelligent'] }}]}],labels:["S\u1EE9c M\u1EA1nh","Tr\xED Tu\u1EC7","Nhanh Nh\u1EB9n","May M\u1EAFn","Th\u1EE7 C\xF4ng","Th\u1EE7 Ph\xE9p","Sinh L\u1EF1c","Mana"]},chart=new ApexCharts(document.querySelector("#stats"),options);chart.render();var chart=new ApexCharts(document.querySelector("#stats-infor"),options);chart.render();
+        });
     </script>
     @endauth
     <script src="{{ asset('assets/js/vue/app.js') }}"></script>
