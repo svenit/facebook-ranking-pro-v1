@@ -40,7 +40,7 @@ class GemController extends Controller
         }
         else
         {
-            $userGem = UserGem::where([['user_id', Auth::id()],['gem_id', $request->id],['status', 1]]);
+            $userGem = UserGem::where([['user_id', Auth::id()],['id', $request->user_gem_id],['gem_id', $request->id],['status', 1]]);
             if($userGem->exists())
             {
                 $userGearGem = UserGearGem::where('user_gem_id', $userGem->first()->id);

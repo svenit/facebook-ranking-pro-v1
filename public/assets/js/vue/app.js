@@ -1492,6 +1492,7 @@ app = new Vue({
         },
         async removeGem(data)
         {
+            console.log(data);
             if(confirm('Tháo ngọc tinh luyện ?'))
             {
                 this.loading = true;

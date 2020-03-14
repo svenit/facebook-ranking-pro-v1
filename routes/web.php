@@ -20,6 +20,9 @@ use Illuminate\Support\Facades\Artisan;
 //     Auth::loginUsingId($id);
 //     return redirect()->back();
 // });
+Route::get('hello',function(){
+    return $gears = Auth::user()->usingGems();
+});
 Route::get('broadcast',function(){
     event(new BroadcastToEveryone('Hello'));
     return 'Done';

@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Model\User;
 use App\Income\Helper;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Cache;
+use Illuminate\Support\Facades\Cache;
 
 class IndexController extends Controller
 {
@@ -22,37 +21,39 @@ class IndexController extends Controller
         if(isset($findUser))
         {
             $helper = new Helper($findUser->id);
-            return response()->json([
-                'infor' => [
-                    'name' => $helper->user()->name,
-                    'character' => [
-                        'name' => $helper->character()->name,
+            return Cache::rememberForever("user-{$findUser->id}", function () use($helper, $findUser){
+                return response()->json([
+                    'infor' => [
+                        'name' => $helper->user()->name,
+                        'character' => [
+                            'name' => $helper->character()->name,
+                        ],
+                        'exp' => (int)$helper->user()->exp,
+                        'coins' => $helper->coins(),
+                        'gold' => $helper->gold(),
+                        'pvp_points' => $helper->user()->pvp_points
                     ],
-                    'exp' => (int)$helper->user()->exp,
-                    'coins' => $helper->coins(),
-                    'gold' => $helper->gold(),
-                    'pvp_points' => $helper->user()->pvp_points
-                ],
-                'rank' => [
-                    'power' => $helper->rankPower()
-                ],
-                'stats' => Auth::id() == $findUser->id ? $helper->stats() : [],
-                'level' => $helper->nextLevel(),
-                'power' => [
-                    'total' => $helper->fullPower($findUser->id),
-                    'hp' => $helper->power()['health_points'],
-                    'strength' => $helper->power()['strength'],
-                    'agility' => $helper->power()['agility'],
-                    'intelligent' => $helper->power()['intelligent'],
-                    'lucky' => $helper->power()['lucky'],
-                    'energy' => $helper->character()->default_energy,
-                    'armor_strength' => $helper->power()['armor_strength'],
-                    'armor_intelligent' => $helper->power()['armor_intelligent'],
-                ],
-                'pet' => $helper->usingPets()->first(),
-                'gears' => $helper->usingGears(),
-                'skills' => $helper->usingSkills()
-            ],200);
+                    'rank' => [
+                        'power' => $helper->rankPower()
+                    ],
+                    'stats' => Auth::id() == $findUser->id ? $helper->stats() : [],
+                    'level' => $helper->nextLevel(),
+                    'power' => [
+                        'total' => $helper->fullPower($findUser->id),
+                        'hp' => $helper->power()['health_points'],
+                        'strength' => $helper->power()['strength'],
+                        'agility' => $helper->power()['agility'],
+                        'intelligent' => $helper->power()['intelligent'],
+                        'lucky' => $helper->power()['lucky'],
+                        'energy' => $helper->character()->default_energy,
+                        'armor_strength' => $helper->power()['armor_strength'],
+                        'armor_intelligent' => $helper->power()['armor_intelligent'],
+                    ],
+                    'pet' => $helper->usingPets()->first(),
+                    'gears' => $helper->usingGears(),
+                    'skills' => $helper->usingSkills()
+                ],200);                
+            });
         }
         return response()->json([
             'keyword' => $param,

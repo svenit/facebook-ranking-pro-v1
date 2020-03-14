@@ -79,7 +79,7 @@
         class="text-gold" style="font-weight:inherit;font-size:11px">Vượt Lên Từ Nghịch Cảnh
     </div>
 @endif
-<div @click="index()"  style="margin-left:10px" data-title="tooltip" title="Click để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px" class="character-sprites hoverable">
+<div @click="index()"  style="margin:10px 0px 20px 10px" data-title="tooltip" title="Click để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px" class="character-sprites hoverable">
     <span v-if="data.pet" :class="`Mount_Body_${data.pet.class_tag}`"></span>
     <span style="z-index:2" class="skin_f5a76e"></span>
     <span style="z-index:2" class="broad_shirt_black"></span>

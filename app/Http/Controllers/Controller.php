@@ -75,8 +75,15 @@ class Controller extends BaseController
     }
     public function updatePower()
     {
-        $helper = new Helper(Auth::id());
+        $userId = Auth::id();
+        $helper = new Helper($userId);
         $helper->updateFullPower();
+        $this->clearMyCache();
+    }
+    public function clearMyCache()
+    {
+        $userId = Auth::id();
+        Cache::forget("user-{$userId}");
     }
     public function removeCache($key)
     {

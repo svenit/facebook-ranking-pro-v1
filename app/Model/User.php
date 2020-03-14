@@ -129,11 +129,17 @@ class User extends Authenticatable
 
     public function usingGems()
     {
-        return $this->gems->filter(function($item, $key){
-            return $item->pivot->status == 1;
-        });
+        $data = [];
+        $gears = collect($this->usingGears());
+        foreach($gears as $gear)
+        {
+            foreach($gear->gems as $gem)
+            {
+                $data[] = $gem->gems->gem;
+            }
+        }
+        return $data;
     }
-
     public function power()
     {
         return $this->getPower();
@@ -152,14 +158,14 @@ class User extends Authenticatable
         $power = [];
         foreach($properties as $key => $property)
         {
-            $power[$key] = ((collect($this->usingPets())->sum($key) + collect($this->usingGears())->sum($key) + collect($this->usingGems())->sum($key) + ($this->stats()[$key] ?? 0) + ($this[$key])) * $property) * $this->relife();
+            $power[$key] = (((collect($this->usingPets())->sum($key) + collect($this->usingGears())->sum($key) + collect($this->usingGems())->sum($key) + ($this->stats()[$key] ?? 0) + ($this[$key])) + $property) * $this->relife());
         }
         return collect($power);
     }
     public function fullPower($id)
     {
         $helper = new Helper($id);
-        return $this->power()->sum() * $helper->level();
+        return $this->power()->sum() + $helper->level();
     }
     
     public function level()
