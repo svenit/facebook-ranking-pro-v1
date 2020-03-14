@@ -37,6 +37,6 @@ class PvPExitMatch implements ShouldBroadcast
     }
     public function broadcastOn()
     {
-        return 'channel-pvp-exit-match';
+        return 'channel';
     }
 }

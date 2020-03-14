@@ -14,9 +14,9 @@
                 <button class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="p-4 text-center">
-                    <span class="pixel-font text-gold">{{ isset(Auth::user()->config['rank']) ? Auth::user()->config['rank'] : 'ERROR' }} RANK</span>
-                    <div style="margin:0px 10px 35px 0px" class="character-sprites hoverable">
+                <div class="p-4">
+                    <p class="pixel-font text-gold" style="text-align:center !important;">{{ isset(Auth::user()->config['rank']) ? Auth::user()->config['rank'] : 'ERROR' }} RANK</p>
+                    <div style="margin:0 auto;position:relative;left:-15px" class="character-sprites hoverable">
                         <span v-if="data.pet" :class="`Mount_Body_${data.pet.class_tag}`"></span>
                         <span style="z-index:2" class="skin_f5a76e"></span>
                         <span style="z-index:2" class="broad_shirt_black"></span>
@@ -29,7 +29,7 @@
                         <span v-if="data.pet" style="z-index:50" :class="`Mount_Head_${data.pet.class_tag}`"></span>
                     </div>
                     <div style="margin-bottom:60px" v-if="data.pet"></div>
-                    <p style="margin-top:20px" class="text-gold">@{{ data.infor.name }} ( @{{ data.infor.character.name }} )</p>
+                    <p style="margin-top:20px" class="text-gold text-center">@{{ data.infor.name }} ( @{{ data.infor.character.name }} )</p>
                 </div>
                 <div class="row row-sm">
                     <div class="col-12 d-flex">
@@ -662,10 +662,10 @@
                                 <li><a href="{{ Route('user.explore.recovery-room.index') }}" class=""><span class="nav-text">Phòng Hồi Phục</span></a></li>
                             </ul>
                         </li>
-                        <li><a href="#" class=""><span class="nav-icon"><i data-feather="users"></i></span> <span
+                        <li class="{{ Request::is('guild/*') || Request::is('guild')  ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="users"></i></span> <span
                             class="nav-text">Bang Hội</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
-                                @if(empty(Auth::user()->guild))
+                                @if(empty(Auth::user()->guildMember))
                                     <li><a href="{{ Route('user.guild.create.form') }}" class=""><span class="nav-text">Tạo</span></a></li>
                                 @else
                                     <li><a href="{{ Route('user.guild.lobby') }}" class=""><span class="nav-text">Đại Sảnh</span></a></li>

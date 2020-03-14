@@ -37,6 +37,6 @@ class PvPJoinedRoom implements ShouldBroadcast
     }
     public function broadcastOn()
     {
-        return 'channel-pvp-joined-room';
+        return ['channel'];
     }
 }

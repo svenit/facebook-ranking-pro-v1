@@ -50,7 +50,7 @@ class CharacterController extends Controller
             $user->save();
             return redirect()->route('user.index')->with([
                 'status' => 'success',
-                'message' => "Chúc mừng bạn đã chọn nhân vật $character->name thành công !"
+                'message' => "Chào mừng [ Player ]"
             ]);
         }
         abort(404);

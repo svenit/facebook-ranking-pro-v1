@@ -11,8 +11,8 @@
         <button id='fight-button' v-if="pvp.isMatching && pvp.match.you.turn == 1" style="width:100px" @click="turnOut()" class="vip-bordered">Bỏ Lượt</button>
         <button id='fight-button' v-if="pvp.isMatching" style="width:200px" class="vip-bordered">Kết Thúc Sau : @{{ pvp.timeRemaining }}s</button>
         <button id='fight-button' v-if="!pvp.isMatching || pvp.isEnding" style="width:100px" @click="exitMatch()" class="vip-bordered">Thoát</button>
-        <div style="margin-top:20px" class="row row-sm sr">
-            <div :class="[pvp.yourAttack ? 'animated fadeOutRight' : '',pvp.yourBuff || pvp.enemyAttack ? 'animated shake' : '']" class="col-md-4 col-lg-4 col-sm-4">
+        <div style="margin-top:20px" class="row">
+            <div :class="[pvp.yourAttack ? 'animated fadeOutRight' : '',pvp.yourBuff || pvp.enemyAttack ? 'animated shake' : '']" class="col-lg-4 col-md-4 col-sm-4 col-auto">
                 <div class="">
                     <div class="">
                         <img v-if="pvp.match.you.turn == 1 && pvp.isMatching && !pvp.isEnding" style="position:absolute;width:50%;left:20%;top:10%" src="https://i.imgur.com/xjA4khR.gif">
@@ -57,12 +57,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 col-lg-3 col-sm-3">
+            <div class="col-3 hide-in-mobile">
                 <div style="position:relative;top:15%;background:transparent !important" class="card">
                     <img style="width:100%" src="https://i.imgur.com/my7u02o.png">
                 </div>
             </div>
-            <div :class="[pvp.enemyAttack ? 'animated fadeOutLeft' : '',pvp.enemyBuff || pvp.yourAttack ? 'animated shake' : '']" class="col-md-4 col-lg-4 col-sm-4">
+            <div style="float:right" :class="[pvp.enemyAttack ? 'animated fadeOutLeft' : '',pvp.enemyBuff || pvp.yourAttack ? 'animated shake' : '']" class="col-lg-4 col-md-4 col-sm-4 col-auto">
                 <div class="">
                     <img v-if="pvp.match.you.turn != 1 && pvp.isMatching" style="position:absolute;width:50%;left:20%;top:10%" src="https://i.imgur.com/xjA4khR.gif">
                     <img v-if="pvp.yourAttack" style="position:absolute;width:100%;z-index:9999999" :src="pvp.yourSkillAnimation">

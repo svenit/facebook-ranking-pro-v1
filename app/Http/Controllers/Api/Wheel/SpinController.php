@@ -77,6 +77,7 @@ class SpinController extends Controller
                 'message' => 'Phát hiện nghi vấn hack, trường hợp của bạn đã được lưu vào lịch sử chúng tôi sẽ xem xét ra đưa ra quyết định khóa tài khoản !'
             ];
         }
+        $this->clearMyCache();
         return response()->json($response); 
     }
 }

@@ -112,15 +112,12 @@ class Helper
     public function rankPower()
     {
         $userCompare = $this->user()->full_power;
-        $ttl = 60;
-        return Cache::remember('top.power', $ttl, function () use ($userCompare){
-            User::where('character_id','!=',0)->whereNotNull('provider_id')->chunkById(2000,function($users) use($userCompare){
-                $users->each(function($user) use ($userCompare){
-                    $userCompare < $user->full_power ? $this->rankPower++ : $this->rankPower;
-                });
+        User::where('character_id','!=',0)->whereNotNull('provider_id')->chunkById(2000,function($users) use($userCompare){
+            $users->each(function($user) use ($userCompare){
+                $userCompare < $user->full_power ? $this->rankPower++ : $this->rankPower;
             });
-            return $this->rankPower;
         });
+        return $this->rankPower;
     }
 
     public function stats()

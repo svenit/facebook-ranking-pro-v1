@@ -37,6 +37,6 @@ class PvPHitEnemy implements ShouldBroadcast
     }
     public function broadcastOn()
     {
-        return 'channel-pvp-hit-enemy';
+        return 'channel';
     }
 }

@@ -37,6 +37,6 @@ class ExitChatRoom implements ShouldBroadcast
     }
     public function broadcastOn()
     {
-        return 'channel-chat-exit-room';
+        return 'channel';
     }
 }

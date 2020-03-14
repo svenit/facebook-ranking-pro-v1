@@ -46,6 +46,7 @@ class SkillController extends Controller
                     Auth::user()->skills()->updateExistingPivot($request->id,[
                         'status' => 1
                     ],false);
+                    $this->clearMyCache();
                     $response = [
                         'code' => 200,
                         'status' => 'success',
@@ -79,6 +80,7 @@ class SkillController extends Controller
         ],false);
         if(isset($removeSkill))
         {
+            $this->clearMyCache();
             return response()->json([
                 'code' => 200,
                 'status' => 'success',
@@ -89,6 +91,7 @@ class SkillController extends Controller
     public function deleteSkill(Request $request)
     {
         Auth::user()->skills()->detach($request->id);
+        $this->clearMyCache();
         return response()->json([
             'code' => 200,
             'status' => 'success',

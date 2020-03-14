@@ -20,8 +20,9 @@ class IndexController extends Controller
 
         if(isset($findUser))
         {
+            $ttl = 60 * 24;
             $helper = new Helper($findUser->id);
-            return Cache::rememberForever("user-{$findUser->id}", function () use($helper, $findUser){
+            return Cache::remember("user-{$findUser->id}", $ttl, function () use($helper, $findUser){
                 return response()->json([
                     'infor' => [
                         'name' => $helper->user()->name,
@@ -31,7 +32,8 @@ class IndexController extends Controller
                         'exp' => (int)$helper->user()->exp,
                         'coins' => $helper->coins(),
                         'gold' => $helper->gold(),
-                        'pvp_points' => $helper->user()->pvp_points
+                        'pvp_points' => $helper->user()->pvp_points,
+                        'facebook_id' => $helper->user()->user_id
                     ],
                     'rank' => [
                         'power' => $helper->rankPower()

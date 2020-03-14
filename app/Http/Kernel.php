@@ -19,11 +19,11 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        \RenatoMarinho\LaravelPageSpeed\Middleware\ElideAttributes::class,
-        \RenatoMarinho\LaravelPageSpeed\Middleware\InsertDNSPrefetch::class,
-        \RenatoMarinho\LaravelPageSpeed\Middleware\RemoveComments::class,
-        \RenatoMarinho\LaravelPageSpeed\Middleware\RemoveQuotes::class,
-        \RenatoMarinho\LaravelPageSpeed\Middleware\CollapseWhitespace::class,
+        // \RenatoMarinho\LaravelPageSpeed\Middleware\ElideAttributes::class,
+        // \RenatoMarinho\LaravelPageSpeed\Middleware\InsertDNSPrefetch::class,
+        // \RenatoMarinho\LaravelPageSpeed\Middleware\RemoveComments::class,
+        // \RenatoMarinho\LaravelPageSpeed\Middleware\RemoveQuotes::class,
+        // \RenatoMarinho\LaravelPageSpeed\Middleware\CollapseWhitespace::class,
     ];
 
     /**
@@ -87,7 +87,8 @@ class Kernel extends HttpKernel
         'redirect.action' => \App\Http\Middleware\RedirectIfInAction::class,
         'prevent.api' => \App\Http\Middleware\PreventActionWhenTracking::class,
         'prevent' => \App\Http\Middleware\PreventTracking::class,
-        'maintaince' => \App\Http\Middleware\MaintainceGate::class
+        'maintaince' => \App\Http\Middleware\MaintainceGate::class,
+        'guild' => \App\Http\Middleware\CheckGuild::class,
     ];
 
     /**

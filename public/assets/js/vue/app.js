@@ -205,13 +205,13 @@ app = new Vue({
                         setInterval(() => {
                             this.listFightRoom();
                         }, 5000);
-                        break;
+                    break;
                     case 'pvp.room':
                         await this.pvpRoom();
-                        break;
+                    break;
                     case 'chat.global':
                         await this.listGlobalChat('global');
-                        break;
+                    break;
                     case 'chat.stranger':
                         if (page.room.people == 2) {
                             this.chat.block = false;
@@ -219,26 +219,26 @@ app = new Vue({
                             this.chat.message = [];
                         }
                         await this.chatRoom();
-                        break;
+                    break;
                     case 'inventory.index':
                         await this.invetory();
-                        break;
+                    break;
                     case 'pet.index':
                         await this.pet();
-                        break;
+                    break;
                     case 'skill.index':
                         await this.skill();
-                        break;
+                    break;
                     case 'item.index':
                         await this.item();
-                        break;
+                    break;
                     case 'gem.index':
                         await this.gem();
-                        break;
+                    break;
                     case 'oven.gem':
                         await this.inventoryAvailable();
                         await this.gem();
-                        break;
+                    break;
                 }
             }
             this.postLocation();
@@ -287,6 +287,10 @@ app = new Vue({
                     countDown = setInterval(() => {
                         if (this.pvp.match.you.turn == 1) {
                             this.pvp.timeOut--;
+                            socket.emit(`event-pvp-time`,{
+                                time:this.pvp.timeOut,
+                                channel:page.room.id
+                            });
                             this.pvp.status = `Lượt của bạn..( ${this.pvp.timeOut}s )`;
                             if (this.pvp.timeOut == 0) {
                                 this.pvp.match.you.turn = 0;
@@ -334,8 +338,15 @@ app = new Vue({
                         }
                     }, 1000);
                 }
-                if (this.pvp.match.you.turn == 0) {
-                    this.pvp.status = `Đang đợi đối thủ ra đòn...( 15s )`;
+                if(this.pvp.match.you.turn == 0) 
+                {
+                    const self = this;
+                    socket.on(`event-pvp-time-${page.room.id}`,(data) => {
+                        if(socket.id !== data.id && this.pvp.match.you.turn == 0)
+                        {
+                            self.pvp.status = `Đang đợi đối thủ ra đòn...( ${data.time}s )`;
+                        }
+                    });
                     axios.post(`${config.root}/api/v1/pvp/listen-action`, {
                         room: page.room.id,
                         bearer: config.bearer
@@ -432,27 +443,42 @@ app = new Vue({
             await this.refreshToken(res);
             this.loading = false;
         },
-        pvpRoom() {
+        async pvpRoom() 
+        {
+            socket.emit('set-pvp-room',page.room.id);
+            socket.on(`enemy-disconnected-pvp-${page.room.id}`,data => {
+                this.notify('Đối thủ đã ngắt kết nối...');
+            });
+            socket.on('enemy-reconnect-pvp',() => {
+                this.notify('Đối thủ đã kết nối trở lại...');
+            });
+            socket.on(`enemy-pvp-ready-${page.room.id}`,(data) => {
+                if(data.status == 1)
+                {
+                    this.notify('Đối thủ đã sẵn sàng, bạn hãy bấm vào nút sẵn sàng để bắt đầu trận đấu !');
+                }
+                else
+                {
+                    this.notify('Đối thủ đã hủy sẵn sàng');
+                }
+            });
+            socket.on(`enemy-pvp-turn-out-${page.room.id}`,(data) => {
+                this.notify('Đối thủ đã bỏ lượt');
+            });
             this.pvp.isReady = page.room.is_ready == 1 ? true : false;
             this.pvp.status = this.pvp.isReady ? 'Hủy' : 'Sẵn Sàng <i class="fas fa-swords"></i>';
             const self = this;
-            var pusher = new Pusher(page.pusher.key, {
-                cluster: 'ap1',
-                forceTLS: true
-            });
-            var joinRoom = pusher.subscribe('channel-pvp-joined-room');
-            var hitEnemy = pusher.subscribe('channel-pvp-hit-enemy');
-            var exitMatch = pusher.subscribe('channel-pvp-exit-match');
-            joinRoom.bind(`event-pvp-joined-room-${page.room.id}-${page.room.me}`, function (res) {
+            socket.on(`event-pvp-joined-room-${page.room.id}-${page.room.me}`, (data) => {
                 const audio = new Audio(`${config.root}/assets/sound/found_enemy.ogg`);
                 audio.play();
-                self.notify(`${res.data.enemy.name} đã vào phòng`);
+                self.notify(`${data.data.enemy.name} đã vào phòng`);
                 self.findEnemy();
-                if (self.pvp.isReady) {
+                if(self.pvp.isReady) 
+                {
                     self.findMatch();
                 }
             });
-            hitEnemy.bind(`event-pvp-hit-enemy-${page.room.id}-${page.room.me}`, function (res) {
+            socket.on(`event-pvp-hit-enemy-${page.room.id}-${page.room.me}`, function (res) {
                 self.notify(res.data.data.message);
                 self.pvp.match.you.turn = 1;
                 if (res.data.data.effectTo == 0) {
@@ -466,16 +492,22 @@ app = new Vue({
                     }, 1000);
                 }
             });
-            exitMatch.bind(`event-pvp-exit-match-${page.room.id}-${page.room.me}`, function (res) {
+            socket.on(`event-pvp-exit-match-${page.room.id}-${page.room.me}`, function (res) {
                 self.notify(`${res.data.data.message}`);
                 self.findEnemy();
             });
-            if (page.room.people == 2) {
+            if(page.room.people == 2) 
+            {
                 this.pvp.enemyJoined = true;
-                if (page.room.is_fighting == 1 || page.room.is_ready == 1) {
-                    this.findMatch();
+                if(page.room.is_fighting == 1 && page.room.is_ready == 1) 
+                {
+                    await this.findMatch();
+                    if(this.pvp.match.you.turn == 1)
+                    {
+                        this.turnOut();
+                    }
                 }
-                if (page.room.is_fighting == 0) {
+                if(page.room.is_fighting == 0) {
                     this.findEnemy();
                 }
             }
@@ -610,7 +642,8 @@ app = new Vue({
                 this.refreshToken(this.token);
             }
         },
-        turnOut() {
+        turnOut() 
+        {
             axios.post(`${config.root}/api/v1/pvp/turn-time-out`, {
                 bearer: config.bearer,
                 room: page.room.id
@@ -631,7 +664,11 @@ app = new Vue({
                         this.pvp.match.enemy.energy = res.data.enemy.energy;
                         this.pvp.timeOut = 15;
                         clearInterval(countDown);
-                        break;
+                        socket.emit(`pvp-turn-out`,{
+                            channel:page.room.id,
+                            id:socket.id
+                        });
+                    break;
                     case 404:
                         Swal.fire('', res.data.message, res.data.status);
                         break;
@@ -648,7 +685,7 @@ app = new Vue({
                         });
                         this.resetPvp();
                         clearInterval(countDown);
-                        break;
+                    break;
                 }
             });
         },
@@ -689,7 +726,8 @@ app = new Vue({
             this.notify(res.data.message);
         },
         async toggleReady() {
-            if (!this.pvp.isMatching) {
+            if(!this.pvp.isMatching) 
+            {
                 this.pvp.isReady = !this.pvp.isReady;
                 let res = await axios.post(`${config.root}/api/v1/pvp/toggle-ready`, {
                     bearer: config.bearer,
@@ -702,17 +740,28 @@ app = new Vue({
                 });
                 await this.refreshToken(res);
                 this.notify(res.data.message);
-                if (res.status == 200 && res.data.code == 200) {
-                    if (this.pvp.isReady) {
+                if(res.status == 200 && res.data.code == 200) 
+                {
+                    socket.emit('pvp-ready',{
+                        channel: page.room.id,
+                        id:socket.id,
+                        status:this.pvp.isReady ? 1 : 0
+                    });
+                    if(this.pvp.isReady) 
+                    {
                         this.findMatch();
                     }
-                } else {
+                } 
+                else 
+                {
                     this.pvp.isReady = false;
                 }
             }
         },
-        async findMatch() {
-            try {
+        async findMatch() 
+        {
+            try 
+            {
                 let res = await axios.post(`${config.root}/api/v1/pvp/find-match`, {
                     room: page.room.id,
                     bearer: config.bearer
@@ -748,11 +797,11 @@ app = new Vue({
                         this.pvp.match.enemy = res.data.enemy.basic.original;
                         this.pvp.match.enemy.hp = res.data.enemy.hp;
                         this.pvp.match.enemy.energy = res.data.enemy.energy;
-                        break;
+                    break;
                     case 404:
                         this.notify(res.data.message);
                         this.pvp.isReady = false;
-                        break;
+                    break;
                     case 500:
                         this.notify(res.data.message);
                         this.pvp.enemyJoined = false;

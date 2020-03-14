@@ -982,3 +982,9 @@ div.table-responsive>div.dataTables_wrapper>div.row>div[class^="col-"]:last-chil
     background-size: contain;
     text-shadow: 0 0 4px #0a0167;
 }
+@media only screen and (max-width: 461px) {
+    .hide-in-mobile
+    {
+        display:none;
+    }
+}

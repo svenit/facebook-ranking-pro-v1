@@ -16,13 +16,11 @@ use Illuminate\Support\Facades\Artisan;
 | contains the "web" middleware group. Now create something great!
 |
 */
-// Route::get('test/{id}',function($id){
-//     Auth::loginUsingId($id);
-//     return redirect()->back();
-// });
-Route::get('hello',function(){
-    return $gears = Auth::user()->usingGems();
+Route::get('test/{id}',function($id){
+    Auth::loginUsingId($id);
+    return redirect()->back();
 });
+
 Route::get('broadcast',function(){
     event(new BroadcastToEveryone('Hello'));
     return 'Done';
@@ -104,6 +102,7 @@ Route::group(['middleware' => ['maintaince','redirect.action']], function () {
                 Route::get('create','GuildController@createForm')->name('create.form');
                 Route::post('create','GuildController@create')->name('create');
                 Route::get('/','GuildController@lobby')->name('lobby');
+                Route::get('members','GuildController@member')->name('member');
             });
 
             Route::group(['prefix' => 'gift-code','as' => 'giftcode.','namespace' => 'GiftCode'], function () {
