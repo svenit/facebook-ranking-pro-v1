@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('hero','Chỉ số')
-@section('sub_hero','')
+@section('sub_hero','Điểm chỉ số sức mạnh')
 
 @section('content')
 <div id="list-fight-room">

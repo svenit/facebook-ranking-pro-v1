@@ -1,5 +1,5 @@
 @auth
-<div class="row row-sm sr">
+{{-- <div class="row row-sm sr">
     <div class="col-md-12 col-lg-12">
         <div class="row row-sm">
             <div class="col-md-12">
@@ -72,7 +72,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 @if(isset(Auth::user()->config['relife']) && Auth::user()->config['relife'])
     <div 
         onclick="Swal.fire('',`<p class='text-gold'><strong>NGƯỜI VƯỢT LÊN TỪ NGHỊCH CẢNH</strong></p><p>Trải qua mọi khó khăn và nguy hiểm nhưng bạn vẫn giữ được sự bình tĩnh và sự quyết đoán trong từng hành động, danh hiệu này xứng đáng dành cho bạn</p><p class='text-success'>Tất cả chỉ số x2</p><p class='text-success'>Hệ thống Quest ẩn</p><p class='text-success'>+2 điểm chỉ số mỗi level</p><p style='font-size:11px'><i>* Chỉ có bạn mới có thể nhìn thấy thông báo này</i></p>`)" 

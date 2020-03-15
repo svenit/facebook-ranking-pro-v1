@@ -40,7 +40,7 @@
 			You don't have javascript enabled.  Good luck with that.
 		</div>
 	</noscript>
-	<div id="app" class="layout-row" v-if="!detect">
+	<div id="app" style="height:100%;min-height:100vh" class="layout-row" v-if="!detect">
 		@if(!request()->is('admin/*'))
 			<div v-if="flash" id="loader" class="loading-screen">
 				<div class="loading-spinner" style=""><div class="loading-spinner-box"><div class="cube"><div class="side"></div><div class="side"></div><div class="side"></div><div class="side"></div><div class="side"></div><div class="side"></div></div><div class="loading-spinner-ment">
@@ -55,9 +55,9 @@
 				<div>
 					<div class="page-hero page-container" id="page-hero">
 						<div class="padding d-flex">
-							<div class="page-title">
-								<h2 class="text-md text-highlight">@yield('hero')</h2>
-								<small class="text-muted">@yield('sub_hero','')</small>
+							<div style="width:100%" class="vip-bordered page-title">
+								<h2 data-title="tooltip" title="Click để xem thông số" class="ribbon"> <button style="background:transparent;border:none">@yield('hero')</button></h2>
+								<p style="margin-top:40px" class="text-muted text-center">@yield('sub_hero','')</p>
 							</div>
 						</div>
 					</div>
