@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api\PvP;
 
-use App\Events\PvPExitMatch;
 use App\Model\Room;
 use App\Model\User;
 use App\Model\Config;
 use App\Model\FightRoom;
+use App\Events\PvPExitMatch;
+use App\Events\PvPKickEnemy;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -65,9 +66,10 @@ class BaseController extends Controller
                                 'id' => $room->id
                             ],
                             'data' => [
-                                'message' => "Đối thủ đã rời phòng"
+                                'message' => 'Đối thủ đã rời, bạn trở thành chủ phòng'
                             ],
-                            'broadcast-to' => $target->user_challenge
+                            'broadcast_to' => $target->user_challenge,
+                            'is_master' => 1
                         ];
                         event(new PvPExitMatch($data));
                         $response = [
@@ -90,9 +92,10 @@ class BaseController extends Controller
                                 'id' => $room->id
                             ],
                             'data' => [
-                                'message' => "Đối thủ đã rời phòng"
+                                'message' => 'Đối thủ đã rời phòng'
                             ],
-                            'broadcast-to' => $target->user_challenge
+                            'broadcast_to' => $target->user_challenge,
+                            'is_master' => 0
                         ];
                         event(new PvPExitMatch($data));
                         $response = [
@@ -172,5 +175,33 @@ class BaseController extends Controller
             'status' => $win ? 1 : null,
             'is_ready' => 0
         ]);
+    }
+
+    public function kickEnemy(Request $request)
+    {
+        $room = Room::where([['user_create_id',Auth::id()],['name', $request->room],['people',2],['is_fighting',0]]);
+        if($room->exists())
+        {
+            $enemy = FightRoom::where([['room_id',$room->first()->id],['user_challenge','!=',Auth::id()]])->first();
+            $data = [
+                'room' => $room->first()->name,
+                'broadcast-to' => $enemy->user_challenge
+            ];
+            $enemy->delete();
+            event(new PvPKickEnemy($data));
+            return response()->json([
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Đã kick'
+            ],200);
+        }
+        else
+        {
+            return response()->json([
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Không thể thực hiện hành động này'
+            ],200);
+        }
     }
 }

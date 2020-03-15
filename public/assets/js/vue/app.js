@@ -114,6 +114,9 @@ app = new Vue({
         pvp: {
             timeRemaining: 0,
             rooms: [],
+            messages:[],
+            text:'',
+            receiveMessage:true,
             isSearching: false,
             isEnding: false,
             isMatching: false,
@@ -131,6 +134,7 @@ app = new Vue({
             timeOut: 20,
             status: '',
             match: {
+                master:null,
                 you: {
                     turn: '',
                     infor: {
@@ -445,12 +449,26 @@ app = new Vue({
         },
         async pvpRoom() 
         {
+            this.pvp.match.master = page.room.master;
             socket.emit('set-pvp-room',page.room.id);
             socket.on(`enemy-disconnected-pvp-${page.room.id}`,data => {
                 this.notify('Đối thủ đã ngắt kết nối...');
             });
             socket.on('enemy-reconnect-pvp',() => {
                 this.notify('Đối thủ đã kết nối trở lại...');
+            });
+            socket.on(`pvp-send-message-${page.room.id}`,(data) => {
+                if(data.sender.id !== page.room.me)
+                {
+                    if(this.pvp.receiveMessage)
+                    {
+                        this.notify(`${data.sender.name} đã gửi 1 tin nhắn mới cho bạn`);
+                    }
+                }
+                this.pvp.messages.push(data);
+                $('#chat-pvp-box').stop().animate({
+                    scrollTop: 1000000000000000000
+                }, $('#chat-pvp-box').scrollHeight);
             });
             socket.on(`enemy-pvp-ready-${page.room.id}`,(data) => {
                 if(data.status == 1)
@@ -493,8 +511,16 @@ app = new Vue({
                 }
             });
             socket.on(`event-pvp-exit-match-${page.room.id}-${page.room.me}`, function (res) {
+                if(res.data.is_master == 1)
+                {
+                    self.pvp.match.master = res.data.broadcast_to;
+                }
                 self.notify(`${res.data.data.message}`);
                 self.findEnemy();
+            });
+            socket.on(`event-pvp-kick-enemy-${page.room.id}-${page.room.me}`, function (res) {
+                self.notify('Bạn đã bị kick khỏi phòng');
+                location.reload();
             });
             if(page.room.people == 2) 
             {
@@ -510,6 +536,41 @@ app = new Vue({
                 if(page.room.is_fighting == 0) {
                     this.findEnemy();
                 }
+            }
+        },
+        sendPvpMessage()
+        {
+            let text = this.pvp.text;
+            if(!text.trim() || text == '')
+            {
+                this.notify('Không được để trống tin nhắn');
+                return;
+            }
+            socket.emit('pvp-send-message',{
+                channel:page.room.id,
+                sender:{
+                    name:page.room.name,
+                    id:page.room.me
+                },
+                body:text
+            });
+            this.pvp.text = '';
+        },
+        async kickEnemy()
+        {
+            let res = await axios.post(`${config.root}/api/v1/pvp/kick-enemy`, {
+                bearer: config.bearer,
+                room: page.room.id
+            }, {
+                headers: {
+                    pragma: this.token
+                }
+            });
+            await this.refreshToken(res);
+            this.notify(res.data.message);
+            if(res.data.code == 200)
+            {
+                this.pvp.enemyJoined = false;
             }
         },
         showGem(data, permission)

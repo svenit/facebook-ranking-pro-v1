@@ -22,6 +22,7 @@ Route::group(['prefix' => 'v1','namespace' => 'Api','middleware' => ['cors','aut
         Route::post('turn-time-out','TurnOutController');
         Route::post('listen-action','ListenActionController');
         Route::post('hit','HitController');
+        Route::post('kick-enemy','BaseController@kickEnemy');
         Route::post('exit-match','BaseController@exitMatch');
     });
     Route::group(['prefix' => 'wheel','namespace' => 'Wheel'], function () {

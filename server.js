@@ -10,6 +10,7 @@ redis.subscribe('channel');
 
 redis.on('message',(channel, message) => {
     let { event, data } = JSON.parse(message);
+    console.log(event, data);
     io.emit(event, data);
 });
 
@@ -60,5 +61,9 @@ function handleConnect(socket)
         socket.broadcast.emit(`enemy-pvp-turn-out-${data.channel}`,{
             id:data.id
         });
+    });
+
+    socket.on('pvp-send-message', (data) => {
+        io.emit(`pvp-send-message-${data.channel}`,data);
     });
 }

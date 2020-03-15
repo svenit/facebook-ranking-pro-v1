@@ -8,6 +8,8 @@
     <div class="padding-x">
         @include('user.theme.parameter')
         <button id='fight-button' v-if="pvp.enemyJoined" style="width:300px" @click="toggleReady()" v-if="!pvp.isEnding && pvp.enemyJoined" class="vip-bordered" v-html="pvp.status"></button>
+        <button id='fight-button' v-if="!pvp.isMatching && pvp.enemyJoined && pvp.match.master == {{ Auth::id() }}" style="width:100px" @click="kickEnemy()" class="vip-bordered">Kick</button>
+        <button id='fight-button' style="width:100px" v-if="pvp.enemyJoined"  data-toggle="modal" data-target=".modal-right-pvp" data-toggle-class="modal-open-aside" data-target="body" class="vip-bordered">Chat</button>
         <button id='fight-button' v-if="pvp.isMatching && pvp.match.you.turn == 1" style="width:100px" @click="turnOut()" class="vip-bordered">Bỏ Lượt</button>
         <button id='fight-button' v-if="pvp.isMatching" style="width:200px" class="vip-bordered">Kết Thúc Sau : @{{ pvp.timeRemaining }}s</button>
         <button id='fight-button' v-if="!pvp.isMatching || pvp.isEnding" style="width:100px" @click="exitMatch()" class="vip-bordered">Thoát</button>
@@ -117,13 +119,38 @@
             <img :src="skill.animation" alt=".">
         </div>
     </div>
+    <div style="z-index: 9999999" class="modal fade modal-right-pvp" data-backdrop="true">
+        <div style="overflow:auto" class="modal-dialog modal-bottom modal-right w-xl">
+            <div style="min-height:100vh;background:#111 !important" class="modal-content vip-bordered no-radius">
+                <div class="modal-header">
+                    Kênh Chat
+                    <span @click="pvp.receiveMessage = !pvp.receiveMessage" class="px-2">
+                        <i v-if="pvp.receiveMessage" data-feather="bell"></i>
+                        <i v-else data-feather="bell-off"></i>
+                    </span>
+                    <button class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div style="max-height:80vh;overflow:auto;" id="chat-pvp-box" class="modal-body">
+                    <div id="message-box">
+                        <p v-for="(message, index) in pvp.messages" :key="index">
+                            <span :class="message.sender.id == {{ Auth::id() }} ? 'text-gold' : 'text-muted'">@{{ message.sender.name }} : </span>
+                            <span class="text-muted">@{{ message.body }} </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input autofocus v-model="pvp.text" type="text" @change="sendPvpMessage" placeholder="Nhập tin nhắn của bạn" class="form-control">
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 @push('js')
-<script src="https://js.pusher.com/5.1/pusher.min.js"></script>
 <script>
     const page = {
         room:{
+            name:"{{ Auth::user()->name }}",
             me:parseInt("{{ Auth::id() }}"),
             id:"{{ $checkRoom->name }}",
             master:parseInt("{{ $checkRoom->user_create_id }}"),
@@ -132,10 +159,7 @@
             people:parseInt("{{ $checkRoom->people }}"),
             is_ready:parseInt("{{ $checkSession->is_ready }}"),
         },
-        path:'pvp.room',
-        pusher:{
-            key:"{{ \App\Income\CustomeConnection::pusher()['app_key'] }}"
-        }
+        path:'pvp.room'
     }
 </script>
 @endpush

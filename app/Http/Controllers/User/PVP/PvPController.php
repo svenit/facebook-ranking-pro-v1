@@ -152,8 +152,8 @@ class PvPController extends Controller
         else
         {
             return redirect()->route('user.pvp.index')->with([
-                'status' => 'error',
-                'message' => 'Không tìm thấy phòng này :('
+                'status' => 'warning',
+                'message' => 'Bạn đã bị kick hoặc không tìm thấy phòng này :('
             ]);
         }
     }
@@ -176,8 +176,8 @@ class PvPController extends Controller
                     $this->removeTracking();
                 }
                 return redirect()->route('user.index')->with([
-                    'status' => 'error',
-                    'message' => 'Không tìm thấy phòng này :('
+                    'status' => 'warning',
+                    'message' => 'Bạn đã bị kick hoặc không tìm thấy phòng này :('
                 ]);
             }
         }
@@ -188,8 +188,8 @@ class PvPController extends Controller
                 $this->removeTracking();
             }
             return redirect()->route('user.index')->with([
-                'status' => 'error',
-                'message' => 'Không tìm thấy phòng này :('
+                'status' => 'warning',
+                'message' => 'Bạn đã bị kick hoặc không tìm thấy phòng này :('
             ]);
         }
     }
