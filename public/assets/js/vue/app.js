@@ -112,6 +112,10 @@ app = new Vue({
             skills: []
         },
         pvp: {
+            search:{
+                text:'',
+                data:[]
+            },
             timeRemaining: 0,
             rooms: [],
             messages:[],
@@ -495,6 +499,8 @@ app = new Vue({
                 {
                     self.findMatch();
                 }
+                document.getElementsByClassName('modal-backdrop fade show')[0].remove();
+                document.getElementsByClassName('modal-backdrop fade show')[1].remove();
             });
             socket.on(`event-pvp-hit-enemy-${page.room.id}-${page.room.me}`, function (res) {
                 self.notify(res.data.data.message);
@@ -521,6 +527,9 @@ app = new Vue({
             socket.on(`event-pvp-kick-enemy-${page.room.id}-${page.room.me}`, function (res) {
                 self.notify('Bạn đã bị kick khỏi phòng');
                 location.reload();
+            });
+            socket.on(`denied-invite-pvp-${page.room.id}-${page.room.me}`, (data) => {
+                self.notify(`${data} đã từ chối tham gia`);
             });
             if(page.room.people == 2) 
             {
@@ -555,6 +564,52 @@ app = new Vue({
                 body:text
             });
             this.pvp.text = '';
+        },
+        async searchPvpEnemy()
+        {
+            try 
+            {
+                this.loading = true;
+                if(this.pvp.search.data.length > 0)
+                {
+                    this.pvp.search.data.forEach((item, key) => {
+                        let element = document.getElementById(`hunter-${item.id}`);
+                        element.classList.remove('gd-warning');
+                        element.innerHTML = 'Mời';
+                        element.disabled = false;
+                    });
+                }
+                let res = await axios.get(`${config.root}/api/v1/user/all`, {
+                    params: {
+                        text:this.pvp.search.text
+                    }
+                });
+                this.pvp.search.data = res.data;
+                this.loading = false;
+            } 
+            catch (e) 
+            {
+                this.loading = false;
+                console.log(e);
+                this.notify('Đã có lỗi xảy ra');
+            }
+        },
+        inviteToPvp(user,room, event)
+        {
+            socket.emit('invite-to-pvp',{
+                room,
+                id:user.id,
+                from:{
+                    name:page.room.name,
+                    channel:page.room.id,
+                    id:page.room.me
+                }
+            });
+            this.notify(`Đã gửi lời mời thách đấu đến ${user.name}`);
+            let target = event.target;
+            target.innerHTML = 'Đã Mời';
+            target.disabled = true;
+            target.classList.add('gd-warning');
         },
         async kickEnemy()
         {

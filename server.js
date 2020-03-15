@@ -66,4 +66,12 @@ function handleConnect(socket)
     socket.on('pvp-send-message', (data) => {
         io.emit(`pvp-send-message-${data.channel}`,data);
     });
+
+    socket.on('invite-to-pvp', (data) => {
+        socket.broadcast.emit(`invite-to-pvp-${data.id}`,data);
+    });
+
+    socket.on('denied-invite-pvp', data => {
+        socket.broadcast.emit(`denied-invite-pvp-${data.channel}-${data.to}`,data.from);
+    });
 }

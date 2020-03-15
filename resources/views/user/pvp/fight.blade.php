@@ -8,6 +8,7 @@
     <div class="padding-x">
         @include('user.theme.parameter')
         <button id='fight-button' v-if="pvp.enemyJoined" style="width:300px" @click="toggleReady()" v-if="!pvp.isEnding && pvp.enemyJoined" class="vip-bordered" v-html="pvp.status"></button>
+        <button id='fight-button' v-if="!pvp.isMatching && !pvp.enemyJoined && pvp.match.master == {{ Auth::id() }}" style="width:100px" id="trigger-invite" @click="searchPvpEnemy" data-toggle="modal" data-target="#invite" class="vip-bordered">Mời</button>
         <button id='fight-button' v-if="!pvp.isMatching && pvp.enemyJoined && pvp.match.master == {{ Auth::id() }}" style="width:100px" @click="kickEnemy()" class="vip-bordered">Kick</button>
         <button id='fight-button' style="width:100px" v-if="pvp.enemyJoined"  data-toggle="modal" data-target=".modal-right-pvp" data-toggle-class="modal-open-aside" data-target="body" class="vip-bordered">Chat</button>
         <button id='fight-button' v-if="pvp.isMatching && pvp.match.you.turn == 1" style="width:100px" @click="turnOut()" class="vip-bordered">Bỏ Lượt</button>
@@ -142,6 +143,45 @@
                     <input autofocus v-model="pvp.text" type="text" @change="sendPvpMessage" placeholder="Nhập tin nhắn của bạn" class="form-control">
                 </div>
             </div>
+        </div>
+    </div>
+    <div id="invite" v-if="!pvp.isMatching && !pvp.enemyJoined && pvp.match.master == {{ Auth::id() }}" class="modal fade gear top-off" data-backdrop="true" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    Tìm kiếm đối thủ <button class="close" data-dismiss="modal">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input v-model='pvp.search.text' @change="searchPvpEnemy" type="text" placeholder="Nhập tên hoặc mã ID rồi Enter để tìm kiếm..." class="form-control">
+                    </div>
+                    <span class="text-gold" v-if="pvp.search.data.length > 0">
+                        Tìm thấy @{{ pvp.search.data.length }} thợ săn
+                    </span>
+                    <span v-else class="text-danger">
+                        Không tìm thấy thợ săn nào
+                    </span>
+                    <div style="max-height:400px;overflow:auto" class="row list list-row">
+                        <div v-for="(enemy, index) in pvp.search.data" :key="index" class="list-item col-12" data-id="1">
+                            <div>
+                                <a href="#" data-pjax-state="">
+                                    <span class="w-40 avatar gd-primary">
+                                        <img :src="`http://graph.facebook.com/${enemy.user_id}/picture?type=normal`" alt=".">
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="flex">
+                                <a href="#" class="item-author text-color" data-pjax-state="">@{{ enemy.name }}</a>
+                                <div class="item-except text-muted text-sm h-1x">LC : @{{ enemy.full_power }}</div>
+                            </div>
+                            <div>
+                                <button :id="`hunter-${enemy.id}`" @click="inviteToPvp(enemy,'{{ Route('user.pvp.joined-room',['id' => $checkRoom->name]) }}', $event)" style="padding:10px 20px" class="item-amount d-lg-block badge badge-pill gd-success">Mời</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
         </div>
     </div>
 </div>

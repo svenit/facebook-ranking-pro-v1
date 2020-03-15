@@ -10,9 +10,10 @@
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::get('v1/user/all','Api\User\IndexController@all');
 Route::get('v1/user/{param}','Api\IndexController@userInfor')->middleware('cors');
 Route::group(['prefix' => 'v1','namespace' => 'Api','middleware' => ['cors','auth']], function () {
-    Route::post('set-location','User\LocationController@setLocation');
+    Route::post('set-location','User\IndexController@setLocation');
     Route::group(['prefix' => 'pvp','namespace' => 'PvP'], function () {
         Route::get('list-room','ListRoomController');
         Route::get('find-enemy','FindEnemyController');

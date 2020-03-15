@@ -90,6 +90,31 @@
 			socket.on("notify-to-{{ Auth::id() }}",(data) => {
 				Swal.fire(data.title,data.message,data.type);
 			});
+			socket.on(`invite-to-pvp-{{ Auth::id() }}`,data => {
+				console.log(data);
+				Swal.fire({
+					title: ``,
+					type: '',
+					showCancelButton: true,
+					showConfirmButton:true,
+					confirmButtonText: 'Không',
+					cancelButtonText: 'Chơi Luôn',
+					cancelButtonColor: '#f21378',
+					html: `${data.from.name} muốn thách đấu với bạn trong PVP Area`
+				}).then((result) => {
+					if(result.value) 
+					{
+						socket.emit('denied-invite-pvp',{
+							from:"{{ Auth::user()->name }}",
+							to:data.from.id,
+							channel:data.from.channel
+						});
+					} 
+					else if (result.dismiss === Swal.DismissReason.cancel) {
+						window.location.href = data.room;
+					}
+				});
+			});
 		@endif
 	</script>
 	@stack('js')

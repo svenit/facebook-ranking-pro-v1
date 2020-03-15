@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class LocationController extends Controller
+class IndexController extends Controller
 {
     public function setLocation(Request $request)
     {
@@ -26,5 +26,16 @@ class LocationController extends Controller
                 'location' => $request->only(['lat', 'lng'])
             ]);
         }
+    }
+
+    public function all(Request $request)
+    {
+        $users = User::where([['name','LIKE', "%{$request->text}%"],['id','!=',Auth::id()]])
+            ->orWhere('user_id',$request->text)
+            ->orWhere('provider_id',$request->text)
+            ->select(['id','name','user_id','full_power'])
+            ->limit(20)
+            ->get();
+        return response()->json($users,200);
     }
 }
