@@ -1,7 +1,7 @@
 @extends('app')
 
-@section('hero','Ngọc Tinh Luyện')
-@section('sub_hero','Ngọc Tinh Luyện')
+@section('hero','Tiệm Rèn Ngọc Tinh Luyện')
+@section('sub_hero','Tinh luyện ngọc bổ trợ vào trang bị của bạn, giúp trang bị của bạn đột phá hơn')
 
 @section('content')
 <div id="list-fight-room">

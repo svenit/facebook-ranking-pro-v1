@@ -8,7 +8,11 @@ class FightRoom extends Model
 {
     protected $fillable = [
         'room_id','user_challenge','user_challenge_hp','user_receive_challenge','user_challenge_energy',
-        'is_ready','status','turn'
+        'is_ready','status','turn','effected'
+    ];
+
+    protected $casts = [
+        'effected' => 'array'
     ];
 
     public function room()

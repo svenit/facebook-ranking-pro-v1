@@ -38,5 +38,10 @@ class SkillType
      * Giáp kháng công pháp thuật bị động
      */
     const ARMOR_INTELLIGENT = 'armor_intelligent';
+
+    /**
+     * Đóng băng 
+     */
+    const STUN = 'stun';
     
 }

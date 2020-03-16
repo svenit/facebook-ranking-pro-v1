@@ -147,9 +147,9 @@ class User extends Authenticatable
     public function getPower()
     {
         $properties = [
-            'strength' => 1,
+            'strength' => 1.5,
             'agility' => 1,
-            'intelligent' => 1,
+            'intelligent' => 1.5,
             'lucky' => 1,
             'health_points' => 2,
             'armor_strength' => 1,
@@ -158,7 +158,7 @@ class User extends Authenticatable
         $power = [];
         foreach($properties as $key => $property)
         {
-            $power[$key] = (((collect($this->usingPets())->sum($key) + collect($this->usingGears())->sum($key) + collect($this->usingGems())->sum($key) + ($this->stats()[$key] ?? 0) + ($this[$key])) + $property) * $this->relife());
+            $power[$key] = (((collect($this->usingPets())->sum($key) + collect($this->usingGears())->sum($key) + collect($this->usingGems())->sum($key) + ($this->stats()[$key] ?? 0) + ($this[$key])) * $property) * $this->relife());
         }
         return collect($power);
     }

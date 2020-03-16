@@ -12,6 +12,7 @@
 	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="{{ asset('css/app.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/inventory.css') }}">
 	<link href="{{ asset('cdn/css/all.min.css') }}" rel="stylesheet">
 	{{-- <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" /> --}}
 	<meta name="csrf-token" content="{{ csrf_token() }}"/>
@@ -82,9 +83,6 @@
 		var socket = io.connect(config.socketHost);
 		socket.on('notify-global',(data) => {
 			Swal.fire(data.title,data.message,data.type);
-		});
-		socket.on('user-count',(data) => {
-			document.getElementById('user-count').innerHTML = data;
 		});
 		@if(Auth::check())
 			socket.on("notify-to-{{ Auth::id() }}",(data) => {

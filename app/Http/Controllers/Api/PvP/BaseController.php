@@ -165,7 +165,8 @@ class BaseController extends Controller
             'turn' => 0,
             'user_receive_challenge' => null,
             'status' => $win ? 2 : null,
-            'is_ready' => 0
+            'is_ready' => 0,
+            'effected' => null
         ]);
         FightRoom::where([['user_challenge',$enemy->user_challenge],['room_id',$id]])->update([
             'user_challenge_hp' => User::findOrFail($enemy->user_challenge)->power()['health_points'],
@@ -173,7 +174,8 @@ class BaseController extends Controller
             'turn' => 0,
             'user_receive_challenge' => null,
             'status' => $win ? 1 : null,
-            'is_ready' => 0
+            'is_ready' => 0,
+            'effected' => null
         ]);
     }
 

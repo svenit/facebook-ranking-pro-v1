@@ -8,7 +8,7 @@
     </div>
 @endif
 <div v-if="data" class="modal fade modal-left" data-backdrop="true">
-    <div style="overflow:auto" class="modal-dialog modal-left w-xl">
+    <div style="overflow:auto;width:350px;" class="modal-dialog modal-left w-xl">
         <div style="min-height:100vh;background:#111 !important" class="modal-content vip-bordered no-radius">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">&times;</button>
@@ -29,9 +29,12 @@
                         <span v-if="data.pet" style="z-index:50" :class="`Mount_Head_${data.pet.class_tag}`"></span>
                     </div>
                     <div style="margin-bottom:60px" v-if="data.pet"></div>
-                    <p style="margin-top:20px" class="text-gold text-center">@{{ data.infor.name }} ( @{{ data.infor.character.name }} )</p>
+                    <p style="margin-top:20px" class="text-muted text-center">@{{ data.infor.name }} ( @{{ data.infor.character.name }} )</p>
                 </div>
                 <div class="row row-sm">
+                    <div class="col-12 d-flex">
+                        <p class="text-gold pixel-font">LC : @{{ numberFormat(data.power.total) }} </p>
+                    </div>
                     <div class="col-12 d-flex">
                         <div class="flex">
                                 <div class="text-info">
@@ -100,6 +103,38 @@
                         <div class="flex">
                             <div class="text-purple"><small><i class="fal fa-dice-d20"></i> Kháng Phép <strong
                                         class="text-purple">@{{ data.power.armor_intelligent }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <p class="text-gold">Thông Tin</p>
+                <div class="row row-sm">
+                    <div class="col-6 d-flex">
+                        <div class="flex">
+                            <div class="text-muted"><small><i class="fas fa-trophy mr-2"></i> <strong
+                                        class="text-muted">Top @{{ numberFormatDetail(data.rank.power) }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex">
+                        <div class="flex">
+                            <div class="text-muted"><small><i class="fas fa-fist-raised mr-2"></i> <strong
+                                class="text-muted"> @{{ numberFormat(data.power.total) }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex mt-2">
+                        <div class="flex">
+                            <div class="text-muted"><small><i class="fas fa-usd-circle mr-2"></i> <strong
+                                        class="text-muted">@{{ numberFormat(data.infor.coins) }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex mt-2">
+                        <div class="flex">
+                            <div class="text-muted"><small><i class="fas fa-gem mr-2"></i> <strong
+                                        class="text-muted">@{{ numberFormat(data.infor.gold) }}</strong></small>
                             </div>
                         </div>
                     </div>
@@ -623,7 +658,7 @@
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('user.top.power') }}" class=""><span class="nav-text">Lực Chiến</span></a></li>
                                 <li><a href="{{ Route('user.top.level') }}" class=""><span class="nav-text">Cấp Độ</span></a></li>
-                                <li><a href="{{ Route('user.top.pvp') }}" class=""><span class="nav-text">PVP</span></a></li>
+                                <li><a href="{{ Route('user.top.pvp') }}" class=""><span class="nav-text">PVP Arena</span></a></li>
                                 <li><a href="{{ Route('user.top.coin') }}" class=""><span class="nav-text">Vàng</span></a></li>
                                 <li><a href="{{ Route('user.top.gold') }}" class=""><span class="nav-text">Kim Cương</span></a></li>
                                 <li><a href="{{ Route('user.top.activities') }}" class=""><span class="nav-text">Hoạt Động</span></a></li>
@@ -676,7 +711,7 @@
                             </ul>
                         </li>
                         <li class="{{ Request::is('pvp/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
-                            class="nav-text">PVP</span><span class="nav-badge"><b class="badge-circle xs text-success"></b></span> <span class="nav-caret"></span></a>
+                            class="nav-text">PVP Arena</span><span class="nav-badge"><b class="badge-circle xs text-success"></b></span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('user.pvp.index') }}" class=""><span class="nav-text">Tham Gia</span></a></li>
                             </ul>

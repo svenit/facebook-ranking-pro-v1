@@ -79,18 +79,29 @@ class HitController extends BaseController
                                                 'turn' => 0,
                                                 'user_challenge_energy' => DB::raw("user_challenge_energy - $skill->energy")
                                             ];
+                                            $yourTurn = 0;
+                                            $enemyTurn = 1;
+                                            $enemyUpdate = [];
+                                            $enemyEffected = $enemy->first()->effected ?? [];
+
                                             switch($skill->type)
                                             {
                                                 case SkillType::ATTACK_STRENGTH:
-                                                    $destroy = $this->renderDestroy(Auth::user()->power()['strength'],$skill) - $getEnemyInfor->power()['armor_strength'] <= 0 ? 0 : $this->renderDestroy(Auth::user()->power()['strength'],$skill) - $getEnemyInfor->power()['armor_strength'];
+                                                    $yourStrength = Auth::user()->power()['strength'];
+                                                    $countDamage = $this->renderDestroy($yourStrength,$skill);
+                                                    $enemyStrengthArmor = $getEnemyInfor->power()['armor_strength'];
+                                                    $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor);
                                                     $message = "[ $skill->name ] Bạn đã gây $destroy sát thương vật lí cho đối thủ";
                                                 break;
                                                 case SkillType::ATTACK_INTELLIGENT:
-                                                    $destroy = $this->renderDestroy(Auth::user()->power()['intelligent'],$skill) - $getEnemyInfor->power()['armor_intelligent'] <= 0 ? 0 : $this->renderDestroy(Auth::user()->power()['intelligent'],$skill) - $getEnemyInfor->power()['armor_intelligent'];
+                                                    $yourStrength = Auth::user()->power()['intelligent'];
+                                                    $countDamage = $this->renderDestroy($yourStrength,$skill);
+                                                    $enemyStrengthArmor = $getEnemyInfor->power()['armor_intelligent'];
+                                                    $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor);
                                                     $message = "[ $skill->name ] Bạn đã gây $destroy sát thương phép thuật cho đối thủ";
                                                 break;
                                                 case SkillType::ATTACK_CRIT:
-                                                    $destroy = $this->renderDestroy(Auth::user()->power()['strength'],$skill) * 2;
+                                                    $destroy = ($this->renderDestroy(Auth::user()->power()['strength'],$skill) * 2);
                                                     $message = "[ $skill->name ] Bạn đã gây $destroy sát thương chí mạng cho đối thủ";
                                                 break;
                                                 case SkillType::ATTACK_HALF_HP:
@@ -129,9 +140,27 @@ class HitController extends BaseController
                                                     }
                                                     $effectTo = 1;
                                                 break;
+                                                case SkillType::STUN:
+                                                    $yourStrength = Auth::user()->power()['strength'];
+                                                    $countDamage = $this->renderDestroy($yourStrength,$skill);
+                                                    $enemyStrengthArmor = $getEnemyInfor->power()['armor_strength'];
+                                                    $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor);
+                                                    $rate = rand(0,100);
+                                                    if($skill->effect_rate >= $rate)
+                                                    {
+                                                        $yourUpdate['turn'] = 1;
+                                                        $yourTurn = 1;
+                                                        $enemyTurn = 0;
+                                                        $enemyEffected[$skill->type] = $skill->effect_turn;
+                                                        $message = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ, đối thụ dính hiệu ứng đóng băng trong $skill->effect_turn lượt";
+                                                    }
+                                                    else
+                                                    {
+                                                        $message = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ";
+                                                    }
+                                                break;
                                                 default:
                                                     $destroy = 0;
-                                                    $message = "[ $skill->name ] Bạn đã gây 0 sát thương cho đối thủ";
                                                 break;
                                             }
                                             if($randomRate <= (Auth::user()->power()['lucky']/$allLucky) * 100)
@@ -139,13 +168,13 @@ class HitController extends BaseController
                                                 if($effectTo == 0)
                                                 {
                                                     $destroy *= 1.5;
-                                                    $message = "[ $skill->name ] Bạn đã gây $destroy sát thương chí mạng cho đối thủ ( x1.5 )";
+                                                    $message .= " ( Chí mạng )";
                                                 }
                                             }
                                             /* Enemy passive skill */
                                             foreach($getEnemyInfor->usingSkills() as $key => $enemyPassiveSkill)
                                             {
-                                                if($enemyPassiveSkill->passive == 1)
+                                                if($enemyPassiveSkill->passive == 1 && $enemyPassiveSkill->success_rate >= $randomRate)
                                                 {
                                                     switch($enemyPassiveSkill->type)
                                                     {
@@ -168,37 +197,46 @@ class HitController extends BaseController
                                             }
                                             if($enemy->first()->user_challenge_hp - $destroy <= 0 || $enemy->first()->user_challenge_hp <= 0)
                                             {
-                                                $exp = 100;
-                                                $coins = 300;
-                                                $pvpPoints = 5;
+                                                $rewards = [
+                                                    'exp' => 100,
+                                                    'coins' => 1000,
+                                                    'pvp_points' => 5
+                                                ];
 
-                                                $youWin = Auth::user();
-
-                                                $youWin->increment('exp',$exp);
-                                                $youWin->increment('income_coins',$coins);
-                                                $youWin->increment('pvp_points',$pvpPoints);
-
-                                                FightRoomLog::create([
-                                                    'user_win_id' => Auth::id(),
-                                                    'user_lose_id' => $enemy->first()->user_receive_challenge
-                                                ]);
-
-                                                if(isset($youWin))
-                                                {
-                                                    $this->pvpRestart($room->id,true);
-                                                    $response = [
-                                                        'code' => 201,
-                                                        'win' => true,
-                                                        'status' => 'success',
-                                                        'message' => "Thắng ! Bạn nhận được $exp EXP,$coins Vàng, $pvpPoints Điểm hạng",
-                                                    ];
-                                                }
+                                                DB::transaction(function () use ($enemy, $room, $rewards){
+                                                    $youWin = Auth::user();
+                                                    $enemyLose = User::findOrFail($enemy->first()->user_challenge);
+    
+                                                    $youWin->increment('exp',$rewards['exp']);
+                                                    $youWin->increment('income_coins',$rewards['coins']);
+                                                    $youWin->increment('pvp_points',$rewards['pvp_points']);
+    
+                                                    $enemyLose->decrement('income_coins',$rewards['coins']);
+                                                    $enemyLose->decrement('pvp_points',$rewards['pvp_points']);
+    
+                                                    FightRoomLog::create([
+                                                        'user_win_id' => Auth::id(),
+                                                        'user_lose_id' => $enemy->first()->user_challenge
+                                                    ]);
+    
+                                                    if(isset($youWin))
+                                                    {
+                                                        $this->pvpRestart($room->id,true);
+                                                    }
+                                                });
+                                                $response = [
+                                                    'code' => 201,
+                                                    'win' => true,
+                                                    'status' => 'success',
+                                                    'message' => "Thắng ! Bạn nhận được {$rewards['exp']} EXP,{$rewards['coins']} Vàng, {$rewards['pvp_points']} Điểm hạng",
+                                                ];
                                             }
                                             else
                                             {
                                                 $enemyUpdate = [
                                                     'user_challenge_hp' => DB::raw("user_challenge_hp - $destroy"),
-                                                    'turn' => 1
+                                                    'turn' => $enemyTurn,
+                                                    'effected' => json_encode($enemyEffected)
                                                 ];
                                                 if($findMatch->update($yourUpdate) && $enemy->update($enemyUpdate))
                                                 {
@@ -232,7 +270,7 @@ class HitController extends BaseController
                                                             'basic' => $userApi->userInfor(Auth::id()),
                                                             'hp' => $findMatch->first()->user_challenge_hp,
                                                             'energy' => $findMatch->first()->user_challenge_energy,
-                                                            'turn' => 0,
+                                                            'turn' => $yourTurn
                                                         ],
                                                     ];
                                                 }
@@ -367,5 +405,10 @@ class HitController extends BaseController
         {
             return $destroy;
         }
+    }
+
+    public function calculateDamage($effect1, $effect2)
+    {
+        return $effect1 - $effect2 <= 0 ? 0 : $effect1 - $effect2;
     }
 }

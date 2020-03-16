@@ -38,10 +38,10 @@ class ListenActionController extends BaseController
                 }
                 else
                 {
-                    $enemy = FightRoom::where('user_challenge',$findMatch->user_receive_challenge);
-                    $enemyTurn = $enemy->first()->turn;
-                    while($time <= $timeLimit + 1 && $enemyTurn == 1)
+                    while($time <= $timeLimit)
                     {
+                        $enemy = FightRoom::where('user_challenge',$findMatch->user_receive_challenge);
+                        $enemyTurn = $enemy->first()->turn;
                         sleep(1);
                         $time++;
                         if($time == $timeLimit)
@@ -49,6 +49,10 @@ class ListenActionController extends BaseController
                             $enemy->update([
                                 'turn' => 0
                             ]);
+                            break;
+                        }
+                        elseif($enemyTurn == 0)
+                        {
                             break;
                         }
                         elseif(collect($this->gameOver)->contains(FightRoom::where('user_challenge',Auth::id())->first()->status))
@@ -81,6 +85,64 @@ class ListenActionController extends BaseController
                                 break;
                             }
                             return response()->json($response,200);
+                        }
+                        elseif(isset($you->first()->effected))
+                        {
+                            $yourEffected = null;
+                            $yourEffectedTurn = 0;
+                            $currentEffected = $you->first()->effected;
+                            $effected = $currentEffected;
+                            foreach(array_wrap($currentEffected) as $key => $effect)
+                            {
+                                if($key && $effect == 1)
+                                {
+                                    $yourEffected = $key;
+                                    $yourEffectedTurn = $effect;
+                                    break;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                            if(isset($yourEffected))
+                            {
+                                switch($yourEffected)
+                                {
+                                    case SkillType::STUN:
+                                        $currentEffected[$yourEffected] = null;
+                                        $you->update([
+                                            'turn' => 0,
+                                            'effected' => json_encode($currentEffected)
+                                        ]);
+                                        $enemy->update([
+                                            'turn' => 1,
+                                        ]);
+                                        $you = FightRoom::where('user_challenge',Auth::id());
+                                        $enemy = FightRoom::where('user_challenge',$findMatch->user_receive_challenge);
+                                        $userApi = new IndexController();
+                                        $response = [
+                                            'code' => 200,
+                                            'status' => 'success',
+                                            'message' => 'Bạn đã bị dính hiệu ứng choáng',
+                                            'enemy' => [
+                                                'basic' => $userApi->userInfor($enemy->first()->user_challenge),
+                                                'hp' => $enemy->first()->user_challenge_hp,
+                                                'energy' => $enemy->first()->user_challenge_energy,
+                                            ],
+                                            'you' => [
+                                                'basic' => $userApi->userInfor(Auth::id()),
+                                                'hp' => $you->first()->user_challenge_hp,
+                                                'energy' => $you->first()->user_challenge_energy,
+                                                'turn' => 0,
+                                                'effected' => $effected,
+                                                'hasEffected' => 1
+                                            ],
+                                        ];
+                                        return response()->json($response,200);
+                                    break;
+                                }
+                            }
                         }
                         else
                         {
@@ -132,7 +194,7 @@ class ListenActionController extends BaseController
                         $response = [
                             'code' => 200,
                             'status' => 'success',
-                            'message' => "Hết thời gian",
+                            'message' => "Đến lượt của bạn",
                             'enemy' => [
                                 'basic' => $userApi->userInfor($enemy->first()->user_challenge),
                                 'hp' => $enemy->first()->user_challenge_hp,
