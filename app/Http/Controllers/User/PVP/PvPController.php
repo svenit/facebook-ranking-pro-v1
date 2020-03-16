@@ -167,7 +167,16 @@ class PvPController extends Controller
             if(isset($checkSession))
             {
                 $this->tracking(true);
-                return view('user.pvp.fight',compact('room','checkRoom','checkSession'));
+                $comments = [
+                    'Bỏ tay ra bạn <p>eeiiii..</p>', 
+                    'Đánh thế cũng <p>đánh</p>', 
+                    'Đm ví tao đâu :(', 
+                    'Mẹ ơi con <p>muốn về nhà :(</p>',
+                    'Ê có chap <p>mới rồi anh e</p>',
+                    'Anh ơi thằng <p>kia nhìn đểu</p>',
+                    'Đánh tay không <p>tao xem nào</p>',
+                ];
+                return view('user.pvp.fight',compact('room','checkRoom','checkSession', 'comments'));
             }
             else
             {

@@ -1,3 +1,25 @@
+.pvp-comment
+{
+    position: absolute;
+    font-size: 11px;
+    color: #777;
+    width:220px;
+    padding: 5px;
+    background-repeat: no-repeat;
+    height: auto;
+    background-size: contain;
+    background-image: url(../images/comment.png);
+}
+.shadow-character
+{
+    width: 40px;
+    background: rgb(0,0,0,0.3);
+    border-radius: 50%;
+    height: 30px;
+    top: 65px;
+    left: 36px;
+    position: absolute;
+}
 /* Fanart Inventory Pack */
 .assassin_weapon_rakasa
 {
