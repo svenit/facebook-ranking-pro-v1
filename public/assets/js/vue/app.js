@@ -168,7 +168,8 @@ app = new Vue({
                     hp: 1,
                     energy: 1,
                     gears: [],
-                    skills: []
+                    skills: [],
+                    pet:{}
                 }
             }
         },

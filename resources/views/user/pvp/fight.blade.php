@@ -7,7 +7,7 @@
 <div class="page-content page-container" id="page-content">
     <div class="padding-x">
         @include('user.theme.parameter')
-        <div style="position:relative;top:-100px">
+        <div style="position:relative;top:-50px">
             <img style="width:100%;height:100%;position:relative;top:50px;z-index:999;" src="{{ asset('assets/images/icon-pack/pvp-header.png') }}">
             <div style="background-image:url('{{ asset('assets/images/icon-pack/pvp-background.png') }}') !important;background-position:center top !important;height:600px;background-attachment: fixed;" class="row vip-bordered">
                 <div style="position:absolute;bottom:0;z-index:999" class="pvp-button">
@@ -19,13 +19,19 @@
                     <button id='fight-button' v-if="pvp.isMatching" style="width:200px" class="vip-bordered">Kết Thúc Sau : @{{ pvp.timeRemaining }}s</button>
                     <button id='fight-button' v-if="!pvp.isMatching || pvp.isEnding" style="width:100px" @click="exitMatch()" class="vip-bordered">Thoát</button>
                 </div>
+                <div style="position:absolute;top:40%;left:10%;z-index:1;" class="pvp-button">
+                    <img style="width:60px;" src="{{ asset('https://66.media.tumblr.com/tumblr_mairyt4v5J1rfjowdo1_500.gif') }}">
+                    <div class="shadow-pet" style="width: 70px;left: -10%;top: 60%;z-index: -1;"></div>
+                </div>
+                <div style="position:absolute;top:48%;right:5%;z-index:1;" class="pvp-button">
+                    <img style="width:150px;height:100px;" src="{{ asset('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/0625c2f9-8190-4016-888a-b5e900cebd89/d5io61q-f2a9e5ad-1f5b-434c-8b8b-e568370b699e.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzA2MjVjMmY5LTgxOTAtNDAxNi04ODhhLWI1ZTkwMGNlYmQ4OVwvZDVpbzYxcS1mMmE5ZTVhZC0xZjViLTQzNGMtOGI4Yi1lNTY4MzcwYjY5OWUucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.7hMsK3ho57QzUccG7PfG8LfM36tSgT96XEwL6nuF_5k') }}">
+                    <div class="shadow-pet" style="width: 110px;left: -5%;top: 80%;z-index: -1;"></div>
+                </div>
                 <div :class="[pvp.yourAttack ? 'animated fadeOutRight' : '',pvp.yourBuff || pvp.enemyAttack ? 'animated shake' : '']" class="col-6 col-auto">
                     <div class="">
                         <div class="">
-                            @{{ pvp.match.you.turn }}
                             <img v-if="pvp.match.you.turn == 1 && pvp.isMatching && !pvp.isEnding" style="position:absolute;width:50%;left:20%;top:10%" src="https://i.imgur.com/xjA4khR.gif">
-                            <img v-if="pvp.enemyAttack" style="position:absolute;width:100%;z-index:9999999" :src="pvp.enemySkillAnimation">
-                            <div @click="index()" style="position:absolute;bottom:28%;right:5%" title="Nhấp vào để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px" class="character-sprites hoverable">
+                            <div @click="index()" :style="{position:'absolute',bottom:`${data.pet ? '32%' : '28%'}`,right:'30%'}" title="Nhấp vào để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px" class="character-sprites hoverable">
                                 <span v-if="data.pet" :class="`Mount_Body_${data.pet.class_tag}`"></span>
                                 <span style="z-index:2" class="skin_f5a76e"></span>
                                 <span style="z-index:2" class="broad_shirt_black"></span>
@@ -36,7 +42,8 @@
                                     <span v-else :class="gear.class_tag" :style="{zIndex:gear.cates.z_index}"></span>
                                 </span>
                                 <span v-if="data.pet" style="z-index:50" :class="`Mount_Head_${data.pet.class_tag}`"></span>
-                                <div class="shadow-character animated infinite pulse"></div>
+                                <div :class="`${data.pet ? 'shadow-pet' : 'shadow-character'} animated infinite pulse`"></div>
+                                <div v-if="pvp.enemyAttack" :style="{backgroundImage:`url(${pvp.enemySkillAnimation})`,width: '100%',height: '100%',top: 0,left: '7%',zIndex: '9999'}" class="shadow-character"></div>
                             </div>
                         </div>
                         <div v-if="pvp.enemyJoined">
@@ -68,7 +75,7 @@
                 <div style="float:right" :class="[pvp.enemyAttack ? 'animated fadeOutLeft' : '',pvp.enemyBuff || pvp.yourAttack ? 'animated shake' : '']" class="col-6 col-auto">
                     <div class="">
                         <img v-if="pvp.match.you.turn == 0 && pvp.isMatching" style="position:absolute;width:50%;left:20%;top:10%" src="https://i.imgur.com/xjA4khR.gif">
-                        <div v-if="pvp.enemyJoined && !pvp.isEnding" style="position:absolute;bottom:28%;left:5%" @click="showUserInfor(pvp.match.enemy.infor.facebook_id)" title="Nhấp vào để xem thông số" data-toggle="modal" data-target=".modal-right" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px" class="character-sprites hoverable">
+                        <div v-if="pvp.enemyJoined && !pvp.isEnding" :style="{position:'absolute',bottom:`${pvp.match.enemy.pet ? '35%' : '25%'}`,left:'30%'}"  @click="showUserInfor(pvp.match.enemy.infor.facebook_id)" title="Nhấp vào để xem thông số" data-toggle="modal" data-target=".modal-right" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px" class="character-sprites hoverable">
                             <span v-if="pvp.match.enemy.pet" :class="`Mount_Body_${pvp.match.enemy.pet.class_tag}`"></span>
                             <span style="z-index:2" class="skin_f5a76e"></span>
                             <span style="z-index:2" class="broad_shirt_black"></span>
@@ -79,8 +86,8 @@
                                 <span v-else :class="gear.class_tag" :style="{zIndex:gear.cates.z_index}"></span>
                             </span>
                             <span v-if="pvp.match.enemy.pet" style="z-index:50" :class="`Mount_Head_${pvp.match.enemy.pet.class_tag}`"></span>
-                            <div v-if="!pvp.yourAttack" class="shadow-character animated infinite pulse"></div>
-                            <div v-else :style="{backgroundImage:url(`${pvp.yourSkillAnimation}`),width: '100%',height: '100%',top: 0,left: '7%',zIndex: '9999'}" class="shadow-character"></div>
+                            <div :class="`${pvp.match.enemy.pet ? 'shadow-pet' : 'shadow-character'} animated infinite pulse`"></div>
+                            <div v-if="pvp.yourAttack" :style="{backgroundImage:`url(${pvp.yourSkillAnimation})`,backgroundSize:'110%',position:'absolute',backgroundPosition:'center',width: '150%',height: '150%',bottom: '-20px',left: 0,zIndex: '9999'}"></div>
                         </div>
                         <div v-if="pvp.enemyJoined">
                             <p class="card-title text-gold text-center">
@@ -120,6 +127,7 @@
                     </span>
                 </div>
             </div>
+            <img style="width:100%;height:100%;position:relative;bottom:50px;z-index:0;" src="https://img.itch.zone/aW1nLzE1MTg1NTQuZ2lm/original/mc%2F7UB.gif">
         </div>
     </div>
     <div style="display:none" class="preload-skills">
