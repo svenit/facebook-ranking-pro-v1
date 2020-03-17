@@ -1,38 +1,62 @@
-.pvp-comment
-{
+.has-pvp-turn-with-pet {
+    transform: rotate3d(150, 1, 1, 45deg);
+    background-image: url(../images/animations/28.gif);
+    width: 250%;
+    height: 170%;
+    top: 45px;
+    z-index: 0 !important;
+    position: absolute;
+    left: -55px;
+    background-size: 100%;
+    background-position: bottom;
+}
+.has-pvp-turn-no-pet {
+    transform: rotate3d(150, 1, 1, 45deg);
+    background-image: url(../images/animations/28.gif);
+    width: 250%;
+    height: 170%;
+    top: 10px;
+    z-index: 0 !important;
+    position: absolute;
+    left: -55px;
+    background-size: 100%;
+    background-position: bottom;
+}
+
+.pvp-comment {
     position: absolute;
     font-size: 11px;
     color: #777;
-    width:220px;
+    width: 220px;
     padding: 5px;
     background-repeat: no-repeat;
     height: auto;
     background-size: contain;
     background-image: url(../images/comment.png);
 }
-.shadow-character
-{
+
+.shadow-character {
     width: 40px;
-    background: rgb(0,0,0,0.3);
+    background: rgb(0, 0, 0, 0.3);
     border-radius: 50%;
     height: 30px;
     top: 65px;
     left: 36px;
     position: absolute;
 }
-.shadow-pet
-{
+
+.shadow-pet {
     width: 120px;
-    background: rgb(0,0,0,0.3);
+    background: rgb(0, 0, 0, 0.3);
     border-radius: 50%;
     height: 30px;
     top: 120%;
     left: 0;
     position: absolute;
 }
+
 /* Fanart Inventory Pack */
-.assassin_weapon_rakasa
-{
+.assassin_weapon_rakasa {
     /* This item was created by Luan Vo - Solo Leveling Viet Nam */
     background-image: url(../images/icon-pack/rakasa.svg);
     width: 60px;
@@ -40,8 +64,8 @@
     background-repeat: no-repeat;
     background-position: 16px 28px;
 }
-.tanker_helmet_igris
-{
+
+.tanker_helmet_igris {
     /* This item was created by Luan Vo - Solo Leveling Viet Nam */
     background-image: url(../images/icon-pack/igris-helmet.svg);
     width: 90px;
@@ -50,9 +74,8 @@
     background-position: 10px 10px;
 }
 
-.assassin_earring_baran
-{
-     /* This item was created by Phan Minh Vit Duc - Solo Leveling Viet Nam */
+.assassin_earring_baran {
+    /* This item was created by Phan Minh Vit Duc - Solo Leveling Viet Nam */
     background-image: url(../images/icon-pack/baran-earing.png);
     width: 90px;
     height: 90px;
