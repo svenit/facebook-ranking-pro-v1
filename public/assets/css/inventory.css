@@ -1,3 +1,72 @@
+/* Fanart Inventory Pack */
+.assassin_weapon_rakasa {
+    /* This item was created by Luan Vo - Solo Leveling Viet Nam */
+    background-image: url(../images/icon-pack/rakasa.svg);
+    width: 60px;
+    height: 100px;
+    background-repeat: no-repeat;
+    background-position: 16px 28px;
+}
+
+.tanker_helmet_igris {
+    /* This item was created by Luan Vo - Solo Leveling Viet Nam */
+    background-image: url(../images/set/igris-header.svg);
+    width: 90px;
+    height: 90px;
+    background-size: 110%;
+    background-position: 9px 12px;
+}
+.shop_tanker_helmet_igris {
+    /* This item was created by Luan Vo - Solo Leveling Viet Nam */
+    background-image: url(../images/set/igris-header.svg);
+    width: 68px;
+    height: 68px;
+    background-size: 100%;
+    background-position: 0px 15px;
+}
+.tanker_armor_igris {
+    /* This item was created by Luan Vo - Solo Leveling Viet Nam */
+    background-image: url(../images/set/igris-armor.svg);
+    width: 90px;
+    height: 90px;
+    background-size: 90%;
+    background-position: 16px 18px;
+}
+.shop_tanker_armor_igris {
+    /* This item was created by Luan Vo - Solo Leveling Viet Nam */
+    background-image: url(../images/set/igris-armor.svg);
+    width: 68px;
+    height: 68px;
+    background-size: 100%;
+    background-position: 0px 0px;
+}
+.tanker_sword_igris {
+    /* This item was created by Luan Vo - Solo Leveling Viet Nam */
+    background-image: url(../images/set/igris-weapon.svg);
+    width: 90px;
+    height: 90px;
+    background-size: 100%;
+    background-position: 0px 10px;
+}
+.shop_tanker_sword_igris {
+    /* This item was created by Luan Vo - Solo Leveling Viet Nam */
+    background-image: url(../images/set/igris-weapon.svg);
+    width: 68px;
+    height: 68px;
+    background-size: 100%;
+    background-position: 15px 5px;
+}
+
+.assassin_earring_baran {
+    /* This item was created by Phan Minh Vit Duc - Solo Leveling Viet Nam */
+    background-image: url(../images/icon-pack/baran-earing.png);
+    width: 90px;
+    height: 90px;
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: 62px 40px;
+}
+
 .has-pvp-turn-with-pet {
     transform: rotate3d(150, 1, 1, 45deg);
     background-image: url(../images/animations/28.gif);
@@ -101,32 +170,18 @@
     left: 0;
     position: absolute;
 }
-
-/* Fanart Inventory Pack */
-.assassin_weapon_rakasa {
-    /* This item was created by Luan Vo - Solo Leveling Viet Nam */
-    background-image: url(../images/icon-pack/rakasa.svg);
-    width: 60px;
-    height: 100px;
-    background-repeat: no-repeat;
-    background-position: 16px 28px;
-}
-
-.tanker_helmet_igris {
-    /* This item was created by Luan Vo - Solo Leveling Viet Nam */
-    background-image: url(../images/icon-pack/igris-helmet.svg);
-    width: 90px;
-    height: 90px;
-    background-size: 109%;
-    background-position: 10px 10px;
-}
-
-.assassin_earring_baran {
-    /* This item was created by Phan Minh Vit Duc - Solo Leveling Viet Nam */
-    background-image: url(../images/icon-pack/baran-earing.png);
-    width: 90px;
-    height: 90px;
-    background-repeat: no-repeat;
-    background-size: 20px;
-    background-position: 62px 40px;
+.avatar-bordered {
+    position: relative;
+    margin: 0 auto;
+    border: 5px solid;
+    background: rgba(10, 12, 17, .65) !important;
+    border-image-slice: 5 5 5 5;
+    border-image-width: 5px 5px 5px 5px;
+    border-image-outset: 0;
+    border-image-repeat: stretch stretch;
+    border-image-source: url(../images/border-avatar.png);
+    width:60px;
+    float: left;
+    border-radius:3px !important;
+    margin-right:10px;
 }

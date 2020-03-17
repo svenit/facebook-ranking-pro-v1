@@ -38,12 +38,10 @@ class ListenActionController extends BaseController
                 }
                 else
                 {
-                    while($time <= $timeLimit)
+                    while($time <= $timeLimit && FightRoom::where('user_challenge',$findMatch->user_receive_challenge)->first()->turn == 1)
                     {
                         $enemy = FightRoom::where('user_challenge',$findMatch->user_receive_challenge);
                         $enemyTurn = $enemy->first()->turn;
-                        sleep(1);
-                        $time++;
                         if($time == $timeLimit)
                         {
                             $enemy->update([
@@ -110,10 +108,12 @@ class ListenActionController extends BaseController
                                 switch($yourEffected)
                                 {
                                     case SkillType::STUN:
+                                        $yourCountDown = $this->decreCountDown() ?? null;
                                         $currentEffected[$yourEffected] = null;
                                         $you->update([
                                             'turn' => 0,
-                                            'effected' => json_encode($currentEffected)
+                                            'effected' => json_encode($currentEffected),
+                                            'countdown_skill' => json_encode($yourCountDown)
                                         ]);
                                         $enemy->update([
                                             'turn' => 1,
@@ -130,6 +130,7 @@ class ListenActionController extends BaseController
                                                 'hp' => $enemy->first()->user_challenge_hp,
                                                 'energy' => $enemy->first()->user_challenge_energy,
                                                 'effected' => $enemy->first()->effected,
+                                                'countdown' => $enemy->first()->countdown_skill
                                             ],
                                             'you' => [
                                                 'basic' => $userApi->userInfor(Auth::id()),
@@ -137,7 +138,8 @@ class ListenActionController extends BaseController
                                                 'energy' => $you->first()->user_challenge_energy,
                                                 'turn' => 0,
                                                 'effected' => $effected,
-                                                'hasEffected' => 1
+                                                'countdown' => $yourCountDown,
+                                                'hasEffected' => 1,
                                             ],
                                         ];
                                         return response()->json($response,200);
@@ -153,6 +155,8 @@ class ListenActionController extends BaseController
                                 break;
                             }
                         }
+                        sleep(1);
+                        $time++;
                     }
                     $getEnemy = FightRoom::where('user_challenge',$findMatch->user_receive_challenge);
                     if($getEnemy->first()->turn == 0)
@@ -184,10 +188,12 @@ class ListenActionController extends BaseController
                                 }
                             }
                         }
+                        $yourCountDown = $this->decreCountDown() ?? null;
                         $you->update([
                             'turn' => 1,
                             'user_challenge_energy' => DB::raw("user_challenge_energy + ".$this->energyRecovery = $you->first()->user_challenge_energy + $this->energyRecovery > Auth::user()->character->default_energy ? Auth::user()->character->default_energy - $you->first()->user_challenge_energy : $this->energyRecovery),
-                            'user_challenge_hp' => DB::raw("user_challenge_hp +".$hp = $you->first()->user_challenge_hp + $hp > Auth::user()->power()['health_points'] ? Auth::user()->power()['health_points'] - $you->first()->user_challenge_hp : $hp)
+                            'user_challenge_hp' => DB::raw("user_challenge_hp +".$hp = $you->first()->user_challenge_hp + $hp > Auth::user()->power()['health_points'] ? Auth::user()->power()['health_points'] - $you->first()->user_challenge_hp : $hp),
+                            'countdown_skill' => json_encode($yourCountDown)
                         ]);
                         $you = FightRoom::where('user_challenge',Auth::id());
                         $enemy = FightRoom::where('user_challenge',$findMatch->user_receive_challenge);
@@ -200,14 +206,16 @@ class ListenActionController extends BaseController
                                 'basic' => $userApi->userInfor($enemy->first()->user_challenge),
                                 'hp' => $enemy->first()->user_challenge_hp,
                                 'energy' => $enemy->first()->user_challenge_energy,
-                                'effected' => $enemy->first()->effected
+                                'effected' => $enemy->first()->effected,
+                                'countdown' => $enemy->first()->countdown_skill
                             ],
                             'you' => [
                                 'basic' => $userApi->userInfor(Auth::id()),
                                 'hp' => $you->first()->user_challenge_hp,
                                 'energy' => $you->first()->user_challenge_energy,
                                 'turn' => 1,
-                                'effected' => $you->first()->effected
+                                'effected' => $you->first()->effected,
+                                'countdown' => $yourCountDown
                             ],
                         ];
                     }
@@ -250,6 +258,18 @@ class ListenActionController extends BaseController
                 ];
             }
             return response()->json($response,200);
+        }
+    }
+    public function decreCountDown()
+    {
+        $skillsCountDown = FightRoom::where('user_challenge',Auth::id())->first()->countdown_skill;
+        if(isset($skillsCountDown))
+        {
+            foreach($skillsCountDown as $key => $countdown)
+            {
+                $skillsCountDown[$key]['countdown'] -= $countdown['countdown'] == 0 ? 0 : 1;
+            }
+            return $skillsCountDown;
         }
     }
 }

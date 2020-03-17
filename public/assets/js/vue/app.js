@@ -132,12 +132,14 @@ app = new Vue({
             yourBuff: false,
             yourSkillAnimation: '',
             yourEffected:null,
+            yourCountDown:null,
 
             enemyAttack: false,
             enemyBuff: false,
             enemySkillAnimation: '',
             enemyAttackDamage:null,
             enemyEffected:null,
+            enemyCountDown:null,
 
             timeOut: 20,
             status: '',
@@ -368,11 +370,13 @@ app = new Vue({
             this.pvp.match.you.energy = res.data.you.energy;
             this.pvp.match.you.turn = res.data.you.turn;
             this.pvp.yourEffected = res.data.you.effected || null;
+            this.pvp.yourCountDown = res.data.you.countdown || null;
 
             this.pvp.match.enemy = res.data.enemy.basic.original;
             this.pvp.match.enemy.hp = res.data.enemy.hp;
             this.pvp.match.enemy.energy = res.data.enemy.energy;
             this.pvp.enemyEffected = res.data.enemy.effected || null;
+            this.pvp.enemyCountDown = res.data.enemy.countdown || null;
         },
         countDown()
         {
@@ -967,6 +971,8 @@ app = new Vue({
                             clearInterval(remaining);
                         }
                         this.pvp.timeRemaining = res.data.remaining;
+                        this.pvp.yourCountDown = res.data.you.countdown;
+                        this.pvp.enemyCountDown = res.data.enemy.countdown;
                         remaining = setInterval(() => {
                             this.pvp.timeRemaining--;
                             if (this.pvp.timeRemaining <= 0) {
@@ -1014,77 +1020,102 @@ app = new Vue({
         },
         async hit(skill) {
             try {
-                if (this.pvp.match.you.turn == 1) {
-                    if (skill.energy <= this.pvp.match.you.energy) {
-                        if (skill.passive == 0) {
-                            if (skill.effect_to == 1) 
-                            {
-                                this.pvp.yourBuff = true;
-                            } 
-                            else 
-                            {
-                                this.pvp.yourSkillAnimation = skill.animation;
-                                this.pvp.yourAttack = true;
-                            }
-                            this.pvp.match.you.turn = 0;
-                            let res = await axios.post(`${config.root}/api/v1/pvp/hit`, {
-                                room: page.room.id,
-                                skill: skill.id,
-                                bearer: config.bearer
-                            }, {
-                                headers: {
-                                    pragma: this.token
+                var skillCountDown = false;
+                if(this.pvp.yourCountDown && this.pvp.yourCountDown.length > 0)
+                {
+                    this.pvp.yourCountDown.filter((item, key) => {
+                        if(skill.id == item.id && item.countdown == 0)
+                        {
+                            skillCountDown = true;
+                            return;
+                        }
+                    });
+                }
+                if(skillCountDown)
+                {
+                    if (this.pvp.match.you.turn == 1) {
+                        if (skill.energy <= this.pvp.match.you.energy) {
+                            if (skill.passive == 0) {
+                                if (skill.effect_to == 1) 
+                                {
+                                    this.pvp.yourBuff = true;
+                                } 
+                                else 
+                                {
+                                    this.pvp.yourSkillAnimation = skill.animation;
+                                    this.pvp.yourAttack = true;
                                 }
-                            });
-                            await this.refreshToken(res);
-                            switch (res.data.code) {
-                                case 200:
-                                    this.notify(res.data.message);
-                                    this.pvpTurnBase(res);
-                                    this.pvp.yourAttackDamage = res.data.you.damage;
-                                    setTimeout(() => {
-                                        this.pvp.yourAttackDamage = null;
-                                    },800);
-                                    this.pvp.yourAttack = false;
-                                    this.pvp.yourBuff = false;
-                                    clearInterval(countDown);
-                                    this.pvp.timeOut = 15;
-                                    this.countDown();
-                                break;
-                                case 404:
-                                    this.notify(res.data.message);
+                                this.pvp.match.you.turn = 0;
+                                let res = await axios.post(`${config.root}/api/v1/pvp/hit`, {
+                                    room: page.room.id,
+                                    skill: skill.id,
+                                    bearer: config.bearer
+                                }, {
+                                    headers: {
+                                        pragma: this.token
+                                    }
+                                });
+                                await this.refreshToken(res);
+                                switch (res.data.code) {
+                                    case 200:
+                                        this.notify(res.data.message);
+                                        this.pvpTurnBase(res);
+                                        this.pvp.yourAttackDamage = res.data.you.damage;
+                                        setTimeout(() => {
+                                            this.pvp.yourAttackDamage = null;
+                                        },800);
+                                        this.pvp.yourAttack = false;
+                                        this.pvp.yourBuff = false;
+                                        clearInterval(countDown);
+                                        this.pvp.timeOut = 15;
+                                        this.countDown();
                                     break;
-                                case 300:
-                                    this.notify(res.data.message);
-                                    this.resetPvp();
-                                    this.findEnemy();
+                                    case 202:
+                                        this.notify(res.data.message);
+                                        this.pvp.match.you.turn = 1;
+                                        this.pvp.yourAttack = false;
+                                        this.pvp.yourBuff = false;
                                     break;
-                                case 201:
-                                    clearInterval(countDown);
-                                    Swal.fire({
-                                        title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
-                                        text: res.data.message,
-                                        focusConfirm: true,
-                                        confirmButtonText: 'OK',
-                                    });
-                                    this.index();
-                                    this.resetPvp();
-                                    this.findEnemy();
-                                    break;
-                                default:
-                                    this.notify('Đã có lỗi xảy ra xin vui lòng thử lại hoặc tải lại trang');
-                                    break;
+                                    case 404:
+                                        this.notify(res.data.message);
+                                        break;
+                                    case 300:
+                                        this.notify(res.data.message);
+                                        this.resetPvp();
+                                        this.findEnemy();
+                                        break;
+                                    case 201:
+                                        clearInterval(countDown);
+                                        Swal.fire({
+                                            title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
+                                            text: res.data.message,
+                                            focusConfirm: true,
+                                            confirmButtonText: 'OK',
+                                        });
+                                        this.index();
+                                        this.resetPvp();
+                                        this.findEnemy();
+                                        break;
+                                    default:
+                                        this.notify('Đã có lỗi xảy ra xin vui lòng thử lại hoặc tải lại trang');
+                                        break;
+                                }
+                            } else {
+                                this.notify('Bạn không thể sử dụng kĩ năng bị động');
                             }
                         } else {
-                            this.notify('Bạn không thể sử dụng kĩ năng bị động');
+                            this.notify('Bạn không đủ MP để sử dụng kĩ năng này');
                         }
                     } else {
-                        this.notify('Bạn không đủ MP để sử dụng kĩ năng này');
+                        this.notify('Vui lòng chờ đến lượt của bạn !');
                     }
-                } else {
-                    this.notify('Vui lòng chờ đến lượt của bạn !');
                 }
-            } catch (e) {
+                else
+                {
+                    this.notify('Kỹ năng chưa hồi');
+                }
+            } 
+            catch (e) {
                 this.notify('Đã có lỗi xảy ra, xin vui lòng tải lại trang');
                 this.refreshToken(this.token);
             }

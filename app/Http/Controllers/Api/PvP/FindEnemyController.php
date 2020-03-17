@@ -30,13 +30,15 @@ class FindEnemyController extends Controller
                             'basic' => $api->userInfor(Auth::id()),
                             'hp' => $you->user_challenge_hp,
                             'energy' => $you->user_challenge_energy,
-                            'effected' => $you->effected
+                            'effected' => $you->effected,
+                            'countdown' => $you->countdown_skill
                         ],
                         'enemy' => [
                             'basic' => $api->userInfor($enemy->user_challenge),
                             'hp' => $enemy->user_challenge_hp,
                             'energy' => $enemy->user_challenge_energy,
-                            'effected' => $enemy->effected
+                            'effected' => $enemy->effected,
+                            'countdown' => $enemy->countdown_skill
                         ],
                         'code' => 200,
                         'status' => 'success'

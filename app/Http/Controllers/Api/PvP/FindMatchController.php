@@ -158,18 +158,21 @@ class FindMatchController extends BaseController
                                 {
                                     FightRoom::where('user_challenge',$getEnemy->user_receive_challenge)->update([
                                         'turn' => 0,
+                                        'countdown_skill' => json_encode($this->getSkills($getEnemy->user_receive_challenge))
                                     ]);
                                     FightRoom::where('user_challenge',Auth::id())->update([
-                                        'turn' => 1
+                                        'turn' => 1,
+                                        'countdown_skill' => json_encode($this->getSkills(Auth::id()))
                                     ]);
                                 }
                                 else
                                 {
                                     FightRoom::where('user_challenge',Auth::id())->update([
-                                        'turn' => 0
+                                        'turn' => 0,
+                                        'countdown_skill' => json_encode($this->getSkills(Auth::id()))
                                     ]);
                                     FightRoom::where('user_challenge',$getEnemy->user_receive_challenge)->update([
-                                        'turn' => 1
+                                        'countdown_skill' => json_encode($this->getSkills($getEnemy->user_receive_challenge))
                                     ]);
                                 }
                             }
@@ -189,14 +192,16 @@ class FindMatchController extends BaseController
                                     'basic' => $userApi->userInfor($getEnemy->user_receive_challenge),
                                     'hp' => $enemy->user_challenge_hp,
                                     'energy' => $enemy->user_challenge_energy,
-                                    'effected' => $enemy->effected
+                                    'effected' => $enemy->effected,
+                                    'countdown' => $this->getSkills($getEnemy->user_receive_challenge)
                                 ],
                                 'you' => [
                                     'basic' => $userApi->userInfor(Auth::id()),
                                     'hp' => $getEnemy->user_challenge_hp,
                                     'energy' => $getEnemy->user_challenge_energy,
                                     'turn' => $turn,
-                                    'effected' => $getEnemy->effected
+                                    'effected' => $getEnemy->effected,
+                                    'countdown' => $this->getSkills(Auth::id())
                                 ],
                                 'remaining' => ($this->limitTime * 60)
                             ]);
@@ -222,14 +227,16 @@ class FindMatchController extends BaseController
                             'basic' => $userApi->userInfor($enemy->user_challenge),
                             'hp' => $enemy->user_challenge_hp,
                             'energy' => $enemy->user_challenge_energy,
-                            'effected' => $enemy->effected
+                            'effected' => $enemy->effected,
+                            'countdown' => $enemy->countdown_skill
                         ],
                         'you' => [
                             'basic' => $userApi->userInfor(Auth::id()),
                             'hp' => $you->user_challenge_hp,
                             'energy' => $you->user_challenge_energy,
                             'turn' => $you->turn,
-                            'effected' => $you->effected
+                            'effected' => $you->effected,
+                            'countdown' => $you->countdown_skill
                         ],
                         'remaining' => ($this->limitTime * 60) - Carbon::parse($room->started_at)->diffInSeconds()
                     ];
@@ -237,5 +244,15 @@ class FindMatchController extends BaseController
                 return response()->json($response,200);
             }
         }
+    }
+
+    public function getSkills($id)
+    {
+        $skills = [];
+        foreach(User::findOrFail($id)->usingSkills() as $key => $skill)
+        {
+            $skills[$key] = $skill->only('id','countdown');
+        }
+        return $skills;
     }
 }

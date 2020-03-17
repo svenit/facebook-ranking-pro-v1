@@ -166,6 +166,7 @@ class BaseController extends Controller
             'user_receive_challenge' => null,
             'status' => $win ? 2 : null,
             'is_ready' => 0,
+            'countdown_skill' => null,
             'effected' => null
         ]);
         FightRoom::where([['user_challenge',$enemy->user_challenge],['room_id',$id]])->update([
@@ -175,6 +176,7 @@ class BaseController extends Controller
             'user_receive_challenge' => null,
             'status' => $win ? 1 : null,
             'is_ready' => 0,
+            'countdown_skill' => null,
             'effected' => null
         ]);
     }

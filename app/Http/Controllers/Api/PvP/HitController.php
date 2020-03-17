@@ -59,281 +59,309 @@ class HitController extends BaseController
                             $checkSkill = UserSkill::where([['user_id',Auth::id()],['skill_id',$request->skill],['status',1]])->first();
                             if(isset($checkSkill))
                             {
-                                $skill = Skill::find($checkSkill->skill_id);
-                                if($skill->passive == 0)
+                                $noCountDown = false;
+                                $checkCountDown = $findMatch->first()->countdown_skill;
+                                if(isset($checkCountDown[0]))
                                 {
-                                    if($findMatch->first()->user_challenge_energy >= $skill->energy)
+                                    foreach($checkCountDown as $key => $countdown)
                                     {
-                                        $randomRate = rand(0,100);
-                                        $getEnemyInfor = User::findOrFail($enemy->first()->user_challenge);
-
-                                        $allAgility = Auth::user()->power()['agility'] + $getEnemyInfor->power()['agility'];
-                                        $allLucky = Auth::user()->power()['lucky'] + $getEnemyInfor->power()['lucky'];
-
-                                        if($randomRate <= $skill->success_rate && $randomRate <= (Auth::user()->power()['agility']/$allAgility) * 100)
+                                        if($request->skill == $countdown['id'] && $countdown['countdown'] == 0)
                                         {
-                                            /* Your skill */
-                                            $destroy = 0;
-                                            $effectTo = 0; 
-                                            $yourUpdate = [
-                                                'turn' => 0,
-                                                'user_challenge_energy' => DB::raw("user_challenge_energy - $skill->energy")
-                                            ];
-                                            $yourTurn = 0;
-                                            $enemyTurn = 1;
-                                            $enemyUpdate = [];
-                                            $enemyEffected = $enemy->first()->effected ?? [];
+                                            $noCountDown = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if($noCountDown)
+                                {
+                                    $skill = Skill::find($checkSkill->skill_id);
+                                    if($skill->passive == 0)
+                                    {
+                                        if($findMatch->first()->user_challenge_energy >= $skill->energy)
+                                        {
+                                            $randomRate = rand(0,100);
+                                            $getEnemyInfor = User::findOrFail($enemy->first()->user_challenge);
 
-                                            switch($skill->type)
+                                            $allAgility = Auth::user()->power()['agility'] + $getEnemyInfor->power()['agility'];
+                                            $allLucky = Auth::user()->power()['lucky'] + $getEnemyInfor->power()['lucky'];
+
+                                            if($randomRate <= $skill->success_rate && $randomRate <= (Auth::user()->power()['agility']/$allAgility) * 100)
                                             {
-                                                case SkillType::ATTACK_STRENGTH:
-                                                    $yourStrength = Auth::user()->power()['strength'];
-                                                    $countDamage = $this->renderDestroy($yourStrength,$skill);
-                                                    $enemyStrengthArmor = $getEnemyInfor->power()['armor_strength'];
-                                                    $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor);
-                                                    $message = "[ $skill->name ] Bạn đã gây $destroy sát thương vật lí cho đối thủ";
-                                                break;
-                                                case SkillType::ATTACK_INTELLIGENT:
-                                                    $yourStrength = Auth::user()->power()['intelligent'];
-                                                    $countDamage = $this->renderDestroy($yourStrength,$skill);
-                                                    $enemyStrengthArmor = $getEnemyInfor->power()['armor_intelligent'];
-                                                    $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor);
-                                                    $message = "[ $skill->name ] Bạn đã gây $destroy sát thương phép thuật cho đối thủ";
-                                                break;
-                                                case SkillType::ATTACK_CRIT:
-                                                    $destroy = ($this->renderDestroy(Auth::user()->power()['strength'],$skill) * 2);
-                                                    $message = "[ $skill->name ] Bạn đã gây $destroy sát thương chí mạng cho đối thủ";
-                                                break;
-                                                case SkillType::ATTACK_HALF_HP:
-                                                    $destroy = (int)$enemy->first()->user_challenge_hp/2;
-                                                    $message = "[ $skill->name ] Bạn đã gây $destroy sát thương tinh thần cho đối thủ";
-                                                break;
-                                                case SkillType::HEALTH_HP:
-                                                    if($skill->power_type == $this->parameter)
-                                                    {
-                                                        $hp = (int)($findMatch->first()->user_challenge_hp + $skill->power_value) < Auth::user()->power()['health_points'] ? $skill->power_value : (int)(Auth::user()->power()['health_points'] - $findMatch->first()->user_challenge_hp);
-                                                        $yourUpdate = [
-                                                            'turn' => 0,
-                                                            'user_challenge_hp' => DB::raw("user_challenge_hp + $hp"),
-                                                            'user_challenge_energy' => DB::raw("user_challenge_energy - $skill->energy")
-                                                        ];
-                                                        $message = $hp > 0 ? "[ $skill->name ] Bạn đã được hồi $hp HP" : "[ $skill->name ] Bạn đã đầy máu không thể hồi thêm";
-                                                    }
-                                                    elseif($skill->power_type == $this->percent)
-                                                    {
-                                                        $renderHP = ($findMatch->first()->user_challenge_hp * $skill->power_value)/100;
-                                                        $hp = (int)($findMatch->first()->user_challenge_hp + $renderHP) < Auth::user()->power()['health_points'] ? $renderHP : (int)(Auth::user()->power()['health_points'] - $findMatch->first()->user_challenge_hp);
-                                                        $yourUpdate = [
-                                                            'turn' => 0,
-                                                            'user_challenge_hp' => DB::raw("user_challenge_hp + $hp"),
-                                                            'user_challenge_energy' => DB::raw("user_challenge_energy - $skill->energy")
-                                                        ];
-                                                        $message = $hp > 0 ? "[ $skill->name ] Bạn đã được hồi $hp HP" : "[ $skill->name ] Bạn đã đầy máu không thể hồi thêm";
-                                                    }
-                                                    else
-                                                    {
-                                                        $yourUpdate = [
-                                                            'turn' => 0,
-                                                            'user_challenge_energy' => DB::raw("user_challenge_energy - $skill->energy")
-                                                        ];
-                                                        $message = "[ $skill->name ] Bạn đã được hồi 0 HP";
-                                                    }
-                                                    $effectTo = 1;
-                                                break;
-                                                case SkillType::STUN:
-                                                    $yourStrength = Auth::user()->power()['strength'];
-                                                    $countDamage = $this->renderDestroy($yourStrength,$skill);
-                                                    $enemyStrengthArmor = $getEnemyInfor->power()['armor_strength'];
-                                                    $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor);
-                                                    $rate = rand(0,100);
-                                                    if($skill->effect_rate >= $rate)
-                                                    {
-                                                        $yourUpdate['turn'] = 1;
-                                                        $yourTurn = 1;
-                                                        $enemyTurn = 0;
-                                                        $enemyEffected[$skill->type] = $skill->effect_turn;
-                                                        $message = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ, đối thụ dính hiệu ứng đóng băng trong $skill->effect_turn lượt";
-                                                    }
-                                                    else
-                                                    {
-                                                        $message = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ";
-                                                    }
-                                                break;
-                                                default:
-                                                    $destroy = 0;
-                                                break;
-                                            }
-                                            if($randomRate <= (Auth::user()->power()['lucky']/$allLucky) * 100)
-                                            {
-                                                if($effectTo == 0)
+                                                /* Your skill */
+                                                $destroy = 0;
+                                                $effectTo = 0; 
+                                                $yourUpdate = [
+                                                    'turn' => 0,
+                                                    'user_challenge_energy' => DB::raw("user_challenge_energy - $skill->energy")
+                                                ];
+                                                $yourTurn = 0;
+                                                $enemyTurn = 1;
+                                                $enemyUpdate = [];
+                                                $enemyEffected = $enemy->first()->effected ?? [];
+
+                                                switch($skill->type)
                                                 {
-                                                    $destroy *= 1.5;
-                                                    $message .= " - Hiệu ứng chí mạng kích hoạt tổng sát thương $destroy ";
+                                                    case SkillType::ATTACK_STRENGTH:
+                                                        $yourStrength = Auth::user()->power()['strength'];
+                                                        $countDamage = $this->renderDestroy($yourStrength,$skill);
+                                                        $enemyStrengthArmor = $getEnemyInfor->power()['armor_strength'];
+                                                        $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor);
+                                                        $message = "[ $skill->name ] Bạn đã gây $destroy sát thương vật lí cho đối thủ";
+                                                    break;
+                                                    case SkillType::ATTACK_INTELLIGENT:
+                                                        $yourStrength = Auth::user()->power()['intelligent'];
+                                                        $countDamage = $this->renderDestroy($yourStrength,$skill);
+                                                        $enemyStrengthArmor = $getEnemyInfor->power()['armor_intelligent'];
+                                                        $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor);
+                                                        $message = "[ $skill->name ] Bạn đã gây $destroy sát thương phép thuật cho đối thủ";
+                                                    break;
+                                                    case SkillType::ATTACK_CRIT:
+                                                        $destroy = ($this->renderDestroy(Auth::user()->power()['strength'],$skill) * 2);
+                                                        $message = "[ $skill->name ] Bạn đã gây $destroy sát thương chí mạng cho đối thủ";
+                                                    break;
+                                                    case SkillType::ATTACK_HALF_HP:
+                                                        $destroy = (int)$enemy->first()->user_challenge_hp/2;
+                                                        $message = "[ $skill->name ] Bạn đã gây $destroy sát thương tinh thần cho đối thủ";
+                                                    break;
+                                                    case SkillType::HEALTH_HP:
+                                                        if($skill->power_type == $this->parameter)
+                                                        {
+                                                            $hp = (int)($findMatch->first()->user_challenge_hp + $skill->power_value) < Auth::user()->power()['health_points'] ? $skill->power_value : (int)(Auth::user()->power()['health_points'] - $findMatch->first()->user_challenge_hp);
+                                                            $yourUpdate = [
+                                                                'turn' => 0,
+                                                                'user_challenge_hp' => DB::raw("user_challenge_hp + $hp"),
+                                                                'user_challenge_energy' => DB::raw("user_challenge_energy - $skill->energy")
+                                                            ];
+                                                            $message = $hp > 0 ? "[ $skill->name ] Bạn đã được hồi $hp HP" : "[ $skill->name ] Bạn đã đầy máu không thể hồi thêm";
+                                                        }
+                                                        elseif($skill->power_type == $this->percent)
+                                                        {
+                                                            $renderHP = ($findMatch->first()->user_challenge_hp * $skill->power_value)/100;
+                                                            $hp = (int)($findMatch->first()->user_challenge_hp + $renderHP) < Auth::user()->power()['health_points'] ? $renderHP : (int)(Auth::user()->power()['health_points'] - $findMatch->first()->user_challenge_hp);
+                                                            $yourUpdate = [
+                                                                'turn' => 0,
+                                                                'user_challenge_hp' => DB::raw("user_challenge_hp + $hp"),
+                                                                'user_challenge_energy' => DB::raw("user_challenge_energy - $skill->energy")
+                                                            ];
+                                                            $message = $hp > 0 ? "[ $skill->name ] Bạn đã được hồi $hp HP" : "[ $skill->name ] Bạn đã đầy máu không thể hồi thêm";
+                                                        }
+                                                        else
+                                                        {
+                                                            $yourUpdate = [
+                                                                'turn' => 0,
+                                                                'user_challenge_energy' => DB::raw("user_challenge_energy - $skill->energy")
+                                                            ];
+                                                            $message = "[ $skill->name ] Bạn đã được hồi 0 HP";
+                                                        }
+                                                        $effectTo = 1;
+                                                    break;
+                                                    case SkillType::STUN:
+                                                        $yourStrength = Auth::user()->power()['strength'];
+                                                        $countDamage = $this->renderDestroy($yourStrength,$skill);
+                                                        $enemyStrengthArmor = $getEnemyInfor->power()['armor_strength'];
+                                                        $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor);
+                                                        $rate = rand(0,100);
+                                                        if($skill->effect_rate >= $rate)
+                                                        {
+                                                            $yourUpdate['turn'] = 1;
+                                                            $yourTurn = 1;
+                                                            $enemyTurn = 0;
+                                                            $enemyEffected[$skill->type] = $skill->effect_turn;
+                                                            $message = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ, đối thụ dính hiệu ứng choáng trong $skill->effect_turn lượt";
+                                                        }
+                                                        else
+                                                        {
+                                                            $message = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ";
+                                                        }
+                                                    break;
+                                                    default:
+                                                        $destroy = 0;
+                                                    break;
                                                 }
-                                            }
-                                            /* Enemy passive skill */
-                                            foreach($getEnemyInfor->usingSkills() as $key => $enemyPassiveSkill)
-                                            {
-                                                if($enemyPassiveSkill->passive == 1 && $enemyPassiveSkill->success_rate >= $randomRate)
+                                                if($randomRate <= (Auth::user()->power()['lucky']/$allLucky) * 100)
                                                 {
-                                                    switch($enemyPassiveSkill->type)
+                                                    if($effectTo == 0)
                                                     {
-                                                        case SkillType::ARMOR_STRENGTH:
-                                                            if($skill->type == 'strength')
-                                                            {
-                                                                $destroy = $this->renderPassive($destroy,$enemyPassiveSkill) < 0 ? 0 : $this->renderPassive($destroy,$enemyPassiveSkill);
-                                                                $message = "[ $skill->name ] Đối thủ có kĩ năng bị động giảm sát thương vật lí ! Sát thương của bạn gây ra chỉ còn lại $destroy";
-                                                            }
-                                                        break;
-                                                        case SkillType::ARMOR_INTELLIGENT:
-                                                            if($skill->type == 'intelligent')
-                                                            {
-                                                                $destroy = $this->renderPassive($destroy,$enemyPassiveSkill) < 0 ? 0 : $this->renderPassive($destroy,$enemyPassiveSkill);
-                                                                $message = "[ $skill->name ] Đối thủ có kĩ năng bị động giảm sát thương phép thuật ! Sát thương của bạn gây ra chỉ còn lại $destroy";
-                                                            }
-                                                        break;
+                                                        $destroy *= 1.5;
+                                                        $message .= " - Hiệu ứng chí mạng kích hoạt tổng sát thương $destroy ";
                                                     }
                                                 }
-                                            }
-                                            if($enemy->first()->user_challenge_hp - $destroy <= 0 || $enemy->first()->user_challenge_hp <= 0)
-                                            {
-                                                $rewards = [
-                                                    'exp' => 100,
-                                                    'coins' => 1000,
-                                                    'pvp_points' => 5
-                                                ];
-
-                                                DB::transaction(function () use ($enemy, $room, $rewards){
-                                                    $youWin = Auth::user();
-                                                    $enemyLose = User::findOrFail($enemy->first()->user_challenge);
-    
-                                                    $youWin->increment('exp',$rewards['exp']);
-                                                    $youWin->increment('income_coins',$rewards['coins']);
-                                                    $youWin->increment('pvp_points',$rewards['pvp_points']);
-    
-                                                    $enemyLose->decrement('income_coins',$rewards['coins']);
-                                                    $enemyLose->decrement('pvp_points',$rewards['pvp_points']);
-    
-                                                    FightRoomLog::create([
-                                                        'user_win_id' => Auth::id(),
-                                                        'user_lose_id' => $enemy->first()->user_challenge
-                                                    ]);
-    
-                                                    if(isset($youWin))
-                                                    {
-                                                        $this->pvpRestart($room->id,true);
-                                                    }
-                                                });
-                                                $response = [
-                                                    'code' => 201,
-                                                    'win' => true,
-                                                    'status' => 'success',
-                                                    'message' => "Thắng ! Bạn nhận được {$rewards['exp']} EXP,{$rewards['coins']} Vàng, {$rewards['pvp_points']} Điểm hạng",
-                                                ];
-                                            }
-                                            else
-                                            {
-                                                $enemyUpdate = [
-                                                    'user_challenge_hp' => DB::raw("user_challenge_hp - $destroy"),
-                                                    'turn' => $enemyTurn,
-                                                    'effected' => json_encode($enemyEffected)
-                                                ];
-                                                if($findMatch->update($yourUpdate) && $enemy->update($enemyUpdate))
+                                                /* Enemy passive skill */
+                                                foreach($getEnemyInfor->usingSkills() as $key => $enemyPassiveSkill)
                                                 {
-                                                    $data = [
-                                                        'room' => [
-                                                            'name' => $room->name,
-                                                            'id' => $room->id
-                                                        ],
-                                                        'enemy' => [
-                                                            'name' => User::findOrFail($enemy->first()->user_challenge)->name,
-                                                            'id' => $enemy->first()->user_challenge
-                                                        ],
-                                                        'data' => [
-                                                            'message' => $effectTo == 0 ? "Đối thủ đã gây cho bạn $destroy sát thương" : 'Đối thủ dùng kĩ năng buff',
-                                                            'effectTo' => $effectTo, 
-                                                            'skillAnimation' => $skill->animation,
-                                                            'damage' => $destroy,
-                                                            'effected' => $enemy->first()->effected
-                                                        ],
-                                                        'broadcast-to' => $enemy->first()->user_challenge
+                                                    if($enemyPassiveSkill->passive == 1 && $enemyPassiveSkill->success_rate >= $randomRate)
+                                                    {
+                                                        switch($enemyPassiveSkill->type)
+                                                        {
+                                                            case SkillType::ARMOR_STRENGTH:
+                                                                if($skill->type == 'strength')
+                                                                {
+                                                                    $destroy = $this->renderPassive($destroy,$enemyPassiveSkill) < 0 ? 0 : $this->renderPassive($destroy,$enemyPassiveSkill);
+                                                                    $message = "[ $skill->name ] Đối thủ có kĩ năng bị động giảm sát thương vật lí ! Sát thương của bạn gây ra chỉ còn lại $destroy";
+                                                                }
+                                                            break;
+                                                            case SkillType::ARMOR_INTELLIGENT:
+                                                                if($skill->type == 'intelligent')
+                                                                {
+                                                                    $destroy = $this->renderPassive($destroy,$enemyPassiveSkill) < 0 ? 0 : $this->renderPassive($destroy,$enemyPassiveSkill);
+                                                                    $message = "[ $skill->name ] Đối thủ có kĩ năng bị động giảm sát thương phép thuật ! Sát thương của bạn gây ra chỉ còn lại $destroy";
+                                                                }
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                                if($enemy->first()->user_challenge_hp - $destroy <= 0 || $enemy->first()->user_challenge_hp <= 0)
+                                                {
+                                                    $rewards = [
+                                                        'exp' => 100,
+                                                        'coins' => 1000,
+                                                        'pvp_points' => 5
                                                     ];
-                                                    event(new PvPHitEnemy($data));
+
+                                                    DB::transaction(function () use ($enemy, $room, $rewards){
+                                                        $youWin = Auth::user();
+                                                        $enemyLose = User::findOrFail($enemy->first()->user_challenge);
+        
+                                                        $youWin->increment('exp',$rewards['exp']);
+                                                        $youWin->increment('income_coins',$rewards['coins']);
+                                                        $youWin->increment('pvp_points',$rewards['pvp_points']);
+        
+                                                        $enemyLose->decrement('income_coins',$rewards['coins']);
+                                                        $enemyLose->decrement('pvp_points',$rewards['pvp_points']);
+        
+                                                        FightRoomLog::create([
+                                                            'user_win_id' => Auth::id(),
+                                                            'user_lose_id' => $enemy->first()->user_challenge
+                                                        ]);
+        
+                                                        if(isset($youWin))
+                                                        {
+                                                            $this->pvpRestart($room->id,true);
+                                                        }
+                                                    });
                                                     $response = [
-                                                        'code' => 200,
+                                                        'code' => 201,
+                                                        'win' => true,
                                                         'status' => 'success',
-                                                        'message' => $message ?? "[ $skill->name ] Không biết",
-                                                        'enemy' => [
-                                                            'basic' => $userApi->userInfor($enemy->first()->user_challenge),
-                                                            'hp' => $enemy->first()->user_challenge_hp,
-                                                            'energy' => $enemy->first()->user_challenge_energy,
-                                                            'effected' => $enemy->first()->effected,
-                                                        ],
-                                                        'you' => [
-                                                            'basic' => $userApi->userInfor(Auth::id()),
-                                                            'hp' => $findMatch->first()->user_challenge_hp,
-                                                            'energy' => $findMatch->first()->user_challenge_energy,
-                                                            'turn' => $yourTurn,
-                                                            'damage' => $destroy,
-                                                            'effected' => $findMatch->first()->effected
-                                                        ],
+                                                        'message' => "Thắng ! Bạn nhận được {$rewards['exp']} EXP,{$rewards['coins']} Vàng, {$rewards['pvp_points']} Điểm hạng",
                                                     ];
                                                 }
                                                 else
                                                 {
-                                                    $response = [
-                                                        'code' => 404,
-                                                        'status' => 'error',
-                                                        'message' => 'Đã có lỗi xảy ra xin vui lòng thử lại'
+                                                    $enemyUpdate = [
+                                                        'user_challenge_hp' => DB::raw("user_challenge_hp - $destroy"),
+                                                        'turn' => $enemyTurn,
+                                                        'effected' => json_encode($enemyEffected)
                                                     ];
+                                                    if($findMatch->update($yourUpdate) && $enemy->update($enemyUpdate))
+                                                    {
+                                                        $data = [
+                                                            'room' => [
+                                                                'name' => $room->name,
+                                                                'id' => $room->id
+                                                            ],
+                                                            'enemy' => [
+                                                                'name' => User::findOrFail($enemy->first()->user_challenge)->name,
+                                                                'id' => $enemy->first()->user_challenge
+                                                            ],
+                                                            'data' => [
+                                                                'message' => $effectTo == 0 ? "Đối thủ đã gây cho bạn $destroy sát thương" : 'Đối thủ dùng kĩ năng buff',
+                                                                'effectTo' => $effectTo, 
+                                                                'skillAnimation' => $skill->animation,
+                                                                'damage' => $destroy,
+                                                                'effected' => $enemy->first()->effected
+                                                            ],
+                                                            'broadcast-to' => $enemy->first()->user_challenge
+                                                        ];
+                                                        event(new PvPHitEnemy($data));
+                                                        $response = [
+                                                            'code' => 200,
+                                                            'status' => 'success',
+                                                            'message' => $message ?? "[ $skill->name ] Không biết",
+                                                            'enemy' => [
+                                                                'basic' => $userApi->userInfor($enemy->first()->user_challenge),
+                                                                'hp' => $enemy->first()->user_challenge_hp,
+                                                                'energy' => $enemy->first()->user_challenge_energy,
+                                                                'effected' => $enemy->first()->effected,
+                                                                'countdown' => $enemy->first()->countdown_skill
+                                                            ],
+                                                            'you' => [
+                                                                'basic' => $userApi->userInfor(Auth::id()),
+                                                                'hp' => $findMatch->first()->user_challenge_hp,
+                                                                'energy' => $findMatch->first()->user_challenge_energy,
+                                                                'turn' => $yourTurn,
+                                                                'damage' => $destroy,
+                                                                'effected' => $findMatch->first()->effected,
+                                                                'countdown' => $findMatch->first()->countdown_skill
+                                                            ],
+                                                        ];
+                                                    }
+                                                    else
+                                                    {
+                                                        $response = [
+                                                            'code' => 404,
+                                                            'status' => 'error',
+                                                            'message' => 'Đã có lỗi xảy ra xin vui lòng thử lại'
+                                                        ];
+                                                    }
                                                 }
+                                            }
+                                            else
+                                            {
+                                                $findMatch->update([
+                                                    'turn' => 0,
+                                                    'user_challenge_energy' => DB::raw("user_challenge_energy - $skill->energy")
+                                                ]);
+                                                $enemy->update([
+                                                    'turn' => 1
+                                                ]);
+                                                $response = [
+                                                    'code' => 200,
+                                                    'status' => 'success',
+                                                    'message' => "[ $skill->name ] Sử dụng kĩ năng thất bại",
+                                                    'enemy' => [
+                                                        'basic' => $userApi->userInfor($enemy->first()->user_challenge),
+                                                        'hp' => $enemy->first()->user_challenge_hp,
+                                                        'energy' => $enemy->first()->user_challenge_energy,
+                                                        'effected' => $enemy->first()->effected,
+                                                        'countdown' => $enemy->first()->countdown_skill
+                                                    ],
+                                                    'you' => [
+                                                        'basic' => $userApi->userInfor(Auth::id()),
+                                                        'hp' => $findMatch->first()->user_challenge_hp,
+                                                        'energy' => $findMatch->first()->user_challenge_energy,
+                                                        'turn' => 0,
+                                                        'damage' => 0,
+                                                        'effected' => $findMatch->first()->effected,
+                                                        'countdown' => $findMatch->first()->countdown_skill
+                                                    ],
+                                                ];
                                             }
                                         }
                                         else
                                         {
-                                            $findMatch->update([
-                                                'turn' => 0,
-                                                'user_challenge_energy' => DB::raw("user_challenge_energy - $skill->energy")
-                                            ]);
-                                            $enemy->update([
-                                                'turn' => 1
-                                            ]);
                                             $response = [
-                                                'code' => 200,
-                                                'status' => 'success',
-                                                'message' => "[ $skill->name ] Sử dụng kĩ năng thất bại",
-                                                'enemy' => [
-                                                    'basic' => $userApi->userInfor($enemy->first()->user_challenge),
-                                                    'hp' => $enemy->first()->user_challenge_hp,
-                                                    'energy' => $enemy->first()->user_challenge_energy,
-                                                    'effected' => $enemy->first()->effected,
-                                                ],
-                                                'you' => [
-                                                    'basic' => $userApi->userInfor(Auth::id()),
-                                                    'hp' => $findMatch->first()->user_challenge_hp,
-                                                    'energy' => $findMatch->first()->user_challenge_energy,
-                                                    'turn' => 0,
-                                                    'damage' => 0,
-                                                    'effected' => $findMatch->first()->effected
-                                                ],
+                                                'code' => 202,
+                                                'status' => 'warning',
+                                                'message' => 'Bạn không đủ MP để sử dụng kĩ năng này'
                                             ];
                                         }
                                     }
                                     else
                                     {
                                         $response = [
-                                            'code' => 404,
+                                            'code' => 202,
                                             'status' => 'warning',
-                                            'message' => 'Bạn không đủ MP để sử dụng kĩ năng này'
+                                            'message' => 'Bạn không thể sử dụng kĩ năng bị động'
                                         ];
                                     }
                                 }
                                 else
                                 {
                                     $response = [
-                                        'code' => 404,
-                                        'status' => 'warning',
-                                        'message' => 'Bạn không thể sử dụng kĩ năng bị động'
+                                        'code' => 202,
+                                        'status' => 'error',
+                                        'message' => 'Vui lòng đợi hồi chiêu'
                                     ];
                                 }
                             }
