@@ -180,20 +180,23 @@ class FindMatchController extends BaseController
                             Room::findOrFail($room->id)->update([
                                 'started_at' => now()
                             ]);
+                            $enemy = FightRoom::where('user_challenge',$getEnemy->user_receive_challenge)->first();
                             return response()->json([
                                 'code' => 200,
                                 'status' => 'success',
                                 'message' => "Bạn đã ghép trận thành công với ".$userApi->userInfor($getEnemy->user_receive_challenge)->original['infor']['name'],
                                 'enemy' => [
                                     'basic' => $userApi->userInfor($getEnemy->user_receive_challenge),
-                                    'hp' => FightRoom::where('user_challenge',$getEnemy->user_receive_challenge)->first()->user_challenge_hp,
-                                    'energy' => FightRoom::where('user_challenge',$getEnemy->user_receive_challenge)->first()->user_challenge_energy,
+                                    'hp' => $enemy->user_challenge_hp,
+                                    'energy' => $enemy->user_challenge_energy,
+                                    'effected' => $enemy->effected
                                 ],
                                 'you' => [
                                     'basic' => $userApi->userInfor(Auth::id()),
                                     'hp' => $getEnemy->user_challenge_hp,
                                     'energy' => $getEnemy->user_challenge_energy,
                                     'turn' => $turn,
+                                    'effected' => $getEnemy->effected
                                 ],
                                 'remaining' => ($this->limitTime * 60)
                             ]);
@@ -219,12 +222,14 @@ class FindMatchController extends BaseController
                             'basic' => $userApi->userInfor($enemy->user_challenge),
                             'hp' => $enemy->user_challenge_hp,
                             'energy' => $enemy->user_challenge_energy,
+                            'effected' => $enemy->effected
                         ],
                         'you' => [
                             'basic' => $userApi->userInfor(Auth::id()),
                             'hp' => $you->user_challenge_hp,
                             'energy' => $you->user_challenge_energy,
                             'turn' => $you->turn,
+                            'effected' => $you->effected
                         ],
                         'remaining' => ($this->limitTime * 60) - Carbon::parse($room->started_at)->diffInSeconds()
                     ];

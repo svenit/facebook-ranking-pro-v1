@@ -22,7 +22,54 @@
     background-size: 100%;
     background-position: bottom;
 }
-
+.has-pvp-broken-with-pet {
+    transform: rotate3d(150, 1, 1, 45deg);
+    background-image: url(../images/broken-stone.gif);
+    width: 250%;
+    height: 170%;
+    top: 55px;
+    z-index: 0 !important;
+    position: absolute;
+    left: -55px;
+    background-size: 100%;
+    background-position: bottom;
+}
+.has-pvp-broken-no-pet {
+    transform: rotate3d(150, 1, 1, 45deg);
+    background-image: url(../images/broken-stone.gif);
+    width: 250%;
+    height: 170%;
+    top: 20px;
+    z-index: 0 !important;
+    position: absolute;
+    left: -55px;
+    background-size: 100%;
+    background-position: bottom;
+}
+.has-pvp-effect-with-pet {
+    transform: rotate3d(150, 1, 1, 45deg);
+    width: 100%;
+    height: 100%;
+    top: -60%;
+    position: absolute;
+    background-repeat: no-repeat;
+    left: 10px;
+    background-size: 50%;
+    z-index: 9999999 !important;
+    background-position: bottom;
+}
+.has-pvp-effect-no-pet {
+    transform: rotate3d(150, 1, 1, 45deg);
+    width: 100%;
+    height: 100%;
+    top: -60%;
+    position: absolute;
+    background-repeat: no-repeat;
+    left: 10px;
+    background-size: 50%;
+    z-index: 9999999 !important;
+    background-position: bottom;
+}
 .pvp-comment {
     position: absolute;
     font-size: 11px;

@@ -17,8 +17,7 @@
 	<link href="{{ asset('cdn/css/all.min.css') }}" rel="stylesheet">
 	{{-- <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" /> --}}
 	<meta name="csrf-token" content="{{ csrf_token() }}"/>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
-	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
 	@stack('css')
 </head>
 <body>
@@ -90,7 +89,6 @@
 				Swal.fire(data.title,data.message,data.type);
 			});
 			socket.on(`invite-to-pvp-{{ Auth::id() }}`,data => {
-				console.log(data);
 				Swal.fire({
 					title: ``,
 					type: '',

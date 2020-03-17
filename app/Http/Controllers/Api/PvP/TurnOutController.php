@@ -77,12 +77,14 @@ class TurnOutController extends BaseController
                             'basic' => $userApi->userInfor($enemy->first()->user_challenge),
                             'hp' => $enemy->first()->user_challenge_hp,
                             'energy' => $enemy->first()->user_challenge_energy,
+                            'effected' => $enemy->first()->effected,
                         ],
                         'you' => [
                             'basic' => $userApi->userInfor(Auth::id()),
                             'hp' => $you->first()->user_challenge_hp,
                             'energy' => $you->first()->user_challenge_energy,
                             'turn' => 0,
+                            'effected' => $you->first()->effected,
                         ],
                     ];
                 }

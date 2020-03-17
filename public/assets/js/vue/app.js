@@ -128,12 +128,16 @@ app = new Vue({
             enemyJoined: false,
 
             yourAttack: false,
+            yourAttackDamage:null,
             yourBuff: false,
             yourSkillAnimation: '',
+            yourEffected:null,
 
             enemyAttack: false,
             enemyBuff: false,
             enemySkillAnimation: '',
+            enemyAttackDamage:null,
+            enemyEffected:null,
 
             timeOut: 20,
             status: '',
@@ -324,17 +328,11 @@ app = new Vue({
                         switch (res.data.code) {
                             case 200:
                                 this.notify(res.data.message);
-                                this.pvp.match.you = res.data.you.basic.original;
-                                this.pvp.match.you.hp = res.data.you.hp;
-                                this.pvp.match.you.energy = res.data.you.energy;
-                                this.pvp.match.you.turn = res.data.you.turn;
-
-                                this.pvp.match.enemy = res.data.enemy.basic.original;
-                                this.pvp.match.enemy.hp = res.data.enemy.hp;
-                                this.pvp.match.enemy.energy = res.data.enemy.energy;
+                                this.pvpTurnBase(res);
                                 this.pvp.timeOut = 15;
                                 if(res.data.you.hasEffected)
                                 {
+                                    console.log(res.data.you.hasEffected);
                                     this.pvp.match.you.turn = 0;
                                     this.pvpListenAction();
                                 }
@@ -363,6 +361,19 @@ app = new Vue({
         }
     },
     methods: {
+        pvpTurnBase(res)
+        {
+            this.pvp.match.you = res.data.you.basic.original;
+            this.pvp.match.you.hp = res.data.you.hp;
+            this.pvp.match.you.energy = res.data.you.energy;
+            this.pvp.match.you.turn = res.data.you.turn;
+            this.pvp.yourEffected = res.data.you.effected || null;
+
+            this.pvp.match.enemy = res.data.enemy.basic.original;
+            this.pvp.match.enemy.hp = res.data.enemy.hp;
+            this.pvp.match.enemy.energy = res.data.enemy.energy;
+            this.pvp.enemyEffected = res.data.enemy.effected || null;
+        },
         countDown()
         {
             countDown = setInterval(() => {
@@ -389,13 +400,7 @@ app = new Vue({
                             clearInterval(countDown);
                             switch (res.data.code) {
                                 case 200:
-                                    this.pvp.match.you = res.data.you.basic.original;
-                                    this.pvp.match.you.hp = res.data.you.hp;
-                                    this.pvp.match.you.energy = res.data.you.energy;
-                                    this.pvp.match.you.turn = res.data.you.turn;
-                                    this.pvp.match.enemy = res.data.enemy.basic.original;
-                                    this.pvp.match.enemy.hp = res.data.enemy.hp;
-                                    this.pvp.match.enemy.energy = res.data.enemy.energy;
+                                    this.pvpTurnBase(res);
                                     this.pvp.timeOut = 15;
                                     break;
                                 case 404:
@@ -435,14 +440,7 @@ app = new Vue({
                 switch (res.data.code) {
                     case 200:
                         this.notify(res.data.message);
-                        this.pvp.match.you = res.data.you.basic.original;
-                        this.pvp.match.you.hp = res.data.you.hp;
-                        this.pvp.match.you.energy = res.data.you.energy;
-                        this.pvp.match.you.turn = res.data.you.turn;
-
-                        this.pvp.match.enemy = res.data.enemy.basic.original;
-                        this.pvp.match.enemy.hp = res.data.enemy.hp;
-                        this.pvp.match.enemy.energy = res.data.enemy.energy;
+                        this.pvpTurnBase(res);
                         this.pvp.timeOut = 15;
                         if(res.data.you.turn == 0)
                         {
@@ -577,7 +575,10 @@ app = new Vue({
                     self.pvp.enemyAttack = true;
                     self.pvp.enemyBuff = true;
                     self.pvp.enemySkillAnimation = res.data.data.skillAnimation;
-
+                    self.pvp.enemyAttackDamage = res.data.data.damage;
+                    setTimeout(() => {
+                        self.pvp.enemyAttackDamage = null;
+                    },800);
                     setTimeout(() => {
                         self.pvp.enemyAttack = false;
                         self.pvp.enemyBuff = false;
@@ -828,50 +829,55 @@ app = new Vue({
         },
         turnOut() 
         {
-            axios.post(`${config.root}/api/v1/pvp/turn-time-out`, {
-                bearer: config.bearer,
-                room: page.room.id
-            }, {
-                headers: {
-                    pragma: this.token
+            if(this.pvp.isMatching && this.pvp.match.you.turn == 1)
+            {
+                this.pvp.match.you.turn == 0;
+                try
+                {
+                    axios.post(`${config.root}/api/v1/pvp/turn-time-out`, {
+                        bearer: config.bearer,
+                        room: page.room.id
+                    }, {
+                        headers: {
+                            pragma: this.token
+                        }
+                    }).then(async (res) => {
+                        await this.refreshToken(res);
+                        switch (res.data.code) {
+                            case 200:
+                                this.pvpTurnBase(res);
+                                this.pvp.timeOut = 15;
+                                clearInterval(countDown);
+                                socket.emit(`pvp-turn-out`,{
+                                    channel:page.room.id,
+                                    id:socket.id
+                                });
+                            break;
+                            case 404:
+                                Swal.fire('', res.data.message, res.data.status);
+                                break;
+                            case 300:
+                                Swal.fire('', res.data.message, res.data.status);
+                                this.resetPvp();
+                                await this.findEnemy();
+                                break;
+                            case 201:
+                                Swal.fire({
+                                    title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
+                                    focusConfirm: true,
+                                    confirmButtonText: 'OK',
+                                });
+                                this.resetPvp();
+                                clearInterval(countDown);
+                            break;
+                        }
+                    });
                 }
-            }).then(async (res) => {
-                await this.refreshToken(res);
-                switch (res.data.code) {
-                    case 200:
-                        this.pvp.match.you = res.data.you.basic.original;
-                        this.pvp.match.you.hp = res.data.you.hp;
-                        this.pvp.match.you.energy = res.data.you.energy;
-                        this.pvp.match.you.turn = res.data.you.turn;
-                        this.pvp.match.enemy = res.data.enemy.basic.original;
-                        this.pvp.match.enemy.hp = res.data.enemy.hp;
-                        this.pvp.match.enemy.energy = res.data.enemy.energy;
-                        this.pvp.timeOut = 15;
-                        clearInterval(countDown);
-                        socket.emit(`pvp-turn-out`,{
-                            channel:page.room.id,
-                            id:socket.id
-                        });
-                    break;
-                    case 404:
-                        Swal.fire('', res.data.message, res.data.status);
-                        break;
-                    case 300:
-                        Swal.fire('', res.data.message, res.data.status);
-                        this.resetPvp();
-                        await this.findEnemy();
-                        break;
-                    case 201:
-                        Swal.fire({
-                            title: !res.data.win ? `<img style='width:100%' src='${config.root}/assets/images/defeat.png'>` : `<img style='width:100%' src='${config.root}/assets/images/victory.png'>`,
-                            focusConfirm: true,
-                            confirmButtonText: 'OK',
-                        });
-                        this.resetPvp();
-                        clearInterval(countDown);
-                    break;
+                catch(e)
+                {
+                    this.notify('Đã có lỗi xảy ra');
                 }
-            });
+            }
         },
         async findEnemy() {
             let res = await axios.get(`${config.root}/api/v1/pvp/find-enemy`, {
@@ -973,14 +979,8 @@ app = new Vue({
                         this.pvp.enemyJoined = true;
                         this.pvp.isSearching = false;
                         this.pvp.isMatching = true;
-                        this.pvp.match.you = res.data.you.basic.original;
-                        this.pvp.match.you.hp = res.data.you.hp;
-                        this.pvp.match.you.energy = res.data.you.energy;
-                        this.pvp.match.you.turn = res.data.you.turn;
 
-                        this.pvp.match.enemy = res.data.enemy.basic.original;
-                        this.pvp.match.enemy.hp = res.data.enemy.hp;
-                        this.pvp.match.enemy.energy = res.data.enemy.energy;
+                        this.pvpTurnBase(res);
                     break;
                     case 404:
                         this.notify(res.data.message);
@@ -1017,12 +1017,16 @@ app = new Vue({
                 if (this.pvp.match.you.turn == 1) {
                     if (skill.energy <= this.pvp.match.you.energy) {
                         if (skill.passive == 0) {
-                            if (skill.effect_to == 1) {
+                            if (skill.effect_to == 1) 
+                            {
                                 this.pvp.yourBuff = true;
-                            } else {
+                            } 
+                            else 
+                            {
                                 this.pvp.yourSkillAnimation = skill.animation;
                                 this.pvp.yourAttack = true;
                             }
+                            this.pvp.match.you.turn = 0;
                             let res = await axios.post(`${config.root}/api/v1/pvp/hit`, {
                                 room: page.room.id,
                                 skill: skill.id,
@@ -1036,14 +1040,11 @@ app = new Vue({
                             switch (res.data.code) {
                                 case 200:
                                     this.notify(res.data.message);
-                                    this.pvp.match.you = res.data.you.basic.original;
-                                    this.pvp.match.you.hp = res.data.you.hp;
-                                    this.pvp.match.you.energy = res.data.you.energy;
-                                    this.pvp.match.you.turn = res.data.you.turn;
-                                    this.pvp.match.enemy = res.data.enemy.basic.original;
-                                    this.pvp.match.enemy.hp = res.data.enemy.hp;
-                                    this.pvp.match.enemy.energy = res.data.enemy.energy;
-
+                                    this.pvpTurnBase(res);
+                                    this.pvp.yourAttackDamage = res.data.you.damage;
+                                    setTimeout(() => {
+                                        this.pvp.yourAttackDamage = null;
+                                    },800);
                                     this.pvp.yourAttack = false;
                                     this.pvp.yourBuff = false;
                                     clearInterval(countDown);
@@ -1863,5 +1864,15 @@ app = new Vue({
         numberFormatDetail(num) {
             return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
         },
+        convertEffect(effect)
+        {
+            var asset = `${config.root}/assets/images/effects`;
+            switch (effect)
+            {
+                case 'stun':
+                    return `${asset}/stun.svg`;
+                break;
+            }
+        }
     },
 });

@@ -168,7 +168,7 @@ class HitController extends BaseController
                                                 if($effectTo == 0)
                                                 {
                                                     $destroy *= 1.5;
-                                                    $message .= " ( Chí mạng )";
+                                                    $message .= " - Hiệu ứng chí mạng kích hoạt tổng sát thương $destroy ";
                                                 }
                                             }
                                             /* Enemy passive skill */
@@ -252,7 +252,9 @@ class HitController extends BaseController
                                                         'data' => [
                                                             'message' => $effectTo == 0 ? "Đối thủ đã gây cho bạn $destroy sát thương" : 'Đối thủ dùng kĩ năng buff',
                                                             'effectTo' => $effectTo, 
-                                                            'skillAnimation' => $skill->animation
+                                                            'skillAnimation' => $skill->animation,
+                                                            'damage' => $destroy,
+                                                            'effected' => $enemy->first()->effected
                                                         ],
                                                         'broadcast-to' => $enemy->first()->user_challenge
                                                     ];
@@ -265,12 +267,15 @@ class HitController extends BaseController
                                                             'basic' => $userApi->userInfor($enemy->first()->user_challenge),
                                                             'hp' => $enemy->first()->user_challenge_hp,
                                                             'energy' => $enemy->first()->user_challenge_energy,
+                                                            'effected' => $enemy->first()->effected,
                                                         ],
                                                         'you' => [
                                                             'basic' => $userApi->userInfor(Auth::id()),
                                                             'hp' => $findMatch->first()->user_challenge_hp,
                                                             'energy' => $findMatch->first()->user_challenge_energy,
-                                                            'turn' => $yourTurn
+                                                            'turn' => $yourTurn,
+                                                            'damage' => $destroy,
+                                                            'effected' => $findMatch->first()->effected
                                                         ],
                                                     ];
                                                 }
@@ -301,12 +306,15 @@ class HitController extends BaseController
                                                     'basic' => $userApi->userInfor($enemy->first()->user_challenge),
                                                     'hp' => $enemy->first()->user_challenge_hp,
                                                     'energy' => $enemy->first()->user_challenge_energy,
+                                                    'effected' => $enemy->first()->effected,
                                                 ],
                                                 'you' => [
                                                     'basic' => $userApi->userInfor(Auth::id()),
                                                     'hp' => $findMatch->first()->user_challenge_hp,
                                                     'energy' => $findMatch->first()->user_challenge_energy,
                                                     'turn' => 0,
+                                                    'damage' => 0,
+                                                    'effected' => $findMatch->first()->effected
                                                 ],
                                             ];
                                         }

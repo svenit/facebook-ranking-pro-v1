@@ -32,5 +32,7 @@ mix.scripts([
 mix.styles([
     'public/assets/css/site.min.css',
     'public/assets/css/static.css',
-    'public/assets/css/style.css'
+    'public/assets/css/style.css',
+    'public/assets/css/animate.min.css',
+    'public/assets/css/toast.min.css',
 ],'public/css/app.min.css');
