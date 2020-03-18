@@ -68,13 +68,17 @@ class HitController extends BaseController
                                         if($request->skill == $countdown['id'] && $countdown['countdown'] == 0)
                                         {
                                             $noCountDown = true;
+                                            $checkCountDown[$key]['countdown'] = Skill::findOrFail($checkSkill->skill_id)->countdown;
+                                            $findMatch->update([
+                                                'countdown_skill' => json_encode($checkCountDown)
+                                            ]);
                                             break;
                                         }
                                     }
                                 }
                                 if($noCountDown)
                                 {
-                                    $skill = Skill::find($checkSkill->skill_id);
+                                    $skill = Skill::findOrFail($checkSkill->skill_id);
                                     if($skill->passive == 0)
                                     {
                                         if($findMatch->first()->user_challenge_energy >= $skill->energy)
@@ -95,6 +99,8 @@ class HitController extends BaseController
                                                     'user_challenge_energy' => DB::raw("user_challenge_energy - $skill->energy")
                                                 ];
                                                 $yourTurn = 0;
+                                                $yourBuff = $findMatch->first()->buff ?? [];
+
                                                 $enemyTurn = 1;
                                                 $enemyUpdate = [];
                                                 $enemyEffected = $enemy->first()->effected ?? [];
@@ -168,6 +174,24 @@ class HitController extends BaseController
                                                             $enemyTurn = 0;
                                                             $enemyEffected[$skill->type] = $skill->effect_turn;
                                                             $message = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ, đối thụ dính hiệu ứng choáng trong $skill->effect_turn lượt";
+                                                        }
+                                                        else
+                                                        {
+                                                            $message = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ";
+                                                        }
+                                                    break;
+                                                    case SkillType::INCREAGILITY:
+                                                        $yourStrength = Auth::user()->power()['strength'];
+                                                        $countDamage = $this->renderDestroy($yourStrength,$skill);
+                                                        $enemyStrengthArmor = $getEnemyInfor->power()['armor_strength'];
+                                                        $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor);
+                                                        $rate = rand(0,100);
+                                                        if($skill->effect_rate >= $rate)
+                                                        {
+                                                            $yourBuff[$skill->type] = $skill->effect_turn;
+                                                            $yourUpdate['buff'] = json_encode($yourBuff);
+                                                            $effectType = $skill->effect_value['type'] == 1 ? '%' : '';
+                                                            $message = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ, bạn được tăng {$skill->effect_value['value']}{$effectType} nhanh nhẹn trong {$skill->effect_turn} lượt";
                                                         }
                                                         else
                                                         {

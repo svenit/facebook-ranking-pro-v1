@@ -40,8 +40,18 @@ class SkillType
     const ARMOR_INTELLIGENT = 'armor_intelligent';
 
     /**
-     * Đóng băng 
+     * Gây sát thương vật lý + choáng
      */
-    const STUN = 'stun';
+    const STUN = 'strength-stun';
+
+    /**
+     * Gây sát thương phép thuật + đóng băng
+     */
+    const FREEZE = 'intelligent-freeze';
+
+     /**
+     * Gây sát thương + tăng nhanh nhẹn
+     */
+    const INCREAGILITY = 'strength-increagility';
     
 }

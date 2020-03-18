@@ -16,7 +16,7 @@
 	<link rel="stylesheet" href="{{ asset('assets/css/inventory.css') }}">
 	<link href="{{ asset('cdn/css/all.min.css') }}" rel="stylesheet">
 	{{-- <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" /> --}}
-	<meta name="csrf-token" content="{{ csrf_token() }}"/>
+	<meta name="csrf-token" content="{{ str_random(50) }}"/>
 
 	@stack('css')
 </head>
@@ -50,7 +50,7 @@
 		@endif
 		
 		@include('user.theme.aside')
-		<div id="main" style="background: url({{ asset('assets/images/background.jpg') }});" class="layout-column flex">
+		<div data-id="{{ csrf_token() }}" id="main" style="background: url({{ asset('assets/images/background.jpg') }});" class="layout-column flex">
 			@include('user.theme.header')
 			<div id="content" class="flex">
 				<div>
@@ -66,8 +66,8 @@
 				</div>
 			</div>
 			<div id="footer" style="margin-top:0px" class="page-footer">
-				<div class="d-flex p-3"><span class="text-sm text-muted flex">&copy; Copyright {{ date('Y') }} Coded by <a href="https://facebook.com/sven307">Sven</a></span>
-					<div style="font-family: pixel !important" class="text-sm text-muted">Version 1.0.0</div>
+				<div class="d-flex p-3"><span class="text-sm pixel-font text-muted flex">&copy;Copyright {{ date('Y') }} Coded by <a class="text-gold" href="https://facebook.com/sven307">Sven</a></span>
+					<div style="font-family: pixel !important" class="text-sm text-muted">Version {{ env('APP_VERSION') }}</div>
 				</div>
 			</div>
 		</div>

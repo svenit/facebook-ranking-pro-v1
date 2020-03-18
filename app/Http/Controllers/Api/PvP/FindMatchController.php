@@ -172,6 +172,7 @@ class FindMatchController extends BaseController
                                         'countdown_skill' => json_encode($this->getSkills(Auth::id()))
                                     ]);
                                     FightRoom::where('user_challenge',$getEnemy->user_receive_challenge)->update([
+                                        'turn' => 1,
                                         'countdown_skill' => json_encode($this->getSkills($getEnemy->user_receive_challenge))
                                     ]);
                                 }
@@ -252,6 +253,7 @@ class FindMatchController extends BaseController
         foreach(User::findOrFail($id)->usingSkills() as $key => $skill)
         {
             $skills[$key] = $skill->only('id','countdown');
+            $skills[$key]['countdown'] = 0;
         }
         return $skills;
     }

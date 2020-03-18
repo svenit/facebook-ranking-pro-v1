@@ -43,13 +43,12 @@
                                 <span v-if="data.pet" style="z-index:50" :class="`Mount_Head_${data.pet.class_tag}`"></span>
                                 <div :class="`${data.pet ? 'shadow-pet' : 'shadow-character'} animated infinite pulse`"></div>
                                 <div v-if="pvp.enemyAttack" :style="{backgroundImage:`url(${pvp.enemySkillAnimation})`,backgroundSize:'110%',position:'absolute',backgroundPosition:'center',width: '150%',height: '150%',bottom: `${data.pet ? '-60px' : '-20px'}`,left: 0,zIndex: '9999'}"></div>
-                                <div v-if="pvp.match.you.turn == 1 && pvp.isMatching" :class="`${data.pet ? 'has-pvp-turn-with-pet' : 'has-pvp-turn-no-pet'}`"></div>
+                                <div :style="{backgroundPosition:turnEffect}" :class="`${data.pet ? 'has-pvp-turn-with-pet' : 'has-pvp-turn-no-pet'}`"></div>
                                 <div v-if="pvp.enemyAttackDamage" class="enemy-decrement-hp infinite animated slideOutUp pixel-font text-warning text-center slow">- @{{ numberFormatDetail(pvp.enemyAttackDamage) }} HP</div>
                                 <div v-if="pvp.enemyAttack" :class="`${data.pet ? 'has-pvp-broken-with-pet' : 'has-pvp-broken-no-pet'}`"></div>
                                 <div v-for="(effected, index) in pvp.yourEffected">
                                     <div v-if="effected" :class="`${data.pet ? 'has-pvp-effect-with-pet' : 'has-pvp-effect-no-pet'}`" :style="{backgroundImage:`url(${convertEffect(index)})`}" class="animated flash infinite"></div>
                                 </div>
-                                @{{ pvp.yourCountDown }}
                             </div>
                         </div>
                         <div style="margin-top:5px;" class="row" v-if="pvp.enemyJoined">
@@ -70,10 +69,10 @@
                             </div>
                             <div class="col-12" v-if="pvp.isMatching">
                                 <div class="row row-sm">
-                                    <div style="z-index:1" v-for="(skill,index) in pvp.match.you.skills" :key="index" class="col-1 mr-4">
-                                        <span @click="hit(skill)" style="width:46px !important;" class="w-32 avatar gd-primary" :class="[pvp.match.you.energy >= skill.energy ? '' : 'loading not-allow']">
-                                            <span class="avatar-status b-white avatar-right" :class="[pvp.match.you.energy >= skill.energy ? 'on' : 'away']"></span> 
-                                            <img :src="skill.image" alt=".">
+                                    <div style="z-index:1" v-for="(skill,index) in pvp.match.you.skills" :key="index" class="col-2">
+                                        <span :class="`avatar w-56 ${countdown.countdown !== 0 || pvp.match.you.energy < skill.energy ? 'loading not-allow' : ''}`" v-for="(countdown,index) in pvp.yourCountDown" v-if="skill.id == countdown.id" :key="index">
+                                            <img :style="{filter: pvp.match.you.turn == 1 && pvp.match.you.energy >= skill.energy && countdown.countdown == 0 ? '' : 'grayscale(100%)',position:'relative'}" @click="hit(skill)" width="100%" :src="skill.image" alt=".">
+                                            <span v-if="countdown.countdown !== 0" class="pixel-font" style="position:absolute;left:43%;top:28%;color:#fff">@{{ countdown.countdown }}</span>
                                         </span>
                                     </div>
                                 </div>

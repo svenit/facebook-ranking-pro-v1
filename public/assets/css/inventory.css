@@ -29,8 +29,8 @@
     background-image: url(../images/set/igris-armor.svg);
     width: 90px;
     height: 90px;
-    background-size: 90%;
-    background-position: 16px 18px;
+    background-size: 110%;
+    background-position: 9px 6px;
 }
 .shop_tanker_armor_igris {
     /* This item was created by Luan Vo - Solo Leveling Viet Nam */
@@ -38,7 +38,7 @@
     width: 68px;
     height: 68px;
     background-size: 100%;
-    background-position: 0px 0px;
+    background-position: 0px -5px;
 }
 .tanker_sword_igris {
     /* This item was created by Luan Vo - Solo Leveling Viet Nam */
@@ -69,7 +69,7 @@
 
 .has-pvp-turn-with-pet {
     transform: rotate3d(150, 1, 1, 45deg);
-    background-image: url(../images/animations/28.gif);
+    background-image: url(../images/turn-effect.png);
     width: 250%;
     height: 170%;
     top: 45px;
@@ -81,15 +81,17 @@
 }
 .has-pvp-turn-no-pet {
     transform: rotate3d(150, 1, 1, 45deg);
-    background-image: url(../images/animations/28.gif);
-    width: 250%;
-    height: 170%;
-    top: 10px;
+    background-image: url(../images/turn-effect.png);
+    background-repeat: no-repeat;
+    width: 90px;
+    height: 120px;
+    top: 23px;
     z-index: 0 !important;
     position: absolute;
-    left: -55px;
-    background-size: 100%;
-    background-position: bottom;
+    left: 15px;
+    background-size: 300%;
+    background-position: center;
+    
 }
 .has-pvp-broken-with-pet {
     transform: rotate3d(150, 1, 1, 45deg);

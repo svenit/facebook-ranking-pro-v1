@@ -203,13 +203,14 @@ app = new Vue({
             gear:{},
             action:false
         },
+        turnEffect:0,
         /* Admin */
         shop_tag: '',
         rgb: '',
         selected: []
     },
     async created() {
-        this.token = await this.bind($('meta[name="csrf-token"]').attr('content'));
+        this.token = await this.bind(document.getElementById('main').getAttribute('data-id'));
         if(config.auth) 
         {
             await this.index();
@@ -1900,10 +1901,10 @@ app = new Vue({
             var asset = `${config.root}/assets/images/effects`;
             switch (effect)
             {
-                case 'stun':
+                case 'strength-stun':
                     return `${asset}/stun.svg`;
                 break;
             }
-        }
+        },
     },
 });

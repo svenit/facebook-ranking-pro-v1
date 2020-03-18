@@ -22,9 +22,9 @@ class Cors
             if(isset($request->bearer))
             {
                 $token = md5(hash('sha256',md5($this->encode(strrev(csrf_token().'..$!@{a-z0-9}-VYDEPTRAI&*@!LX&&$PHP?1+1')))));
-                if($request->header('host') == env('APP_DOMAIN') && $request->header('pragma') == $token)
+                if($request->header('host') === env('APP_DOMAIN') && $request->header('pragma') === $token)
                 {
-                    $newToken = Str::random(40);
+                    $newToken = uniqid(Str::random(40));
                     Session::forget('_token');
                     Session::put('_token',$newToken);
                     return $next($request)->header('Authorization',$newToken)

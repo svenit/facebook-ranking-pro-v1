@@ -729,6 +729,9 @@
                         <li><a href="{{ Route('user.giftcode.index') }}" class=""><span class="nav-icon"><i data-feather="dollar-sign"></i></span> <span
                             class="nav-text">Donate</span></a>
                         </li>
+                        <li><a href="{{ Route('user.giftcode.index') }}" class=""><span class="nav-icon"><i data-feather="dollar-sign"></i></span> <span
+                            class="nav-text">Changelogs</span></a>
+                        </li>
                     @endif
                     @if(Auth::check() && Auth::user()->isAdmin)
                         <li class="nav-header hidden-folded"><span class="text-muted">Admin Cpanel</span></li>

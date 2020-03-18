@@ -38,7 +38,7 @@ class ListenActionController extends BaseController
                 }
                 else
                 {
-                    while($time <= $timeLimit && FightRoom::where('user_challenge',$findMatch->user_receive_challenge)->first()->turn == 1)
+                    while($time <= $timeLimit)
                     {
                         $enemy = FightRoom::where('user_challenge',$findMatch->user_receive_challenge);
                         $enemyTurn = $enemy->first()->turn;
@@ -266,6 +266,19 @@ class ListenActionController extends BaseController
         if(isset($skillsCountDown))
         {
             foreach($skillsCountDown as $key => $countdown)
+            {
+                $skillsCountDown[$key]['countdown'] -= $countdown['countdown'] == 0 ? 0 : 1;
+            }
+            return $skillsCountDown;
+        }
+    }
+
+    public function decreBuff()
+    {
+        $buffs = FightRoom::where('user_challenge',Auth::id())->first()->buff;
+        if(isset($buffs))
+        {
+            foreach($buffs as $key => $buff)
             {
                 $skillsCountDown[$key]['countdown'] -= $countdown['countdown'] == 0 ? 0 : 1;
             }
