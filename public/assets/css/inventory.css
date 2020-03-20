@@ -69,33 +69,35 @@
 
 .has-pvp-turn-with-pet {
     transform: rotate3d(150, 1, 1, 45deg);
-    background-image: url(../images/turn-effect.png);
-    width: 250%;
+    background-image: url(../images/turn-effect.gif);
+    width: 150%;
     height: 170%;
-    top: 45px;
+    top: 20px;
     z-index: 0 !important;
+    image-rendering:pixelated;
+    background-repeat: no-repeat;
     position: absolute;
-    left: -55px;
+    left: -10px;
     background-size: 100%;
     background-position: bottom;
 }
 .has-pvp-turn-no-pet {
     transform: rotate3d(150, 1, 1, 45deg);
-    background-image: url(../images/turn-effect.png);
+    background-image: url(../images/turn-effect.gif) !important;
     background-repeat: no-repeat;
-    width: 90px;
-    height: 120px;
-    top: 23px;
+    width: 100%;
+    height: 100%;
+    image-rendering:pixelated;
+    top: 30px;
     z-index: 0 !important;
     position: absolute;
-    left: 15px;
-    background-size: 300%;
-    background-position: center;
-    
+    left: 13px;
+    background-size: 100%;
+    background-position: bottom;
 }
 .has-pvp-broken-with-pet {
     transform: rotate3d(150, 1, 1, 45deg);
-    background-image: url(../images/broken-stone.gif);
+    background-image: url(../images/broken-stone.gif) !important;
     width: 250%;
     height: 170%;
     top: 55px;
@@ -154,22 +156,22 @@
 }
 
 .shadow-character {
-    width: 40px;
-    background: rgb(0, 0, 0, 0.3);
+    width: 50px;
+    background: rgb(0, 0, 0, 0.4);
     border-radius: 50%;
     height: 30px;
-    top: 65px;
-    left: 36px;
+    top: 71px;
+    left: 32px;
     position: absolute;
 }
 
 .shadow-pet {
-    width: 120px;
-    background: rgb(0, 0, 0, 0.3);
+    width: 90px;
+    background: rgb(0, 0, 0, 0.4);
     border-radius: 50%;
     height: 30px;
     top: 120%;
-    left: 0;
+    left: 10px;
     position: absolute;
 }
 .avatar-bordered {

@@ -158,22 +158,26 @@ class FindMatchController extends BaseController
                                 {
                                     FightRoom::where('user_challenge',$getEnemy->user_receive_challenge)->update([
                                         'turn' => 0,
-                                        'countdown_skill' => json_encode($this->getSkills($getEnemy->user_receive_challenge))
+                                        'countdown_skill' => json_encode($this->getSkills($getEnemy->user_receive_challenge)),
+                                        'check_status' => 0
                                     ]);
                                     FightRoom::where('user_challenge',Auth::id())->update([
                                         'turn' => 1,
-                                        'countdown_skill' => json_encode($this->getSkills(Auth::id()))
+                                        'countdown_skill' => json_encode($this->getSkills(Auth::id())),
+                                        'check_status' => 0
                                     ]);
                                 }
                                 else
                                 {
                                     FightRoom::where('user_challenge',Auth::id())->update([
                                         'turn' => 0,
-                                        'countdown_skill' => json_encode($this->getSkills(Auth::id()))
+                                        'countdown_skill' => json_encode($this->getSkills(Auth::id())),
+                                        'check_status' => 0
                                     ]);
                                     FightRoom::where('user_challenge',$getEnemy->user_receive_challenge)->update([
                                         'turn' => 1,
-                                        'countdown_skill' => json_encode($this->getSkills($getEnemy->user_receive_challenge))
+                                        'countdown_skill' => json_encode($this->getSkills($getEnemy->user_receive_challenge)),
+                                        'check_status' => 0
                                     ]);
                                 }
                             }

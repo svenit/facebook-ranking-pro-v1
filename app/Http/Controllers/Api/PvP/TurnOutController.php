@@ -105,6 +105,7 @@ class TurnOutController extends BaseController
         {
             if($this->limitTimeStatus && Carbon::parse($room->started_at)->diffInMinutes() >= $this->limitTime)
             {
+                $this->pvpRestart($room->id);
                 $response = [
                     'code' => 300,
                     'status' => 'warning',

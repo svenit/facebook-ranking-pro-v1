@@ -74,4 +74,8 @@ function handleConnect(socket)
     socket.on('denied-invite-pvp', data => {
         socket.broadcast.emit(`denied-invite-pvp-${data.channel}-${data.to}`,data.from);
     });
+
+    socket.on('event-pvp-hit-enemy', data => {
+        socket.broadcast.emit(`event-pvp-hit-enemy-${data.room.name}-${data['broadcast-to']}`,data);
+    });
 }

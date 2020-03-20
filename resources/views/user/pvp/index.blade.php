@@ -13,11 +13,11 @@
                 <button style="width:300px" class="vip-bordered">Vé Tham Gia : {{ Auth::user()->pvp_times }}</button>
             </p>
             <div style="margin-top:20px" class="row">
-                <div v-for="(room,index) in pvp.rooms" :key="index" class="col-6 col-md-4 col-lg-3">
+                <div v-for="(room,index) in pvp.rooms" :key="index" class="col-auto">
                     <a :href="`join/${room.name}`">
                         <div class="card vip-bordered">
-                            <div class="media media-4x3 gd-dark">
-                                <a class="media-content" style="background-image:url(https://cdn.dribbble.com/users/321899/screenshots/5566650/pvp_logo.png)">
+                            <div class="media media-4x3">
+                                <a class="media-content" style="background-image:url({{ asset('assets/images/app.png') }})">
                                 </a>
                             </div>
                             <div class="btn-group">

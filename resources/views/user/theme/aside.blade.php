@@ -624,11 +624,12 @@
         </div>
     </div>
 </div>
-<div id="aside-left" class="page-sidenav no-shrink bg-light nav-dropdown fade" aria-hidden="true">
+@if(!request()->is('pvp/room/*'))
+<div id="aside-left" class="page-sidenav no-shrink bg-light nav-dropdown fade hide" aria-hidden="true">
     <div class="sidenav h-100 modal-dialog bg-light normal-bordered">
         <div class="navbar"><a href="{{ Route('user.index') }}" class="navbar-brand">
-            <img src="https://dslv9ilpbe7p1.cloudfront.net/8nAm-YsBbxDswigGmEWqpA_store_logo_image.png">
-            <span class="hidden-folded d-inline l-s-n-1x">{{ env('APP_NAME') }}</span></a></div>
+            <img src="{{ asset('assets/images/app.png') }}">
+            <span style="font-weight:inherit;" class="pixel-font hidden-folded text-warning d-inline l-s-n-1x">{{ env('APP_NAME') }}</span></a></div>
         <div class="flex scrollable hover">
             <div class="nav-active-text-primary" data-nav>
                 <ul class="nav bg">
@@ -844,6 +845,7 @@
         @endauth
     </div>
 </div>
+@endif
 @if(!request()->is('admin/*'))
 <div v-if="loading" id="modal-sm" class="modal fade show" data-backdrop="true" style="display: block;" aria-modal="true">
     <div class="modal-dialog modal-sm">

@@ -298,6 +298,7 @@ app = new Vue({
             if(this.pvp.timeRemaining == 0)
             {
                 this.notify('Đã hết thời gian chiến đấu');
+                this.resetPvp();
             }
         },
         'pvp.match.you.turn'() {
@@ -316,7 +317,7 @@ app = new Vue({
                     socket.on(`event-pvp-time-${page.room.id}`,(data) => {
                         if(socket.id !== data.id && this.pvp.match.you.turn == 0)
                         {
-                            self.pvp.status = `Đang đợi đối thủ ra đòn...( ${data.time}s )`;
+                            self.pvp.status = `Lượt của đối thủ...( ${data.time}s )`;
                         }
                     });
                     axios.post(`${config.root}/api/v1/pvp/listen-action`, {
@@ -385,10 +386,17 @@ app = new Vue({
                 if (this.pvp.match.you.turn == 1) {
                     this.pvp.timeOut--;
                     const self = this;
-                    socket.emit(`event-pvp-time`,{
-                        time:self.pvp.timeOut,
-                        channel:page.room.id
-                    });
+                    if(this.pvp.isMatching)
+                    {
+                        socket.emit(`event-pvp-time`,{
+                            time:self.pvp.timeOut,
+                            channel:page.room.id
+                        });
+                    }
+                    else
+                    {
+                        this.resetPvp();
+                    }
                     this.pvp.status = `Lượt của bạn..( ${this.pvp.timeOut}s )`;
                     if (this.pvp.timeOut == 0) {
                         this.pvp.match.you.turn = 0;
@@ -575,12 +583,12 @@ app = new Vue({
                 document.getElementsByClassName('modal-backdrop fade show')[1].remove();
             });
             socket.on(`event-pvp-hit-enemy-${page.room.id}-${page.room.me}`, function (res) {
-                self.notify(res.data.data.message);
-                if (res.data.data.effectTo == 0) {
+                self.notify(res.data.message);
+                if (res.hit && res.data.effectTo == 0) {
                     self.pvp.enemyAttack = true;
                     self.pvp.enemyBuff = true;
-                    self.pvp.enemySkillAnimation = res.data.data.skillAnimation;
-                    self.pvp.enemyAttackDamage = res.data.data.damage;
+                    self.pvp.enemySkillAnimation = res.data.skillAnimation;
+                    self.pvp.enemyAttackDamage = res.data.damage;
                     setTimeout(() => {
                         self.pvp.enemyAttackDamage = null;
                     },800);
@@ -687,19 +695,25 @@ app = new Vue({
         },
         async kickEnemy()
         {
-            let res = await axios.post(`${config.root}/api/v1/pvp/kick-enemy`, {
-                bearer: config.bearer,
-                room: page.room.id
-            }, {
-                headers: {
-                    pragma: this.token
-                }
-            });
-            await this.refreshToken(res);
-            this.notify(res.data.message);
-            if(res.data.code == 200)
+            if(confirm('Kick người chơi này ?'))
             {
-                this.pvp.enemyJoined = false;
+                if(!this.pvp.isMatching && this.pvp.enemyJoined)
+                {
+                    let res = await axios.post(`${config.root}/api/v1/pvp/kick-enemy`, {
+                        bearer: config.bearer,
+                        room: page.room.id
+                    }, {
+                        headers: {
+                            pragma: this.token
+                        }
+                    });
+                    await this.refreshToken(res);
+                    this.notify(res.data.message);
+                    if(res.data.code == 200)
+                    {
+                        this.pvp.enemyJoined = false;
+                    }
+                }
             }
         },
         showGem(data, permission)
@@ -921,36 +935,43 @@ app = new Vue({
             this.notify(res.data.message);
         },
         async toggleReady() {
-            if(!this.pvp.isMatching) 
+            try
             {
-                this.pvp.isReady = !this.pvp.isReady;
-                let res = await axios.post(`${config.root}/api/v1/pvp/toggle-ready`, {
-                    bearer: config.bearer,
-                    room: page.room.id,
-                    status: this.pvp.isReady ? 1 : 0
-                }, {
-                    headers: {
-                        pragma: this.token
-                    }
-                });
-                await this.refreshToken(res);
-                this.notify(res.data.message);
-                if(res.status == 200 && res.data.code == 200) 
+                if(!this.pvp.isMatching) 
                 {
-                    socket.emit('pvp-ready',{
-                        channel: page.room.id,
-                        id:socket.id,
-                        status:this.pvp.isReady ? 1 : 0
+                    this.pvp.isReady = !this.pvp.isReady;
+                    let res = await axios.post(`${config.root}/api/v1/pvp/toggle-ready`, {
+                        bearer: config.bearer,
+                        room: page.room.id,
+                        status: this.pvp.isReady ? 1 : 0
+                    }, {
+                        headers: {
+                            pragma: this.token
+                        }
                     });
-                    if(this.pvp.isReady) 
+                    await this.refreshToken(res);
+                    this.notify(res.data.message);
+                    if(res.status == 200 && res.data.code == 200) 
                     {
-                        this.findMatch();
+                        socket.emit('pvp-ready',{
+                            channel: page.room.id,
+                            id:socket.id,
+                            status:this.pvp.isReady ? 1 : 0
+                        });
+                        if(this.pvp.isReady) 
+                        {
+                            this.findMatch();
+                        }
+                    } 
+                    else 
+                    {
+                        this.pvp.isReady = false;
                     }
-                } 
-                else 
-                {
-                    this.pvp.isReady = false;
                 }
+            }
+            catch(e)
+            {
+                Swal.fire('','Đã có lỗi xảy ra xin vui lòng tải lại trang','error');
             }
         },
         async findMatch() 
@@ -1062,6 +1083,7 @@ app = new Vue({
                                         this.notify(res.data.message);
                                         this.pvpTurnBase(res);
                                         this.pvp.yourAttackDamage = res.data.you.damage;
+                                        socket.emit('event-pvp-hit-enemy',res.data.data);
                                         setTimeout(() => {
                                             this.pvp.yourAttackDamage = null;
                                         },800);
@@ -1234,6 +1256,7 @@ app = new Vue({
             this.pvp.yourBuff = false;
             this.pvp.isReady = false;
             this.pvp.status = 'Sẵn Sàng <i class="fas fa-swords"></i>';
+            this.pvp.match.you.turn = 0;
         },
         async listGlobalChat(channel) {
             const self = this;

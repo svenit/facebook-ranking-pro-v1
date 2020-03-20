@@ -280,6 +280,7 @@ class HitController extends BaseController
                                                     if($findMatch->update($yourUpdate) && $enemy->update($enemyUpdate))
                                                     {
                                                         $data = [
+                                                            'hit' => true,
                                                             'room' => [
                                                                 'name' => $room->name,
                                                                 'id' => $room->id
@@ -297,7 +298,6 @@ class HitController extends BaseController
                                                             ],
                                                             'broadcast-to' => $enemy->first()->user_challenge
                                                         ];
-                                                        event(new PvPHitEnemy($data));
                                                         $response = [
                                                             'code' => 200,
                                                             'status' => 'success',
@@ -318,6 +318,7 @@ class HitController extends BaseController
                                                                 'effected' => $findMatch->first()->effected,
                                                                 'countdown' => $findMatch->first()->countdown_skill
                                                             ],
+                                                            'data' => $data
                                                         ];
                                                     }
                                                     else
@@ -332,6 +333,21 @@ class HitController extends BaseController
                                             }
                                             else
                                             {
+                                                $data = [
+                                                    'hit' => false,
+                                                    'room' => [
+                                                        'name' => $room->name,
+                                                        'id' => $room->id
+                                                    ],
+                                                    'data' => [
+                                                        'message' => 'Đối thủ sử dụng kĩ năng thất bại',
+                                                    ],
+                                                    'enemy' => [
+                                                        'name' => User::findOrFail($enemy->first()->user_challenge)->name,
+                                                        'id' => $enemy->first()->user_challenge
+                                                    ],
+                                                    'broadcast-to' => $enemy->first()->user_challenge
+                                                ];
                                                 $findMatch->update([
                                                     'turn' => 0,
                                                     'user_challenge_energy' => DB::raw("user_challenge_energy - $skill->energy")
@@ -359,6 +375,7 @@ class HitController extends BaseController
                                                         'effected' => $findMatch->first()->effected,
                                                         'countdown' => $findMatch->first()->countdown_skill
                                                     ],
+                                                    'data' => $data
                                                 ];
                                             }
                                         }

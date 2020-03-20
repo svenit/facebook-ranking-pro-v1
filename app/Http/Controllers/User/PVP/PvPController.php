@@ -175,6 +175,7 @@ class PvPController extends Controller
                     'Ê có chap <p>mới rồi anh e</p>',
                     'Anh ơi thằng <p>kia nhìn đểu</p>',
                     'Đánh tay không <p>tao xem nào</p>',
+                    'Tải lại trang sẽ<p> làm bạn mất lượt'
                 ];
                 return view('user.pvp.fight',compact('room','checkRoom','checkSession', 'comments'));
             }

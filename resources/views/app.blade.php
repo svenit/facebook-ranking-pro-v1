@@ -54,14 +54,16 @@
 			@include('user.theme.header')
 			<div id="content" class="flex">
 				<div>
+					@if(!request()->is('pvp/room/*'))
 					<div class="page-hero page-container" id="page-hero">
 						<div class="padding d-flex">
 							<div style="width:100%" class="vip-bordered page-title">
-								<h2 data-title="tooltip" title="Click để xem thông số" class="ribbon"> <button style="background:transparent;border:none">@yield('hero')</button></h2>
+								<h2 data-title="tooltip" class="ribbon"> <button style="background:transparent;border:none">@yield('hero')</button></h2>
 								<p style="margin-top:40px" class="text-muted text-center">@yield('sub_hero','')</p>
 							</div>
 						</div>
 					</div>
+					@endif
 					@yield('content')
 				</div>
 			</div>

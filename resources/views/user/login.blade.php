@@ -14,6 +14,9 @@
 <body style="background:#2e334c" class="layout-row">
     <div id="ajax-content" class="dark h-v d-flex flex align-items-center">
         <div style="padding:40px;border-radius:5px;width:500px" class="bg-dark mx-auto w-xl w-auto-xs animate fadeIn text-center">
+            <div class="mb-3"><img style="width:200px" src="{{ asset('assets/images/app.png') }}" class="">
+                <div class="mt-3 font-bold"></div>
+            </div>
             <div class="mb-3"><img src="{{ asset('assets/images/logo.png') }}" class="w-100">
                 <div class="mt-3 font-bold"></div>
             </div>
