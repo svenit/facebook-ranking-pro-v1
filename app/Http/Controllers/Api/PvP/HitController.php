@@ -180,6 +180,25 @@ class HitController extends BaseController
                                                             $message = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ";
                                                         }
                                                     break;
+                                                    case SkillType::FREEZE:
+                                                        $yourStrength = Auth::user()->power()['intelligent'];
+                                                        $countDamage = $this->renderDestroy($yourStrength,$skill);
+                                                        $enemyStrengthArmor = $getEnemyInfor->power()['armor_intelligent'];
+                                                        $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor);
+                                                        $rate = rand(0,100);
+                                                        if($skill->effect_rate >= $rate)
+                                                        {
+                                                            $yourUpdate['turn'] = 1;
+                                                            $yourTurn = 1;
+                                                            $enemyTurn = 0;
+                                                            $enemyEffected[$skill->type] = $skill->effect_turn;
+                                                            $message = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ, đối thụ dính hiệu ứng đóng băng trong $skill->effect_turn lượt";
+                                                        }
+                                                        else
+                                                        {
+                                                            $message = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ";
+                                                        }
+                                                    break;
                                                     case SkillType::INCREAGILITY:
                                                         $yourStrength = Auth::user()->power()['strength'];
                                                         $countDamage = $this->renderDestroy($yourStrength,$skill);

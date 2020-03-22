@@ -90,14 +90,10 @@ class ListenActionController extends BaseController
                         $effected = $currentEffected;
                         foreach(array_wrap($currentEffected) as $key => $effect)
                         {
-                            if($key && $effect == 1)
+                            if($key && isset($effect) && $effect == 1)
                             {
                                 $yourEffected = $key;
                                 $yourEffectedTurn = $effect;
-                                break;
-                            }
-                            else
-                            {
                                 break;
                             }
                         }
@@ -123,6 +119,43 @@ class ListenActionController extends BaseController
                                         'code' => 200,
                                         'status' => 'success',
                                         'message' => 'Bạn đã bị dính hiệu ứng choáng',
+                                        'enemy' => [
+                                            'basic' => $userApi->userInfor($enemy->first()->user_challenge),
+                                            'hp' => $enemy->first()->user_challenge_hp,
+                                            'energy' => $enemy->first()->user_challenge_energy,
+                                            'effected' => $enemy->first()->effected,
+                                            'countdown' => $enemy->first()->countdown_skill
+                                        ],
+                                        'you' => [
+                                            'basic' => $userApi->userInfor(Auth::id()),
+                                            'hp' => $you->first()->user_challenge_hp,
+                                            'energy' => $you->first()->user_challenge_energy,
+                                            'turn' => 0,
+                                            'effected' => $effected,
+                                            'countdown' => $yourCountDown,
+                                            'hasEffected' => 1,
+                                        ],
+                                    ];
+                                    return response()->json($response,200);
+                                break;
+                                case SkillType::FREEZE:
+                                    $yourCountDown = $this->decreCountDown() ?? null;
+                                    $currentEffected[$yourEffected] = null;
+                                    $you->update([
+                                        'turn' => 0,
+                                        'effected' => json_encode($currentEffected),
+                                        'countdown_skill' => json_encode($yourCountDown)
+                                    ]);
+                                    $enemy->update([
+                                        'turn' => 1,
+                                    ]);
+                                    $you = FightRoom::where('user_challenge',Auth::id());
+                                    $enemy = FightRoom::where('user_challenge',$findMatch->user_receive_challenge);
+                                    $userApi = new IndexController();
+                                    $response = [
+                                        'code' => 200,
+                                        'status' => 'success',
+                                        'message' => 'Bạn đã bị dính hiệu đóng băng',
                                         'enemy' => [
                                             'basic' => $userApi->userInfor($enemy->first()->user_challenge),
                                             'hp' => $enemy->first()->user_challenge_hp,

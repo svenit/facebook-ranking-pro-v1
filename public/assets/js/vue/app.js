@@ -1918,16 +1918,6 @@ app = new Vue({
         },
         numberFormatDetail(num) {
             return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
-        },
-        convertEffect(effect)
-        {
-            var asset = `${config.root}/assets/images/effects`;
-            switch (effect)
-            {
-                case 'strength-stun':
-                    return `${asset}/stun.svg`;
-                break;
-            }
-        },
+        }
     },
 });
