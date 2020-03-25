@@ -256,8 +256,7 @@ class FindMatchController extends BaseController
         $skills = [];
         foreach(User::findOrFail($id)->usingSkills() as $key => $skill)
         {
-            $skills[$key] = $skill->only('id','countdown');
-            $skills[$key]['countdown'] = 0;
+            $skills[$skill->id] = 0;
         }
         return $skills;
     }

@@ -298,7 +298,7 @@ class ListenActionController extends BaseController
         {
             foreach($skillsCountDown as $key => $countdown)
             {
-                $skillsCountDown[$key]['countdown'] -= $countdown['countdown'] == 0 ? 0 : 1;
+                $skillsCountDown[$key] -= $countdown == 0 ? 0 : 1;
             }
             return $skillsCountDown;
         }

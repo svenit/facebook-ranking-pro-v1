@@ -72,9 +72,9 @@
                             <div class="col-12" v-if="pvp.isMatching">
                                 <div class="row row-sm">
                                     <div style="z-index:1" v-for="(skill,index) in pvp.match.you.skills" :key="index" class="mr-2 col-auto">
-                                        <span :class="`avatar w-56 ${countdown.countdown !== 0 || pvp.match.you.energy < skill.energy ? 'loading not-allow' : ''}`" v-for="(countdown,index) in pvp.yourCountDown" v-if="skill.id == countdown.id" :key="index">
-                                            <img :style="{filter: pvp.match.you.turn == 1 && pvp.match.you.energy >= skill.energy && countdown.countdown == 0 ? '' : 'grayscale(100%)',position:'relative'}" @click="hit(skill)" width="100%" :src="skill.image" alt=".">
-                                            <span v-if="countdown.countdown !== 0" class="pixel-font" style="position:absolute;left:43%;top:28%;color:#fff">@{{ countdown.countdown }}</span>
+                                        <span :class="`avatar w-56 ${countdown !== 0 || pvp.match.you.energy < skill.energy ? 'loading not-allow' : ''}`" v-for="(countdown,index) in pvp.yourCountDown" v-if="skill.id == index" :key="index">
+                                            <img :style="{filter: pvp.match.you.turn == 1 && pvp.match.you.energy >= skill.energy && countdown == 0 ? '' : 'grayscale(100%)',position:'relative'}" @click="hit(skill)" width="100%" :src="skill.image" alt=".">
+                                            <span v-if="countdown !== 0" class="pixel-font" style="position:absolute;left:43%;top:28%;color:#fff">@{{ countdown }}</span>
                                         </span>
                                     </div>
                                 </div>
@@ -123,9 +123,9 @@
                             <div class="col-12" v-if="pvp.isMatching">
                                 <div style="float:right"  class="row row-sm text-right">
                                     <div style="z-index:1;" v-for="(skill,index) in pvp.match.enemy.skills" :key="index" class="col-auto mr-2">
-                                        <span :class="`avatar w-56 ${countdown.countdown !== 0 || pvp.match.enemy.energy < skill.energy ? 'loading not-allow' : ''}`" v-for="(countdown,index) in pvp.enemyCountDown" v-if="skill.id == countdown.id" :key="index">
-                                            <img :style="{filter: pvp.match.enemy.turn == 1 && pvp.match.enemy.energy >= skill.energy && countdown.countdown == 0 ? '' : 'grayscale(100%)',position:'relative'}" @click="showSkillsDescription(skill)" :src="skill.image" alt=".">
-                                            <span v-if="countdown.countdown !== 0" class="pixel-font" style="position:absolute;left:43%;top:28%;color:#fff">@{{ countdown.countdown }}</span>
+                                        <span :class="`avatar w-56 ${countdown !== 0 || pvp.match.enemy.energy < skill.energy ? 'loading not-allow' : ''}`" v-for="(countdown,index) in pvp.enemyCountDown" v-if="skill.id == index" :key="index">
+                                            <img :style="{filter: pvp.match.enemy.turn == 1 && pvp.match.enemy.energy >= skill.energy && countdown == 0 ? '' : 'grayscale(100%)',position:'relative'}" @click="showSkillsDescription(skill)" :src="skill.image" alt=".">
+                                            <span v-if="countdown !== 0" class="pixel-font" style="position:absolute;left:43%;top:28%;color:#fff">@{{ countdown }}</span>
                                         </span>
                                     </div>
                                 </div>

@@ -2,7 +2,6 @@ const port = 3000;
 const io = require('socket.io')(port);
 const Redis = require('ioredis');
 const redis = new Redis();
-const map = new Map();
 
 console.log('App is runnig at port', port);
 

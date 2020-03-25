@@ -1,7 +1,17 @@
 
+{{-- 
+	A TextBased Game Platform - Developed by Sven 
+
+  _________      .__           .__                     .__  .__                   _________.__        .__.__          __                
+ /   _____/ ____ |  |   ____   |  |   _______  __ ____ |  | |__| ____    ____    /   _____/|__| _____ |__|  | _____ _/  |_  ___________ 
+ \_____  \ /  _ \|  |  /  _ \  |  | _/ __ \  \/ // __ \|  | |  |/    \  / ___\   \_____  \ |  |/     \|  |  | \__  \\   __\/  _ \_  __ \
+ /        (  <_> )  |_(  <_> ) |  |_\  ___/\   /\  ___/|  |_|  |   |  \/ /_/  >  /        \|  |  Y Y  \  |  |__/ __ \|  | (  <_> )  | \/
+/_______  /\____/|____/\____/  |____/\___  >\_/  \___  >____/__|___|  /\___  /  /_______  /|__|__|_|  /__|____(____  /__|  \____/|__|   
+        \/                               \/          \/             \//_____/           \/          \/             \/                   
+
+--}}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 	<meta charset="utf-8">
 	<title>{{ env('APP_NAME','Solo Leveling') }} - @yield('hero')</title>
@@ -48,7 +58,6 @@
 					<p class="mt-5">Đang tải dữ liệu...</p></div></div></div>
 			</div>
 		@endif
-		
 		@include('user.theme.aside')
 		<div data-id="{{ csrf_token() }}" id="main" style="background: url({{ asset('assets/images/background.jpg') }});" class="layout-column flex">
 			@include('user.theme.header')

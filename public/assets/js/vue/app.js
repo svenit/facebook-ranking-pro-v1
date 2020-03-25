@@ -1042,18 +1042,8 @@ app = new Vue({
         },
         async hit(skill) {
             try {
-                var skillCountDown = false;
-                if(this.pvp.yourCountDown && this.pvp.yourCountDown.length > 0)
-                {
-                    this.pvp.yourCountDown.filter((item, key) => {
-                        if(skill.id == item.id && item.countdown == 0)
-                        {
-                            skillCountDown = true;
-                            return;
-                        }
-                    });
-                }
-                if(skillCountDown)
+                console.log(this.pvp.yourCountDown[skill.id]);
+                if(this.pvp.yourCountDown[skill.id] == 0)
                 {
                     if (this.pvp.match.you.turn == 1) {
                         if (skill.energy <= this.pvp.match.you.energy) {

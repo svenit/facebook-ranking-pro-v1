@@ -60,34 +60,52 @@ class HitController extends BaseController
                             if(isset($checkSkill))
                             {
                                 $noCountDown = false;
-                                $checkCountDown = $findMatch->first()->countdown_skill;
-                                if(isset($checkCountDown[0]))
-                                {
-                                    foreach($checkCountDown as $key => $countdown)
-                                    {
-                                        if($request->skill == $countdown['id'] && $countdown['countdown'] == 0)
-                                        {
-                                            $noCountDown = true;
-                                            $checkCountDown[$key]['countdown'] = Skill::findOrFail($checkSkill->skill_id)->countdown;
-                                            $findMatch->update([
-                                                'countdown_skill' => json_encode($checkCountDown)
-                                            ]);
-                                            break;
-                                        }
-                                    }
-                                }
-                                if($noCountDown)
+                                $checkCountDown = $findMatch->first()->countdown_skill[$request->skill];
+                                if(isset($checkCountDown) && $checkCountDown == 0)
                                 {
                                     $skill = Skill::findOrFail($checkSkill->skill_id);
                                     if($skill->passive == 0)
                                     {
                                         if($findMatch->first()->user_challenge_energy >= $skill->energy)
                                         {
+                                            $checkCountDown = Skill::findOrFail($checkSkill->skill_id)->countdown;
+                                            $findMatch->update([
+                                                "countdown_skill->{$request->skill}" => $checkCountDown
+                                            ]);
+                                            
+                                            /* Enemy buff */
+                                            $enemyBuffStatus = [
+                                                'agility' => 0,
+                                                'lucky' => 0,
+                                                'armor_strength' => 0,
+                                                'armor_intelligent' => 0
+                                            ];
+                                            $enemyBuffs = $enemy->first()->buff;
+                                            if(isset($enemyBuffs))
+                                            {
+                                                foreach($enemyBuffs as $key => $enemyBuff)
+                                                {
+                                                    if($enemyBuff > 0)
+                                                    {
+                                                        switch($key)
+                                                        {
+                                                            case SkillType::INCREAGILITY:
+                                                                $enemyBuffStatus['agility'] += $enemyBuffs[$key."-value"];
+                                                                $enemyBuffs[$key] = --$enemyBuff;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                                $enemy->update([
+                                                    'buff' => json_encode($enemyBuffs)
+                                                ]);
+                                            }
+
                                             $randomRate = rand(0,100);
                                             $getEnemyInfor = User::findOrFail($enemy->first()->user_challenge);
 
-                                            $allAgility = Auth::user()->power()['agility'] + $getEnemyInfor->power()['agility'];
-                                            $allLucky = Auth::user()->power()['lucky'] + $getEnemyInfor->power()['lucky'];
+                                            $allAgility = Auth::user()->power()['agility'] + $getEnemyInfor->power()['agility'] + $enemyBuffStatus['agility'];
+                                            $allLucky = Auth::user()->power()['lucky'] + $getEnemyInfor->power()['lucky'] + $enemyBuffStatus['lucky'];
 
                                             if($randomRate <= $skill->success_rate && $randomRate <= (Auth::user()->power()['agility']/$allAgility) * 100)
                                             {
@@ -111,14 +129,14 @@ class HitController extends BaseController
                                                         $yourStrength = Auth::user()->power()['strength'];
                                                         $countDamage = $this->renderDestroy($yourStrength,$skill);
                                                         $enemyStrengthArmor = $getEnemyInfor->power()['armor_strength'];
-                                                        $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor);
+                                                        $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor) - $enemyBuffStatus['armor_strength'];
                                                         $message = "[ $skill->name ] Bạn đã gây $destroy sát thương vật lí cho đối thủ";
                                                     break;
                                                     case SkillType::ATTACK_INTELLIGENT:
                                                         $yourStrength = Auth::user()->power()['intelligent'];
                                                         $countDamage = $this->renderDestroy($yourStrength,$skill);
                                                         $enemyStrengthArmor = $getEnemyInfor->power()['armor_intelligent'];
-                                                        $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor);
+                                                        $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor) - $enemyBuffStatus['armor_intelligent'];
                                                         $message = "[ $skill->name ] Bạn đã gây $destroy sát thương phép thuật cho đối thủ";
                                                     break;
                                                     case SkillType::ATTACK_CRIT:
@@ -165,7 +183,7 @@ class HitController extends BaseController
                                                         $yourStrength = Auth::user()->power()['strength'];
                                                         $countDamage = $this->renderDestroy($yourStrength,$skill);
                                                         $enemyStrengthArmor = $getEnemyInfor->power()['armor_strength'];
-                                                        $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor);
+                                                        $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor) - $enemyBuffStatus['armor_strength'];
                                                         $rate = rand(0,100);
                                                         if($skill->effect_rate >= $rate)
                                                         {
@@ -184,7 +202,7 @@ class HitController extends BaseController
                                                         $yourStrength = Auth::user()->power()['intelligent'];
                                                         $countDamage = $this->renderDestroy($yourStrength,$skill);
                                                         $enemyStrengthArmor = $getEnemyInfor->power()['armor_intelligent'];
-                                                        $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor);
+                                                        $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor) - $enemyBuffStatus['armor_intelligent'];
                                                         $rate = rand(0,100);
                                                         if($skill->effect_rate >= $rate)
                                                         {
@@ -203,11 +221,13 @@ class HitController extends BaseController
                                                         $yourStrength = Auth::user()->power()['strength'];
                                                         $countDamage = $this->renderDestroy($yourStrength,$skill);
                                                         $enemyStrengthArmor = $getEnemyInfor->power()['armor_strength'];
-                                                        $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor);
+                                                        $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor) - $enemyBuffStatus['armor_strength'];
                                                         $rate = rand(0,100);
                                                         if($skill->effect_rate >= $rate)
                                                         {
                                                             $yourBuff[$skill->type] = $skill->effect_turn;
+                                                            $yourBuff[$skill->type."-type"] = $skill->effect_value['type'];
+                                                            $yourBuff[$skill->type."-value"] = $skill->effect_value['value'];
                                                             $yourUpdate['buff'] = json_encode($yourBuff);
                                                             $effectType = $skill->effect_value['type'] == 1 ? '%' : '';
                                                             $message = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ, bạn được tăng {$skill->effect_value['value']}{$effectType} nhanh nhẹn trong {$skill->effect_turn} lượt";
@@ -240,14 +260,14 @@ class HitController extends BaseController
                                                                 if($skill->type == 'strength')
                                                                 {
                                                                     $destroy = $this->renderPassive($destroy,$enemyPassiveSkill) < 0 ? 0 : $this->renderPassive($destroy,$enemyPassiveSkill);
-                                                                    $message = "[ $skill->name ] Đối thủ có kĩ năng bị động giảm sát thương vật lí ! Sát thương của bạn gây ra chỉ còn lại $destroy";
+                                                                    $message .= " - Đối thủ có kĩ năng bị động giảm sát thương vật lí ! Sát thương của bạn gây ra chỉ còn lại $destroy";
                                                                 }
                                                             break;
                                                             case SkillType::ARMOR_INTELLIGENT:
                                                                 if($skill->type == 'intelligent')
                                                                 {
                                                                     $destroy = $this->renderPassive($destroy,$enemyPassiveSkill) < 0 ? 0 : $this->renderPassive($destroy,$enemyPassiveSkill);
-                                                                    $message = "[ $skill->name ] Đối thủ có kĩ năng bị động giảm sát thương phép thuật ! Sát thương của bạn gây ra chỉ còn lại $destroy";
+                                                                    $message .= " - Đối thủ có kĩ năng bị động giảm sát thương phép thuật ! Sát thương của bạn gây ra chỉ còn lại $destroy";
                                                                 }
                                                             break;
                                                         }
@@ -383,7 +403,8 @@ class HitController extends BaseController
                                                         'hp' => $enemy->first()->user_challenge_hp,
                                                         'energy' => $enemy->first()->user_challenge_energy,
                                                         'effected' => $enemy->first()->effected,
-                                                        'countdown' => $enemy->first()->countdown_skill
+                                                        'countdown' => $enemy->first()->countdown_skill,
+                                                        'buff_status' => $enemyBuffStatus
                                                     ],
                                                     'you' => [
                                                         'basic' => $userApi->userInfor(Auth::id()),
@@ -392,7 +413,7 @@ class HitController extends BaseController
                                                         'turn' => 0,
                                                         'damage' => 0,
                                                         'effected' => $findMatch->first()->effected,
-                                                        'countdown' => $findMatch->first()->countdown_skill
+                                                        'countdown' => $findMatch->first()->countdown_skill,
                                                     ],
                                                     'data' => $data
                                                 ];
