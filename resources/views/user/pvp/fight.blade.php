@@ -51,7 +51,10 @@
                                 <div v-if="pvp.enemyAttackDamage" class="enemy-decrement-hp infinite animated slideOutUp pixel-font text-warning text-center slow">- @{{ numberFormatDetail(pvp.enemyAttackDamage) }} HP</div>
                                 <div v-if="pvp.enemyAttack" :class="`${data.pet ? 'has-pvp-broken-with-pet' : 'has-pvp-broken-no-pet'}`"></div>
                                 <div v-for="(effected, index) in pvp.yourEffected">
-                                    <div v-if="effected" :class="`${data.pet ? 'has-pvp-effect-with-pet' : 'has-pvp-effect-no-pet'}`" :class="`${index || ''}animated flash infinite`"></div>
+                                    <div v-if="effected" :class="`${data.pet ? 'has-pvp-effect-with-pet' : 'has-pvp-effect-no-pet'} ${index}`" class="animated flash infinite"></div>
+                                </div>
+                                <div v-for="(buff, index) in pvp.yourSkillBuff">
+                                    <div v-if="buff > 0" :class="`${data.pet ? 'has-pvp-effect-with-pet' : 'has-pvp-effect-no-pet'} ${index}`" class="animated flash infinite"></div>
                                 </div>
                             </div>
                         </div>
@@ -102,6 +105,9 @@
                             <div v-if="pvp.yourAttack" :class="`${pvp.match.enemy.pet ? 'has-pvp-broken-with-pet' : 'has-pvp-broken-no-pet'}`"></div>
                             <div v-for="(effected, index) in pvp.enemyEffected">
                                 <div v-if="effected" :class="`${pvp.match.enemy.pet ? 'has-pvp-effect-with-pet' : 'has-pvp-effect-no-pet'} ${index}`" class="animated flash infinite"></div>
+                            </div>
+                            <div v-for="(buff, index) in pvp.enemySkillBuff">
+                                <div v-if="buff > 0" :class="`${pvp.match.enemy.pet ? 'has-pvp-effect-with-pet' : 'has-pvp-effect-no-pet'} ${index}`" class="animated flash infinite"></div>
                             </div>
                         </div>
                         <div style="margin-top:5px;" class="row" v-if="pvp.enemyJoined">
@@ -222,7 +228,7 @@
 @endsection
 @push('js')
 <script>
-    const page = {
+    var page = {
         room:{
             name:"{{ Auth::user()->name }}",
             me:parseInt("{{ Auth::id() }}"),

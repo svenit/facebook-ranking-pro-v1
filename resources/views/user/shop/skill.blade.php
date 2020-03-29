@@ -61,7 +61,7 @@
     </script>
 @endif
 <script>
-    const page = {
+    var page = {
         path:'shop.index'
     };
 </script>

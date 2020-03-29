@@ -90,7 +90,7 @@
     </script>
 @endif
 <script>
-    const page = {
+    var page = {
         path:'chat.stranger',
         user:{
             id:{{ Auth::user()->user_id }},

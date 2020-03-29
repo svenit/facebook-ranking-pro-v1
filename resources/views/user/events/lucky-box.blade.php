@@ -21,7 +21,7 @@
 @endsection
 @push('js')
 <script>
-    const page = {
+    var page = {
         path:'event.lucky-box'
     };
 </script>

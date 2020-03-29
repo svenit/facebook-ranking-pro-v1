@@ -91,7 +91,7 @@
     </script>
 @endif
 <script>
-    const page = {
+    var page = {
         path:'chat.global',
         user:{
             id:{{ Auth::user()->user_id }},

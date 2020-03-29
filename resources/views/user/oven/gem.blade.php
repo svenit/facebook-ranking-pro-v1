@@ -79,7 +79,7 @@
         </script>
     @endif
     <script>
-        const page = {
+        var page = {
             path:'oven.gem'
         };
     </script>

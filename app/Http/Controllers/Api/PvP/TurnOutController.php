@@ -78,6 +78,7 @@ class TurnOutController extends BaseController
                             'hp' => $enemy->first()->user_challenge_hp,
                             'energy' => $enemy->first()->user_challenge_energy,
                             'effected' => $enemy->first()->effected,
+                            'buff' => $enemy->first()->buff,
                             'countdown' => $enemy->first()->countdown_skill
                         ],
                         'you' => [
@@ -86,6 +87,7 @@ class TurnOutController extends BaseController
                             'energy' => $you->first()->user_challenge_energy,
                             'turn' => 0,
                             'effected' => $you->first()->effected,
+                            'buff' => $you->first()->buff,
                             'countdown' => $you->first()->countdown_skill
                         ],
                     ];

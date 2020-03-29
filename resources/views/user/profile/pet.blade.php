@@ -122,7 +122,7 @@
     </script>
 @endif
 <script>
-    const page = {
+    var page = {
         path:'pet.index'
     };
 </script>

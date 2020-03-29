@@ -133,6 +133,7 @@ app = new Vue({
             yourSkillAnimation: '',
             yourEffected:null,
             yourCountDown:null,
+            yourSkillBuff:null,
 
             enemyAttack: false,
             enemyBuff: false,
@@ -140,6 +141,7 @@ app = new Vue({
             enemyAttackDamage:null,
             enemyEffected:null,
             enemyCountDown:null,
+            enemySkillBuff:null,
 
             timeOut: 20,
             status: '',
@@ -261,7 +263,6 @@ app = new Vue({
         }
         this.loading = false;
         this.flash = false;
-        $('[data-title="tooltip"]').tooltip();
     },
     updated() {
         // if (config.detect) {
@@ -373,12 +374,14 @@ app = new Vue({
             this.pvp.match.you.turn = res.data.you.turn;
             this.pvp.yourEffected = res.data.you.effected || null;
             this.pvp.yourCountDown = res.data.you.countdown || null;
+            this.pvp.yourSkillBuff = res.data.you.buff || null;
 
             this.pvp.match.enemy = res.data.enemy.basic.original;
             this.pvp.match.enemy.hp = res.data.enemy.hp;
             this.pvp.match.enemy.energy = res.data.enemy.energy;
             this.pvp.enemyEffected = res.data.enemy.effected || null;
             this.pvp.enemyCountDown = res.data.enemy.countdown || null;
+            this.pvp.enemySkillBuff = res.data.enemy.buff || null;
         },
         countDown()
         {

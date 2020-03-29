@@ -97,7 +97,7 @@
         </script>
     @endif
     <script>
-        const page = {
+        var page = {
             path:'profile.stat'
         };
     </script>

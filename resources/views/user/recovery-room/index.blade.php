@@ -64,7 +64,7 @@
     </script>
 @endif
 <script>
-    const page = {
+    var page = {
         path:'recovery-room.index'
     };
 </script>

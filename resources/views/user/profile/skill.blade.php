@@ -63,7 +63,7 @@
     </script>
 @endif
 <script>
-    const page = {
+    var page = {
         path:'skill.index'
     };
 </script>

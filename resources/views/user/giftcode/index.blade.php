@@ -36,7 +36,7 @@
 @endsection
 @push('js')
 <script>
-    const page = {
+    var page = {
         path:'giftcode'
     };
 </script>

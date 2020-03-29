@@ -104,6 +104,10 @@ Route::group(['middleware' => ['maintaince','redirect.action']], function () {
                 Route::get('/','GuildController@lobby')->name('lobby');
                 Route::get('members','GuildController@member')->name('member');
             });
+            Route::group(['prefix' => 'dungeon','as' => 'dungeon.','namespace' => 'Dungeon'], function () {
+                Route::get('/','DungeonController@index')->name('index');
+                Route::get('join/{id}','DungeonController@join')->name('join');
+            });
 
             Route::group(['prefix' => 'gift-code','as' => 'giftcode.','namespace' => 'GiftCode'], function () {
                 Route::view('/','user.giftcode.index')->name('index');

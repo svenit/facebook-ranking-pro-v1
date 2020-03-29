@@ -666,10 +666,10 @@
                             </ul>
                         </li>
                         <li class="{{ Request::is('events/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="coffee"></i></span> <span
-                                    class="nav-text">Giải Trí</span> <span class="nav-caret"></span></a>
+                                    class="nav-text">Cansino</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('user.events.wheel') }}" class=""><span class="nav-text">VQMM</span></a></li>
-                                <li><a href="{{ Route('user.events.lucky-box') }}" class=""><span class="nav-text">Kho Báu</span></a></li>
+                                <li><a href="{{ Route('user.events.lucky-box') }}" class=""><span class="nav-text">Cá Cược</span></a></li>
                             </ul>
                         </li>
                         <li class="{{ Request::is('shop/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shopping-cart"></i></span> <span

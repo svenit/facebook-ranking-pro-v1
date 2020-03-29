@@ -27,7 +27,6 @@
 	<link href="{{ asset('cdn/css/all.min.css') }}" rel="stylesheet">
 	{{-- <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" /> --}}
 	<meta name="csrf-token" content="{{ str_random(50) }}"/>
-
 	@stack('css')
 </head>
 <body>
@@ -83,10 +82,9 @@
 			</div>
 		</div>
 	</div>
-</body>
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-database.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.2/dist/sweetalert2.all.min.js"></script>	
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 	<script src="{{ asset('js/vendor.min.js') }}"></script>
@@ -131,4 +129,5 @@
 			Swal.fire('',"{{ session('message') }}","{{ session('status') }}");
 		</script>
 	@endif
+</body>
 </html>

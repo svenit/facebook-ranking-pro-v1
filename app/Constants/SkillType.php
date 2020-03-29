@@ -50,7 +50,7 @@ class SkillType
     const FREEZE = 'intelligent-freeze';
 
      /**
-     * Gây sát thương + tăng nhanh nhẹn
+     * Gây sát thương vật lý + tăng nhanh nhẹn
      */
     const INCREAGILITY = 'strength-increagility';
     

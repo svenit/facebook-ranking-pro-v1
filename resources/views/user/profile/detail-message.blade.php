@@ -38,7 +38,7 @@
     </script>
 @endif
 <script>
-    const page = {
+    var page = {
         path:'message.index'
     };
 </script>

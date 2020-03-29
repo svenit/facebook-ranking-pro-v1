@@ -124,6 +124,7 @@ class ListenActionController extends BaseController
                                             'hp' => $enemy->first()->user_challenge_hp,
                                             'energy' => $enemy->first()->user_challenge_energy,
                                             'effected' => $enemy->first()->effected,
+                                            'buff' => $enemy->first()->buff,
                                             'countdown' => $enemy->first()->countdown_skill
                                         ],
                                         'you' => [
@@ -132,6 +133,7 @@ class ListenActionController extends BaseController
                                             'energy' => $you->first()->user_challenge_energy,
                                             'turn' => 0,
                                             'effected' => $effected,
+                                            'buff' => $you->first()->buff,
                                             'countdown' => $yourCountDown,
                                             'hasEffected' => 1,
                                         ],
@@ -161,6 +163,7 @@ class ListenActionController extends BaseController
                                             'hp' => $enemy->first()->user_challenge_hp,
                                             'energy' => $enemy->first()->user_challenge_energy,
                                             'effected' => $enemy->first()->effected,
+                                            'buff' => $enemy->first()->effected,
                                             'countdown' => $enemy->first()->countdown_skill
                                         ],
                                         'you' => [
@@ -169,6 +172,7 @@ class ListenActionController extends BaseController
                                             'energy' => $you->first()->user_challenge_energy,
                                             'turn' => 0,
                                             'effected' => $effected,
+                                            'buff' => $you->first()->buff,
                                             'countdown' => $yourCountDown,
                                             'hasEffected' => 1,
                                         ],
@@ -238,6 +242,7 @@ class ListenActionController extends BaseController
                             'hp' => $enemy->first()->user_challenge_hp,
                             'energy' => $enemy->first()->user_challenge_energy,
                             'effected' => $enemy->first()->effected,
+                            'buff' => $enemy->first()->buff,
                             'countdown' => $enemy->first()->countdown_skill
                         ],
                         'you' => [
@@ -246,6 +251,7 @@ class ListenActionController extends BaseController
                             'energy' => $you->first()->user_challenge_energy,
                             'turn' => 1,
                             'effected' => $you->first()->effected,
+                            'buff' => $you->first()->buff,
                             'countdown' => $yourCountDown
                         ],
                     ];
@@ -299,19 +305,6 @@ class ListenActionController extends BaseController
             foreach($skillsCountDown as $key => $countdown)
             {
                 $skillsCountDown[$key] -= $countdown == 0 ? 0 : 1;
-            }
-            return $skillsCountDown;
-        }
-    }
-
-    public function decreBuff()
-    {
-        $buffs = FightRoom::where('user_challenge',Auth::id())->first()->buff;
-        if(isset($buffs))
-        {
-            foreach($buffs as $key => $buff)
-            {
-                $skillsCountDown[$key]['countdown'] -= $countdown['countdown'] == 0 ? 0 : 1;
             }
             return $skillsCountDown;
         }

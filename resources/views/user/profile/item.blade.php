@@ -28,7 +28,7 @@
 @endsection
 @push('js')
 <script>
-    const page = {
+    var page = {
         path:'item.index'
     };
 </script>

@@ -195,9 +195,15 @@
 }
 .intelligent-freeze
 {
-    background-image: url(../images/animations/4.gif);
+    background-image: url(../images/effects/freeze.png);
     background-size: 100%;
     height:200px;
     width:200px;
-    left:-35px;
+    left:-55px;
+    top:-30px;
+    opacity: .8;
+}
+.strength-increagility
+{
+    background-image: url(../images/effects/speedup.png);
 }

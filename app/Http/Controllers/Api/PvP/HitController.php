@@ -130,22 +130,26 @@ class HitController extends BaseController
                                                         $countDamage = $this->renderDestroy($yourStrength,$skill);
                                                         $enemyStrengthArmor = $getEnemyInfor->power()['armor_strength'];
                                                         $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor) - $enemyBuffStatus['armor_strength'];
-                                                        $message = "[ $skill->name ] Bạn đã gây $destroy sát thương vật lí cho đối thủ";
+                                                        $messageToMe = "[ $skill->name ] Bạn đã gây $destroy sát thương vật lí cho đối thủ";
+                                                        $messageToEnemy = "[ $skill->name ] Đối thủ đã gây $destroy sát thương vật lí cho bạn";
                                                     break;
                                                     case SkillType::ATTACK_INTELLIGENT:
                                                         $yourStrength = Auth::user()->power()['intelligent'];
                                                         $countDamage = $this->renderDestroy($yourStrength,$skill);
                                                         $enemyStrengthArmor = $getEnemyInfor->power()['armor_intelligent'];
                                                         $destroy = $this->calculateDamage($countDamage, $enemyStrengthArmor) - $enemyBuffStatus['armor_intelligent'];
-                                                        $message = "[ $skill->name ] Bạn đã gây $destroy sát thương phép thuật cho đối thủ";
+                                                        $messageToMe = "[ $skill->name ] Bạn đã gây $destroy sát thương phép thuật cho đối thủ";
+                                                        $messageToEnemy = "[ $skill->name ] Đối thủ đã gây $destroy sát thương phép thuật cho bạn";
                                                     break;
                                                     case SkillType::ATTACK_CRIT:
                                                         $destroy = ($this->renderDestroy(Auth::user()->power()['strength'],$skill) * 2);
-                                                        $message = "[ $skill->name ] Bạn đã gây $destroy sát thương chí mạng cho đối thủ";
+                                                        $messageToMe = "[ $skill->name ] Bạn đã gây $destroy sát thương chí mạng cho đối thủ";
+                                                        $messageToEnemy = "[ $skill->name ] Đối thủ đã gây $destroy sát thương chí mạng cho bạn";
                                                     break;
                                                     case SkillType::ATTACK_HALF_HP:
                                                         $destroy = (int)$enemy->first()->user_challenge_hp/2;
-                                                        $message = "[ $skill->name ] Bạn đã gây $destroy sát thương tinh thần cho đối thủ";
+                                                        $messageToMe = "[ $skill->name ] Bạn đã gây $destroy sát thương tinh thần cho đối thủ";
+                                                        $messageToEnemy = "[ $skill->name ] Đối thủ đã gây $destroy sát thương tinh thần cho bạn";
                                                     break;
                                                     case SkillType::HEALTH_HP:
                                                         if($skill->power_type == $this->parameter)
@@ -156,7 +160,8 @@ class HitController extends BaseController
                                                                 'user_challenge_hp' => DB::raw("user_challenge_hp + $hp"),
                                                                 'user_challenge_energy' => DB::raw("user_challenge_energy - $skill->energy")
                                                             ];
-                                                            $message = $hp > 0 ? "[ $skill->name ] Bạn đã được hồi $hp HP" : "[ $skill->name ] Bạn đã đầy máu không thể hồi thêm";
+                                                            $messageToMe = $hp > 0 ? "[ $skill->name ] Bạn đã được hồi $hp HP" : "[ $skill->name ] Bạn đã đầy máu không thể hồi thêm";
+                                                            $messageToEnemy = $hp > 0 ? "[ $skill->name ] Đối thủ đã được hồi $hp HP" : "[ $skill->name ] Đối thủ đã đầy máu không thể hồi thêm";
                                                         }
                                                         elseif($skill->power_type == $this->percent)
                                                         {
@@ -167,7 +172,8 @@ class HitController extends BaseController
                                                                 'user_challenge_hp' => DB::raw("user_challenge_hp + $hp"),
                                                                 'user_challenge_energy' => DB::raw("user_challenge_energy - $skill->energy")
                                                             ];
-                                                            $message = $hp > 0 ? "[ $skill->name ] Bạn đã được hồi $hp HP" : "[ $skill->name ] Bạn đã đầy máu không thể hồi thêm";
+                                                            $messageToMe = $hp > 0 ? "[ $skill->name ] Bạn đã được hồi $hp HP" : "[ $skill->name ] Bạn đã đầy máu không thể hồi thêm";
+                                                            $messageToEnemy = $hp > 0 ? "[ $skill->name ] Đối thủ đã được hồi $hp HP" : "[ $skill->name ] Đối thủ đã đầy máu không thể hồi thêm";
                                                         }
                                                         else
                                                         {
@@ -175,7 +181,8 @@ class HitController extends BaseController
                                                                 'turn' => 0,
                                                                 'user_challenge_energy' => DB::raw("user_challenge_energy - $skill->energy")
                                                             ];
-                                                            $message = "[ $skill->name ] Bạn đã được hồi 0 HP";
+                                                            $messageToMe = "[ $skill->name ] Bạn đã được hồi 0 HP";
+                                                            $messageToEnemy = "[ $skill->name ] Đối thủ đã được hồi 0 HP";
                                                         }
                                                         $effectTo = 1;
                                                     break;
@@ -191,11 +198,13 @@ class HitController extends BaseController
                                                             $yourTurn = 1;
                                                             $enemyTurn = 0;
                                                             $enemyEffected[$skill->type] = $skill->effect_turn;
-                                                            $message = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ, đối thụ dính hiệu ứng choáng trong $skill->effect_turn lượt";
+                                                            $messageToMe = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ, đối thụ dính hiệu ứng choáng trong $skill->effect_turn lượt";
+                                                            $messageToEnemy = "[ $skill->name ] Đối thủ đã gây $destroy sát thương cho bạn, bạn bị dính hiệu ứng choáng trong $skill->effect_turn lượt";
                                                         }
                                                         else
                                                         {
-                                                            $message = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ";
+                                                            $messageToMe = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ";
+                                                            $messageToEnemy = "[ $skill->name ] Đối thủ đã gây $destroy sát thương cho bạn";
                                                         }
                                                     break;
                                                     case SkillType::FREEZE:
@@ -210,11 +219,13 @@ class HitController extends BaseController
                                                             $yourTurn = 1;
                                                             $enemyTurn = 0;
                                                             $enemyEffected[$skill->type] = $skill->effect_turn;
-                                                            $message = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ, đối thụ dính hiệu ứng đóng băng trong $skill->effect_turn lượt";
+                                                            $messageToMe = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ, đối thụ dính hiệu ứng đóng băng trong $skill->effect_turn lượt";
+                                                            $messageToEnemy = "[ $skill->name ] Đối thủ đã gây $destroy sát thương cho bạn, bạn bị thụ dính hiệu ứng đóng băng trong $skill->effect_turn lượt";
                                                         }
                                                         else
                                                         {
-                                                            $message = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ";
+                                                            $messageToMe = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ";
+                                                            $messageToEnemy = "[ $skill->name ] Đối thủ đã gây $destroy sát thương cho bạn";
                                                         }
                                                     break;
                                                     case SkillType::INCREAGILITY:
@@ -230,11 +241,13 @@ class HitController extends BaseController
                                                             $yourBuff[$skill->type."-value"] = $skill->effect_value['value'];
                                                             $yourUpdate['buff'] = json_encode($yourBuff);
                                                             $effectType = $skill->effect_value['type'] == 1 ? '%' : '';
-                                                            $message = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ, bạn được tăng {$skill->effect_value['value']}{$effectType} nhanh nhẹn trong {$skill->effect_turn} lượt";
+                                                            $messageToMe = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ, Hiệu ứng kích hoạt - Bạn được tăng {$skill->effect_value['value']}{$effectType} nhanh nhẹn trong {$skill->effect_turn} lượt";
+                                                            $messageToEnemy = "[ $skill->name ] Đối thủ đã gây $destroy sát thương cho bạn, Hiệu ứng kích hoạt - Đối thủ được tăng {$skill->effect_value['value']}{$effectType} nhanh nhẹn trong {$skill->effect_turn} lượt";
                                                         }
                                                         else
                                                         {
-                                                            $message = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ";
+                                                            $messageToMe = "[ $skill->name ] Bạn đã gây $destroy sát thương cho đối thủ";
+                                                            $messageToEnemy = "[ $skill->name ] Đối thủ đã gây $destroy sát thương cho bạn";
                                                         }
                                                     break;
                                                     default:
@@ -246,7 +259,8 @@ class HitController extends BaseController
                                                     if($effectTo == 0)
                                                     {
                                                         $destroy *= 1.5;
-                                                        $message .= " - Hiệu ứng chí mạng kích hoạt tổng sát thương $destroy ";
+                                                        $messageToMe .= " - Hiệu ứng chí mạng kích hoạt tổng sát thương $destroy ";
+                                                        $messageToEnemy .= " - Hiệu ứng chí mạng kích hoạt tổng sát thương $destroy ";
                                                     }
                                                 }
                                                 /* Enemy passive skill */
@@ -260,14 +274,16 @@ class HitController extends BaseController
                                                                 if($skill->type == 'strength')
                                                                 {
                                                                     $destroy = $this->renderPassive($destroy,$enemyPassiveSkill) < 0 ? 0 : $this->renderPassive($destroy,$enemyPassiveSkill);
-                                                                    $message .= " - Đối thủ có kĩ năng bị động giảm sát thương vật lí ! Sát thương của bạn gây ra chỉ còn lại $destroy";
+                                                                    $messageToMe .= " - Đối thủ có kĩ năng bị động giảm sát thương vật lí ! Sát thương của bạn gây ra chỉ còn lại $destroy";
+                                                                    $messageToEnemy .= " - Bạn có kĩ năng bị động giảm sát thương vật lí ! Sát thương nhận được chỉ còn lại $destroy";
                                                                 }
                                                             break;
                                                             case SkillType::ARMOR_INTELLIGENT:
                                                                 if($skill->type == 'intelligent')
                                                                 {
                                                                     $destroy = $this->renderPassive($destroy,$enemyPassiveSkill) < 0 ? 0 : $this->renderPassive($destroy,$enemyPassiveSkill);
-                                                                    $message .= " - Đối thủ có kĩ năng bị động giảm sát thương phép thuật ! Sát thương của bạn gây ra chỉ còn lại $destroy";
+                                                                    $messageToMe .= " - Đối thủ có kĩ năng bị động giảm sát thương phép thuật ! Sát thương của bạn gây ra chỉ còn lại $destroy";
+                                                                    $messageToMe .= " - Bạn có kĩ năng bị động giảm sát thương phép thuật ! Sát thương nhận được chỉ còn lại $destroy";
                                                                 }
                                                             break;
                                                         }
@@ -329,23 +345,25 @@ class HitController extends BaseController
                                                                 'id' => $enemy->first()->user_challenge
                                                             ],
                                                             'data' => [
-                                                                'message' => $effectTo == 0 ? "Đối thủ đã gây cho bạn $destroy sát thương" : 'Đối thủ dùng kĩ năng buff',
+                                                                'message' => $effectTo == 0 ? $messageToEnemy : 'Đối thủ dùng kĩ năng lên bản thân',
                                                                 'effectTo' => $effectTo, 
                                                                 'skillAnimation' => $skill->animation,
                                                                 'damage' => $destroy,
-                                                                'effected' => $enemy->first()->effected
+                                                                'effected' => $enemy->first()->effected,
+                                                                'buff' => $enemy->first()->buff
                                                             ],
                                                             'broadcast-to' => $enemy->first()->user_challenge
                                                         ];
                                                         $response = [
                                                             'code' => 200,
                                                             'status' => 'success',
-                                                            'message' => $message ?? "[ $skill->name ] Không biết",
+                                                            'message' => $messageToMe ?? "[ $skill->name ] Không biết",
                                                             'enemy' => [
                                                                 'basic' => $userApi->userInfor($enemy->first()->user_challenge),
                                                                 'hp' => $enemy->first()->user_challenge_hp,
                                                                 'energy' => $enemy->first()->user_challenge_energy,
                                                                 'effected' => $enemy->first()->effected,
+                                                                'buff' => $enemy->first()->buff,
                                                                 'countdown' => $enemy->first()->countdown_skill
                                                             ],
                                                             'you' => [
@@ -355,6 +373,7 @@ class HitController extends BaseController
                                                                 'turn' => $yourTurn,
                                                                 'damage' => $destroy,
                                                                 'effected' => $findMatch->first()->effected,
+                                                                'buff' => $findMatch->first()->buff,
                                                                 'countdown' => $findMatch->first()->countdown_skill
                                                             ],
                                                             'data' => $data
@@ -379,7 +398,7 @@ class HitController extends BaseController
                                                         'id' => $room->id
                                                     ],
                                                     'data' => [
-                                                        'message' => 'Đối thủ sử dụng kĩ năng thất bại',
+                                                        'message' => "[ $skill->name ] Đối thủ sử dụng kĩ năng thất bại",
                                                     ],
                                                     'enemy' => [
                                                         'name' => User::findOrFail($enemy->first()->user_challenge)->name,
@@ -403,6 +422,7 @@ class HitController extends BaseController
                                                         'hp' => $enemy->first()->user_challenge_hp,
                                                         'energy' => $enemy->first()->user_challenge_energy,
                                                         'effected' => $enemy->first()->effected,
+                                                        'buff' => $enemy->first()->buff,
                                                         'countdown' => $enemy->first()->countdown_skill,
                                                         'buff_status' => $enemyBuffStatus
                                                     ],
@@ -413,6 +433,7 @@ class HitController extends BaseController
                                                         'turn' => 0,
                                                         'damage' => 0,
                                                         'effected' => $findMatch->first()->effected,
+                                                        'buff' => $findMatch->first()->buff,
                                                         'countdown' => $findMatch->first()->countdown_skill,
                                                     ],
                                                     'data' => $data

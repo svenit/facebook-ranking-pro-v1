@@ -32,7 +32,7 @@
     </script>
 @endif
 <script>
-    const page = {
+    var page = {
         path:'gem.index'
     };
 </script>

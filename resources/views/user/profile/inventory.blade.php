@@ -47,7 +47,7 @@
     </script>
 @endif
 <script>
-    const page = {
+    var page = {
         path:'inventory.index'
     };
 </script>

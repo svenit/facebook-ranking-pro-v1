@@ -198,6 +198,7 @@ class FindMatchController extends BaseController
                                     'hp' => $enemy->user_challenge_hp,
                                     'energy' => $enemy->user_challenge_energy,
                                     'effected' => $enemy->effected,
+                                    'buff' => $enemy->buff,
                                     'countdown' => $this->getSkills($getEnemy->user_receive_challenge)
                                 ],
                                 'you' => [
@@ -206,6 +207,7 @@ class FindMatchController extends BaseController
                                     'energy' => $getEnemy->user_challenge_energy,
                                     'turn' => $turn,
                                     'effected' => $getEnemy->effected,
+                                    'buff' => $getEnemy->buff,
                                     'countdown' => $this->getSkills(Auth::id())
                                 ],
                                 'remaining' => ($this->limitTime * 60)
@@ -233,6 +235,7 @@ class FindMatchController extends BaseController
                             'hp' => $enemy->user_challenge_hp,
                             'energy' => $enemy->user_challenge_energy,
                             'effected' => $enemy->effected,
+                            'buff' => $enemy->buff,
                             'countdown' => $enemy->countdown_skill
                         ],
                         'you' => [
@@ -241,6 +244,7 @@ class FindMatchController extends BaseController
                             'energy' => $you->user_challenge_energy,
                             'turn' => $you->turn,
                             'effected' => $you->effected,
+                            'buff' => $you->buff,
                             'countdown' => $you->countdown_skill
                         ],
                         'remaining' => ($this->limitTime * 60) - Carbon::parse($room->started_at)->diffInSeconds()
