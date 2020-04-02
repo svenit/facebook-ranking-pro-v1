@@ -123,12 +123,12 @@
     transform: rotate3d(150, 1, 1, 45deg);
     width: 100%;
     height: 100%;
-    top: -60%;
+    top: -29px !important;
     position: absolute;
     background-repeat: no-repeat;
     left: 10px;
     background-size: 50%;
-    z-index: 9999999 !important;
+    z-index: 111 !important;
     background-position: bottom;
 }
 .has-pvp-effect-no-pet {
@@ -140,7 +140,7 @@
     background-repeat: no-repeat;
     left: 10px;
     background-size: 50%;
-    z-index: 9999999 !important;
+    z-index: 111 !important;
     background-position: bottom;
 }
 .pvp-comment {
@@ -195,13 +195,13 @@
 }
 .intelligent-freeze
 {
+    transform: rotate3d(150, 1, 1, 45deg);
     background-image: url(../images/effects/freeze.png);
     background-size: 100%;
-    height:200px;
+    height:218px;
     width:200px;
     left:-55px;
-    top:-30px;
-    opacity: .8;
+    opacity: 0.6;
 }
 .strength-increagility
 {

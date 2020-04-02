@@ -250,7 +250,7 @@
                     </div>
                     <div style="margin:10px 20px" class="row">
                         <div v-for="(gem, index) in detailGear.data.gems" :key="index" style="padding:5px" class="col-auto">
-                            <img :style="{border:`1px solid ${gem.gem_item.rgb}`}" :src="gem.gem_item.image" @click="showGem(gem,detailGear.permission)" width="40px">
+                            <div :style="{border:`1px solid ${gem.gem_item.rgb}`}" :class="`gem ${gem.gem_item.image}`" @click="showGem(gem,detailGear.permission)" width="40px"></div>
                         </div>
                     </div>
                     <div style="margin:20px 10px" class="col-12">
@@ -283,7 +283,7 @@
                 <div class="row">
                     <div class="col-4">
                         <center>
-                            <img class="pixel text-center" :style="{border:`1px solid ${detailGem.data.rgb}`,margin:'0 auto'}" :src="detailGem.data.image" width="60px">
+                            <div :class="`pixel text-center gem ${detailGem.data.image}`" :style="{border:`1px solid ${detailGem.data.rgb}`,margin:'0 auto'}" width="60px"></div>
                         </center>
                         <p :style="{fontSize:'14px',color:`${detailGem.data.rgb}`,marginTop:'20px'}" class="modal-title text-md text-center">@{{ detailGem.data.name }}</p>
                     </div>

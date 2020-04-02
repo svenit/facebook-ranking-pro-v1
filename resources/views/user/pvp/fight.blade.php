@@ -51,7 +51,7 @@
                                 <div v-if="pvp.enemyAttackDamage" class="enemy-decrement-hp infinite animated slideOutUp pixel-font text-warning text-center slow">- @{{ numberFormatDetail(pvp.enemyAttackDamage) }} HP</div>
                                 <div v-if="pvp.enemyAttack" :class="`${data.pet ? 'has-pvp-broken-with-pet' : 'has-pvp-broken-no-pet'}`"></div>
                                 <div v-for="(effected, index) in pvp.yourEffected">
-                                    <div v-if="effected" :class="`${data.pet ? 'has-pvp-effect-with-pet' : 'has-pvp-effect-no-pet'} ${index}`" class="animated flash infinite"></div>
+                                    <div v-if="effected" :class="`${data.pet ? 'has-pvp-effect-with-pet' : 'has-pvp-effect-no-pet'} ${index}`" class="animated flash"></div>
                                 </div>
                                 <div v-for="(buff, index) in pvp.yourSkillBuff">
                                     <div v-if="buff > 0" :class="`${data.pet ? 'has-pvp-effect-with-pet' : 'has-pvp-effect-no-pet'} ${index}`" class="animated flash infinite"></div>
@@ -87,7 +87,7 @@
                 </div>
                 <div style="float:right" class="col-6 col-auto">
                     <div class="">
-                        <div :class="[pvp.enemyAttack ? 'animated fadeOutLeft' : '',pvp.enemyBuff || pvp.yourAttack ? 'animated shake' : '']" class="character-sprites hoverable" v-if="pvp.enemyJoined && !pvp.isEnding" :style="{position:'absolute',bottom:`${pvp.match.enemy.pet ? '35%' : '25%'}`,left:'30%',zIndex:999}"  @click="showUserInfor(pvp.match.enemy.infor.facebook_id)" title="Nhấp vào để xem thông số" data-toggle="modal" data-target=".modal-right" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px">
+                        <div :class="[pvp.enemyAttack ? 'animated fadeOutLeft' : '',pvp.enemyBuff || pvp.yourAttack ? 'animated shake' : '']" class="character-sprites hoverable" v-if="pvp.enemyJoined && !pvp.isEnding" :style="{position:'absolute',bottom:`${pvp.match.enemy.pet ? '32%' : '28%'}`,left:'30%',zIndex:999}"  @click="showUserInfor(pvp.match.enemy.infor.facebook_id)" title="Nhấp vào để xem thông số" data-toggle="modal" data-target=".modal-right" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px">
                             <span style="z-index: 1" v-if="pvp.match.enemy.pet" :class="`Mount_Body_${pvp.match.enemy.pet.class_tag}`"></span>
                             <span style="z-index:2" class="skin_f5a76e"></span>
                             <span style="z-index:2" class="broad_shirt_black"></span>
@@ -104,7 +104,7 @@
                             <div v-if="pvp.yourAttackDamage" class="enemy-decrement-hp infinite animated slideOutUp pixel-font text-warning text-center slow">- @{{ numberFormatDetail(pvp.yourAttackDamage) }} HP</div>
                             <div v-if="pvp.yourAttack" :class="`${pvp.match.enemy.pet ? 'has-pvp-broken-with-pet' : 'has-pvp-broken-no-pet'}`"></div>
                             <div v-for="(effected, index) in pvp.enemyEffected">
-                                <div v-if="effected" :class="`${pvp.match.enemy.pet ? 'has-pvp-effect-with-pet' : 'has-pvp-effect-no-pet'} ${index}`" class="animated flash infinite"></div>
+                                <div v-if="effected" :class="`${pvp.match.enemy.pet ? 'has-pvp-effect-with-pet' : 'has-pvp-effect-no-pet'} ${index}`" class="animated flash"></div>
                             </div>
                             <div v-for="(buff, index) in pvp.enemySkillBuff">
                                 <div v-if="buff > 0" :class="`${pvp.match.enemy.pet ? 'has-pvp-effect-with-pet' : 'has-pvp-effect-no-pet'} ${index}`" class="animated flash infinite"></div>

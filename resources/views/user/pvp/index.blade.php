@@ -17,7 +17,7 @@
                     <a :href="`join/${room.name}`">
                         <div class="card vip-bordered">
                             <div class="media media-4x3">
-                                <a class="media-content" style="background-image:url({{ asset('assets/images/app.png') }})">
+                                <a class="media-content" style="background-size:80%;background-image:url({{ asset('assets/images/pvp.png') }})">
                                 </a>
                             </div>
                             <div class="btn-group">

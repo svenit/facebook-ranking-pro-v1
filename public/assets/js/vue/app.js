@@ -1240,16 +1240,26 @@ app = new Vue({
             return md5(parseInt(str));
         },
         resetPvp() {
-            this.pvp.match.you.turn = '';
             this.pvp.timeOut = 20;
             this.pvp.isSearching = false;
             this.pvp.isEnding = false;
             this.pvp.isMatching = false;
-            this.pvp.yourAttack = false;
-            this.pvp.yourBuff = false;
             this.pvp.isReady = false;
             this.pvp.status = 'Sẵn Sàng <i class="fas fa-swords"></i>';
-            this.pvp.match.you.turn = 0;
+            
+            this.pvp.match.you.turn = null;
+            this.pvp.yourAttack = false;
+            this.pvp.yourBuff = false;
+            this.pvp.yourEffected = null;
+            this.pvp.yourCountDown = null;
+            this.pvp.yourSkillBuff = null;
+
+            this.pvp.match.enemy.turn = null;
+            this.pvp.enemyAttack = false;
+            this.pvp.enemyBuff = false;
+            this.pvp.enemyEffected = null;
+            this.pvp.enemyCountDown = null;
+            this.pvp.enemySkillBuff = null;
         },
         async listGlobalChat(channel) {
             const self = this;
@@ -1911,6 +1921,6 @@ app = new Vue({
         },
         numberFormatDetail(num) {
             return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
-        }
+        },
     },
 });

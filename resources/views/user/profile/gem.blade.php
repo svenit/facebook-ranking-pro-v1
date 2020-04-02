@@ -15,7 +15,7 @@
                         <div class="card">
                             <span :style="{border:`1px solid ${gem.rgb}`}" class="w-64 avatar gd-dark">
                                 <span class="avatar-status on b-white avatar-right"></span> 
-                                <img style="width:40px" :src="gem.image" class="pixel">
+                                <div style="width:40px" :class="`gem ${gem.image}`" class="pixel"></div>
                             </span>
                         </div>
                     </div>

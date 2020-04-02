@@ -24,6 +24,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="{{ asset('css/app.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/css/inventory.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/gem.css') }}">
 	<link href="{{ asset('cdn/css/all.min.css') }}" rel="stylesheet">
 	{{-- <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" /> --}}
 	<meta name="csrf-token" content="{{ str_random(50) }}"/>

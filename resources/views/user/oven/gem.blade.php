@@ -27,7 +27,7 @@
                             <div class="col-4">
                                 <span @click="oven.gem = {}" v-if="oven.gem.id" :style="{border:`1px solid ${oven.gem.rgb}`,float:'right'}" :class="`w-64 avatar gd-dark ${oven.action ? 'animated fadeOutLeft' : ''}`">
                                     <span class="avatar-status on b-white avatar-right"></span> 
-                                    <img style="width:40px" :src="oven.gem.image" class="pixel">
+                                    <div style="width:40px" :class="`gem ${oven.gem.image}`" class="pixel"></div>
                                 </span>
                                 <span v-else style="border:1px dashed #f2f2f2;float:right" class="w-64 avatar gd-dark">
                                     <span class="avatar-status on b-white avatar-right"></span> 
@@ -58,7 +58,7 @@
                                         <div style="background:transparent !important" class="card">
                                             <span :style="{border:`1px solid ${gem.rgb}`}" :class="`w-64 avatar gd-dark ${oven.gem == gem ? 'loading' : ''}`">
                                                 <span v-if="oven.gem == gem" class="avatar-status on b-white avatar-right"></span> 
-                                                <img style="width:40px" :src="gem.image" class="pixel">
+                                                <div style="width:40px" :class="`gem ${gem.image}`" class="pixel"></div>
                                             </span>
                                         </div>
                                     </div>

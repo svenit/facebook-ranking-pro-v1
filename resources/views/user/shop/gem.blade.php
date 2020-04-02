@@ -15,9 +15,7 @@
                         <div style="margin:15px 0px" class="col-6 col-md-4 col-lg-3">
                             <div data-title="tooltip" title="Click vào để xem chi tiết" class="card vip-bordered">
                                 <div @click="showGem({{ json_encode($gem) }},0)" class="text-center hoverable">
-                                    <div style="margin:0 auto !important" class="pixel">
-                                        <img src="{{ $gem->image }}">
-                                    </div>
+                                    <div style="margin:0 auto !important" class="pixel gem {{ $gem->image }}"></div>
                                     <p style="margin-top:10px;color:{{ $gem->rgb }}">{{ $gem->name }}</p>
                                 </div>
                                 <div class="btn-group">

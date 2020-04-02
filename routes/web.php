@@ -1,9 +1,7 @@
 <?php
 
 use App\Model\User;
-use App\Events\BroadcastToEveryone;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Artisan;
 
 
 /*
@@ -17,14 +15,11 @@ use Illuminate\Support\Facades\Artisan;
 |
 */
 Route::get('test/{id}',function($id){
-    Auth::loginUsingId($id);
+    $user = User::findOrFail($id);
+    Auth::login($user);
     return redirect()->back();
 });
 
-Route::get('broadcast',function(){
-    event(new BroadcastToEveryone('Hello'));
-    return 'Done';
-});
 Route::get('chat/stranger/exit','User\Chat\StrangerController@exit')->name('user.chat.stranger.exit');
 Route::group(['middleware' => ['maintaince','redirect.action']], function () {
     Route::group(['prefix' => 'oauth','as' => 'oauth.','namespace' => 'Auth'], function () {
