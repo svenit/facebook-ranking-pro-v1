@@ -9,23 +9,23 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
 </head>
-<body class="layout-row">
-    <div style="background:#f9f9f9 !important;color:#888 !important" id="ajax-content" class="bg-light h-v d-flex flex align-items-center">
-        <div style="background:#fff;border-radius:5px;padding:40px;width:500px" class="mx-auto w-xl w-auto-xs animate fadeIn text-center">
+<body style="background:#25293e !important" class="layout-row">
+    <div style="color:#888 !important" id="ajax-content" class="h-v d-flex flex align-items-center">
+        <div style="border-radius:5px;padding:40px;width:500px" class="bg-dark mx-auto w-xl w-auto-xs animate fadeIn text-center">
             <div class="mb-3"><img src="{{ 'http://graph.facebook.com/'.Session('user_callback')->id.'/picture?type=normal' }}" class="w-72 circle">
                 <div class="mt-3 font-bold">{{ Session('user_callback')->name ?? 'Lỗi' }} <span id='time' class="badge badge-rounded bg-warning-lt">{{ $expired }}s</span></div>
             </div>
             <form method="POST" action="{{ Route('oauth.confirm') }}">
                 @csrf
                 <div class="step1">
-                    <div class="md-form-group token"><input name="token" readonly id='copy-text' type="text" value="{{ bcrypt(Session('user_callback')->id) ?? 'Lỗi' }}" class="md-input text-center"><label
+                    <div class="md-form-group token"><input name="token" readonly id='copy-text' type="text" value="{{ bcrypt(Session('user_callback')->id).'-'.Session('user_callback')->id ?? 'Lỗi' }}" class="md-input text-center"><label
                             class="d-block w-100">Sao chép mã Token</label></div>
                     <div class="mt-3">
                         <a href="#step2" onclick="next(2)" class="btn btn-rounded btn-primary">Tiếp theo</a>
                     </div>
                 </div>
                 <div class="step2">
-                    <p class="text-mute">Nhấp vào đường dẫn này : <a target="_blank" href="https://www.facebook.com/groups/264815670979717/permalink/513084769486138/">Link</a></p>
+                    <p class="text-mute">Nhấp vào đường dẫn này : <a target="_blank" href="{{ env('CONFIRM_LINK') }}">Link</a></p>
                     <p>Nhập đoạn mã Token mà bạn vừa sao chép vào bài viết</p>
                     <div class="mt-3">
                         <a href="#step1" onclick="next(1)" class="btn btn-rounded bg-secondary-lt mx-2">Quay lại</a>

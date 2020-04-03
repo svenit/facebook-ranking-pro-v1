@@ -32,7 +32,7 @@ Route::group(['middleware' => ['maintaince','redirect.action']], function () {
     });
     Route::group(['prefix' => 'character','as' => 'user.character.','namespace' => 'User\Character'], function () {
         Route::get('choose','CharacterController@choose')->name('choose');
-        Route::get('set/{id}','CharacterController@set')->name('set')->where('id','[1-9+]');
+        Route::get('set','CharacterController@set')->name('set');
     });
     Route::group(['prefix' => '/','as' => 'user.','namespace' => 'User','middleware' => 'user'], function () {
         Route::get('/','HomeController@index')->name('index');

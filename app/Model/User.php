@@ -147,20 +147,31 @@ class User extends Authenticatable
     public function getPower()
     {
         $properties = [
+            'health_points' => 3,
             'strength' => 1.5,
-            'agility' => 1,
             'intelligent' => 1.5,
+            'agility' => 1,
             'lucky' => 1,
-            'health_points' => 2,
             'armor_strength' => 1,
             'armor_intelligent' => 1
         ];
         $power = [];
         foreach($properties as $key => $property)
         {
-            $power[$key] = (((collect($this->usingPets())->sum($key) + collect($this->usingGears())->sum($key) + collect($this->usingGems())->sum($key) + ($this->stats()[$key] ?? 0) + ($this[$key])) * $property) * $this->relife());
+            $power[$key] = (((collect($this->usingPets())->sum($key) + $this->getGearsPower($key) + collect($this->usingGems())->sum($key) + ($this->stats()[$key] ?? 0) + ($this[$key])) * $property) * $this->relife());
         }
         return collect($power);
+    }
+
+    public function getGearsPower($key)
+    {
+        $defaultDamage = 0;
+        $percentDamage = 0;
+        foreach($this->usingGears() as $gear)
+        {
+            $defaultDamage += $gear[$key]['default'] + ($gear[$key]['default'] * $gear[$key]['percent'])/100;
+        }
+        return floor($defaultDamage);
     }
     public function fullPower($id)
     {

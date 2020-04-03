@@ -12,6 +12,15 @@ class Gear extends Model
         'armor_intelligent','health_points','description','rgb','level_required',
         'price','price_type','status'
     ];
+    protected $casts = [
+        'strength' => 'array',
+        'intelligent' => 'array',
+        'agility' => 'array',
+        'lucky' => 'array',
+        'armor_strength' => 'array',
+        'armor_intelligent' => 'array',
+        'health_points' => 'array',
+    ];
     protected $hidden = [
         'character_id','cate_gear_id','status','created_at','updated_at'
     ];

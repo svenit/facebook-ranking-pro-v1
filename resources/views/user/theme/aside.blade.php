@@ -176,8 +176,8 @@
 </div>
 @endauth
 <div id="gear" v-if="detailGear.data" class="modal fade gear top-off" data-backdrop="true" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content bg-dark">
+    <div style="max-width:700px" class="modal-dialog">
+        <div class="lighting-box modal-content bg-dark">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">×</button>
             </div>
@@ -200,57 +200,59 @@
                             <div class="col-6 d-flex">
                                 <div class="flex">
                                     <div class="text-success"><small><i class="fas fa-heart"></i> Sinh Lực <strong
-                                        class="text-success">+ @{{ detailGear.data.health_points }}</strong></small>
+                                        class="text-success">+ @{{ detailGear.data.health_points.default }} ( +@{{ detailGear.data.health_points.percent }}% )</strong></small>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-6 d-flex mt-2">
                                 <div class="flex">
                                     <div class="text-danger"><small><i class="fas fa-swords"></i> Sức Mạnh <strong
-                                        class="text-danger">+ @{{ detailGear.data.strength }}</strong></small>
+                                        class="text-danger">+ @{{ detailGear.data.strength.default }} ( +@{{ detailGear.data.strength.percent }}% )</strong></small>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-6 d-flex mt-2">
                                 <div class="flex">
                                     <div class="text-info"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
-                                        class="text-info">+ @{{ detailGear.data.intelligent }}</strong></small>
+                                        class="text-info">+ @{{ detailGear.data.intelligent.default }} ( +@{{ detailGear.data.intelligent.percent }}% )</strong></small>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-6 d-flex mt-2">
                                 <div class="flex">
                                     <div class="text-primary"><small><i class="fas fa-bolt"></i> Nhanh Nhẹn <strong
-                                        class="text-primary">+ @{{ detailGear.data.agility }}</strong></small>
+                                        class="text-primary">+ @{{ detailGear.data.agility.default }} ( +@{{ detailGear.data.agility.percent }}% )</strong></small>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-6 d-flex mt-2">
                                 <div class="flex">
                                     <div class="text-warning"><small><i class="fas fa-stars"></i> May Mắn <strong
-                                        class="text-warning">+ @{{ detailGear.data.lucky }}</strong></small>
+                                        class="text-warning">+ @{{ detailGear.data.lucky.default }} ( +@{{ detailGear.data.lucky.percent }}% )</strong></small>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-6 d-flex mt-2">
                                 <div class="flex">
                                     <div class="text-silver"><small><i class="fas fa-shield"></i> Kháng Công <strong
-                                        class="text-silver">+ @{{ detailGear.data.armor_strength }}</strong></small>
+                                        class="text-silver">+ @{{ detailGear.data.armor_strength.default }} ( +@{{ detailGear.data.armor_strength.percent }}% )</strong></small>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-6 d-flex mt-2">
                                 <div class="flex">
                                     <div class="text-purple"><small><i class="fal fa-dice-d20"></i> Kháng Phép <strong
-                                        class="text-purple">+ @{{ detailGear.data.armor_intelligent }}</strong></small>
+                                        class="text-purple">+ @{{ detailGear.data.armor_intelligent.default }} ( +@{{ detailGear.data.armor_intelligent.percent }}% )</strong></small>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div style="margin:10px 20px" class="row">
-                        <div v-for="(gem, index) in detailGear.data.gems" :key="index" style="padding:5px" class="col-auto">
-                            <div :style="{border:`1px solid ${gem.gem_item.rgb}`}" :class="`gem ${gem.gem_item.image}`" @click="showGem(gem,detailGear.permission)" width="40px"></div>
+                    <div class="col-12">
+                        <div style="margin:10px 20px" class="row">
+                            <div v-for="(gem, index) in detailGear.data.gems" :key="index" style="padding:5px" class="col-auto">
+                                <div :style="{border:`1px solid ${gem.gem_item.rgb}`}" :class="`gem ${gem.gem_item.image}`" @click="showGem(gem,detailGear.permission)" width="40px"></div>
+                            </div>
                         </div>
                     </div>
                     <div style="margin:20px 10px" class="col-12">

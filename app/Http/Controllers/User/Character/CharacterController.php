@@ -11,9 +11,11 @@ use App\Http\Requests\CharacterRequest;
 
 class CharacterController extends Controller
 {
+    private $noCharacter = 0;
+
     public function choose()
     {
-        if(Auth::check() && Auth::user()->character_id == 0)
+        if(Auth::check() && Auth::user()->character_id == $this->noCharacter)
         {
             $characters = Character::avaiable();
             return view('user.character.choose')->with([
@@ -22,11 +24,11 @@ class CharacterController extends Controller
         }
         abort(404);
     }
-    public function set($id)
+    public function set()
     {
-        if(Auth::check() && Auth::user()->character_id == 0)
+        if(Auth::check() && Auth::user()->character_id == $this->noCharacter)
         {
-            $character = Character::findOrFail($id);
+            $character = Character::where('id', '!=', $this->noCharacter)->inRandomOrder()->first();
             $user = User::findOrFail(Auth::id());
 
             $user->character_id = $character->id;
@@ -49,8 +51,8 @@ class CharacterController extends Controller
             
             $user->save();
             return redirect()->route('user.index')->with([
-                'status' => 'success',
-                'message' => "Chào mừng [ Player ]"
+                'status' => '',
+                'message' => "Chào mừng [ Player ] - Bạn đã thức tỉnh thành công E Rank {$character->name}"
             ]);
         }
         abort(404);

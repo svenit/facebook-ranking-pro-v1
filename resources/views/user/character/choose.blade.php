@@ -1,110 +1,113 @@
-@extends('app')
+<!DOCTYPE html>
+<html lang="en">
 
-@section('hero','Chọn nhân vật')
-@section('sub_hero','Vui lòng chọn nhân vật để bắt đầu')
+<head>
+    <meta charset="utf-8">
+    <title>{{ env('APP_NAME') }} - Đăng Nhập </title>
+    <link rel="stylesheet" href="{{ asset('assets/css/site.min.css') }}">
+    <link href="{{ asset('cdn/css/all.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/app.min.css') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+</head>
 
-@section('content')
-<div class="page-content page-container" id="page-content">
-    <div class="padding-x">
-        <div class="row row-sm sr">
-            @foreach($characters as $key => $character)
-                <div class="col-auto">
-                    <div class="card">
-                        <div style="position:relative;margin:0 auto" class="character-sprites hoverable">
-                            <span class="hair_flower_3"></span>
-                            <span class="chair_none"></span>
-                            <span class=""></span>
-                            <span class="skin_f5a76e"></span>
-                            <span class="broad_shirt_black"></span>
-                            <span class="head_0"></span>
-                            <span class="broad_armor_base_0"></span>
-                            <span class=""></span>
-                            <span class="hair_bangs_0_black"></span>
-                            <span class="hair_base_0_black"></span>
-                            <span class="hair_mustache_0_black"></span>
-                            <span class="hair_beard_0_black"></span>
-                            <span class=""></span>
-                            <span class="eyewear_base_0"></span>
-                            <span class="head_base_0"></span>
-                            <span class=""></span>
-                            <span class="hair_flower_0"></span>
-                            <span class="shield_base_0"></span>
-                            <span class=""></span>
-                        </div>
-                        <div class="card-body">
-                            <p  class="card-title text-gold text-center">{{ $character->name }}</p>
-                            <div id="{{ str_slug($character->name) }}"></div>
-                            <center><a class="text-center" onclick="return confirm('Bạn có chắc chắn muốn chọn nhân vật này ?')" style="margin-left:-10px" href="{{ Route('user.character.set',['id' => $character->id]) }}">
-                                <button class="btn w-sm mb-1 bg-dark"><span class="mx-1">Chọn</span></button>
-                            </a>
-                            </center>
-                        </div>
-                    </div>
+<body class="bg-dark layout-row">
+    <div id="app" class="dark h-v d-flex flex align-items-center">
+        <div style="border-radius:5px;width:600px;margin:0px" class="bg-dark mx-auto w-xl w-auto-xs animate fadeIn text-center">
+            <div>
+                <div class="mb-3"><img style="width:150px" src="{{ asset('assets/images/app.png') }}" class="">
+                <div class="text-warning mt-3 font-bold">Addictive Text-Based Fantasy MMORPG!</div>
                 </div>
-            @endforeach
+                <div class="mb-3" v-html="story"></div>
+                <div v-if="next && step < stories.length - 1" @click="nextStory" class="mt-15" style="margin-top:10px;">
+                    <a href="#" @click="skipStotry" class="mr-2 btn btn-rounded btn-outline-danger">
+                        <span class="mx-2">Bỏ Qua</span>
+                    </a>
+                    <a href="#" class="btn btn-rounded btn-secondary">
+                        <span class="mx-2">Tiếp</span>
+                    </a>
+                </div>
+                <div v-if="next && step == stories.length - 1" class="animated pulse infinite mt-15" style="margin-top:10px;">
+                    <a href="{{ Route('user.character.set') }}" class="btn btn-rounded btn-outline-warning">
+                        <i class="fas fa-swords"></i>
+                        <span class="mx-2">Thức Tỉnh</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-@endsection
-@push('js')
-    <style>
-        .apexcharts-canvas.dark
-        {
-            background: transparent;
-        }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest"></script>
+</body>
+<style>
+    a:hover{
+        color: #fff !important;
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.2/dist/sweetalert2.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+@if(session('message'))
     <script>
-        $(document).ready(() => {
-            @foreach($characters as $key => $character)
-                var options = {
-                    chart: {
-                        sparkline: {
-                            enabled: false,
-                        },
-                        height: 250,
-                        type: 'radar',
-                        toolbar:{
-                            show:false
-                        }
-                    },
-                    fill: {
-                        type: 'gradient',
-                        gradient: {
-                            shade: 'dark',
-                            type: "horizontal",
-                            shadeIntensity: 0.5,
-                            gradientToColors: undefined, // optional, if not defined - uses the shades of same color in series
-                            inverseColors: true,
-                            opacityFrom: 1,
-                            opacityTo: 0.8,
-                            stops: [0, 50, 100],
-                            colorStops: []
-                        }
-                    },
-                    theme: {
-                        mode: 'dark', 
-                        palette: 'palette1', 
-                        monochrome: {
-                            enabled: false,
-                            color: '#333',
-                            shadeTo: 'dark',
-                            shadeIntensity: 1
-                        },
-                    },
-                    series: [{
-                        name: 'Chỉ Số',
-                        data: [{{ $character->strength }}, {{ $character->intelligent }}, {{ $character->agility }}, {{ $character->lucky }}, {{ $character->armor_strength }}, {{ $character->armor_intelligent }},{{ $character->health_points/10 }},{{ $character->default_energy/10 }}],
-                    }],
-                    labels: ['Sức Mạnh', 'Trí Tuệ', 'Nhanh Nhẹn', 'May Mắn', 'Thủ Công', 'Thủ Phép','Sinh Lực','Mana']
-                }
-
-                var chart = new ApexCharts(
-                    document.querySelector("#{{ str_slug($character->name) }}"),
-                    options
-                );
-                chart.render();
-            @endforeach
-        })
+        Swal.fire('',"{{ session('message') }}","{{ session('status') }}");
     </script>
-@endpush
+@endif
+<script>
+    let i = 0;
+    new Vue({
+        el:'#app',
+        data:{
+            step:0,
+            next:false,
+            story:'',
+            stories:[
+                "<p>Xin chào Player [ <strong>{{ Auth::user()->name }}</strong> ]<p> Chào mừng bạn đến với Solo Leveling Simulator...",
+                "Năm 2025! Khắp mọi nơi trên thế giới đều xuất hiện những cánh cổng kì lạ...",
+                "Tất cả truyền thông, báo chí khắp nơi đều đăng tin về sự kiện này và làm rúng lên thông tin về ngày tận thế của trái đất...",
+                "Tất cả mọi người đều tò mò về thứ đang ẩn lấp phía sau những cánh cổng kia...",
+                "Và rồi... Chưa đến một tuần sau khi sự kiện những cánh cổng này xuất hiện...",
+                "Từ trong cánh cổng xuất hiện những con quái vật, chúng bắt đầu tấn công và tiêu diệt loài người...",
+                "Tất cả mọi thứ đều trở lên hỗn loạn, vũ khí hiện đại không hề có tác dụng đối với chúng...",
+                "Lúc này con người chỉ biết cầu nguyện rằng có một phép màu nào đó xuất hiện và cứu rỗi lấy họ...",
+                "Và dường như phép màu đó đã trở thành hiện thực, đã có những người nhận được sức mạnh vượt trội và có khả năng đối trọi lại với lũ quái vật...",
+                "Từng người từng người một được nhận thứ sức mạnh đó, họ bắt đầu lập tổ đội với chung một mục đích là tiêu diệt lũ quái vật và đóng những cánh cổng lại...",
+                "Họ - những người thức tỉnh sức mạnh được mọi người gọi là [ Thợ Săn ]"
+            ],
+        },
+        created()
+        {
+            this.typeWriter();
+        },
+        methods:{
+            typeWriter() 
+            {
+                if(i < this.stories[this.step].length)
+                {
+                    this.story += this.stories[this.step].charAt(i);
+                    i++;
+                    setTimeout(this.typeWriter, 30);
+                    if(i == this.stories[this.step].length)
+                    {
+                        this.next = true;
+                    }
+                }
+            },
+            nextStory()
+            {
+                this.next = false;
+                this.story = '';
+                this.step++;
+                i = 0;
+                this.typeWriter();
+            },
+            skipStotry()
+            {
+                if(confirm('Bỏ qua phần giới thiệu?'))
+                {
+                    this.step = this.stories.length - 1;
+                    this.story = this.stories[this.step];
+                }
+            }
+        }
+    })
+</script>
+</html>

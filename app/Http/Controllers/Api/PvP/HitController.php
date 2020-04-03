@@ -10,6 +10,7 @@ use App\Model\FightRoom;
 use App\Model\UserSkill;
 use App\Events\PvPHitEnemy;
 use App\Model\FightRoomLog;
+use Illuminate\Support\Str;
 use App\Constants\SkillType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -154,7 +155,8 @@ class HitController extends BaseController
                                                     case SkillType::HEALTH_HP:
                                                         if($skill->power_type == $this->parameter)
                                                         {
-                                                            $hp = (int)($findMatch->first()->user_challenge_hp + $skill->power_value) < Auth::user()->power()['health_points'] ? $skill->power_value : (int)(Auth::user()->power()['health_points'] - $findMatch->first()->user_challenge_hp);
+                                                            $skillPower = $this->dividePower($skill->power_value);
+                                                            $hp = (int)($findMatch->first()->user_challenge_hp + $skillPower) < Auth::user()->power()['health_points'] ? $skillPower : (int)(Auth::user()->power()['health_points'] - $findMatch->first()->user_challenge_hp);
                                                             $yourUpdate = [
                                                                 'turn' => 0,
                                                                 'user_challenge_hp' => DB::raw("user_challenge_hp + $hp"),
@@ -165,7 +167,7 @@ class HitController extends BaseController
                                                         }
                                                         elseif($skill->power_type == $this->percent)
                                                         {
-                                                            $renderHP = ($findMatch->first()->user_challenge_hp * $skill->power_value)/100;
+                                                            $renderHP = ($findMatch->first()->user_challenge_hp * $this->dividePower($skill->power_value))/100;
                                                             $hp = (int)($findMatch->first()->user_challenge_hp + $renderHP) < Auth::user()->power()['health_points'] ? $renderHP : (int)(Auth::user()->power()['health_points'] - $findMatch->first()->user_challenge_hp);
                                                             $yourUpdate = [
                                                                 'turn' => 0,
@@ -511,10 +513,10 @@ class HitController extends BaseController
         switch($skill->power_type)
         {
             case 0:
-                return $power + $skill->power_value;
+                return $power + $this->dividePower($skill->power_value);
             break;
             case 1:
-                return $power + (($power * $skill->power_value)/100);
+                return $power + (($power * $this->dividePower($skill->power_value))/100);
             break;
             default:
                 return 0;
@@ -529,10 +531,10 @@ class HitController extends BaseController
             switch($skill->power_type)
             {
                 case 0:
-                    return $destroy - $skill->power_value;
+                    return $destroy - $this->dividePower($skill->power_value);
                 break;
                 case 1:
-                    return $destroy - ($destroy * $skill->power_value)/100;
+                    return $destroy - ($destroy * $this->dividePower($skill->power_value))/100;
                 break;
                 default:
                     return $destroy;
@@ -548,5 +550,15 @@ class HitController extends BaseController
     public function calculateDamage($effect1, $effect2)
     {
         return $effect1 - $effect2 <= 0 ? 0 : $effect1 - $effect2;
+    }
+
+    public function dividePower($power)
+    {
+        if(Str::contains($power, '-'))
+        {
+            $value = explode('-', $power);
+            return (int)$randomValue = rand($value[0], $value[1]);
+        }
+        return (int)$power;
     }
 }

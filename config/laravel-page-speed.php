@@ -23,6 +23,7 @@ return [
     |
     */
     'skip' => [
+        'oauth/confirm',
         '*.xml',
         '*.less',
         '*.pdf',

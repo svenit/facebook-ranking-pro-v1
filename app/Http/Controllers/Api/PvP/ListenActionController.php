@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\PvP;
 use Carbon\Carbon;
 use App\Model\Room;
 use App\Model\FightRoom;
+use Illuminate\Support\Str;
 use App\Constants\SkillType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -206,11 +207,11 @@ class ListenActionController extends BaseController
                                 case SkillType::HEALTH_HP:
                                     if($yourPassiveSkill->power_type == 0)
                                     {
-                                        $hp = $yourPassiveSkill->power_value;
+                                        $hp = $this->dividePower($yourPassiveSkill->power_value);
                                     }
                                     elseif($yourPassiveSkill->power_type == 1)
                                     {
-                                        $hp = ($you->first()->user_challenge_hp * $yourPassiveSkill->power_value)/100;
+                                        $hp = ($you->first()->user_challenge_hp * $this->dividePower($yourPassiveSkill->power_value))/100;
                                     }
                                     else
                                     {
@@ -308,5 +309,15 @@ class ListenActionController extends BaseController
             }
             return $skillsCountDown;
         }
+    }
+
+    public function dividePower($power)
+    {
+        if(Str::contains($power, '-'))
+        {
+            $value = explode('-', $power);
+            return (int)$randomValue = rand($value[0], $value[1]);
+        }
+        return (int)$power;
     }
 }

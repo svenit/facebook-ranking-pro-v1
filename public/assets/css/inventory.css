@@ -67,6 +67,7 @@
     background-position: 62px 40px;
 }
 
+/* Something else */
 .has-pvp-turn-with-pet {
     transform: rotate3d(150, 1, 1, 45deg);
     background-image: url(../images/turn-effect.gif);
