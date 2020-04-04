@@ -1,0 +1,205 @@
+{
+   "defaultPosition":[4,4],
+   "data":[
+        [{
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/dark-tree.png",
+                "canCross": false
+            },
+            {
+                "background": "water",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/waterfall.png",
+                "canCross": false
+            },
+            {
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/stone.png",
+                "canCross": false
+            },
+            {
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/land.png",
+                "canCross": true
+            },
+            {
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/land.png",
+                "canCross": true
+            },
+            {
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/dark-tree.png",
+                "canCross": false
+            },
+            {
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/dark-tree.png",
+                "canCross": false
+            }
+        ],
+        [{
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/dark-tree.png",
+                "canCross": false
+            },
+            {
+                "background": "water",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/nope.png",
+                "canCross": false
+            },
+            {
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/dark-tree.png",
+                "canCross": false
+            },
+            {
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/land.png",
+                "canCross": true
+            },
+            {
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/land.png",
+                "canCross": true
+            },
+            {
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/dark-tree.png",
+                "canCross": false
+            },
+            {
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/dark-tree.png",
+                "canCross": false
+            }
+        ],
+        [{
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/dark-tree.png",
+                "canCross": false
+            },
+            {
+                "background": "water",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/lotus.png",
+                "canCross": false
+            },
+            {
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/dark-tree.png",
+                "canCross": false
+            },
+            {
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/land.png",
+                "canCross": true
+            },
+            {
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/land.png",
+                "canCross": true
+            },
+            {
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/dark-tree.png",
+                "canCross": false
+            },
+            {
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/dark-tree.png",
+                "canCross": false
+            }
+        ],
+        [{
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/land.png",
+                "canCross": true
+            },
+            {
+                "background": "water",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/bridge.png",
+                "canCross": true
+            },
+            {
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/land.png",
+                "canCross": true
+            },
+            {
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/land.png",
+                "canCross": true
+            },
+            {
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/land.png",
+                "canCross": true
+            },
+            {
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/land.png",
+                "canCross": true
+            },
+            {
+                "background": "grass",
+                "style": "",
+                "href": "#",
+                "src": "assets/images/map/land.png",
+                "canCross": true
+            }
+        ]
+    ]
+}

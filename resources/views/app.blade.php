@@ -62,19 +62,17 @@
 		<div data-id="{{ csrf_token() }}" id="main" style="background: url({{ asset('assets/images/background.jpg') }});" class="layout-column flex">
 			@include('user.theme.header')
 			<div id="content" class="flex">
-				<div>
-					@if(!request()->is('pvp/room/*'))
-					<div class="page-hero page-container" id="page-hero">
-						<div class="padding d-flex">
-							<div style="width:100%" class="vip-bordered page-title">
-								<h2 data-title="tooltip" class="ribbon"> <button style="background:transparent;border:none">@yield('hero')</button></h2>
-								<p style="margin-top:40px" class="text-muted text-center">@yield('sub_hero','')</p>
-							</div>
+				@if(!request()->is('pvp/room/*'))
+				<div class="page-hero page-container" id="page-hero">
+					<div class="padding d-flex">
+						<div style="width:100%" class="vip-bordered page-title">
+							<h2 data-title="tooltip" class="ribbon"> <button style="background:transparent;border:none">@yield('hero')</button></h2>
+							<p style="margin-top:40px" class="text-muted text-center">@yield('sub_hero','')</p>
 						</div>
 					</div>
-					@endif
-					@yield('content')
 				</div>
+				@endif
+				@yield('content')
 			</div>
 			<div id="footer" style="margin-top:0px" class="page-footer">
 				<div class="d-flex p-3"><span class="text-sm pixel-font text-muted flex">&copy;Copyright {{ date('Y') }} Coded by <a class="text-gold" href="https://facebook.com/sven307">Sven</a></span>

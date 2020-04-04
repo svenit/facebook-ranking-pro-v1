@@ -1,3 +1,12 @@
+
+Vue.component('button-counter', {
+    data: function () {
+      return {
+        count: 0
+      }
+    },
+    template: '<button v-on:click="count++">Bạn đã bấm {{ count }} lần.</button>'
+  });
 app = new Vue({
     el: '#app',
     data: {
@@ -237,7 +246,17 @@ app = new Vue({
         /* Admin */
         shop_tag: '',
         rgb: '',
-        selected: []
+        selected: [],
+        map:{
+            yourPosition:[0,0],
+            cols:7,
+            rows:4,
+            data:[
+                [
+                    
+                ]
+            ]
+        }
     },
     async created() {
         this.token = await this.bind(document.getElementById('main').getAttribute('data-id'));
@@ -246,6 +265,14 @@ app = new Vue({
             await this.index();
             if(typeof page == "undefined" || page == null) {} else {
                 switch (page.path) {
+                    case 'map':
+                        const self = this;
+                        document.onkeypress = function (e) {
+                            e = e || window.event;
+                            return self.moveToPositionByKey(e);
+                        };
+                        await this.readTextFile(`assets/maps/${page.map}.json`);
+                    break;
                     case 'pvp.list':
                         await this.listFightRoom();
                         setInterval(() => {
@@ -394,6 +421,84 @@ app = new Vue({
         }
     },
     methods: {
+        readTextFile(file)
+        {
+            var rawFile = new XMLHttpRequest();
+            rawFile.open("GET", file, false);
+            const self = this;
+            rawFile.onreadystatechange = function ()
+            {
+                if(rawFile.readyState === 4)
+                {
+                    if(rawFile.status === 200 || rawFile.status == 0)
+                    {
+                        let map = JSON.parse(rawFile.responseText);
+                        self.map.data = map.data;
+                        self.map.yourPosition = map.defaultPosition;
+                    }
+                }
+            }
+            rawFile.send(null);
+        },
+        drawMap(map, x, y)
+        {
+            if(x === this.map.yourPosition[0] && y === this.map.yourPosition[1])
+            {
+                return `
+                <div style='position:relative'>
+                    <div style="position:absolute;top:${this.data.pet ? '-20px' : '15px'};left:17px" id="character" data-title="tooltip" title="Click để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" class="character-sprites hoverable">
+                        ${this.drawCharacter()}
+                    </div>
+                    <img src="${map.src}" style="${map.style}" class="${map.background}">
+                </div
+                `;
+            }
+            else
+            {   
+                return `<img src="${map.src}" style="${map.style}" class="${map.background}">`;
+            }
+        },
+        moveToPosition(map, x, y)
+        {
+            try
+            {
+                let position = this.map.data[x - 1][y - 1];
+                console.log(x, y);
+                if(position && position.canCross)
+                {
+                    this.map.yourPosition = [x,y];
+                    this.drawMap(map, x,y);
+                }
+            }
+            catch(e){}
+        },
+        moveToPositionByKey(e)
+        {
+            let yourPosition = this.map.yourPosition;
+            let row = yourPosition[0];
+            let col = yourPosition[1];
+            let map = this.map.data;
+            switch(e.keyCode)
+            {
+                case 97: // A
+                    this.moveToPosition(map, row, col - 1);
+                break;
+                case 100: // D
+                    this.moveToPosition(map, row, col + 1);
+                break;
+                case 119: // W
+                    console.log(map[row - 1][col]);
+                    this.moveToPosition(map, row - 1, col);
+                break;
+                case 115: // S
+                    this.moveToPosition(map, row + 1, col);
+                break;
+            }
+        },
+        drawCharacter()
+        {
+            return this.$refs['character'] ? this.$refs['character'].innerHTML : '';
+        },
         pvpTurnBase(res)
         {
             this.pvp.match.you = res.data.you.basic.original;

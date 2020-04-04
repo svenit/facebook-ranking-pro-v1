@@ -6,7 +6,17 @@
 
 <div class="page-content page-container" id="page-content">
     <div class="padding-x">
+        <div style="overflow:auto" class="vip-bordered">
+            <table style="border: none;" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr v-for="i in map.rows">
+                        <td style="width:90px;height:90px" v-for="j in map.cols" v-html="drawMap(map.data[i - 1][j - 1],i,j)" @click="moveToPosition(map.data[i - 1][j - 1],i,j)"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         @include('user.theme.parameter')
+        {{-- @include('user.theme.parameter')
         <div class="row row-sm sr">
             <div class="col-md-12 col-lg-12">
                 <div class="row row-sm">
@@ -19,42 +29,42 @@
                                             <div class="col-md-4 col-lg-2 col-sm-6">
                                                 <div class="d-flex align-items-center text-hover-success">
                                                     <div class="px-4 flex">
-                                                        <img src="https://vignette.wikia.nocookie.net/tomeofthesun/images/a/ad/Production.png/revision/latest?cb=20160531170704">
+                                                        <a href="{{ Route('user.guild.lobby') }}"><img src="{{ asset('assets/images/Guild.png') }}"></a>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-4 col-lg-2 col-sm-6">
                                                 <div class="d-flex align-items-center text-hover-success">
                                                     <div class="px-4 flex">
-                                                        <img src="https://vignette.wikia.nocookie.net/tomeofthesun/images/a/ae/Clan_War.png/revision/latest?cb=20160427183424">
+                                                        <a href="{{ Route('user.pvp.index') }}"><img src="{{ asset('assets/images/PVP_Icon.png') }}"></a>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-4 col-lg-2 col-sm-6">
                                                 <div class="d-flex align-items-center text-hover-success">
                                                     <div class="px-4 flex">
-                                                        <img src="https://vignette.wikia.nocookie.net/tomeofthesun/images/8/88/King_of_the_Hill.png/revision/latest?cb=20160427183424">
+                                                        <a href="#"><img src="{{ asset('assets/images/Quest.png') }}"></a>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-4 col-lg-2 col-sm-6">
                                                 <div class="d-flex align-items-center text-hover-success">
                                                     <div class="px-4 flex">
-                                                        <img src="https://vignette.wikia.nocookie.net/tomeofthesun/images/a/a7/Hero%27s_Journey.png/revision/latest?cb=20160427180921">
+                                                        <a href="{{ Route('user.shop.item') }}"><img src="{{ asset('assets/images/Shop.png') }}"></a>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-4 col-lg-2 col-sm-6">
                                                 <div class="d-flex align-items-center text-hover-success">
                                                     <div class="px-4 flex">
-                                                        <img src="https://vignette.wikia.nocookie.net/tomeofthesun/images/7/73/Adventure_Inn.png/revision/latest?cb=20160427180920">
+                                                        <a href="{{ Route('user.events.wheel') }}"><img src="{{ asset('assets/images/Casino.png') }}"></a>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-4 col-lg-2 col-sm-6">
                                                 <div class="d-flex align-items-center text-hover-success">
                                                     <div class="px-4 flex">
-                                                        <img src="https://vignette.wikia.nocookie.net/tomeofthesun/images/7/7f/Treasure_Forest.png/revision/latest?cb=20160427180922">
+                                                        <a href="{{ Route('user.oven.gem') }}"><img src="{{ asset('assets/images/Smith.png') }}"></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -106,7 +116,7 @@
             <div class="corner corner-top-right"></div> 
             <div class="corner corner-bottom-left"></div> 
             <div class="corner corner-bottom-right">
-        </div>
+        </div> --}}
     </div>
 </div>
 @endsection
@@ -119,7 +129,8 @@
     @endif
     <script>
         const page = {
-            path:'home'
-        }
+            path:'map',
+            map:"hometown"
+        };
     </script>
 @endpush
