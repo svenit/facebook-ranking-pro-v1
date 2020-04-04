@@ -248,12 +248,14 @@ app = new Vue({
         rgb: '',
         selected: [],
         map:{
+            currentMap:null,
             yourPosition:[0,0],
+            animation:'flash',
             cols:7,
             rows:4,
             data:[
                 [
-                    
+
                 ]
             ]
         }
@@ -271,6 +273,7 @@ app = new Vue({
                             e = e || window.event;
                             return self.moveToPositionByKey(e);
                         };
+                        this.map.currentMap = page.map;
                         await this.readTextFile(`assets/maps/${page.map}.json`);
                     break;
                     case 'pvp.list':
@@ -421,24 +424,11 @@ app = new Vue({
         }
     },
     methods: {
-        readTextFile(file)
+        async readTextFile(file)
         {
-            var rawFile = new XMLHttpRequest();
-            rawFile.open("GET", file, false);
-            const self = this;
-            rawFile.onreadystatechange = function ()
-            {
-                if(rawFile.readyState === 4)
-                {
-                    if(rawFile.status === 200 || rawFile.status == 0)
-                    {
-                        let map = JSON.parse(rawFile.responseText);
-                        self.map.data = map.data;
-                        self.map.yourPosition = map.defaultPosition;
-                    }
-                }
-            }
-            rawFile.send(null);
+            let { data } = await axios.get(file);
+            this.map.data = data.data;
+            this.map.yourPosition = data.defaultPosition;
         },
         drawMap(map, x, y)
         {
@@ -446,28 +436,29 @@ app = new Vue({
             {
                 return `
                 <div style='position:relative'>
-                    <div style="position:absolute;top:${this.data.pet ? '-20px' : '15px'};left:17px" id="character" data-title="tooltip" title="Click để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" class="character-sprites hoverable">
+                    <div style="position:absolute;top:${this.data.pet ? '-30px' : '15px'};left:17px" id="character" data-title="tooltip" title="Click để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" class="animated ${this.map.animation} faster character-sprites hoverable">
                         ${this.drawCharacter()}
+                        <span style='z-index:0;position:absolute' class="has-pvp-turn-with-pet"></span>
+                        <span style='z-index:0;position:absolute' class="shadow-pet"></span>
                     </div>
-                    <img src="${map.src}" style="${map.style}" class="${map.background}">
+                    <img src="${map.src || null}" style="${map.style || null}" class="${map.background || null}">
                 </div
                 `;
             }
             else
             {   
-                return `<img src="${map.src}" style="${map.style}" class="${map.background}">`;
+                return `<img src="${map.src || null}" style="${map.style || null}" class="${map.background || null}">`;
             }
         },
-        moveToPosition(map, x, y)
+        moveToPosition(map, x, y, animation = null)
         {
             try
             {
                 let position = this.map.data[x - 1][y - 1];
-                console.log(x, y);
                 if(position && position.canCross)
                 {
+                    this.map.animation = animation;
                     this.map.yourPosition = [x,y];
-                    this.drawMap(map, x,y);
                 }
             }
             catch(e){}
@@ -481,17 +472,16 @@ app = new Vue({
             switch(e.keyCode)
             {
                 case 97: // A
-                    this.moveToPosition(map, row, col - 1);
+                    this.moveToPosition(map, row, col - 1, 'slideInRight');
                 break;
                 case 100: // D
-                    this.moveToPosition(map, row, col + 1);
+                    this.moveToPosition(map, row, col + 1, 'slideInLeft');
                 break;
                 case 119: // W
-                    console.log(map[row - 1][col]);
-                    this.moveToPosition(map, row - 1, col);
+                    this.moveToPosition(map, row - 1, col, 'slideInUp');
                 break;
                 case 115: // S
-                    this.moveToPosition(map, row + 1, col);
+                    this.moveToPosition(map, row + 1, col, 'slideInDown');
                 break;
             }
         },

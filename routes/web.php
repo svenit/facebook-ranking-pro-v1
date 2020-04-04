@@ -34,7 +34,7 @@ Route::group(['middleware' => ['maintaince','redirect.action']], function () {
         Route::get('choose','CharacterController@choose')->name('choose');
         Route::get('set','CharacterController@set')->name('set');
     });
-    Route::group(['prefix' => '/','as' => 'user.','namespace' => 'User','middleware' => 'user'], function () {
+    Route::group(['prefix' => '/','as' => 'user.','namespace' => 'User','middleware' => ['user','auth']], function () {
         Route::get('/','HomeController@index')->name('index');
         Route::group(['prefix' => 'top','as' => 'top.','namespace' => 'Top'], function () {
             Route::get('level','TopController@level')->name('level');
