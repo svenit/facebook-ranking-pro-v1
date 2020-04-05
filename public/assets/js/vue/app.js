@@ -249,16 +249,23 @@ app = new Vue({
         selected: [],
         map:{
             currentMap:null,
-            yourPosition:[0,0],
+            yourPosition:null,
             animation:'flash',
             cols:7,
             rows:4,
             data:[
                 [
-
+                    {
+                        background:null,
+                        src:null,
+                        canCross:false,
+                        href:'#'
+                    }
                 ]
-            ]
-        }
+            ],
+            characterSameBlock:false
+        },
+        cloneMap:[]
     },
     async created() {
         this.token = await this.bind(document.getElementById('main').getAttribute('data-id'));
@@ -271,10 +278,11 @@ app = new Vue({
                         const self = this;
                         document.onkeypress = function (e) {
                             e = e || window.event;
-                            return self.moveToPositionByKey(e);
+                            self.moveToPositionByKey(e);
                         };
                         this.map.currentMap = page.map;
                         await this.readTextFile(`assets/maps/${page.map}.json`);
+                        self.listenOtherPlayerMove();
                     break;
                     case 'pvp.list':
                         await this.listFightRoom();
@@ -421,44 +429,128 @@ app = new Vue({
                     });
                 }
             }
+        },
+        'map.yourPosition':function(newPosition, oldPosition)
+        {
+            if(oldPosition == null || newPosition[0] !== oldPosition[0] || newPosition[1] !== oldPosition[1])
+            {
+                this.map.characterSameBlock = false;
+                socket.emit('player-move',{
+                    newPosition,
+                    oldPosition,
+                    character:this.drawCharacter(),
+                    pet:this.data.pet
+                });
+            }
         }
     },
     methods: {
+        listenOtherPlayerMove()
+        {
+            socket.on('other-player-move',data => {
+                let newPosition = data.newPosition;
+                let oldPosition = data.oldPosition;
+                let yourPosition = this.map.yourPosition;
+                let map = this.map.data[newPosition[0] - 1][newPosition[1] - 1];
+                let cloneMap = this.cloneMap[newPosition[0] - 1][newPosition[1] - 1];
+                var doubleCharacters = false;
+                this.map.data[newPosition[0] - 1][newPosition[1] - 1] = `
+                <div style='position:relative'>
+                    <div style="position:absolute;top:${data.pet ? '-30px' : '0px'};left:17px" id="character" data-title="tooltip" title="Click để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" class="animated ${this.map.animation} faster character-sprites hoverable">
+                        ${data.character}
+                        <span style='z-index:0;position:absolute' class="${data.pet ? 'has-pvp-turn-with-pet' : 'has-pvp-turn-no-pet'}"></span>
+                        <span style='z-index:0;position:absolute' class="${data.pet ? 'shadow-pet' : 'shadow-character' }"></span>
+                    </div>
+                    <img src="${map.src || cloneMap.src}" style="${map.style || cloneMap.style}" class="${map.background || cloneMap.background}">
+                </div
+                `;
+                if(oldPosition == null)
+                {
+                    this.map.data[newPosition[0] - 1][newPosition[1] - 1] = `
+                    <div style='position:relative'>
+                        <div style="position:absolute;top:${data.pet ? '-30px' : '0px'};left:17px" id="character" data-title="tooltip" title="Click để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" class="animated ${this.map.animation} faster character-sprites hoverable">
+                            ${data.character}
+                            <span style='z-index:0;position:absolute' class="${data.pet ? 'has-pvp-turn-with-pet' : 'has-pvp-turn-no-pet'}"></span>
+                            <span style='z-index:0;position:absolute' class="${data.pet ? 'shadow-pet' : 'shadow-character' }"></span>
+                        </div>
+                        <img src="${map.src || cloneMap.src}" style="${map.style || cloneMap.style}" class="${map.background || cloneMap.background}">
+                    </div
+                    `;
+                }
+                else
+                {
+                    this.map.data[oldPosition[0] - 1][oldPosition[1] - 1] = this.cloneMap[oldPosition[0] - 1][oldPosition[1] - 1];
+                }
+                if(yourPosition[0] === newPosition[0] && yourPosition[1] === newPosition[1])
+                {
+                    this.map.characterSameBlock = this.map.data[newPosition[0] - 1][newPosition[1] - 1];
+                }
+                else
+                {
+                    this.map.characterSameBlock = false;
+                }
+                this.moveToPosition(this.map.yourPosition[0], this.map.yourPosition[1]);
+            });
+        },
         async readTextFile(file)
         {
             let { data } = await axios.get(file);
             this.map.data = data.data;
-            this.map.yourPosition = data.defaultPosition;
+            this.cloneMap = JSON.parse(JSON.stringify(data.data))
+            if(localStorage.position)
+            {
+                let position = JSON.parse(localStorage.position);
+                if(this.map.data[position.x - 1][position.y - 1] && this.map.data[position.x - 1][position.y - 1].canCross)
+                {
+                    this.map.yourPosition = [position.x, position.y];
+                }
+                else
+                {
+                    this.map.yourPosition = data.defaultPosition;
+                }
+            }
+            else
+            {
+                this.map.yourPosition = data.defaultPosition;
+            }
         },
         drawMap(map, x, y)
         {
-            if(x === this.map.yourPosition[0] && y === this.map.yourPosition[1])
+            let yourPosition = this.map.yourPosition;
+            let cloneMap = this.cloneMap[yourPosition[0] - 1][yourPosition[1] - 1];
+            if(x === yourPosition[0] && y === yourPosition[1])
             {
                 return `
                 <div style='position:relative'>
-                    <div style="position:absolute;top:${this.data.pet ? '-30px' : '15px'};left:17px" id="character" data-title="tooltip" title="Click để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" class="animated ${this.map.animation} faster character-sprites hoverable">
+                    <div style="position:absolute;top:${this.data.pet ? '-30px' : '0px'};left:17px" id="character" data-title="tooltip" title="Click để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" class="animated ${this.map.animation} faster character-sprites hoverable">
                         ${this.drawCharacter()}
-                        <span style='z-index:0;position:absolute' class="has-pvp-turn-with-pet"></span>
-                        <span style='z-index:0;position:absolute' class="shadow-pet"></span>
+                        <span style='z-index:0;position:absolute' class="${this.data.pet ? 'has-pvp-turn-with-pet' : 'has-pvp-turn-no-pet'}"></span>
+                        <span style='z-index:0;position:absolute' class="${this.data.pet ? 'shadow-pet' : 'shadow-character'}"></span>
                     </div>
-                    <img src="${map.src || null}" style="${map.style || null}" class="${map.background || null}">
+                    ${this.map.characterSameBlock ? this.map.characterSameBlock : ''}
+                    <img src="${map.src || cloneMap.src}" style="${map.style || cloneMap.stype}" class="${map.background || cloneMap.background}">
                 </div
                 `;
             }
-            else
+            else if(map.src)
             {   
-                return `<img src="${map.src || null}" style="${map.style || null}" class="${map.background || null}">`;
+                return `<img src="${map.src || cloneMap.src}" style="${map.style || null}" class="${map.background || null}">`;
+            }
+            else
+            {
+                return map;
             }
         },
-        moveToPosition(map, x, y, animation = null)
+        moveToPosition(x, y, animation = null)
         {
             try
             {
-                let position = this.map.data[x - 1][y - 1];
+                let position = this.cloneMap[x - 1][y - 1];
                 if(position && position.canCross)
                 {
                     this.map.animation = animation;
                     this.map.yourPosition = [x,y];
+                    localStorage.setItem('position',JSON.stringify({x,y}));
                 }
             }
             catch(e){}
@@ -468,20 +560,19 @@ app = new Vue({
             let yourPosition = this.map.yourPosition;
             let row = yourPosition[0];
             let col = yourPosition[1];
-            let map = this.map.data;
             switch(e.keyCode)
             {
                 case 97: // A
-                    this.moveToPosition(map, row, col - 1, 'slideInRight');
+                    this.moveToPosition(row, col - 1, 'slideInRight');
                 break;
                 case 100: // D
-                    this.moveToPosition(map, row, col + 1, 'slideInLeft');
+                    this.moveToPosition(row, col + 1, 'slideInLeft');
                 break;
                 case 119: // W
-                    this.moveToPosition(map, row - 1, col, 'slideInUp');
+                    this.moveToPosition(row - 1, col, 'slideInUp');
                 break;
                 case 115: // S
-                    this.moveToPosition(map, row + 1, col, 'slideInDown');
+                    this.moveToPosition(row + 1, col, 'slideInDown');
                 break;
             }
         },

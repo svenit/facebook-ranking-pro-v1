@@ -10,7 +10,7 @@
             <table style="border: none;" cellspacing="0" cellpadding="0">
                 <tbody>
                     <tr v-for="i in map.rows">
-                        <td style="width:90px;height:90px" v-for="j in map.cols" v-html="drawMap(map.data[i - 1][j - 1],i,j)" @click="moveToPosition(map.data[i - 1][j - 1],i,j)"></td>
+                        <td style="width:90px;height:90px" v-for="j in map.cols" v-html="drawMap(map.data[i - 1][j - 1],i,j)" @click="moveToPosition(i,j)"></td>
                     </tr>
                 </tbody>
             </table>

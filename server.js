@@ -77,4 +77,8 @@ function handleConnect(socket)
     socket.on('event-pvp-hit-enemy', data => {
         socket.broadcast.emit(`event-pvp-hit-enemy-${data.room.name}-${data['broadcast-to']}`,data);
     });
+
+    socket.on('player-move', data => {
+        socket.broadcast.emit(`other-player-move`,data);
+    });
 }
