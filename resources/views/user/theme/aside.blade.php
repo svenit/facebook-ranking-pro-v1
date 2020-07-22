@@ -9,22 +9,22 @@
 @endif
 <div v-if="data" class="modal fade modal-left" data-backdrop="true">
     <div style="overflow:auto;width:350px;" class="modal-dialog modal-left w-xl">
-        <div style="min-height:100vh;background:#111 !important" class="modal-content vip-bordered no-radius">
+        <div style="min-height:100vh;background:#111 !important;" class="modal-content vip-bordered no-radius">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">&times;</button>
             </div>
-            <div class="modal-body">
+            <div style="overflow:auto;height:200px" class="modal-body">
                 <div class="p-4">
                     <p class="pixel-font text-gold" style="text-align:center !important;">{{ isset(Auth::user()->config['rank']) ? Auth::user()->config['rank'] : 'ERROR' }} RANK</p>
                     <div style="margin:0 auto;position:relative;left:-15px" class="character-sprites hoverable">
                         <span v-if="data.pet" :class="`Mount_Body_${data.pet.class_tag}`"></span>
-                        <span style="z-index:2" class="skin_f5a76e"></span>
-                        <span style="z-index:2" class="broad_shirt_black"></span>
-                        <span style="z-index:2" class="head_0"></span>
+                        <span style="z-index:2" class="skin_f5a76e up-to-down"></span>
+                        <span style="z-index:2" class="broad_shirt_black up-to-down"></span>
+                        <span style="z-index:2" class="head_0 up-to-down"></span>
                         <span class=""></span>
                         <span v-for="(gear,index) in data.gears" :key="index">
-                            <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="e" :style="{zIndex:gear.cates.z_index}"></span>
-                            <span v-else :class="gear.class_tag" :style="{zIndex:gear.cates.z_index}"></span>
+                            <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="`${e} ${gear.cates.animation} up-to-down`" :style="{zIndex:gear.cates.z_index}"></span>
+                            <span v-else :class="`${gear.class_tag} ${gear.cates.animation} up-to-down`" :style="{zIndex:gear.cates.z_index}"></span>
                         </span>
                         <span v-if="data.pet" style="z-index:50" :class="`Mount_Head_${data.pet.class_tag}`"></span>
                     </div>
@@ -59,49 +59,49 @@
                     </div>
                     <div class="col-6 d-flex">
                         <div class="flex">
-                            <div class="text-success"><small><i class="fas fa-heart"></i> Sinh Lực <strong
+                            <div class="text-success"><small><i class="fas fa-heart"></i> HP <strong
                                         class="text-success">@{{ data.power.hp }}</strong></small>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 d-flex mt-2">
                         <div class="flex">
-                            <div class="text-danger"><small><i class="fas fa-swords"></i> Sức Mạnh <strong
+                            <div class="text-danger"><small><i class="fas fa-swords"></i> STR <strong
                                         class="text-danger">@{{ data.power.strength }}</strong></small>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 d-flex mt-2">
                         <div class="flex">
-                            <div class="text-info"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
+                            <div class="text-info"><small><i class="fas fa-brain"></i> INT <strong
                                         class="text-info">@{{ data.power.intelligent }}</strong></small>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 d-flex mt-2">
                         <div class="flex">
-                            <div class="text-primary"><small><i class="fas fa-bolt"></i> Nhanh Nhẹn <strong
+                            <div class="text-primary"><small><i class="fas fa-bolt"></i> AGI <strong
                                         class="text-primary">@{{ data.power.agility }}</strong></small>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 d-flex mt-2">
                         <div class="flex">
-                            <div class="text-warning"><small><i class="fas fa-stars"></i> May Mắn <strong
+                            <div class="text-warning"><small><i class="fas fa-stars"></i> LUK <strong
                                         class="text-warning">@{{ data.power.lucky }}</strong></small>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 d-flex mt-2">
                         <div class="flex">
-                            <div class="text-silver"><small><i class="fas fa-shield"></i> Kháng Công <strong
+                            <div class="text-silver"><small><i class="fas fa-shield"></i> DEF <strong
                                         class="text-silver">@{{ data.power.armor_strength }}</strong></small>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 d-flex mt-2">
                         <div class="flex">
-                            <div class="text-purple"><small><i class="fal fa-dice-d20"></i> Kháng Phép <strong
+                            <div class="text-purple"><small><i class="fal fa-dice-d20"></i> AM <strong
                                         class="text-purple">@{{ data.power.armor_intelligent }}</strong></small>
                             </div>
                         </div>
@@ -506,13 +506,13 @@
                 <div class="p-4 text-center">
                     <div title="Nhấp vào để xem thông số" style="margin:0px 10px 35px 0px" class="character-sprites hoverable" :class="user.infor.vip ? 'vip-2' : ''">
                         <span v-if="user.pet" :class="`Mount_Body_${user.pet.class_tag}`"></span>
-                        <span style="z-index:2" class="skin_f5a76e"></span>
-                        <span style="z-index:2" class="broad_shirt_black"></span>
-                        <span style="z-index:2" class="head_0"></span>
+                        <span style="z-index:2" class="skin_f5a76e up-to-down"></span>
+                        <span style="z-index:2" class="broad_shirt_black up-to-down"></span>
+                        <span style="z-index:2" class="head_0 up-to-down"></span>
                         <span class=""></span>
                         <span v-for="(gear,index) in user.gears" :key="index">
-                            <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="e" :style="{zIndex:gear.cates.z_index}"></span>
-                            <span v-else :class="gear.class_tag" :style="{zIndex:gear.cates.z_index}"></span>
+                            <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="`${e} ${gear.cates.animation} up-to-down`" :style="{zIndex:gear.cates.z_index}"></span>
+                            <span v-else :class="`${gear.class_tag} ${gear.cates.animation} up-to-down`" :style="{zIndex:gear.cates.z_index}"></span>
                         </span>
                         <span v-if="user.pet" style="z-index: 50" :class="`Mount_Head_${user.pet.class_tag}`"></span>
                     </div>
@@ -859,7 +859,58 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         $(document).ready(() => {
-            var options={chart:{sparkline:{enabled:!1},height:250,type:"radar",toolbar:{show:!1}},yaxis:{show:!1},dataLabels:{enabled:!0,background:{enabled:!0,borderRadius:2}},fill:{type:"gradient",gradient:{shade:"dark",type:"horizontal",shadeIntensity:.5,gradientToColors:void 0,inverseColors:!0,opacityFrom:1,opacityTo:.8,stops:[0,50,100],colorStops:[]}},theme:{mode:"dark",palette:"palette1",monochrome:{enabled:!1,color:"#333",shadeTo:"dark",shadeIntensity:1}},series:[{name:"Ch\u1EC9 S\u1ED1",data:[{{ Auth::user()->stats()['strength'] }},{{ Auth::user()->stats()['intelligent'] }},{{ Auth::user()->stats()['agility'] }},{{ Auth::user()->stats()['lucky'] }},{{ Auth::user()->stats()['armor_strength'] }},{{ Auth::user()->stats()['armor_intelligent'] }}]}],labels:["S\u1EE9c M\u1EA1nh","Tr\xED Tu\u1EC7","Nhanh Nh\u1EB9n","May M\u1EAFn","Th\u1EE7 C\xF4ng","Th\u1EE7 Ph\xE9p","Sinh L\u1EF1c","Mana"]},chart=new ApexCharts(document.querySelector("#stats"),options);chart.render();var chart=new ApexCharts(document.querySelector("#stats-infor"),options);chart.render();
+            var options = {
+                chart: {
+                    sparkline: {
+                        enabled:!1
+                    },
+                    height:250,
+                    type:"radar",
+                    toolbar:{
+                        show:!1
+                    }
+                },
+                yaxis:{
+                    show:!1
+                },
+                dataLabels: {
+                    enabled:!0,
+                    background:{
+                        enabled:!0,
+                        borderRadius:2
+                    }
+                },
+                fill:{
+                    type:"gradient",
+                    gradient:{
+                        shade:"dark",
+                        type:"horizontal",
+                        shadeIntensity:.5,
+                        inverseColors:!0,
+                        opacityFrom:1,
+                        opacityTo:.8,
+                        stops:[0,50,100],
+                        colorStops:[]
+                    }
+                },
+                theme:{
+                    mode:"dark",
+                    palette:"palette1",
+                    monochrome:{
+                        enabled:!1,
+                        color:"#333",
+                        shadeTo:"dark",
+                        shadeIntensity:1
+                    }
+                },
+                series: [{
+                    name: 'Chỉ số',
+                    data: [{{ Auth::user()->stats()['strength'] }}, {{ Auth::user()->stats()['intelligent'] }}, {{ Auth::user()->stats()['agility'] }}, {{ Auth::user()->stats()['lucky'] }}, {{ Auth::user()->stats()['armor_strength'] }}, {{ Auth::user()->stats()['armor_intelligent'] }}],
+                    label: ['Sức Mạnh', 'Trí Tuệ', 'Nhanh Nhẹn', 'May Mắn', 'Kháng Công', 'Kháng Phép']
+                }]
+            };
+            var chart = new ApexCharts(document.querySelector("#stats"),options);
+            chart.render();
         });
     </script>
     @endauth

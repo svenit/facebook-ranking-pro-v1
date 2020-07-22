@@ -6,15 +6,15 @@
     </div>
 @endif
 @if(!request()->is('pvp/room/*'))
-<div id="character" ref="character" @click="index()"  style="margin:10px 0px 20px 10px;display:none" data-title="tooltip" title="Click để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px" class="character-sprites hoverable">
+<div id="character" ref="character" @click="index()"  style="margin-bottom:20px" data-title="tooltip" title="Click để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" class="character-sprites hoverable">
     <span v-if="data.pet" style="z-index:2" :class="`Mount_Body_${data.pet.class_tag}`"></span>
-    <span style="z-index:2" class="skin_f5a76e"></span>
-    <span style="z-index:2" class="broad_shirt_black"></span>
-    <span style="z-index:2" class="head_0"></span>
+    <span style="z-index:2" class="skin_f5a76e up-to-down"></span>
+    <span style="z-index:2" class="broad_shirt_black up-to-down"></span>
+    <span style="z-index:2" class="head_0 up-to-down"></span>
     <span class=""></span>
     <span v-for="(gear,index) in data.gears" :key="index">
-        <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="e" :style="{zIndex:gear.cates.z_index}"></span>
-        <span v-else :class="gear.class_tag" :style="{zIndex:gear.cates.z_index}"></span>
+        <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="`${e} ${gear.cates.animation} up-to-down`" :style="{zIndex:gear.cates.z_index}"></span>
+        <span v-else :class="`${gear.class_tag} ${gear.cates.animation} up-to-down`" :style="{zIndex:gear.cates.z_index}"></span>
     </span>
     <span v-if="data.pet" style="z-index:50" :class="`Mount_Head_${data.pet.class_tag}`"></span>
 </div>

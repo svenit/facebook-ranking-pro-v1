@@ -1,5 +1,5 @@
 
-{{-- 
+<!--
 	A TextBased Game Platform - Developed by Sven 
 
   _________      .__           .__                     .__  .__                   _________.__        .__.__          __                
@@ -9,7 +9,7 @@
 /_______  /\____/|____/\____/  |____/\___  >\_/  \___  >____/__|___|  /\___  /  /_______  /|__|__|_|  /__|____(____  /__|  \____/|__|   
         \/                               \/          \/             \//_____/           \/          \/             \/                   
 
---}}
+ -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,11 +22,10 @@
 	<meta name="description" content="@yield('sub_hero')">
 	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link rel="stylesheet" href="{{ asset('css/app.min.css') }}">
+	<link rel="stylesheet" href="{{ mix('css/app.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/css/inventory.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/css/gem.css') }}">
 	<link href="{{ asset('cdn/css/all.min.css') }}" rel="stylesheet">
-	{{-- <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" /> --}}
 	<meta name="csrf-token" content="{{ str_random(50) }}"/>
 	@stack('css')
 </head>
@@ -41,7 +40,21 @@
 		gtag('config', 'UA-112101707-1');
 	</script>
 	<script>
-		config={socketHost:"{{ env('SOCKET_HOST') }}",root:"{{url('/')}}",current_url:"{{url()->current()}}",auth:{{Auth::check() ? 1 : 0}},bearer:"{{str_random(50)}}",detect:{{Auth::check() && Auth::user()->isAdmin ? 'false' : 'true'}}};
+		const config = {
+			appName: "{{ env('APP_NAME') }}",
+			appVersion: "{{ env('APP_VERSION') }}",
+			maintainer: "{{ env('MAINTAINER') }}",
+			socketHost: "{{ env('SOCKET_HOST') }}",
+			root: "{{ url('/') }}",
+			currentUrl: "{{ url()->current() }}",
+			apiUrl: "{{ url('api') }}/{{ env('API_VERSION') }}",
+			auth: {{ Auth::check() ? 1 : 0 }},
+			bearer: "{{ str_random(50) }}",
+			bcrypt: "{{ bcrypt(str_random(50)) }}",
+			detect: {{ Auth::check() && Auth::user()->isAdmin ? 'false' : 'true' }}
+		};
+		@auth 
+		@endauth
 	</script>
 	<noscript>
 		<style type="text/css">
@@ -86,41 +99,15 @@
 	<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-database.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.2/dist/sweetalert2.all.min.js"></script>	
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-	<script src="{{ asset('js/vendor.min.js') }}"></script>
+	<script src="{{ mix('js/vendor.min.js') }}"></script>
 	<script>
-		var socket = io.connect(config.socketHost);
-		socket.on('notify-global',(data) => {
-			Swal.fire(data.title,data.message,data.type);
-		});
-		@if(Auth::check())
-			socket.on("notify-to-{{ Auth::id() }}",(data) => {
-				Swal.fire(data.title,data.message,data.type);
-			});
-			socket.on(`invite-to-pvp-{{ Auth::id() }}`,data => {
-				Swal.fire({
-					title: ``,
-					type: '',
-					showCancelButton: true,
-					showConfirmButton:true,
-					confirmButtonText: 'Không',
-					cancelButtonText: 'Chơi Luôn',
-					cancelButtonColor: '#f21378',
-					html: `${data.from.name} muốn thách đấu với bạn trong PVP Area`
-				}).then((result) => {
-					if(result.value) 
-					{
-						socket.emit('denied-invite-pvp',{
-							from:"{{ Auth::user()->name }}",
-							to:data.from.id,
-							channel:data.from.channel
-						});
-					} 
-					else if (result.dismiss === Swal.DismissReason.cancel) {
-						window.location.href = data.room;
-					}
-				});
-			});
-		@endif
+		@auth
+			const user = {
+				id: {{ Auth::id() }},
+				name: "{{ Auth::user()->name }}",
+				character: "{{ Auth::user()->character->name }}"
+			};
+		@endauth
 	</script>
 	@stack('js')
 	@if(session('message'))

@@ -142,7 +142,12 @@ class User extends Authenticatable
     }
     public function power()
     {
-        return $this->getPower();
+        $gearPower = $this->getGearsPower();
+        return collect($this->getPower())->map(function($each, $key) use($gearPower){
+            $raw = $each + $gearPower['raw'][$key];
+            $percentBonus = ($raw * $gearPower['percent'][$key])/100;
+            return $raw + $percentBonus;
+        });
     }
     public function getPower()
     {
@@ -158,20 +163,35 @@ class User extends Authenticatable
         $power = [];
         foreach($properties as $key => $property)
         {
-            $power[$key] = (((collect($this->usingPets())->sum($key) + $this->getGearsPower($key) + collect($this->usingGems())->sum($key) + ($this->stats()[$key] ?? 0) + ($this[$key])) * $property) * $this->relife());
+            $power[$key] = (((collect($this->usingPets())->sum($key) + collect($this->usingGems())->sum($key) + ($this->stats()[$key] ?? 0) + ($this[$key])) * $property) * $this->relife());
         }
         return collect($power);
     }
 
-    public function getGearsPower($key)
+    public function getGearsPower()
     {
-        $defaultDamage = 0;
-        $percentDamage = 0;
+        $properties = $percentPower = [
+            'health_points' => 0,
+            'strength' => 0,
+            'intelligent' => 0,
+            'agility' => 0,
+            'lucky' => 0,
+            'armor_strength' => 0,
+            'armor_intelligent' => 0
+        ];
+        $allPower = $this->getPower();
         foreach($this->usingGears() as $gear)
         {
-            $defaultDamage += $gear[$key]['default'] + ($gear[$key]['default'] * $gear[$key]['percent'])/100;
+            foreach($properties as $key => $property) 
+            {
+                $properties[$key] += $gear[$key]['default'];
+                $percentPower[$key] += $gear[$key]['percent'] ?? 0;
+            }
         }
-        return floor($defaultDamage);
+        return [
+            'raw' => $properties,
+            'percent' => $percentPower
+        ];
     }
     public function fullPower($id)
     {

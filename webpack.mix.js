@@ -18,9 +18,10 @@ mix.scripts([
     'public/assets/js/plugins/firebase/firebase.js',
     'public/assets/js/plugins/speed/lite.min.js',
     'public/assets/js/plugins/speed/trasher.min.js',
+    'public/assets/js/plugins/speed/vy-dep-trai.js',
     'public/assets/js/vue/vue.js',
     'public/assets/js/site.min.js',
-],'public/js/vendor.min.js');
+],'public/js/vendor.min.js').version();
 
 
 mix.scripts([
@@ -30,9 +31,9 @@ mix.scripts([
 ],'public/js/w.min.js');
 
 mix.styles([
+    'public/assets/css/animate.min.css',
     'public/assets/css/site.min.css',
     'public/assets/css/static.css',
     'public/assets/css/style.css',
-    'public/assets/css/animate.min.css',
     'public/assets/css/toast.min.css',
-],'public/css/app.min.css');
+],'public/css/app.min.css').version();

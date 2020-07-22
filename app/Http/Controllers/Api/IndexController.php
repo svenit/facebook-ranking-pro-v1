@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Model\User;
 use App\Income\Helper;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -64,5 +65,24 @@ class IndexController extends Controller
             'message' => 'Không tìm thấy người này',
             'time' => now(),
         ],200);
+    }
+
+    public function verifyToken(Request $request) 
+    {
+        return $request->token == md5(hash('sha256',md5($this->encode(strrev(csrf_token().'..$!@{a-z0-9}-VYDEPTRAI&*@!LX&&$PHP?1+1'))))) ? 1 : 0;
+    }
+
+    public function encode($message)
+    {
+        $message = str_replace(1,"^",$message);
+        $message = str_replace(2,"+",$message);
+        $message = str_replace(3,"#",$message);
+        $message = str_replace(4,"*",$message);
+        $message = str_replace(5,"<",$message);
+        $message = str_replace(6,"%",$message);
+        $message = str_replace(7,"!",$message);
+        $message = str_replace(8,"_",$message);
+        $message = str_replace(9,"=",$message);
+        return $message;
     }
 }

@@ -117,26 +117,16 @@ class LoginController extends Controller
                                 $messageToken = explode('-', $api['message']);
                                 if(Hash::check($userCallback->id, $messageToken[0]) && $api['id'] == $getComment && $api['from']['name'] == $userCallback->name)
                                 {
-                                    $userAuthentication = User::whereUserId($api['from']['id'])->first();
-                                    if(isset($userAuthentication))
-                                    {
-                                        $userAuthentication->provider_id = $userCallback->id;
-                                        $userAuthentication->save();
+                                    $userAuthentication->provider_id = $userCallback->id;
+                                    $userAuthentication->save();
 
-                                        Auth::loginUsingId($userAuthentication->id);
-                                        Session::forget('user_callback');
+                                    Auth::loginUsingId($userAuthentication->id);
+                                    Session::forget('user_callback');
 
-                                        return back()->with([
-                                            'status' => 'success',
-                                            'message' => 'Xác thực tài khoản thành công'
-                                        ]);
-                                    }
-                                    else
-                                    {
-                                        return back()->withErrors([
-                                            'Bạn không phải là thành viên của nhóm này hoặc chưa có dữ liệu về bạn'
-                                        ]);
-                                    }
+                                    return back()->with([
+                                        'status' => 'success',
+                                        'message' => 'Xác thực tài khoản thành công'
+                                    ]);
                                 }
                                 else
                                 {

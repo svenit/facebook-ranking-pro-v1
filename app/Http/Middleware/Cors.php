@@ -26,9 +26,10 @@ class Cors
                 {
                     $newToken = uniqid(Str::random(40));
                     Session::forget('_token');
-                    Session::put('_token',$newToken);
-                    return $next($request)->header('Authorization',$newToken)
-                        ->header('Token',Str::random(40))
+                    Session::put('_token', $newToken);
+                    return $next($request)->header('Authorization', $newToken)
+                        ->header('Cookie', request()->header('Cookie'))
+                        ->header('Token', Str::random(40))
                         ->header('Access-Control-Allow-Origin', env('APP_DOMAIN'))
                         ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
                 }

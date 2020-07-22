@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User\PVP;
 
 use App\Model\Room;
+use App\Model\User;
 use App\Model\Tracking;
 use App\Model\FightRoom;
 use Illuminate\Http\Request;
@@ -116,18 +117,6 @@ class PvPController extends Controller
                             ]);
                             if(isset($joinMatch))
                             {
-                                $data = [
-                                    'room' => [
-                                        'name' => $room,
-                                        'id' => $checkRoom->id
-                                    ],
-                                    'enemy' => [
-                                        'name' => Auth::user()->name,
-                                        'id' => Auth::id()
-                                    ],
-                                    'broadcast-to' => $findEnemy->user_challenge
-                                ];
-                                event(new PvPJoinedRoom($data));
                                 return redirect()->route('user.pvp.room',['id' => $checkRoom->name]);
                             }
                         }
@@ -167,17 +156,7 @@ class PvPController extends Controller
             if(isset($checkSession))
             {
                 $this->tracking(true);
-                $comments = [
-                    'Bỏ tay ra bạn <p>eeiiii..</p>', 
-                    'Đánh thế cũng <p>đánh</p>', 
-                    'Đm ví tao đâu :(', 
-                    'Mẹ ơi con <p>muốn về nhà :(</p>',
-                    'Ê có chap <p>mới rồi anh e</p>',
-                    'Anh ơi thằng <p>kia nhìn đểu</p>',
-                    'Đánh tay không <p>tao xem nào</p>',
-                    'Tải lại trang sẽ<p> làm bạn mất lượt'
-                ];
-                return view('user.pvp.fight',compact('room','checkRoom','checkSession', 'comments'));
+                return view('user.pvp.fight',compact('room','checkRoom','checkSession'));
             }
             else
             {

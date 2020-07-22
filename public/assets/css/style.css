@@ -694,20 +694,53 @@ div.table-responsive>div.dataTables_wrapper>div.row>div[class^="col-"]:last-chil
         display:none;
     }
 }
-.red-button {
+.s-button {
     display: inline-block;
-    width: 20rem!important;
-    height: 6rem!important;
+    width: 9rem!important;
+    height: 3rem!important;
     font-weight: 600;
-    font-size: 2rem!important;
-    line-height: 6.5rem!important;
+    line-height: 3rem!important;
     padding-right: 0!important;
     color: #fff;
     text-decoration: none;
     text-align: center;
     text-transform: uppercase;
     text-shadow: 0 0 0.85rem hsla(0,0%,100%,.4);
-    background: url(../assets/images/button-red.png) no-repeat!important;
-    background-size: cover!important;
+    background-size: cover !important;
     margin-left: 0!important;
+}
+
+.red-button {
+    background: url(../assets/images/button-red.png) no-repeat !important;
+    background-size: cover !important;
+}
+
+.green-button {
+    background: url(../assets/images/button-blue.png) no-repeat !important;
+    background-size: cover !important;
+    line-height: 3.5rem!important;
+}
+
+#SvgjsSvg1010 {
+    background-color: #101010 !important;
+}
+
+#fight-button {
+    background-image: url(../assets/images/button-red.png);
+}
+
+.up-to-down {
+    animation: upDown 1s infinite;
+}
+
+@keyframes upDown {
+    0% {
+        top: 0px;
+    }
+    50% {
+        top: -1px;
+    }
+    100% {
+        top: -1.5px;
+    }
 }

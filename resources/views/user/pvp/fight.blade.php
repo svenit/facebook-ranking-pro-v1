@@ -8,155 +8,133 @@
     <div class="padding-x">
         @include('user.theme.parameter')
         <div style="position:relative;top:-80px">
-            <center><img width="100%" style="width:200px;position: relative;top:40px;z-index:999;margin:0 auto" src="{{ asset('assets/images/app.png') }}"></center>
-            <center>
-                <div v-if="pvp.isMatching" style="width:200px;position: relative;top:40px;z-index:999;margin:0 auto">
-                    <div class="animated infinite heartBeat pixel-font text-warning">@{{ pvp.timeRemaining }}s</div>
+            <center><img width="100%" style="width:200px;position: relative;top:20px;z-index:999;margin:0 auto" src="{{ asset('assets/images/app.png') }}"></center>
+            <center v-if="pvp.match.status == 'FIGHTING'">
+                <div style="width:200px;border-bottom-left-radius:25px;border-bottom-right-radius:25px;background: #0b0e12;height:32px;position: relative;top:32px;z-index:999;margin:0 auto;border: 2px solid #936b37">
+                    <div class="pixel-font animated infinite heartBeat normal text-warning">@{{ moment(pvp.match.room.timeRemaining).format('mm:ss') }}</div>
                 </div>
             </center>
-            <div style="background-image:url('{{ asset('assets/images/icon-pack/pvp-background.png') }}') !important;background-position:center top !important;height:650px;background-attachment: fixed;" class="row vip-bordered">
-                <div style="position:absolute;bottom:0;z-index:999" class="pvp-button">
-                    <button id='fight-button' v-if="pvp.enemyJoined" style="width:300px" @click="toggleReady()" v-if="!pvp.isEnding && pvp.enemyJoined" class="vip-bordered" v-html="pvp.status"></button>
-                    <button id='fight-button' v-if="!pvp.isMatching && !pvp.enemyJoined && pvp.match.master == {{ Auth::id() }}" style="width:100px" id="trigger-invite" @click="searchPvpEnemy" data-toggle="modal" data-target="#invite" class="vip-bordered">Mời</button>
-                    <button id='fight-button' v-if="!pvp.isMatching && pvp.enemyJoined && pvp.match.master == {{ Auth::id() }}" style="width:100px" @click="kickEnemy()" class="vip-bordered">Kick</button>
-                    <button id='fight-button' style="width:100px;" v-if="pvp.enemyJoined"  data-toggle="modal" data-target=".modal-right-pvp" data-toggle-class="modal-open-aside" data-target="body" class="vip-bordered">Chat </button>
-                    <button id='fight-button' v-if="pvp.isMatching && pvp.match.you.turn == 1" style="width:100px" @click="turnOut()" class="vip-bordered">Bỏ Lượt</button>
-                    <button id='fight-button' v-if="!pvp.isMatching || pvp.isEnding" style="width:100px" @click="exitMatch()" class="vip-bordered">Thoát</button>
-                </div>
-                <div style="position:absolute;top:40%;left:10%;z-index:0;" class="pvp-button">
-                    <img style="width:60px;" src="{{ asset('assets/images/fire.gif') }}">
-                    <div class="shadow-pet" style="width: 70px;left: -10%;top: 60%;z-index: -1;"></div>
-                </div>
-                <div style="position:absolute;top:48%;right:5%;z-index:0;" class="pvp-button">
-                    <img style="width:150px;height:100px;" src="{{ asset('assets/images/stone.png') }}">
-                    <div class="shadow-pet" style="width: 110px;left: -5%;top: 80%;z-index: -1;"></div>
+            <div style="background-image:url('{{ asset('assets/images/pvp-bg-3.png') }}') !important;background-position:bottom !important;height:620px;background-repeat: no-repeat !important;background-position: bottom !important;background-size: cover !important;" class="row vip-bordered">
+                <div style="position:absolute;bottom:0;z-index:999;width:100%" class="pvp-button">
+                    <div class="row" v-if="pvp.match.status == 'CONNECT_ENEMY'">
+                        <div class="col-9">
+                            <div :class="`s-button red-button ${pvp.match.isReady ? '' : 'animated infinite pulse normal'}`" :style="{width:'300px', filter: pvp.match.isReady ? 'grayscale(1)' : 'hue-rotate(85deg)'}" @click="toggleReady()">@{{ pvp.match.isReady ? 'Cancel' : 'Ready' }}</div>
+                        </div>
+                        <div class="col-3">
+                            Chat
+                        </div>
+                    </div>
                 </div>
                 <div class="col-6 col-auto">
                     <div class="">
                         <div class="">
-                            <div @click="index()" :class="[pvp.yourAttack ? 'animated fadeOutRight' : '',pvp.yourBuff || pvp.enemyAttack ? 'animated shake' : '']" :style="{position:'absolute',bottom:`${data.pet ? '32%' : '28%'}`,right:'30%'}" title="Nhấp vào để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px" class="character-sprites hoverable">
-                                <span v-if="data.pet" style="z-index: 1" :class="`Mount_Body_${data.pet.class_tag}`"></span>
-                                <span style="z-index:2" class="skin_f5a76e"></span>
-                                <span style="z-index:2" class="broad_shirt_black"></span>
-                                <span style="z-index:2" class="head_0"></span>
+                            <div @click="index()" :style="{transform: 'scaleX(-1)',position:'absolute',bottom:`${data.pet ? '11%' : '5%'}`,right:'30%'}" title="Nhấp vào để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px" class="character-sprites hoverable">
+                                <span v-if="data.pet" style="z-index:1" :class="`Mount_Body_${data.pet.class_tag}`"></span>
+                                <span style="z-index:2" class="skin_f5a76e up-to-down"></span>
+                                <span style="z-index:2" class="broad_shirt_black up-to-down"></span>
+                                <span style="z-index:2" class="head_0 up-to-down"></span>
                                 <span class=""></span>
                                 <span v-for="(gear,index) in data.gears" :key="index">
-                                    <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="e" :style="{zIndex:gear.cates.z_index}"></span>
-                                    <span v-else :class="gear.class_tag" :style="{zIndex:gear.cates.z_index}"></span>
+                                    <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="`${e} ${gear.cates.animation} up-to-down`" :style="{zIndex:gear.cates.z_index}"></span>
+                                    <span v-else :class="`${gear.class_tag} ${gear.cates.animation} up-to-down`" :style="{zIndex:gear.cates.z_index}"></span>
                                 </span>
                                 <span v-if="data.pet" style="z-index:50" :class="`Mount_Head_${data.pet.class_tag}`"></span>
-                                <div :class="`${data.pet ? 'shadow-pet' : 'shadow-character'} animated infinite pulse`"></div>
-                                <div v-if="pvp.enemyAttack" :style="{backgroundImage:`url(${pvp.enemySkillAnimation})`,backgroundSize:'110%',position:'absolute',backgroundPosition:'center',width: '150%',height: '150%',bottom: `${data.pet ? '-60px' : '-20px'}`,left: 0,zIndex: '9999'}"></div>
-                                <div v-if="pvp.match.you.turn == 1 && pvp.isMatching" :class="`${data.pet ? 'has-pvp-turn-with-pet' : 'has-pvp-turn-no-pet'}`"></div>
-                                <div v-if="pvp.enemyAttackDamage" class="enemy-decrement-hp infinite animated slideOutUp pixel-font text-warning text-center slow">- @{{ numberFormatDetail(pvp.enemyAttackDamage) }} HP</div>
-                                <div v-if="pvp.enemyAttack" :class="`${data.pet ? 'has-pvp-broken-with-pet' : 'has-pvp-broken-no-pet'}`"></div>
-                                <div v-for="(effected, index) in pvp.yourEffected">
-                                    <div v-if="effected" :class="`${data.pet ? 'has-pvp-effect-with-pet' : 'has-pvp-effect-no-pet'} ${index}`" class="animated flash"></div>
-                                </div>
-                                <div v-for="(buff, index) in pvp.yourSkillBuff">
-                                    <div v-if="buff > 0" :class="`${data.pet ? 'has-pvp-effect-with-pet' : 'has-pvp-effect-no-pet'} ${index}`" class="animated flash infinite"></div>
-                                </div>
+                                <div :class="`${data.pet ? 'shadow-pet' : 'shadow-character'} animated slow infinite pulse`"></div>
+                                <div v-if="pvp.match.me.uid == pvp.match.room.turnIndex" :class="`${data.pet ? 'has-pvp-turn-with-pet' : 'has-pvp-turn-no-pet'}`"></div>
                             </div>
                         </div>
-                        <div style="margin-top:5px;" class="row" v-if="pvp.enemyJoined">
-                            <div class="col-12">
-                                <img class="avatar-bordered" :src="`http://graph.facebook.com/${pvp.match.you.infor.facebook_id}/picture?type=normal`">
-                                <p class="card-title text-gold">
-                                    @{{ pvp.match.you.infor.name }} ( @{{ pvp.match.you.infor.character.name }} )
-                                </p>
-                                <div class="progress no-bg mt-2 align-items-center circle" style="height:8px">
-                                    <div style="padding:5px" class="progress-bar progress-bar-striped progress-bar-animated circle gd-success" :style="{width:(pvp.match.you.hp/pvp.match.you.power.hp)*100 + '%'}">@{{ numberFormat(pvp.match.you.hp) }}/@{{ numberFormat(pvp.match.you.power.hp) }}</div>                        
-                                </div>
-                                <div class="progress no-bg mt-2 align-items-center circle" style="height:8px">
-                                    <div style="padding:5px" class="progress-bar circle gd-primary" :style="{width:(pvp.match.you.energy/pvp.match.you.power.energy)*100 + '%'}">@{{ numberFormat(pvp.match.you.energy) }}/@{{ numberFormat(pvp.match.you.power.energy)  }}</div>                        
+                        <div v-if="pvp.match.status == 'FIGHTING'" style="margin-top:5px;" class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-10 row" style="height:50px;padding: 0px;margin-left: 10px;border-bottom-right-radius: 50px;background:rgb(0,0,0,.8);border: 2px solid #936b37;border-top-left-radius: 25px;border-bottom-left-radius: 25px">
+                                <img class="circle col-auto" style="width:46px;height:46px;padding:0px" :src="`http://graph.facebook.com/${data.infor.facebook_id}/picture?type=normal`">
+                                <div class="col-9">
+                                    <div class="progress no-bg mt-2 align-items-center circle" style="height:8px;">
+                                        <div style="padding:5px;" :style="{width:(pvp.match.me.status.hp/pvp.match.me.playerInfo.power.hp)*100 + '%'}" class="progress-bar progress-bar-striped progress-bar-animated circle gd-success">@{{ numberFormat(pvp.match.me.status.hp) }}/@{{ numberFormat(pvp.match.me.playerInfo.power.hp) }}</div>                        
+                                    </div>
+                                    <div class="progress no-bg mt-2 align-items-center circle" style="height:8px">
+                                        <div style="padding:5px;" :style="{width:(pvp.match.me.status.energy/pvp.match.me.playerInfo.power.energy)*100 + '%'}" class="progress-bar circle gd-primary">@{{ numberFormat(pvp.match.me.status.energy) }}/@{{ numberFormat(pvp.match.me.playerInfo.power.energy) }}</div>                        
+                                    </div>
                                 </div>
                                 <br>
                             </div>
-                            <div class="col-12" v-if="pvp.isMatching">
+                            {{-- <div class="col-12">
                                 <div class="row row-sm">
-                                    <div style="z-index:1" v-for="(skill,index) in pvp.match.you.skills" :key="index" class="mr-2 col-auto">
-                                        <span :class="`avatar w-56 ${countdown !== 0 || pvp.match.you.energy < skill.energy ? 'loading not-allow' : ''}`" v-for="(countdown,index) in pvp.yourCountDown" v-if="skill.id == index" :key="index">
+                                    <div style="z-index:1" v-for="(skill,index) in pvp.match.me.playerInfo.skills" :key="index" class="mr-2 col-auto">
+                                        <span v-for="(countdown,index) in pvp.yourCountDown" v-if="skill.id == index" :class="`avatar w-56 ${countdown !== 0 || pvp.match.me.status.energy < skill.energy ? 'loading not-allow' : ''}`" :key="index">
                                             <img :style="{filter: pvp.match.you.turn == 1 && pvp.match.you.energy >= skill.energy && countdown == 0 ? '' : 'grayscale(100%)',position:'relative'}" @click="hit(skill)" width="100%" :src="skill.image" alt=".">
                                             <span v-if="countdown !== 0" class="pixel-font" style="position:absolute;left:43%;top:28%;color:#fff">@{{ countdown }}</span>
                                         </span>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
-                <div style="float:right" class="col-6 col-auto">
+                <div v-if="pvp.match.status == 'CONNECT_ENEMY' || pvp.match.status == 'FIGHTING'" style="float:right" class="col-6 col-auto">
                     <div class="">
-                        <div :class="[pvp.enemyAttack ? 'animated fadeOutLeft' : '',pvp.enemyBuff || pvp.yourAttack ? 'animated shake' : '']" class="character-sprites hoverable" v-if="pvp.enemyJoined && !pvp.isEnding" :style="{position:'absolute',bottom:`${pvp.match.enemy.pet ? '32%' : '28%'}`,left:'30%',zIndex:999}"  @click="showUserInfor(pvp.match.enemy.infor.facebook_id)" title="Nhấp vào để xem thông số" data-toggle="modal" data-target=".modal-right" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px">
-                            <span style="z-index: 1" v-if="pvp.match.enemy.pet" :class="`Mount_Body_${pvp.match.enemy.pet.class_tag}`"></span>
-                            <span style="z-index:2" class="skin_f5a76e"></span>
-                            <span style="z-index:2" class="broad_shirt_black"></span>
-                            <span style="z-index:2" class="head_0"></span>
+                        <div class="character-sprites hoverable" :style="{position:'absolute',bottom:`${pvp.match.enemy.playerInfo.pet ? '11%' : '5%'}`,left:'30%',zIndex:999,filter: (pvp.match.enemy.isReady || pvp.match.status == 'FIGHTING') && pvp.match.enemy.isConnect ? 'none' : 'grayscale(1)'}"  @click="showUserInfor(pvp.match.enemy.playerInfo.infor.facebook_id)" title="Nhấp vào để xem thông số" data-toggle="modal" data-target=".modal-right" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px">
+                            <span style="z-index: 1"  v-if="pvp.match.enemy.playerInfo.pet" :class="`Mount_Body_${pvp.match.enemy.playerInfo.pet.class_tag}`"></span>
+                            <span style="z-index:2" class="skin_f5a76e up-to-down"></span>
+                            <span style="z-index:2" class="broad_shirt_black up-to-down"></span>
+                            <span style="z-index:2" class="head_0 up-to-down"></span>
                             <span class=""></span>
-                            <span v-for="(gear,index) in pvp.match.enemy.gears" :key="index">
-                                <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="e" :style="{zIndex:gear.cates.z_index}"></span>
-                                <span v-else :class="gear.class_tag" :style="{zIndex:gear.cates.z_index}"></span>
+                            <span v-for="(gear,index) in pvp.match.enemy.playerInfo.gears" :key="index">
+                                <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="`${e} ${gear.cates.animation} up-to-down`" :style="{zIndex:gear.cates.z_index}"></span>
+                                <span v-else :class="`${gear.class_tag} ${gear.cates.animation} up-to-down`" :style="{zIndex:gear.cates.z_index}"></span>
                             </span>
-                            <span v-if="pvp.match.enemy.pet" style="z-index:50" :class="`Mount_Head_${pvp.match.enemy.pet.class_tag}`"></span>
-                            <div :class="`${pvp.match.enemy.pet ? 'shadow-pet' : 'shadow-character'} animated infinite pulse`"></div>
-                            <div v-if="pvp.yourAttack" :style="{backgroundImage:`url(${pvp.yourSkillAnimation})`,backgroundSize:'110%',position:'absolute',backgroundPosition:'center',width: '150%',height: '150%',bottom: `${pvp.match.enemy.pet ? '-60px' : '-20px'}`,left: 0,zIndex: '9999'}"></div>
-                            <div v-if="pvp.match.you.turn == 0 && pvp.isMatching" :class="`${pvp.match.enemy.pet ? 'has-pvp-turn-with-pet' : 'has-pvp-turn-no-pet'}`"></div>
+                            <span v-if="pvp.match.enemy.playerInfo.pet" style="z-index:50" :class="`Mount_Head_${pvp.match.enemy.playerInfo.pet.class_tag}`"></span>
+                            <div :class="`${pvp.match.enemy.playerInfo.pet ? 'shadow-pet' : 'shadow-character'} animated slow infinite pulse`"></div>
+                            <div v-if="pvp.match.enemy.isReady && pvp.match.status == 'CONNECT_ENEMY'" style="position: absolute; left:30%;text-shadow: 1px 1px 10px #333, 1px 1px 10px #333;top:-15%" class="animated tada infinite slower pixel-font text-warning text-center slow">READY!</div>
+                            <div v-if="!pvp.match.enemy.isConnect" style="position: absolute;top:-10%;font-size: 12px;filter: drop-shadow(2px 4px 6px black);" class="enemy-decrement-hp animated flash infinite slower pixel-font text-center slower">DISCONNECTED...</div>
+                            <div v-if="pvp.match.enemy.uid == pvp.match.room.turnIndex" :class="`${pvp.match.enemy.playerInfo.pet ? 'has-pvp-turn-with-pet' : 'has-pvp-turn-no-pet'}`"></div>
+                            {{-- <div v-if="pvp.yourAttack" :style="{backgroundImage:`url(${pvp.yourSkillAnimation})`,backgroundSize:'110%',position:'absolute',backgroundPosition:'center',width: '150%',height: '150%',bottom: `${pvp.match.enemy.playerInfo.pet ? '-60px' : '-20px'}`,left: 0,zIndex: '9999'}"></div>
                             <div v-if="pvp.yourAttackDamage" class="enemy-decrement-hp infinite animated slideOutUp pixel-font text-warning text-center slow">- @{{ numberFormatDetail(pvp.yourAttackDamage) }} HP</div>
-                            <div v-if="pvp.yourAttack" :class="`${pvp.match.enemy.pet ? 'has-pvp-broken-with-pet' : 'has-pvp-broken-no-pet'}`"></div>
+                            <div v-if="pvp.yourAttack" :class="`${pvp.match.enemy.playerInfo.pet ? 'has-pvp-broken-with-pet' : 'has-pvp-broken-no-pet'}`"></div>
                             <div v-for="(effected, index) in pvp.enemyEffected">
-                                <div v-if="effected" :class="`${pvp.match.enemy.pet ? 'has-pvp-effect-with-pet' : 'has-pvp-effect-no-pet'} ${index}`" class="animated flash"></div>
+                                <div v-if="effected" :class="`${pvp.match.enemy.playerInfo.pet ? 'has-pvp-effect-with-pet' : 'has-pvp-effect-no-pet'} ${index}`" class="animated flash"></div>
                             </div>
                             <div v-for="(buff, index) in pvp.enemySkillBuff">
-                                <div v-if="buff > 0" :class="`${pvp.match.enemy.pet ? 'has-pvp-effect-with-pet' : 'has-pvp-effect-no-pet'} ${index}`" class="animated flash infinite"></div>
-                            </div>
+                                <div v-if="buff > 0" :class="`${pvp.match.enemy.playerInfo.pet ? 'has-pvp-effect-with-pet' : 'has-pvp-effect-no-pet'} ${index}`" class="animated flash infinite"></div>
+                            </div> --}}
                         </div>
                         <div style="margin-top:5px;" class="row" v-if="pvp.enemyJoined">
                             <div class="col-12">
-                                <img style="float:right;margin-left:10px;" class="avatar-bordered" :src="`http://graph.facebook.com/${pvp.match.enemy.infor.facebook_id}/picture?type=normal`">
+                                <img style="float:right;margin-left:10px;" class="avatar-bordered" :src="`http://graph.facebook.com/${pvp.match.enemy.playerInfo.infor.facebook_id}/picture?type=normal`">
                                 <p style="text-align: right" class="card-title text-gold">
-                                    @{{ pvp.match.enemy.infor.name }} ( @{{ pvp.match.enemy.infor.character.name }} )
+                                    @{{ pvp.match.enemy.playerInfo.infor.name }} ( @{{ pvp.match.enemy.playerInfo.infor.character.name }} )
                                 </p>
                                 <div class="">
                                     <div class="progress no-bg mt-2 align-items-center circle" style="height:8px">
-                                        <div style="padding:5px" class="progress-bar circle gd-success" :style="{width:(pvp.match.enemy.hp/pvp.match.enemy.power.hp)*100 + '%'}">@{{ numberFormat(pvp.match.enemy.hp) }}/@{{ numberFormat(pvp.match.enemy.power.hp)  }}</div>                        
+                                        <div style="padding:5px" class="progress-bar circle gd-success" :style="{width:(pvp.match.enemy.playerInfo.hp/pvp.match.enemy.playerInfo.power.hp)*100 + '%'}">@{{ numberFormat(pvp.match.enemy.playerInfo.hp) }}/@{{ numberFormat(pvp.match.enemy.playerInfo.power.hp)  }}</div>                        
                                     </div>
                                     <div class="progress no-bg mt-2 align-items-center circle" style="height:8px">
-                                        <div style="padding:5px" class="progress-bar circle gd-primary" :style="{width:(pvp.match.enemy.energy/pvp.match.enemy.power.energy)*100 + '%'}">@{{ numberFormat(pvp.match.enemy.energy) }}/@{{ numberFormat(pvp.match.enemy.power.energy)  }}</div>                        
+                                        <div style="padding:5px" class="progress-bar circle gd-primary" :style="{width:(pvp.match.enemy.playerInfo.energy/pvp.match.enemy.playerInfo.power.energy)*100 + '%'}">@{{ numberFormat(pvp.match.enemy.playerInfo.energy) }}/@{{ numberFormat(pvp.match.enemy.playerInfo.power.energy)  }}</div>                        
                                     </div>
                                 </div>
                                 <br>
                             </div>
-                            <div class="col-12" v-if="pvp.isMatching">
+                            {{-- <div class="col-12" v-if="pvp.isMatching">
                                 <div style="float:right"  class="row row-sm text-right">
-                                    <div style="z-index:1;" v-for="(skill,index) in pvp.match.enemy.skills" :key="index" class="col-auto mr-2">
-                                        <span :class="`avatar w-56 ${countdown !== 0 || pvp.match.enemy.energy < skill.energy ? 'loading not-allow' : ''}`" v-for="(countdown,index) in pvp.enemyCountDown" v-if="skill.id == index" :key="index">
-                                            <img :style="{filter: pvp.match.enemy.turn == 1 && pvp.match.enemy.energy >= skill.energy && countdown == 0 ? '' : 'grayscale(100%)',position:'relative'}" @click="showSkillsDescription(skill)" :src="skill.image" alt=".">
+                                    <div style="z-index:1;" v-for="(skill,index) in pvp.match.enemy.playerInfo.skills" :key="index" class="col-auto mr-2">
+                                        <span :class="`avatar w-56 ${countdown !== 0 || pvp.match.enemy.playerInfo.energy < skill.energy ? 'loading not-allow' : ''}`" v-for="(countdown,index) in pvp.enemyCountDown" v-if="skill.id == index" :key="index">
+                                            <img :style="{filter: pvp.match.enemy.playerInfo.turn == 1 && pvp.match.enemy.playerInfo.energy >= skill.energy && countdown == 0 ? '' : 'grayscale(100%)',position:'relative'}" @click="showSkillsDescription(skill)" :src="skill.image" alt=".">
                                             <span v-if="countdown !== 0" class="pixel-font" style="position:absolute;left:43%;top:28%;color:#fff">@{{ countdown }}</span>
                                         </span>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                         
                     </div>
-                </div>
-                <div class="pvp-comment hide-in-mobile" style="width:300px;height:60px;top: 12%;left: 10%;">
-                    {!! $comments[rand(0,count($comments) - 1)] !!}
-                </div>
-                <div class="pvp-comment hide-in-mobile" style="width:300px;height:65px;top: 12%;right: 0%;">
-                    <span>
-                        {!! $comments[rand(0,count($comments) - 1)] !!}</p>
-                    </span>
                 </div>
             </div>
             <img style="width:100%;height:100%;position:relative;bottom:50px;z-index:0;" src="https://img.itch.zone/aW1nLzE1MTg1NTQuZ2lm/original/mc%2F7UB.gif">
         </div>
     </div>
-    <div style="display:none" class="preload-skills">
+    {{-- <div style="display:none" class="preload-skills">
         <div v-for="(skill,index) in pvp.match.you.skills" :key="index + 'you'" class="col-3">
             <img :src="skill.animation" alt=".">
         </div>
-        <div v-for="(skill,index) in pvp.match.enemy.skills" :key="index + 'enemy'" class="col-3">
+        <div v-for="(skill,index) in pvp.match.enemy.playerInfo.skills" :key="index + 'enemy'" class="col-3">
             <img :src="skill.animation" alt=".">
         </div>
     </div>
@@ -223,23 +201,19 @@
             </div>
             <!-- /.modal-content -->
         </div>
-    </div>
+    </div> --}}
 </div>
 @endsection
 @push('js')
 <script>
     var page = {
         room:{
-            name:"{{ Auth::user()->name }}",
-            me:parseInt("{{ Auth::id() }}"),
-            id:"{{ $checkRoom->name }}",
-            master:parseInt("{{ $checkRoom->user_create_id }}"),
-            is_fighting:parseInt("{{ $checkRoom->is_fighting }}"),
-            created_at:"{{ $checkRoom->created_at }}",
-            people:parseInt("{{ $checkRoom->people }}"),
-            is_ready:parseInt("{{ $checkSession->is_ready }}"),
+            userName: "{{ Auth::user()->name }}",
+            userId: parseInt("{{ Auth::id() }}"),
+            roomId: "{{ $checkRoom->name }}",
+            createdAt: "{{ $checkRoom->created_at }}",
         },
-        path:'pvp.room'
+        path: 'pvp.room'
     }
 </script>
 @endpush

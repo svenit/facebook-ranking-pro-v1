@@ -4,19 +4,22 @@
 @section('hero','Trang Chủ')
 @section('sub_hero',"Xin chào, $welcome")
 
-<div class="page-content page-container" id="page-content">
+<div style="height:100%" class="page-content page-container" id="page-content">
     <div class="padding-x">
-        <div style="overflow:auto" class="vip-bordered">
-            <table style="border: none;" cellspacing="0" cellpadding="0">
+        {{-- <div style="overflow:hidden;height:100%;position:relative" id="map-view" class="vip-bordered">
+            <div onclick="openFullscreen()" class="full-screen">Full</div>
+            <table style="border: none;height:auto;border-collapse: collapse;" cellspacing="0" valign="center" cellpadding="0">
                 <tbody>
                     <tr v-for="i in map.rows">
-                        <td style="width:90px;height:90px" v-for="j in map.cols" v-html="drawMap(map.data[i - 1][j - 1],i,j)" @click="moveToPosition(i,j)"></td>
+                        <td v-for="j in map.cols" v-html="drawMap(map.data[i - 1][j - 1],i,j)" :class="cloneMap[i - 1][j - 1].background" @click="moveToPosition(i,j)" :id="`map-${i}-${j}`" :style="{width:'60px',height:'60px',padding:0,position:cloneMap[i - 1][j - 1].relative ? 'relative' : ''}"></td>
                     </tr>
                 </tbody>
             </table>
-        </div>
+            <div class="entity" style="position:fixed;bottom:0%;left:0%;background:#fff;z-index:999">
+                1
+            </div>
+        </div> --}}
         @include('user.theme.parameter')
-        {{-- @include('user.theme.parameter')
         <div class="row row-sm sr">
             <div class="col-md-12 col-lg-12">
                 <div class="row row-sm">
@@ -116,7 +119,7 @@
             <div class="corner corner-top-right"></div> 
             <div class="corner corner-bottom-left"></div> 
             <div class="corner corner-bottom-right">
-        </div> --}}
+        </div>
     </div>
 </div>
 @endsection
