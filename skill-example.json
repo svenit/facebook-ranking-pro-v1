@@ -1,0 +1,179 @@
+{
+    "buffSkill": false,
+    "energy": 100,
+    "countDown": 2,
+    "damageRange": ["300", "400"],
+    "danamgeType": "number",
+    "damageBaseOn": "strength",
+    "setSelfTarget": {
+        "probability": 0,
+        "turn": 0
+    },
+    "clearAllCountDown": {
+        "probability": 0
+    },
+    "clearAllDebuff": {
+        "probability": 100
+    },
+    "stun": {
+        "probability": 50,
+        "turn": 2,
+        "animation": "stun"
+    },
+    "silient": {
+        "probability": 0,
+        "turn": 0,
+        "animation": "silient"
+    },
+    "passiveEffect": {
+        "available": [],
+        "decreDamageIn": {
+            "probability": 0,
+            "unit": 0,
+            "type": "percent",
+            "turn": 0,
+            "baseOn": "strength",
+            "animation": null
+        }
+    },
+    "selfSpecialEffect": {
+        "available": ["decreDamageIn"],
+        "decreDamageIn": {
+            "probability": 70,
+            "unit": 30,
+            "type": "percent",
+            "turn": 2,
+            "baseOn": "strength",
+            "animation": null
+        }
+    },
+    "selfEffect": {
+        "available": ["heal_points", "energy"],
+        "heal_points": {
+            "unit": 10,
+            "type": "percent",
+            "probability": 100,
+            "turn": 3, 
+            "animation": null
+        },
+        "energy": {
+            "unit": 5,
+            "type": "percent",
+            "probability": 100,
+            "turn": 3,
+            "animation": null
+        },
+        "strength": {
+            "unit": 0,
+            "type": "percent",
+            "probability": 0,
+            "turn": 0, 
+            "animation": null
+        },
+        "intelligent": {
+            "unit": 0,
+            "type": "percent",
+            "probability": 0,
+            "turn": 0,
+            "animation": null
+        },
+        "agility": {
+            "unit": 0,
+            "type": "percent",
+            "probability": 0,
+            "turn": 0,
+            "animation": null
+        },
+        "lucky": {
+            "unit": 0,
+            "type": "percent",
+            "probability": 0,
+            "turn": 0,
+            "animation": null
+        },
+        "armor_strength": {
+            "unit": 0,
+            "type": "percent",
+            "probability": 0,
+            "turn": 0,
+            "animation": null
+        },
+        "armor_intelligent": {
+            "unit": 0,
+            "type": "percent",
+            "probability": 0,
+            "turn": 0,
+            "animation": null
+        }
+    },
+    "enemySpecialEffect": {
+        "available": ["tickDamage"],
+        "tickDamage": {
+            "probability": 100,
+            "unit": 30,
+            "type": "percent",
+            "turn": 1,
+            "baseOn": "strength",
+            "animation": null
+        }
+    },
+    "enemyEffect": {
+        "available": [],
+        "heal_points": {
+            "unit": 0,
+            "type": "percent",
+            "probability": 0,
+            "turn": 0,
+            "animation": null
+        },
+        "energy": {
+            "unit": 0,
+            "type": "percent",
+            "probability": 0,
+            "turn": 0,
+            "animation": null
+        },
+        "strength": {
+            "unit": 0,
+            "type": "percent",
+            "probability": 0,
+            "turn": 0,
+            "animation": null
+        },
+        "intelligent": {
+            "unit": 0,
+            "type": "percent",
+            "probability": 0,
+            "turn": 0,
+            "animation": null
+        },
+        "agility": {
+            "unit": 0,
+            "type": "percent",
+            "probability": 0,
+            "turn": 0,
+            "animation": null
+        },
+        "lucky": {
+            "unit": 0,
+            "type": "percent",
+            "probability": 0,
+            "turn": 0,
+            "animation": null
+        },
+        "armor_strength": {
+            "unit": 0,
+            "type": "percent",
+            "probability": 0,
+            "turn": 2,
+            "animation": null
+        },
+        "armor_intelligent": {
+            "unit": 0,
+            "type": "percent",
+            "probability": 0,
+            "turn": 0,
+            "animation": null
+        }
+    }
+}

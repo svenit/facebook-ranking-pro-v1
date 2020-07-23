@@ -15,8 +15,9 @@ class IndexController extends Controller
     {
         $param = $param == 'profile' && Auth::check() ? Auth::id() : $param;
         $findUser = User::whereId($param)
-            ->orWhere('user_id',$param)
-            ->orWhere('name','LIKE',"%$param%")
+            ->orWhere('user_id', $param)
+            ->orWhere('provider_id', $param)
+            ->orWhere('name', 'LIKE', "%$param%")
             ->first();
 
         if(isset($findUser))
@@ -34,7 +35,7 @@ class IndexController extends Controller
                         'coins' => $helper->coins(),
                         'gold' => $helper->gold(),
                         'pvp_points' => $helper->user()->pvp_points,
-                        'facebook_id' => $helper->user()->user_id
+                        'provider_id' => $helper->user()->provider_id
                     ],
                     'rank' => [
                         'power' => $helper->rankPower()
@@ -54,7 +55,7 @@ class IndexController extends Controller
                     ],
                     'pet' => $helper->usingPets()->first(),
                     'gears' => $helper->usingGears(),
-                    'skills' => $helper->usingSkills()
+                    'skills' => Auth::id() == $findUser->id ? $helper->usingSkills() : []
                 ],200);                
             });
         }

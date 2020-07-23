@@ -53,8 +53,6 @@
 			bcrypt: "{{ bcrypt(str_random(50)) }}",
 			detect: {{ Auth::check() && Auth::user()->isAdmin ? 'false' : 'true' }}
 		};
-		@auth 
-		@endauth
 	</script>
 	<noscript>
 		<style type="text/css">

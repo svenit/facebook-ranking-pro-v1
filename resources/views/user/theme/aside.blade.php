@@ -16,7 +16,7 @@
             <div style="overflow:auto;height:200px" class="modal-body">
                 <div class="p-4">
                     <p class="pixel-font text-gold" style="text-align:center !important;">{{ isset(Auth::user()->config['rank']) ? Auth::user()->config['rank'] : 'ERROR' }} RANK</p>
-                    <div style="margin:0 auto;position:relative;left:-15px" class="character-sprites hoverable">
+                    <div style="margin:0 auto;position:relative;right:-15px;transform:scaleX(-1)" class="character-sprites hoverable">
                         <span v-if="data.pet" :class="`Mount_Body_${data.pet.class_tag}`"></span>
                         <span style="z-index:2" class="skin_f5a76e up-to-down"></span>
                         <span style="z-index:2" class="broad_shirt_black up-to-down"></span>
@@ -504,7 +504,7 @@
             </div>
             <div class="modal-body">
                 <div class="p-4 text-center">
-                    <div title="Nhấp vào để xem thông số" style="margin:0px 10px 35px 0px" class="character-sprites hoverable" :class="user.infor.vip ? 'vip-2' : ''">
+                    <div title="Nhấp vào để xem thông số" style="margin:0px 10px 35px 0px;position:relative" class="character-sprites hoverable">
                         <span v-if="user.pet" :class="`Mount_Body_${user.pet.class_tag}`"></span>
                         <span style="z-index:2" class="skin_f5a76e up-to-down"></span>
                         <span style="z-index:2" class="broad_shirt_black up-to-down"></span>
@@ -603,20 +603,6 @@
                     </div>
                     <div v-for="n in parseInt(8 - user.gears.length)" :key="n + Math.random(1,10)" style="margin-bottom:15px" class="col-3 d-flex">
                         <div class="flex hoverable">
-                            <div class="hoverable" :style="{width:'68px',height:'68px',borderRadius:'5px',border:'1px dashed #ccc',background:'#4e4e4e'}">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <p class="text-gold">Kỹ Năng</p>
-                <div class="row row-sm">
-                    <div v-for="(skill,index) in user.skills" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
-                        <div class="flex hoverable">
-                            <img title @click="showSkillsDescription(skill,0)" data-toggle="tooltip" :style="{borderRadius:'5px',width:'68px',height:'68px',border:`1px solid ${skill.rgb}`}" :src="skill.image">
-                        </div>
-                    </div>
-                    <div v-for="n in parseInt(4 - user.skills.length)" :key="n + Math.random(1,10)" style="margin-bottom:15px" class="col-3 d-flex">
-                        <div class="flex">
                             <div class="hoverable" :style="{width:'68px',height:'68px',borderRadius:'5px',border:'1px dashed #ccc',background:'#4e4e4e'}">
                             </div>
                         </div>

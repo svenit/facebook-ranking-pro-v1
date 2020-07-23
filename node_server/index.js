@@ -38,8 +38,8 @@ let intervalRooms = [];
 
 const defaultPvpConfig = {
     slot: 2, 
-    timeRemaining: 15 * 1000,
-    timePerTurn: 3000
+    timeRemaining: 60 * 1000,
+    timePerTurn: 5000
 }
 
 io.use(async (socket, next) => {
@@ -64,7 +64,7 @@ io.use(async (socket, next) => {
 let key = "let author = 'sven307';console.log(author);";
 
 function AESEncrypt(data) {
-    return CryptoJS.AES.encrypt(data, key).toString();
+    return btoa(CryptoJS.AES.encrypt(data, key).toString());
 };
 
 function AESEncryptJSON(data) {
@@ -72,11 +72,18 @@ function AESEncryptJSON(data) {
 };
 
 function AESDecrypt(data) {
-    return CryptoJS.AES.decrypt(data, key).toString(CryptoJS.enc.Utf8);
+    return CryptoJS.AES.decrypt(atob(data), key).toString(CryptoJS.enc.Utf8);
 }
 
 function AESDecryptJSON(data) {
     return JSON.parse(AESDecrypt(data));
+}
+
+function btoa(string) {
+    return new Buffer.from(string).toString('base64');
+}
+function atob(string) {
+    return new Buffer.from(string, 'base64').toString('ascii');
 }
 
 async function verifyToken({token, urlConfirm, cookieHeader}) {
@@ -99,7 +106,7 @@ function handleConnect(socket) {
         socket.name = name;
         users[socket.id] = socket;
     });
-    socket.on('joinPvpRoom', data => {
+    socket.on(btoa('joinPvpRoom'), data => {
         let { room, playerInfo } = AESDecryptJSON(data);
         const roomId = room.roomId;
         let player;
@@ -122,11 +129,11 @@ function handleConnect(socket) {
             if(pvpRooms[roomId].addPlayer(player)) {
                 socket.join(roomId);
                 if(pvpRooms[roomId].players.length == pvpRooms[roomId].slot) {
-                    socket.in(roomId).emit('listenPvp', AESEncryptJSON({
+                    socket.in(roomId).emit(btoa('listenPvp'), AESEncryptJSON({
                         room: pvpRooms[roomId], 
                         message: `Đã kết nối đến thợ săn [ ${player.playerInfo.infor.name} ]`
                     }));
-                    io.to(socket.id).emit('listenPvp', AESEncryptJSON({
+                    io.to(socket.id).emit(btoa('listenPvp'), AESEncryptJSON({
                         room: pvpRooms[roomId], 
                         message: `Đã kết nối đến thợ săn [ ${pvpRooms[roomId].otherPlayers(room.userId)[0].playerInfo.infor.name} ]`
                     }));
@@ -134,7 +141,7 @@ function handleConnect(socket) {
             }
         }
     });
-    socket.on('readyPvp', data => {
+    socket.on(btoa('readyPvp'), data => {
         let { room, status } = AESDecryptJSON(data);
         if(typeof(pvpRooms[room.roomId]) != 'undefined') {
             let joinedRoom = pvpRooms[room.roomId];
@@ -145,6 +152,7 @@ function handleConnect(socket) {
                     let otherPlayer = joinedRoom.otherPlayers(room.userId)[0];
                     if(otherPlayer.status.isReady && joinedRoom.players.length == joinedRoom.slot) {
                         /*  Start PVP */
+                        joinedRoom.setSocket(io.sockets.sockets);
                         joinedRoom.startPvp();
                         player.setStats();
                         otherPlayer.setStats();
@@ -152,12 +160,12 @@ function handleConnect(socket) {
                             room: pvpRooms[room.roomId], 
                             message: 'Bắt đầu trận đấu'
                         };
-                        io.in(room.roomId).emit('listenPvp', AESEncryptJSON(data));
+                        io.in(room.roomId).emit(btoa('listenPvp'), AESEncryptJSON(data));
                         /* Time count down */
                         intervalRooms[room.roomId] = setInterval(() => {
                             joinedRoom.timeRemaining -= 1000;
                             if(joinedRoom.timeRemaining >= 0) {
-                                io.in(room.roomId).emit('updatePvpRoom', AESEncryptJSON({
+                                io.in(room.roomId).emit(btoa('updatePvpRoom'), AESEncryptJSON({
                                     room: joinedRoom
                                 }));
                             }
@@ -170,12 +178,12 @@ function handleConnect(socket) {
                                     message: 'Trận đấu kết thúc',
                                     finishPvp: true
                                 };
-                                io.in(room.roomId).emit('listenPvp', AESEncryptJSON(data));
+                                io.in(room.roomId).emit(btoa('listenPvp'), AESEncryptJSON(data));
                             }
                         }, 1000);
                         return;
                     }
-                    socket.to(room.roomId).emit('listenPvp', AESEncryptJSON({
+                    socket.to(room.roomId).emit(btoa('listenPvp'), AESEncryptJSON({
                         room: pvpRooms[room.roomId], 
                         message: status ? 'Đối thủ đã sẵn sàng' : 'Đối thủ đã hủy sẵn sàng'
                     }));
@@ -213,7 +221,7 @@ function playerExitPvp(user, socket) {
                         delete players[userId];
                         delete users[socket.id];
                     }
-                    socket.to(roomId).emit('listenPvp', AESEncryptJSON({
+                    socket.to(roomId).emit(btoa('listenPvp'), AESEncryptJSON({
                         room: joinedRoom, 
                         message: `${name} đã rời trận`
                     }));

@@ -73,7 +73,6 @@ let status = {
     isReady: false,
     hp: 0,
     energy: 0, 
-    isStun: false,
     stunTurn: 0,
     stunType: null
 };

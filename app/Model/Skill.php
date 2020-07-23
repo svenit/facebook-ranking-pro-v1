@@ -28,6 +28,7 @@ class Skill extends Model
     protected $casts = [
         'effect_value' => 'array',
         'stat' => 'array',
+        'options' => 'array',
     ];
     protected $hidden = [
         'character_id','power_type','type','created_at','updated_at'

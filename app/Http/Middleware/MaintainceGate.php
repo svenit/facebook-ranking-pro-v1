@@ -4,7 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Model\Config;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class MaintainceGate
 {
@@ -18,6 +20,9 @@ class MaintainceGate
     public function handle($request, Closure $next)
     {
         $config = new Config();
+        $newToken = uniqid(Str::random(40));
+        Session::forget('_token');
+        Session::put('_token', $newToken);
         if(Auth::check() && Auth::user()->isAdmin)
         {
             return $next($request);

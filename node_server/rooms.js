@@ -12,6 +12,11 @@ let Room = function(id) {
     }
 
     let turnTimeout;
+    let socketServer;
+
+    self.setSocket = function(socket) {
+        socketServer = socket;
+    };
 
     self.newRoom = function({slot, timeRemaining, timePerTurn}) {
         self.slot = slot;
@@ -22,24 +27,35 @@ let Room = function(id) {
         self.timePerTurn = timePerTurn;
         self.players.map(player => player.remake());
         clearTimeout(turnTimeout);
-    }
+    };
 
     self.nextTurn = function() {
-        let currentTurn = self.currentTurn++;
-        let turn = currentTurn % self.players.length;
-        /* Next turn if player is stun */
-        if(self.players[turn].status.isStun) {
+        let turn = ++self.currentTurn % self.players.length;
+        /* Next turn if player is stunned or disconnected */
+        if(self.players[turn].status.stunTurn > 0 || !self.players[turn].isConnect || typeof(socketServer[self.players[turn].socketId]) == 'undefined') {
+            /* If the player is stunned, passing turn to other player */
+            if(self.players[turn].status.stunTurn > 0) {
+                --self.players[turn].status.stunTurn;
+            }
+            /* If cannot connect to player, set player status is disconnected */
+            self.players[turn].isConnect = typeof(socketServer[self.players[turn].socketId]) != 'undefined';
             return self.nextTurn();
         }
         self.turnIndex = self.players[turn].uid;
+        /* Decrement turn countdown of skill per turn */
+        self.players[turn].playerInfo.skills.map(skill => {
+            if(skill.options.currentCountDown > 0) {
+                --skill.options.currentCountDown;
+            }
+        });
         self.triggerTimeOut();
-    }
+    };
 
     self.triggerTimeOut = function() {
         turnTimeout = setTimeout(() => {
             self.nextTurn();
         }, self.timePerTurn);
-    }
+    };
 
     self.startPvp = function() {
         self.isFighting = true;
@@ -50,10 +66,12 @@ let Room = function(id) {
                 max = self.players[i].playerInfo.power.agility;
                 turnIndex = self.players[i].uid;
             }
+            /* Remake all countdown skill */
+            self.players[i].playerInfo.skills.map(skill => skill.options.currentCountDown = 0);
         }
         self.turnIndex = turnIndex;
         self.triggerTimeOut();
-    }
+    };
     
     self.removePlayer = function(uid) {
         for(let i in self.players)
@@ -62,7 +80,7 @@ let Room = function(id) {
                 self.players.splice(i, 1);
             }
         }
-    }
+    };
     
     self.addPlayer = function(player) {
         let { players, slot } = self;
@@ -81,15 +99,15 @@ let Room = function(id) {
             return true;
         }
         return false;
-    }
+    };
 
     self.otherPlayers = function(uid) {
         return self.players.filter(item => item.uid != uid);
-    }
+    };
 
     self.findPlayer = function(uid) {
         return self.players.filter(item => item.uid == uid);
-    }
+    };
 
     return self;
 }

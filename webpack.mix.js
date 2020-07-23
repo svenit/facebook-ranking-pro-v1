@@ -28,7 +28,7 @@ mix.scripts([
     'public/assets/js/wheel/throw.min.js',
     'public/assets/js/wheel/wheel.js',
     'public/assets/js/wheel/index.js',
-],'public/js/w.min.js');
+],'public/js/w.min.js').version();
 
 mix.styles([
     'public/assets/css/animate.min.css',

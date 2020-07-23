@@ -50,7 +50,7 @@ class LoginController extends Controller
 
         if(isset($userAuthentication))
         {
-            if($userAuthentication->status == 1)
+            if($userAuthentication->status)
             {
                 Auth::loginUsingId($userAuthentication->id,TRUE);
                 return redirect()->route('user.index')->with([

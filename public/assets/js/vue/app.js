@@ -70,7 +70,7 @@
                         reactions: 0,
                         comments: 0
                     },
-                    facebook_id: "0",
+                    provider_id: "0",
                     active: "",
                     pvp_points: 0
                 },
@@ -117,7 +117,7 @@
                         reactions: 0,
                         comments: 0
                     },
-                    facebook_id: "0",
+                    provider_id: "0",
                     active: ""
                 },
                 rank: {
@@ -234,12 +234,13 @@
             this.flash = false;
         },
         updated() {
-            // if (config.detect) {
-            //     window.addEventListener('devtoolschange', event => {
-            //         this.detect = event.detail.isOpen;
-            //     });
-            //     this.detect = window.devtools.isOpen;
-            // }
+            if (config.detect) {
+                window.addEventListener('devtoolschange', event => {
+                    this.detect = event.detail.isOpen;
+                });
+                this.detect = window.devtools.isOpen;
+                console.log(this.detect);
+            }
         },
         watch: {
             'wheel.spinning'() {
@@ -271,6 +272,7 @@
                         this.socket = io.connect(config.socketHost, {
                             query: `tokenKey=${tokenKey}&urlConfirm=${config.apiUrl}&ref=${ref}`
                         });
+                        io = `Xin chào ${user.name}!, Có vẻ như bạn đang cố tìm kiếm lỗ hổng bảo mật trong website của mình, do game được phát hành miễn phí nên mong ${user.name} có thể hợp tác report bugs cho mình thay vì tìm lỗ hổng để hack cho bản thân. Cảm ơn!`;
                         this.socket.emit('onConnection', this.AESEncryptJSON(user));
                     }
                     this.data = res.data;
@@ -282,13 +284,13 @@
             },
 
             AESEncrypt(data) {
-                return VyDepTrai.AES.encrypt(data, this.author).toString();
+                return btoa(VyDepTrai.AES.encrypt(data, this.author).toString());
             },
             AESEncryptJSON(data) {
                 return this.AESEncrypt(JSON.stringify(data));
             },
             AESDecrypt(data) {
-                return VyDepTrai.AES.decrypt(data, this.author).toString(VyDepTrai.enc.Utf8);
+                return VyDepTrai.AES.decrypt(atob(data), this.author).toString(VyDepTrai.enc.Utf8);
             },
             AESDecryptJSON(data) {
                 return JSON.parse(this.AESDecrypt(data));
@@ -325,21 +327,14 @@
                 this.loading = false;
             },
             async pvpRoom() {
-                this.socket.emit('joinPvpRoom', this.AESEncryptJSON({room: page.room, playerInfo: this.data}));
-                this.socket.on('listenPvp', data => {
+                this.socket.emit(btoa('joinPvpRoom'), this.AESEncryptJSON({room: page.room, playerInfo: this.data}));
+                this.socket.on(btoa('listenPvp'), data => {
                     if(data != 'undefined') {
-                        let { otherPlayer, room, message, finishPvp } = this.AESDecryptJSON(data);
+                        let { room, message, finishPvp } = this.AESDecryptJSON(data);
+                        console.log(room);
                         if(room.id == page.room.roomId) {
                             if(room.players.length == room.slot) {
-                                room.players.filter((player, key) => {
-                                    if(player.uid == page.room.userId) {
-                                        this.pvp.match.me = player;
-                                    }
-                                    else {
-                                        this.pvp.match.enemy = player;
-                                        this.pvp.match.enemy.isReady = player.status.isReady;
-                                    }
-                                });
+                                this.setPlayerInRoom(room);
                                 this.pvp.match.status = 'CONNECT_ENEMY';
                             }
                             else {
@@ -360,14 +355,26 @@
                         }
                     }
                 });
-                this.socket.on('updatePvpRoom', data => {
+                this.socket.on(btoa('updatePvpRoom'), data => {
                     let { room } = this.AESDecryptJSON(data);
                     console.log(room);
+                    this.setPlayerInRoom(room);
                     this.pvp.match.room = room;
                 });
             },
+            setPlayerInRoom(room) {
+                room.players.filter((player, key) => {
+                    if(player.uid == page.room.userId) {
+                        this.pvp.match.me = player;
+                    }
+                    else {
+                        this.pvp.match.enemy = player;
+                        this.pvp.match.enemy.isReady = player.status.isReady;
+                    }
+                });
+            },
             toggleReady() {
-                this.socket.emit('readyPvp', this.AESEncryptJSON({room: page.room, status: !this.pvp.match.isReady}));
+                this.socket.emit(btoa('readyPvp'), this.AESEncryptJSON({room: page.room, status: !this.pvp.match.isReady}));
                 this.pvp.match.isReady = !this.pvp.match.isReady;
             },
             sendPvpMessage() {
@@ -447,9 +454,9 @@
                     showCancelButton: permission ? true : false,
                     showConfirmButton: permission ? true : false,
                     confirmButtonText: permission && data.pivot.status == 1 ? 'Gỡ' : 'Sử Dụng',
-                    cancelButtonText: 'Vứt',
+                    cancelButtonText: '<i class="fa fa-trash"></i>',
                     cancelButtonColor: '#f21378',
-                    html: `<p>[ ${data.name} - ${data.passive == 1 ? 'Bị động' : 'Chủ động'} ] <p/><p>( ${skillName} )</p> <p>${data.description} </p> <p>Yêu cầu cấp độ : ${data.required_level} </p> <p>MP : ${data.energy} </p> <p>Tỉ lệ thành công : ${data.success_rate}% </p>`
+                    html: `<p>[ ${data.name} - ${skillName} - Lv: ${data.required_level} ] <p/><div class="text-warning text-sm">${data.description} </div>`
                 }).then((result) => {
                     if (result.value) {
                         switch (data.pivot.status) {

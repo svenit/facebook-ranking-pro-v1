@@ -60,18 +60,6 @@ class BaseController extends Controller
                     if(isset($leaveRoom,$target,$updateMaster))
                     {
                         $this->removeTracking();
-                        $data = [
-                            'room' => [
-                                'name' => $room->name,
-                                'id' => $room->id
-                            ],
-                            'data' => [
-                                'message' => 'Đối thủ đã rời, bạn trở thành chủ phòng'
-                            ],
-                            'broadcast_to' => $target->user_challenge,
-                            'is_master' => 1
-                        ];
-                        event(new PvPExitMatch($data));
                         $response = [
                             'code' => 200,
                             'msg' => 'Đã thoát',
@@ -86,18 +74,6 @@ class BaseController extends Controller
                     if(isset($leaveRoom))
                     {
                         $this->removeTracking();
-                        $data = [
-                            'room' => [
-                                'name' => $room->name,
-                                'id' => $room->id
-                            ],
-                            'data' => [
-                                'message' => 'Đối thủ đã rời phòng'
-                            ],
-                            'broadcast_to' => $target->user_challenge,
-                            'is_master' => 0
-                        ];
-                        event(new PvPExitMatch($data));
                         $response = [
                             'code' => 200,
                             'msg' => 'Đã thoát',
@@ -108,81 +84,6 @@ class BaseController extends Controller
                 }
             }
         }
-    }
-    public function toggleReady(Request $request)
-    {
-        $room = Room::where([['name',$request->room],['people',2],['is_fighting',0]])->first();
-        if(isset($room))
-        {
-            if(Auth::user()->energy >=  $this->wasteEnergy && Auth::user()->pvp_times > 0)
-            {
-                $toggleReady = FightRoom::where([['room_id',$room->id],['user_challenge',Auth::id()],['user_receive_challenge',null]])->update([
-                    'is_ready' => $request->status == 1 ? 1 : 0,
-                    'status' => null,
-                    'turn' => 0
-                ]);
-                if(isset($toggleReady))
-                {
-                    return response()->json([
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => $request->status == 1 ? 'Sẵn sàng' : 'Đã hủy'
-                    ],200);
-                }
-                else
-                {
-                    return response()->json([
-                        'status' => 'error',
-                        'code' => 404,
-                        'message' => 'Đã có lỗi xảy ra'
-                    ],201);
-                }
-            }
-            return response()->json([
-                'status' => 'error',
-                'code' => 404,
-                'message' => 'Bạn không đủ sức khỏe hoặc lượt tham gia PVP'
-            ],201);
-        }
-        else
-        {
-            return response()->json([
-                'status' => 'error',
-                'code' => 404,
-                'message' => 'Không tìm thấy phòng'
-            ],201);
-        }
-    }
-    public function pvpRestart($id,$win = null)
-    {
-        $enemy = FightRoom::where([['room_id',$id],['user_challenge','!=',Auth::id()]])->first();
-        Room::whereId($id)->update([
-            'is_fighting' => 0
-        ]);
-        FightRoom::where([['user_challenge',Auth::id()],['room_id',$id]])->update([
-            'user_challenge_hp' => Auth::user()->power()['health_points'],
-            'user_challenge_energy' => Auth::user()->character->default_energy,
-            'turn' => 0,
-            'user_receive_challenge' => null,
-            'status' => $win ? 2 : null,
-            'is_ready' => 0,
-            'buff' => null,
-            'countdown_skill' => null,
-            'effected' => null,
-            'check_status' => 0
-        ]);
-        FightRoom::where([['user_challenge',$enemy->user_challenge],['room_id',$id]])->update([
-            'user_challenge_hp' => User::findOrFail($enemy->user_challenge)->power()['health_points'],
-            'user_challenge_energy' => User::findOrFail($enemy->user_challenge)->character->default_energy,
-            'turn' => 0,
-            'user_receive_challenge' => null,
-            'status' => $win ? 1 : null,
-            'is_ready' => 0,
-            'buff' => null,
-            'countdown_skill' => null,
-            'effected' => null,
-            'check_status' => 0
-        ]);
     }
 
     public function kickEnemy(Request $request)
