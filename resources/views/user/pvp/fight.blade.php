@@ -52,10 +52,10 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div style="position: absolute;height:5px;right:33%;width:100px;background:rgb(0,0,0,.5) !important;padding:5px 0px;bottom:32%" class="progress no-bg mt-2 align-items-center circle">
+                                    <div style="position: absolute;height:5px;right:34%;width:100px;background:rgb(0,0,0,.5) !important;padding:5px 0px;bottom:32%" class="progress no-bg mt-2 align-items-center circle">
                                         <div :style="{padding:'5px 0px',width:(pvp.match.me.status.hp/pvp.match.me.playerInfo.power.hp)*100 + '%'}" class="progress-bar progress-bar-striped progress-bar-animated circle gd-warning">@{{ numberFormat(pvp.match.me.status.hp) }}/@{{ numberFormat(pvp.match.me.playerInfo.power.hp) }}</div>                        
                                     </div>
-                                    <div style="position: absolute;height:5px;right:33%;width:100px;background:rgb(0,0,0,.5) !important;padding:5px 0px;bottom:30%" class="progress no-bg mt-2 align-items-center circle">
+                                    <div style="position: absolute;height:5px;right:34%;width:100px;background:rgb(0,0,0,.5) !important;padding:5px 0px;bottom:30%" class="progress no-bg mt-2 align-items-center circle">
                                         <div :style="{padding:'5px 0px',width:(pvp.match.me.status.energy/pvp.match.me.playerInfo.power.energy)*100 + '%'}" class="progress-bar progress-bar-striped progress-bar-animated circle gd-info">@{{ numberFormat(pvp.match.me.status.energy) }}/@{{ numberFormat(pvp.match.me.playerInfo.power.energy) }}</div>                        
                                     </div>
                                 </div>
@@ -103,7 +103,7 @@
                             </div> --}}
                         </div>
                         <div v-if="pvp.match.status == 'FIGHTING'">
-                            <div :style="{position: 'absolute', bottom: `${(35 + pvp.match.enemy.effectAnimation.length/6)}%`, right: '30%',width:'150px'}" class="animated flash normal row skill-effect">
+                            <div :style="{position: 'absolute', bottom: `${(35 + pvp.match.enemy.effectAnimation.length/6)}%`, left: '30%',width:'150px'}" class="animated flash normal row skill-effect">
                                 <div v-if="pvp.match.status == 'FIGHTING' && pvp.match.target == pvp.match.enemy.playerInfo.infor.uid">
                                     <img class="col-auto pixel up-to-down" style="width:25px;padding:0;transform:rotate(90deg) translate(0%, -200%);filter: hue-rotate(300deg);margin:0 auto" src="{{ asset('assets/images/target.png') }}">
                                 </div>
@@ -112,10 +112,10 @@
                                 </div>
                             </div>
                             <div>
-                                <div style="position: absolute;height:5px;right:35%;width:100px;background:rgb(0,0,0,.5) !important;padding:5px 0px;bottom:32%" class="progress no-bg mt-2 align-items-center circle">
+                                <div style="position: absolute;height:5px;left:32%;width:100px;background:rgb(0,0,0,.5) !important;padding:5px 0px;bottom:32%" class="progress no-bg mt-2 align-items-center circle">
                                     <div :style="{padding:'5px 0px',width:(pvp.match.enemy.status.hp/pvp.match.enemy.playerInfo.power.hp)*100 + '%'}" class="progress-bar progress-bar-striped progress-bar-animated circle gd-warning">@{{ numberFormat(pvp.match.enemy.status.hp) }}/@{{ numberFormat(pvp.match.enemy.playerInfo.power.hp) }}</div>                        
                                 </div>
-                                <div style="position: absolute;height:5px;right:35%;width:100px;background:rgb(0,0,0,.5) !important;padding:5px 0px;bottom:30%" class="progress no-bg mt-2 align-items-center circle">
+                                <div style="position: absolute;height:5px;left:32%;width:100px;background:rgb(0,0,0,.5) !important;padding:5px 0px;bottom:30%" class="progress no-bg mt-2 align-items-center circle">
                                     <div :style="{padding:'5px 0px',width:(pvp.match.enemy.status.energy/pvp.match.enemy.playerInfo.power.energy)*100 + '%'}" class="progress-bar progress-bar-striped progress-bar-animated circle gd-info">@{{ numberFormat(pvp.match.enemy.status.energy) }}/@{{ numberFormat(pvp.match.enemy.playerInfo.power.energy) }}</div>                        
                                 </div>
                             </div>

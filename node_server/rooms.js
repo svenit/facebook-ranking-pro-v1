@@ -1,3 +1,5 @@
+const Util = require('./util');
+
 let Room = function(id) {
     var self = {
         id,
@@ -13,9 +15,11 @@ let Room = function(id) {
     }
 
     let turnTimeout;
+    let ioServer;
     let socketServer;
 
-    self.setSocket = function(socket) {
+    self.setSocketIo = function({io, socket}) {
+        ioServer = io;
         socketServer = socket;
     };
 
@@ -30,13 +34,35 @@ let Room = function(id) {
         clearTimeout(turnTimeout);
     };
 
+    self.clearTurn = function() {
+        clearTimeout(turnTimeout);
+    };
+
     self.nextTurn = function() {
         let turn = self.currentTurn++ % self.playerSetTurn.length;
         let player = self.findPlayer(self.playerSetTurn[turn].uid);
         if(typeof(player[0]) != 'undefined') {
             player = player[0];
+            /* Decrement turn countdown of skill per turn */
+            player.playerInfo.skills.map(skill => {
+                if(skill.options.currentCoolDown > 0) {
+                    --skill.options.currentCoolDown;
+                }
+            });
+            /* Decrement effect turn */
+            let playerEffects = Object.keys(player.selfEffect);
+            for(let i in playerEffects) {
+                let { animation } = player.selfEffect[playerEffects[i]];
+                let turn = --player.selfEffect[playerEffects[i]].turn;
+                if(turn == 0) {
+                    player.removeSkillEffect(animation);
+                    delete player.selfEffect[playerEffects[i]];
+                }
+            }
+            /* Increment energy */
+            player.status.energy += player.status.energy == player.playerInfo.power.energy ? 0 : 20;
             /* Next turn if player is stunned or disconnected */
-            if(player.status.stun.turn > 0 || !player.isConnect || typeof(socketServer[player.socketId]) == 'undefined') {
+            if(player.status.stun.turn > 0 || !player.isConnect || typeof(ioServer.sockets.sockets[player.socketId]) == 'undefined') {
                 /* If the player is stunned, passing turn to other player */
                 if(player.status.stun.turn > 0) {
                     --player.status.stun.turn;
@@ -46,12 +72,10 @@ let Room = function(id) {
                 return self.nextTurn();
             }
             self.turnIndex = player.uid;
-            /* Decrement turn countdown of skill per turn */
-            player.playerInfo.skills.map(skill => {
-                if(skill.options.currentCoolDown > 0) {
-                    --skill.options.currentCoolDown;
-                }
-            });
+            ioServer.to(player.socketId).emit(Util.btoa('listenPvp'), Util.AESEncryptJSON({
+                room: self,
+                message: 'Đến lượt của bạn'
+            }));
             self.triggerTimeOut();
         }
     };

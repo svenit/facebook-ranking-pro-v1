@@ -3,7 +3,7 @@
     "energy": 100,
     "coolDown": 2,
     "damageRange": ["300", "400"],
-    "danamgeType": "number",
+    "damageType": "number",
     "damageBaseOn": "strength",
     "backgroundAnimation": "dark",
     "setSelfTarget": {
@@ -49,19 +49,19 @@
         }
     },
     "selfEffect": {
-        "available": ["heal_points", "energy"],
-        "heal_points": {
+        "available": ["hp", "energy"],
+        "hp": {
             "unit": 10,
             "type": "percent",
-            "probability": 100,
-            "turn": 3, 
+            "probability": 30,
+            "turn": 2, 
             "animation": "buff-hp"
         },
         "energy": {
             "unit": 5,
             "type": "percent",
             "probability": 100,
-            "turn": 3,
+            "turn": 1,
             "animation": "buff-mana"
         },
         "strength": {
@@ -120,7 +120,7 @@
     },
     "enemyEffect": {
         "available": [],
-        "heal_points": {
+        "hp": {
             "unit": 0,
             "type": "percent",
             "probability": 0,

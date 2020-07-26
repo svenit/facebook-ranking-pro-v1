@@ -452,7 +452,7 @@
                     return;
                 }
                 if(skill.options.currentCoolDown > 0) {
-                    this.notify('Kỹ năng chưa hồi');
+                    this.notify('Kỹ năng chưa hồi!');
                     return;
                 }
                 this.socket.emit(btoa('fightSkill'), this.AESEncryptJSON({

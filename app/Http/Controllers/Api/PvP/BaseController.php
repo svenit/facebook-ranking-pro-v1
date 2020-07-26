@@ -92,12 +92,7 @@ class BaseController extends Controller
         if($room->exists())
         {
             $enemy = FightRoom::where([['room_id',$room->first()->id],['user_challenge','!=',Auth::id()]])->first();
-            $data = [
-                'room' => $room->first()->name,
-                'broadcast-to' => $enemy->user_challenge
-            ];
             $enemy->delete();
-            event(new PvPKickEnemy($data));
             return response()->json([
                 'status' => 'success',
                 'code' => 200,
