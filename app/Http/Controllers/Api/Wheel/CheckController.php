@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api\Wheel;
 
+use Session;
+use App\Services\Crypto;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Session;
 
 class CheckController extends Controller
 {
@@ -22,23 +23,23 @@ class CheckController extends Controller
                 if(isset($paid))
                 {
                     Session::put('spinning',true);
-                    return response()->json([
+                    return response()->json(Crypto::encrypt([
                         'code' => 200,
                         'status' => 'success',
                         'message' => 'OK'
-                    ],200);
+                    ]),200);
                 }
             }
-            return response()->json([
+            return response()->json(Crypto::encrypt([
                 'code' => 500,
                 'status' => 'error',
                 'message' => 'Bạn không đủ vàng'
-            ]);
+            ]));
         }
-        return response()->json([
+        return response()->json(Crypto::encrypt([
             'code' => 500,
             'status' => 'error',
             'message' => 'Không tìm thấy mã kết nối, vui lòng thử lại'
-        ]); 
+        ])); 
     }
 }

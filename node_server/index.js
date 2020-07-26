@@ -100,7 +100,7 @@ async function verifyToken({token, urlConfirm, cookieHeader}) {
 io.on('connection', handleConnect);
 
 function handleConnect(socket) {
-    socket.on('onConnection', data => {
+    socket.on(btoa('onConnection'), data => {
         let { id, name } = AESDecryptJSON(data);
         socket.userId = id;
         socket.name = name;
@@ -111,7 +111,7 @@ function handleConnect(socket) {
         const roomId = room.roomId;
         let player;
         if(typeof(players[room.userId]) == 'undefined') {
-            player = new Player({uid: room.userId, playerInfo, roomId});
+            player = new Player({uid: room.userId, team: room.userId, playerInfo, roomId});
             players[room.userId] = player;
         }
         else {
@@ -156,11 +156,10 @@ function handleConnect(socket) {
                         joinedRoom.startPvp();
                         player.setStats();
                         otherPlayer.setStats();
-                        let data = {
+                        io.in(room.roomId).emit(btoa('listenPvp'), AESEncryptJSON({
                             room: pvpRooms[room.roomId], 
                             message: 'Bắt đầu trận đấu'
-                        };
-                        io.in(room.roomId).emit(btoa('listenPvp'), AESEncryptJSON(data));
+                        }));
                         /* Time count down */
                         intervalRooms[room.roomId] = setInterval(() => {
                             joinedRoom.timeRemaining -= 1000;
@@ -190,6 +189,10 @@ function handleConnect(socket) {
                 }
             }
         }
+    });
+    socket.on(btoa('fightSkill'), data => {
+        let { room, user, target, skill } = AESDecryptJSON(data);
+        
     });
     socket.on('error', function (err) {
         console.log(err);

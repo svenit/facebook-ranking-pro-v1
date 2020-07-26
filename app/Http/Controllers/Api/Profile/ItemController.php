@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Profile;
 
 use App\Model\UserItem;
+use App\Services\Crypto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -17,7 +18,7 @@ class ItemController extends Controller
     }
     public function __invoke()
     {
-        return response()->json(Auth::user()->items,200);
+        return response()->json(Crypto::encrypt(Auth::user()->items),200);
     }
     public function use(Request $request)
     {
@@ -30,11 +31,11 @@ class ItemController extends Controller
         ]);
         if($validate->fails())
         {
-            return response()->json([
+            return response()->json(Crypto::encrypt([
                 'code' => 500,
                 'status' => 'error',
                 'message' => $validate->errors()->first()
-            ],200);
+            ]),200);
         }
         else
         {
@@ -109,7 +110,7 @@ class ItemController extends Controller
                     'message' => 'Vật phẩm không tồn tại'
                 ];
             }
-            return response()->json($response,200);
+            return response()->json(Crypto::encrypt($response),200);
         }
     }
     public function removeItem($item, $quantity)
@@ -134,11 +135,11 @@ class ItemController extends Controller
         ]);
         if($validate->fails())
         {
-            return response()->json([
+            return response()->json(Crypto::encrypt([
                 'code' => 500,
                 'status' => 'error',
                 'message' => $validate->errors()->first()
-            ],200);
+            ]),200);
         }
         else
         {
@@ -160,7 +161,7 @@ class ItemController extends Controller
                     'message' => 'Vật phẩm không tồn tại'
                 ];
             }
-            return response()->json($response,200);
+            return response()->json(Crypto::encrypt($response),200);
         }
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Model\User;
+use App\Services\Crypto;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -36,6 +37,6 @@ class IndexController extends Controller
             ->select(['id','name','user_id','full_power'])
             ->limit(20)
             ->get();
-        return response()->json($users,200);
+        return response()->json(Crypto::encrypt($users),200);
     }
 }

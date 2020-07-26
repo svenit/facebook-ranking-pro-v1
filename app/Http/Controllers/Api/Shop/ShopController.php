@@ -12,6 +12,7 @@ use App\Model\UserPet;
 use App\Model\UserGear;
 use App\Model\UserItem;
 use App\Model\UserSkill;
+use App\Services\Crypto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -27,11 +28,11 @@ class ShopController extends Controller
         ]);
         if($validate->fails())
         {
-            return response()->json([
+            return response()->json(Crypto::encrypt([
                 'code' => 500,
                 'status' => 'error',
                 'message' => 'Trang bị không tồn tại'
-            ],200);
+            ]),200);
         }
         else
         {
@@ -94,7 +95,7 @@ class ShopController extends Controller
                     'message' => 'Trang bị không tồn tại'
                 ];
             }
-            return response()->json($response,200);
+            return response()->json(Crypto::encrypt($response),200);
         }
     }
     public function buySkill(Request $request)
@@ -104,11 +105,11 @@ class ShopController extends Controller
         ]);
         if($validate->fails())
         {
-            return response()->json([
+            return response()->json(Crypto::encrypt([
                 'code' => 500,
                 'status' => 'error',
                 'message' => 'Kỹ năng không tồn tại'
-            ],200);
+            ]),200);
         }
         else
         {
@@ -183,7 +184,7 @@ class ShopController extends Controller
                     'message' => 'Kỹ năng không tồn tại'
                 ];
             }
-            return response()->json($response,200);
+            return response()->json(Crypto::encrypt($response),200);
         }
     }
     public function buyPet(Request $request)
@@ -193,11 +194,11 @@ class ShopController extends Controller
         ]);
         if($validate->fails())
         {
-            return response()->json([
+            return response()->json(Crypto::encrypt([
                 'code' => 500,
                 'status' => 'error',
                 'message' => 'Thú cưỡi không tồn tại'
-            ],200);
+            ]),200);
         }
         else
         {
@@ -260,7 +261,7 @@ class ShopController extends Controller
                     'message' => 'Thú cưỡi không tồn tại'
                 ];
             }
-            return response()->json($response,200);
+            return response()->json(Crypto::encrypt($response),200);
         }
     }
     public function buyItem(Request $request)
@@ -271,11 +272,11 @@ class ShopController extends Controller
         ]);
         if($validate->fails())
         {
-            return response()->json([
+            return response()->json(Crypto::encrypt([
                 'code' => 500,
                 'status' => 'error',
                 'message' => 'Vật phẩm không tồn tại hoặc số lượng không chính xác'
-            ],200);
+            ]),200);
         }
         else
         {
@@ -334,7 +335,7 @@ class ShopController extends Controller
                     'message' => 'Vật phẩm không tồn tại'
                 ];
             }
-            return response()->json($response,200);
+            return response()->json(Crypto::encrypt($response),200);
         }
     }
     public function checkItem($request,$item)
@@ -361,11 +362,11 @@ class ShopController extends Controller
         ]);
         if($validate->fails())
         {
-            return response()->json([
+            return response()->json(Crypto::encrypt([
                 'code' => 500,
                 'message' => 'Lỗi',
                 'status' => 'error'
-            ]);
+            ]));
         }
         else
         {
@@ -421,7 +422,7 @@ class ShopController extends Controller
                     }
                 break;
             }
-            return response()->json($response,200);
+            return response()->json(Crypto::encrypt($response),200);
         }
     }
 }

@@ -21,22 +21,22 @@ class Cors
         {
             if(isset($request->bearer))
             {
-                $token = md5(hash('sha256',md5($this->encode(strrev(csrf_token().'..$!@{a-z0-9}-VYDEPTRAI&*@!LX&&$PHP?1+1')))));
-                if($request->header('host') === env('APP_DOMAIN') && $request->header('pragma') === $token)
+                $token = md5(hash('sha256',md5($this->encode(strrev(session('client_key').'..$!@{a-z0-9}-VYDEPTRAI&*@!LX&&$PHP?1+1')))));
+                if($request->header('host') === env('APP_DOMAIN') && $request->_token == csrf_token() && $request->header('pragma') === $token)
                 {
                     $newToken = uniqid(Str::random(40));
-                    Session::forget('_token');
-                    Session::put('_token', $newToken);
-                    return $next($request)->header('Authorization', $newToken)
-                        ->header('Cookie', request()->header('Cookie'))
+                    Session::forget('client_key');
+                    Session::put('client_key', $newToken);
+                    return $next($request)->header('Cookie', request()->header('Cookie'))
                         ->header('Token', Str::random(40))
                         ->header('Access-Control-Allow-Origin', env('APP_DOMAIN'))
-                        ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+                        ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+                        ->header('Authorization', $newToken);
                 }
                 return response()->json([
                     'status' => 'error',
                     'code' => '403',
-                    'message' => 'Invalid token or token expired'
+                    'message' => 'Server can not decrypt data with this secret key'
                 ]);
             }
             else
@@ -44,7 +44,7 @@ class Cors
                 return response()->json([
                     'status' => 'error',
                     'code' => '403',
-                    'message' => 'Invalid token or token expired'
+                    'message' => 'Bearer Token is required',
                 ]);
             }
         }

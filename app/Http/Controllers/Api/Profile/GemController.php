@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Profile;
 
 use App\Model\UserGem;
+use App\Services\Crypto;
 use App\Model\UserGearGem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +22,7 @@ class GemController extends Controller
     {
         $gems = Auth::user()->gems->where('pivot.status',0);
 
-        return response()->json($gems, 200);
+        return response()->json(Crypto::encrypt($gems), 200);
     }
 
     public function remove(Request $request)
@@ -32,11 +33,11 @@ class GemController extends Controller
         ]);
         if($validate->fails())
         {
-            return response()->json([
+            return response()->json(Crypto::encrypt([
                 'code' => 500,
                 'status' => 'error',
                 'message' => 'Ngọc bổ trợ không tồn tại'
-            ]);
+            ]));
         }
         else
         {
@@ -68,7 +69,7 @@ class GemController extends Controller
                     'message' => 'Ngọc bổ trợ không tồn tại'
                 ];
             }
-            return response()->json($response);
+            return response()->json(Crypto::encrypt($response));
         }
     }
 }

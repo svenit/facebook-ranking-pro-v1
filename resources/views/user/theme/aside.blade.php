@@ -43,7 +43,7 @@
                                 <i class="fas fa-arrow-right"></i> 
                                 @{{ data.level.next_level }} 
                                 ( @{{ data.level.percent }} % )
-                                <div class="progress my-3 circle" style="height:6px">
+                                <div @click="notify(`Bạn cần ${(data.level.next_level_exp - data.level.current_user_exp)} kinh nghiệm nữa để lên cấp`)" class="progress my-3 circle" style="height:6px">
                                     <div class="progress-bar circle gd-info" data-title="tooltip" :title="`Bạn cần ${(data.level.next_level_exp - data.level.current_user_exp)} kinh nghiệm nữa để lên cấp`" :style="{width:data.level.percent + '%'}">
                                     </div>
                                 </div>
@@ -360,6 +360,72 @@
                 </button>
                 <button v-if="detailGem.data.pivot.status == 1" type="button" @click="removeGem(detailGem.data)" class="btn btn-secondary" data-dismiss="modal">
                     Tháo
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+<div id="skill" v-if="detailSkill.data" class="modal fade gear top-off" data-backdrop="true" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-4">
+                        <center>
+                            <img :src="detailSkill.data.image" class="pixel text-center" :style="{border:`1px solid ${detailSkill.data.rgb}`,margin:'0 auto'}" width="60px">
+                        </center>
+                        <p :style="{fontSize:'14px',color:`${detailSkill.data.rgb}`,marginTop:'20px'}" class="modal-title text-md text-center">@{{ detailSkill.data.name }}</p>
+                    </div>
+                    <div class="col-8">
+                        <div class="row">
+                            <div class="col-12 d-flex">
+                                <div class="flex">
+                                    <div class="text-light"><small><i class="fas fa-chevron-double-up"></i> Level yêu cầu: <strong
+                                        class="text-light">@{{ detailSkill.data.required_level }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex mt-1">
+                                <div class="flex">
+                                    <div class="text-warning"><small><i class="fas fa-helmet-battle"></i> Class: <strong
+                                    class="text-warning">@{{ detailSkill.character }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex mt-1">
+                                <div class="flex">
+                                    <div class="text-info"><small><i class="fas fa-tint"></i> Mana: <strong
+                                    class="text-info">@{{ detailSkill.data.options.energy }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex mt-1">
+                                <div class="flex">
+                                    <div class="text-success"><small><i class="fas fa-hourglass-half"></i> Thời gian hồi chiêu: <strong
+                                    class="text-success">@{{ detailSkill.data.options.coolDown }}</strong></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin:20px 10px" class="col-12">
+                        <p style="font-size:13px" class="text-muted" v-html="detailSkill.data.description"></p>
+                    </div>
+                </div>
+            </div>
+            <div v-if="detailSkill.permission == 1" class="modal-footer">
+                <button type="button" @click="deleteSkill(detailSkill.data.id)" class="btn bg-danger-lt" data-dismiss="modal">
+                    Vứt Bỏ
+                </button>
+                <button v-if="detailSkill.data.pivot.status == 1" type="button" @click="removeSkill(detailSkill.data.id)" class="btn btn-secondary" data-dismiss="modal">
+                    Tháo
+                </button>
+                <button v-else type="button" @click="useSkill(detailSkill.data.id)" class="btn btn-success" data-dismiss="modal">
+                    Sử Dụng
                 </button>
             </div>
         </div>
@@ -907,3 +973,6 @@
 <button class="btn btn-white btn-block mb-2" style="display:none" id="trigger-pet" data-toggle="modal" data-target="#pet"></button>
 <button class="btn btn-white btn-block mb-2" style="display:none" id="trigger-item" data-toggle="modal" data-target="#item"></button>
 <button class="btn btn-white btn-block mb-2" style="display:none" id="trigger-gem" data-toggle="modal" data-target="#gem"></button>
+<button class="btn btn-white btn-block mb-2" style="display:none" id="trigger-skill" data-toggle="modal" data-target="#skill"></button>
+<button id="show-infor-user" style="display:none" data-toggle="modal" data-target=".modal-right" data-toggle-class="modal-open-aside" data-target="body"></button>
+<button id="show-profile" style="display:none" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body"></button>

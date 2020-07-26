@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Model\User;
 use App\Income\Helper;
+use App\Services\Crypto;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -25,8 +26,9 @@ class IndexController extends Controller
             $ttl = 60 * 24;
             $helper = new Helper($findUser->id);
             return Cache::remember("user-{$findUser->id}", $ttl, function () use($helper, $findUser){
-                return response()->json([
+                return response()->json(Crypto::encrypt([
                     'infor' => [
+                        'uid' => $helper->user()->id,
                         'name' => $helper->user()->name,
                         'character' => [
                             'name' => $helper->character()->name,
@@ -56,21 +58,21 @@ class IndexController extends Controller
                     'pet' => $helper->usingPets()->first(),
                     'gears' => $helper->usingGears(),
                     'skills' => Auth::id() == $findUser->id ? $helper->usingSkills() : []
-                ],200);                
+                ]),200);                
             });
         }
-        return response()->json([
+        return response()->json(Crypto::encrypt([
             'keyword' => $param,
             'code' => 404,
             'status' => 'error',
             'message' => 'Không tìm thấy người này',
             'time' => now(),
-        ],200);
+        ]),200);
     }
 
     public function verifyToken(Request $request) 
     {
-        return $request->token == md5(hash('sha256',md5($this->encode(strrev(csrf_token().'..$!@{a-z0-9}-VYDEPTRAI&*@!LX&&$PHP?1+1'))))) ? 1 : 0;
+        return $request->token == md5(hash('sha256',md5($this->encode(strrev(session('client_key').'..$!@{a-z0-9}-VYDEPTRAI&*@!LX&&$PHP?1+1'))))) ? 1 : 0;
     }
 
     public function encode($message)

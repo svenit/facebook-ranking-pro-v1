@@ -1,97 +1,46 @@
-
-const NUMBER = 'NUMBER';
-const PERCENT = 'PERCENT';
-
-let statsBuffs = {
-    available: [],
-    hp: {
-        parameter: 0,
-        unit: NUMBER,
-        turn: 0
-    },
-    strength: {
-        parameter: 0,
-        unit: NUMBER,
-        turn: 0
-    },
-    energy: {
-        parameter: 0,
-        unit: NUMBER,
-        turn: 0
-    },
-    intelligent: {
-        parameter: 0,
-        unit: NUMBER,
-        turn: 0
-    }, 
-    armor_strength: {
-        parameter: 0,
-        unit: NUMBER,
-        turn: 0
-    }, 
-    armor_intelligent: {
-        parameter: 0,
-        unit: NUMBER,
-        turn: 0
-    }, 
-    lucky: {
-        parameter: 0,
-        unit: NUMBER,
-        turn: 0
-    }, 
-    agility: {
-        parameter: 0,
-        unit: NUMBER,
-        turn: 0
-    }, 
-};
-
-let effectBuffs = {
-    available: [],
-    hpBleeding: {
-        parameter: 0,
-        statEffect: 'hp',
-        unit: NUMBER,
-        turn: 0
-    },
-    energyBleeding: {
-        parameter: 0,
-        statEffect: 'energy',
-        unit: NUMBER,
-        turn: 0
-    },
-    silent: {
-        parameter: 0,
-        statEffect: null,
-        unit: null,
-        turn: 0
-    },
-};
+let selfEffect = {};
+let passiveEffect = {};
+let selfSpecialEffect = {};
 
 let status = {
     isTurn: false,
     isReady: false,
     hp: 0,
     energy: 0, 
-    stunTurn: 0,
-    stunType: null
+    stun: {
+        turn: 0,
+        animation: null
+    },
+    silient: {
+        turn: 0,
+        animation: null
+    },
+    target: {
+        uid: null,
+        turn: 0
+    }
 };
 
-let Player = function({uid, playerInfo, roomId}) {
+let Player = function({uid, team, playerInfo, roomId}) {
     let self = {
         uid, 
+        team,
         isConnect: true,
         roomId,
         playerInfo,
+        effectAnimation: [],
         status: Object.assign({}, status),
-        statsBuffs: Object.assign({}, statsBuffs),
-        effectBuffs: Object.assign({}, effectBuffs),
+        selfEffect: Object.assign({}, selfEffect),
+        passiveEffect: Object.assign({}, passiveEffect),
+        selfSpecialEffect: Object.assign({}, selfSpecialEffect),
     };
 
     self.remake = function() {
+        self.effectAnimation = [];
         self.status = Object.assign({}, status);
-        self.statsBuffs = Object.assign({}, statsBuffs);
-        self.effectBuffs = Object.assign({}, effectBuffs);
+        self.selfEffect = Object.assign({}, selfEffect);
+        self.passiveEffect = Object.assign({}, passiveEffect);
+        self.selfSpecialEffect = Object.assign({}, selfSpecialEffect);
     };
 
     self.setStats = function() {

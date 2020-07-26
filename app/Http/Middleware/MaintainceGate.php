@@ -21,8 +21,7 @@ class MaintainceGate
     {
         $config = new Config();
         $newToken = uniqid(Str::random(40));
-        Session::forget('_token');
-        Session::put('_token', $newToken);
+        Session::put('client_key', $newToken);
         if(Auth::check() && Auth::user()->isAdmin)
         {
             return $next($request);

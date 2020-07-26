@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Auth;
 */
 Route::post('verify-token','Api\IndexController@verifyToken');
 Route::get('user/all','Api\User\IndexController@all');
-Route::get('user/{param}','Api\IndexController@userInfor')->middleware('cors');
 Route::group(['namespace' => 'Api','middleware' => ['cors', 'auth']], function () {
+    Route::get('user/{param}','IndexController@userInfor');
     Route::post('set-location','User\IndexController@setLocation');
     Route::group(['prefix' => 'pvp','namespace' => 'PvP'], function () {
         Route::get('list-room','ListRoomController');

@@ -9,6 +9,7 @@ let Room = function(id) {
         players: [],
         masterId: null,
         timePerTurn: 0,
+        playerSetTurn: []
     }
 
     let turnTimeout;
@@ -30,25 +31,29 @@ let Room = function(id) {
     };
 
     self.nextTurn = function() {
-        let turn = ++self.currentTurn % self.players.length;
-        /* Next turn if player is stunned or disconnected */
-        if(self.players[turn].status.stunTurn > 0 || !self.players[turn].isConnect || typeof(socketServer[self.players[turn].socketId]) == 'undefined') {
-            /* If the player is stunned, passing turn to other player */
-            if(self.players[turn].status.stunTurn > 0) {
-                --self.players[turn].status.stunTurn;
+        let turn = self.currentTurn++ % self.playerSetTurn.length;
+        let player = self.findPlayer(self.playerSetTurn[turn].uid);
+        if(typeof(player[0]) != 'undefined') {
+            player = player[0];
+            /* Next turn if player is stunned or disconnected */
+            if(player.status.stun.turn > 0 || !player.isConnect || typeof(socketServer[player.socketId]) == 'undefined') {
+                /* If the player is stunned, passing turn to other player */
+                if(player.status.stun.turn > 0) {
+                    --player.status.stun.turn;
+                }
+                /* If cannot connect to player, set player status is disconnected */
+                player.isConnect = typeof(socketServer[player.socketId]) != 'undefined';
+                return self.nextTurn();
             }
-            /* If cannot connect to player, set player status is disconnected */
-            self.players[turn].isConnect = typeof(socketServer[self.players[turn].socketId]) != 'undefined';
-            return self.nextTurn();
+            self.turnIndex = player.uid;
+            /* Decrement turn countdown of skill per turn */
+            player.playerInfo.skills.map(skill => {
+                if(skill.options.currentCoolDown > 0) {
+                    --skill.options.currentCoolDown;
+                }
+            });
+            self.triggerTimeOut();
         }
-        self.turnIndex = self.players[turn].uid;
-        /* Decrement turn countdown of skill per turn */
-        self.players[turn].playerInfo.skills.map(skill => {
-            if(skill.options.currentCountDown > 0) {
-                --skill.options.currentCountDown;
-            }
-        });
-        self.triggerTimeOut();
     };
 
     self.triggerTimeOut = function() {
@@ -59,18 +64,17 @@ let Room = function(id) {
 
     self.startPvp = function() {
         self.isFighting = true;
-        let turnIndex = self.players[0].uid;
-        let max = 0;
+        let orderPlayersByLucky = [];
         for(let i in self.players) {
-            if(max < self.players[i].playerInfo.power.agility) {
-                max = self.players[i].playerInfo.power.agility;
-                turnIndex = self.players[i].uid;
-            }
+            orderPlayersByLucky.push({
+                uid: self.players[i].uid,
+                lucky: self.players[i].playerInfo.power.lucky
+            });
             /* Remake all countdown skill */
-            self.players[i].playerInfo.skills.map(skill => skill.options.currentCountDown = 0);
+            self.players[i].playerInfo.skills.map(skill => skill.options.currentCoolDown = 0);
         }
-        self.turnIndex = turnIndex;
-        self.triggerTimeOut();
+        self.playerSetTurn = orderPlayersByLucky.sort((a, b) => b.lucky - a.lucky);
+        self.nextTurn();
     };
     
     self.removePlayer = function(uid) {
@@ -84,7 +88,6 @@ let Room = function(id) {
     
     self.addPlayer = function(player) {
         let { players, slot } = self;
-        player.order = players.length;
         let findPlayer = self.findPlayer(player.uid);
         if (findPlayer.length == 0) {
             if(players.length < slot) {

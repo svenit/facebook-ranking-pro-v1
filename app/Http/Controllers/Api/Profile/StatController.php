@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Profile;
 
+use App\Services\Crypto;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
@@ -27,11 +28,11 @@ class StatController extends Controller
         ]);
         if($validate->fails())
         {
-            return response()->json([
+            return response()->json(Crypto::encrypt([
                 'code' => 500,
                 'status' => 'error',
                 'message' => $validate->errors()->first()
-            ],200);
+            ]),200);
         }
         else
         {
@@ -43,11 +44,11 @@ class StatController extends Controller
                 'stat_points' =>  DB::raw("stat_points - {$request->point}")
             ]);
             $this->updatePower();
-            return response()->json([
+            return response()->json(Crypto::encrypt([
                 'code' => 200,
                 'status' => 'success',
                 'message' => 'Cộng điểm thuộc tính thành công'
-            ],200);
+            ]),200);
         }
     }
 }

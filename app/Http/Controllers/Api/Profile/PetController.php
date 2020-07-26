@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Profile;
 
 use App\Income\Helper;
 use App\Model\UserPet;
+use App\Services\Crypto;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,7 @@ class PetController extends Controller
     }
     public function __invoke()
     {
-        return response()->json(Auth::user()->pets,200);
+        return response()->json(Crypto::encrypt(Auth::user()->pets),200);
     }
     public function riding(Request $request)
     {
@@ -27,11 +28,11 @@ class PetController extends Controller
         ]);
         if($validate->fails())
         {
-            return response()->json([
+            return response()->json(Crypto::encrypt([
                 'code' => 500,
                 'status' => 'error',
                 'message' => 'Thú cưỡi không tồn tại'
-            ],200);
+            ]),200);
         }
         else
         { 
@@ -82,7 +83,7 @@ class PetController extends Controller
                     'message' => "Thú cưỡi không tồn tại hoặc đã được trang bị"
                 ];
             }
-            return response()->json($response,200);
+            return response()->json(Crypto::encrypt($response),200);
         }
     }
     public function petDown(Request $request)
@@ -119,7 +120,7 @@ class PetController extends Controller
                 'message' => "Thú cưỡi không tồn tại"
             ];
         }
-        return response()->json($response,200);
+        return response()->json(Crypto::encrypt($response),200);
     }
     public function dropPet(Request $request)
     {
@@ -153,6 +154,6 @@ class PetController extends Controller
                 'message' => "Thú cưỡi không tồn tại"
             ];
         }
-        return response()->json($response,200);
+        return response()->json(Crypto::encrypt($response),200);
     }
 }

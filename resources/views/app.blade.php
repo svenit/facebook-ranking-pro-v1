@@ -26,7 +26,7 @@
 	<link rel="stylesheet" href="{{ asset('assets/css/inventory.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/css/gem.css') }}">
 	<link href="{{ asset('cdn/css/all.min.css') }}" rel="stylesheet">
-	<meta name="csrf-token" content="{{ str_random(50) }}"/>
+	<meta name="csrf-token" content="{{ csrf_token() }}"/>
 	@stack('css')
 </head>
 <body>
@@ -70,7 +70,7 @@
 			</div>
 		@endif
 		@include('user.theme.aside')
-		<div data-id="{{ csrf_token() }}" id="main" style="background: url({{ asset('assets/images/background.jpg') }});" class="layout-column flex">
+		<div data-id="{{ session('client_key') }}" id="main" style="background: url({{ asset('assets/images/background.jpg') }});" class="layout-column flex">
 			@include('user.theme.header')
 			<div id="content" class="flex">
 				@if(!request()->is('pvp/room/*'))
@@ -86,7 +86,7 @@
 				@yield('content')
 			</div>
 			<div id="footer" style="margin-top:0px" class="page-footer">
-				<div class="d-flex p-3"><span class="text-sm pixel-font text-muted flex">&copy;Copyright {{ date('Y') }} Coded by <a class="text-gold" href="https://facebook.com/sven307">Sven</a></span>
+				<div class="d-flex p-3"><span copyright-id="{{ config('services.crypto.salt') }}" class="copyright text-sm pixel-font text-muted flex">&copy;Copyright {{ date('Y') }} Coded by <a class="text-gold" href="https://facebook.com/sven307">Sven</a></span>
 					<div style="font-family: pixel !important" class="text-sm text-muted">Version {{ env('APP_VERSION') }}</div>
 				</div>
 			</div>

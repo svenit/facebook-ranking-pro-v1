@@ -28,7 +28,7 @@
                 <div class="col-6 col-auto">
                     <div class="">
                         <div class="">
-                            <div @click="index()" :style="{transform: 'scaleX(-1)',position:'absolute',bottom:`${data.pet ? '11%' : '5%'}`,right:'30%'}" title="Nhấp vào để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px" class="character-sprites hoverable">
+                            <div @click="handleClickCharacter(data, true)" :style="{transform: 'scaleX(-1)',position:'absolute',bottom:`${data.pet ? '11%' : '5%'}`,right:'30%'}" title="Nhấp vào để xem thông số" style="margin:0px 10px 35px 0px" class="character-sprites hoverable">
                                 <span v-if="data.pet" style="z-index:1" :class="`Mount_Body_${data.pet.class_tag}`"></span>
                                 <span style="z-index:2" class="skin_f5a76e up-to-down"></span>
                                 <span style="z-index:2" class="broad_shirt_black up-to-down"></span>
@@ -42,26 +42,32 @@
                                 <div :class="`${data.pet ? 'shadow-pet' : 'shadow-character'} animated slow infinite pulse`"></div>
                                 <div v-if="pvp.match.me.uid == pvp.match.room.turnIndex && pvp.match.status == 'FIGHTING'" :class="`${data.pet ? 'has-pvp-turn-with-pet' : 'has-pvp-turn-no-pet'}`"></div>
                             </div>
-                        </div>
-                        <div v-if="pvp.match.status == 'FIGHTING'" style="margin-top:5px;" class="row">
-                            <div class="col-lg-8 col-md-8 col-sm-10 row" style="height:50px;padding: 0px;margin-left: 10px;border-bottom-right-radius: 50px;background:rgb(0,0,0,.8);border: 2px solid #936b37;border-top-left-radius: 25px;border-bottom-left-radius: 25px">
-                                <img class="circle col-auto" style="width:46px;height:46px;padding:0px" :src="`http://graph.facebook.com/${data.infor.provider_id}/picture?type=normal`">
-                                <div class="col-9">
-                                    <div class="progress no-bg mt-2 align-items-center circle" style="height:8px;">
-                                        <div style="padding:5px;" :style="{width:(pvp.match.me.status.hp/pvp.match.me.playerInfo.power.hp)*100 + '%'}" class="progress-bar progress-bar-striped progress-bar-animated circle gd-success">@{{ numberFormat(pvp.match.me.status.hp) }}/@{{ numberFormat(pvp.match.me.playerInfo.power.hp) }}</div>                        
+                            <div v-if="pvp.match.status == 'FIGHTING'">
+                                <div :style="{position: 'absolute', bottom: `${(35 + (pvp.match.me.effectAnimation.length/6))}%`, right: '30%',width:'150px'}" class="animated flash normal row skill-effect">
+                                    <div class="col-12" v-if="pvp.match.status == 'FIGHTING' && pvp.match.target == pvp.match.me.playerInfo.infor.uid">
+                                        <img class="col-auto pixel up-to-down" style="width:25px;padding:0;transform:rotate(90deg) translate(0%, -150%);filter: hue-rotate(300deg);margin:0 auto" src="{{ asset('assets/images/target.png') }}">
                                     </div>
-                                    <div class="progress no-bg mt-2 align-items-center circle" style="height:8px">
-                                        <div style="padding:5px;" :style="{width:(pvp.match.me.status.energy/pvp.match.me.playerInfo.power.energy)*100 + '%'}" class="progress-bar circle gd-primary">@{{ numberFormat(pvp.match.me.status.energy) }}/@{{ numberFormat(pvp.match.me.playerInfo.power.energy) }}</div>                        
+                                    <div class="col-12 row">
+                                        <img v-for="(animation, index) in pvp.match.me.effectAnimation" class="col-auto pixel" style="width:25px;padding:0" :src="`{{ asset('assets/images/effects') }}/${animation}.png`">
                                     </div>
                                 </div>
-                                <br>
+                                <div>
+                                    <div style="position: absolute;height:5px;right:33%;width:100px;background:rgb(0,0,0,.5) !important;padding:5px 0px;bottom:32%" class="progress no-bg mt-2 align-items-center circle">
+                                        <div :style="{padding:'5px 0px',width:(pvp.match.me.status.hp/pvp.match.me.playerInfo.power.hp)*100 + '%'}" class="progress-bar progress-bar-striped progress-bar-animated circle gd-warning">@{{ numberFormat(pvp.match.me.status.hp) }}/@{{ numberFormat(pvp.match.me.playerInfo.power.hp) }}</div>                        
+                                    </div>
+                                    <div style="position: absolute;height:5px;right:33%;width:100px;background:rgb(0,0,0,.5) !important;padding:5px 0px;bottom:30%" class="progress no-bg mt-2 align-items-center circle">
+                                        <div :style="{padding:'5px 0px',width:(pvp.match.me.status.energy/pvp.match.me.playerInfo.power.energy)*100 + '%'}" class="progress-bar progress-bar-striped progress-bar-animated circle gd-info">@{{ numberFormat(pvp.match.me.status.energy) }}/@{{ numberFormat(pvp.match.me.playerInfo.power.energy) }}</div>                        
+                                    </div>
+                                </div>
                             </div>
+                        </div>
+                        <div v-if="pvp.match.status == 'FIGHTING'" style="margin-top:5px;" class="row">
                             <div class="col-12">
                                 <div class="row row-sm">
-                                    <div style="z-index:1" v-for="(skill,index) in pvp.match.me.playerInfo.skills" :key="index" class="mr-2 col-auto">
-                                        <span :class="`avatar w-56 ${skill.options.currentCountDown !== 0 || pvp.match.me.status.energy < skill.options.energy ? 'loading not-allow' : ''}`" :key="index">
-                                            <img :style="{filter: pvp.match.me.uid == pvp.match.room.turnIndex && pvp.match.me.status.energy >= skill.options.energy && skill.options.currentCountDown == 0 ? '' : 'grayscale(100%)',position:'relative'}" width="100%" :src="skill.image" alt=".">
-                                            <span v-if="skill.options.currentCountDown !== 0" class="pixel-font" style="position:absolute;left:43%;top:28%;color:#fff">@{{ skill.options.currentCountDown }}</span>
+                                    <div style="z-index:1" v-for="(skill,index) in pvp.match.me.playerInfo.skills" :key="index" class="mb-2 col-12">
+                                        <span :class="`skill avatar w-56 ${skill.options.currentCoolDown !== 0 || pvp.match.me.status.energy < skill.options.energy ? 'loading not-allow' : ''}`" style="border-radius:0px !important" :key="index">
+                                            <img @click="fightSkill(skill)" :style="{filter: pvp.match.me.uid == pvp.match.room.turnIndex && pvp.match.me.status.energy >= skill.options.energy && skill.options.currentCoolDown == 0 ? '' : 'grayscale(100%)',position:'relative'}" width="100%" :src="skill.image" alt=".">
+                                            <span v-if="skill.options.currentCoolDown !== 0" class="pixel-font" style="position:absolute;left:43%;top:28%;color:#fff">@{{ skill.options.currentCoolDown }}</span>
                                         </span>
                                     </div>
                                 </div>
@@ -71,7 +77,7 @@
                 </div>
                 <div v-if="pvp.match.status == 'CONNECT_ENEMY' || pvp.match.status == 'FIGHTING'" style="float:right" class="col-6 col-auto">
                     <div class="">
-                        <div class="character-sprites hoverable" :style="{position:'absolute',bottom:`${pvp.match.enemy.playerInfo.pet ? '11%' : '5%'}`,left:'30%',zIndex:999,filter: (pvp.match.enemy.isReady || pvp.match.status == 'FIGHTING') && pvp.match.enemy.isConnect ? 'none' : 'grayscale(1)'}"  @click="showUserInfor(pvp.match.enemy.playerInfo.infor.provider_id)" title="Nhấp vào để xem thông số" data-toggle="modal" data-target=".modal-right" data-toggle-class="modal-open-aside" data-target="body" style="margin:0px 10px 35px 0px">
+                        <div class="character-sprites hoverable" :style="{position:'absolute',bottom:`${pvp.match.enemy.playerInfo.pet ? '11%' : '5%'}`,left:'30%',zIndex:999,filter: (pvp.match.enemy.isReady || pvp.match.status == 'FIGHTING') && pvp.match.enemy.isConnect ? 'none' : 'grayscale(1)'}"  @click="handleClickCharacter(pvp.match.enemy.playerInfo, false)" title="Nhấp vào để xem thông số" style="margin:0px 10px 35px 0px">
                             <span style="z-index: 1"  v-if="pvp.match.enemy.playerInfo.pet" :class="`Mount_Body_${pvp.match.enemy.playerInfo.pet.class_tag}`"></span>
                             <span style="z-index:2" class="skin_f5a76e up-to-down"></span>
                             <span style="z-index:2" class="broad_shirt_black up-to-down"></span>
@@ -96,34 +102,24 @@
                                 <div v-if="buff > 0" :class="`${pvp.match.enemy.playerInfo.pet ? 'has-pvp-effect-with-pet' : 'has-pvp-effect-no-pet'} ${index}`" class="animated flash infinite"></div>
                             </div> --}}
                         </div>
-                        <div style="margin-top:5px;" class="row" v-if="pvp.enemyJoined">
-                            <div class="col-12">
-                                <img style="float:right;margin-left:10px;" class="avatar-bordered" :src="`http://graph.facebook.com/${pvp.match.enemy.playerInfo.infor.provider_id}/picture?type=normal`">
-                                <p style="text-align: right" class="card-title text-gold">
-                                    @{{ pvp.match.enemy.playerInfo.infor.name }} ( @{{ pvp.match.enemy.playerInfo.infor.character.name }} )
-                                </p>
-                                <div class="">
-                                    <div class="progress no-bg mt-2 align-items-center circle" style="height:8px">
-                                        <div style="padding:5px" class="progress-bar circle gd-success" :style="{width:(pvp.match.enemy.playerInfo.hp/pvp.match.enemy.playerInfo.power.hp)*100 + '%'}">@{{ numberFormat(pvp.match.enemy.playerInfo.hp) }}/@{{ numberFormat(pvp.match.enemy.playerInfo.power.hp)  }}</div>                        
-                                    </div>
-                                    <div class="progress no-bg mt-2 align-items-center circle" style="height:8px">
-                                        <div style="padding:5px" class="progress-bar circle gd-primary" :style="{width:(pvp.match.enemy.playerInfo.energy/pvp.match.enemy.playerInfo.power.energy)*100 + '%'}">@{{ numberFormat(pvp.match.enemy.playerInfo.energy) }}/@{{ numberFormat(pvp.match.enemy.playerInfo.power.energy)  }}</div>                        
-                                    </div>
+                        <div v-if="pvp.match.status == 'FIGHTING'">
+                            <div :style="{position: 'absolute', bottom: `${(35 + pvp.match.enemy.effectAnimation.length/6)}%`, right: '30%',width:'150px'}" class="animated flash normal row skill-effect">
+                                <div v-if="pvp.match.status == 'FIGHTING' && pvp.match.target == pvp.match.enemy.playerInfo.infor.uid">
+                                    <img class="col-auto pixel up-to-down" style="width:25px;padding:0;transform:rotate(90deg) translate(0%, -200%);filter: hue-rotate(300deg);margin:0 auto" src="{{ asset('assets/images/target.png') }}">
                                 </div>
-                                <br>
+                                <div>
+                                    <img v-for="(animation, index) in pvp.match.enemy.effectAnimation" class="col-auto pixel" style="width:25px;padding:0" :src="`{{ asset('assets/images/effects') }}/${animation}.png`">
+                                </div>
                             </div>
-                            {{-- <div class="col-12" v-if="pvp.isMatching">
-                                <div style="float:right"  class="row row-sm text-right">
-                                    <div style="z-index:1;" v-for="(skill,index) in pvp.match.enemy.playerInfo.skills" :key="index" class="col-auto mr-2">
-                                        <span :class="`avatar w-56 ${countdown !== 0 || pvp.match.enemy.playerInfo.energy < skill.energy ? 'loading not-allow' : ''}`" v-for="(countdown,index) in pvp.enemyCountDown" v-if="skill.id == index" :key="index">
-                                            <img :style="{filter: pvp.match.enemy.playerInfo.turn == 1 && pvp.match.enemy.playerInfo.energy >= skill.energy && countdown == 0 ? '' : 'grayscale(100%)',position:'relative'}" @click="showSkillsDescription(skill)" :src="skill.image" alt=".">
-                                            <span v-if="countdown !== 0" class="pixel-font" style="position:absolute;left:43%;top:28%;color:#fff">@{{ countdown }}</span>
-                                        </span>
-                                    </div>
+                            <div>
+                                <div style="position: absolute;height:5px;right:35%;width:100px;background:rgb(0,0,0,.5) !important;padding:5px 0px;bottom:32%" class="progress no-bg mt-2 align-items-center circle">
+                                    <div :style="{padding:'5px 0px',width:(pvp.match.enemy.status.hp/pvp.match.enemy.playerInfo.power.hp)*100 + '%'}" class="progress-bar progress-bar-striped progress-bar-animated circle gd-warning">@{{ numberFormat(pvp.match.enemy.status.hp) }}/@{{ numberFormat(pvp.match.enemy.playerInfo.power.hp) }}</div>                        
                                 </div>
-                            </div> --}}
+                                <div style="position: absolute;height:5px;right:35%;width:100px;background:rgb(0,0,0,.5) !important;padding:5px 0px;bottom:30%" class="progress no-bg mt-2 align-items-center circle">
+                                    <div :style="{padding:'5px 0px',width:(pvp.match.enemy.status.energy/pvp.match.enemy.playerInfo.power.energy)*100 + '%'}" class="progress-bar progress-bar-striped progress-bar-animated circle gd-info">@{{ numberFormat(pvp.match.enemy.status.energy) }}/@{{ numberFormat(pvp.match.enemy.playerInfo.power.energy) }}</div>                        
+                                </div>
+                            </div>
                         </div>
-                        
                     </div>
                 </div>
             </div>

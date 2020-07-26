@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Oven;
 
 use App\Model\UserGem;
 use App\Model\UserGear;
+use App\Services\Crypto;
 use App\Model\UserGearGem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,11 +23,11 @@ class InsertGemToGearController extends Controller
         ]);
         if($validate->fails())
         {
-            return response()->json([
+            return response()->json(Crypto::encrypt([
                 'code' => 500,
                 'status' => 'error',
                 'message' => 'Đã có lỗi xảy ra'
-            ]);
+            ]));
         }
         else
         {
@@ -84,7 +85,7 @@ class InsertGemToGearController extends Controller
                     'message' => 'Đã có lỗi xảy ra'
                 ];
             }
-            return response()->json($response,200);
+            return response()->json(Crypto::encrypt($response),200);
         }
     }
 }

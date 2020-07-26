@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Wheel;
 
 use Session;
 use App\Model\SpinWheel;
+use App\Services\Crypto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -78,6 +79,6 @@ class SpinController extends Controller
             ];
         }
         $this->clearMyCache();
-        return response()->json($response); 
+        return response()->json(Crypto::encrypt($response)); 
     }
 }

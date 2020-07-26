@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Api\Profile;
 
 use App\Model\Skill;
+use App\Income\Helper;
 use App\Model\UserSkill;
+use App\Services\Crypto;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use App\Income\Helper;
 
 class SkillController extends Controller
 {
@@ -20,7 +21,7 @@ class SkillController extends Controller
     }
     public function __invoke()
     {
-        return response()->json(Auth::user()->skills->load('character'),200);
+        return response()->json(Crypto::encrypt(Auth::user()->skills->load('character')),200);
     }
     public function useSkill(Request $request)
     {
@@ -29,11 +30,11 @@ class SkillController extends Controller
         ]);
         if($validate->fails())
         {
-            return response()->json([
+            return response()->json(Crypto::encrypt([
                 'code' => 500,
                 'status' => 'error',
                 'message' => 'Kĩ năng không tồn tại'
-            ],200);
+            ]),200);
         }
         else
         {
@@ -70,7 +71,7 @@ class SkillController extends Controller
                     'message' => "Bạn không thể sử dụng quá $this->maxSkill kỹ năng"
                 ];
             }
-            return response()->json($response,200);
+            return response()->json(Crypto::encrypt($response),200);
         }
     }
     public function removeSkill(Request $request)
@@ -81,21 +82,21 @@ class SkillController extends Controller
         if(isset($removeSkill))
         {
             $this->clearMyCache();
-            return response()->json([
+            return response()->json(Crypto::encrypt([
                 'code' => 200,
                 'status' => 'success',
                 'message' => "Đã gỡ kỹ năng"
-            ],200);
+            ]),200);
         }
     }
     public function deleteSkill(Request $request)
     {
         Auth::user()->skills()->detach($request->id);
         $this->clearMyCache();
-        return response()->json([
+        return response()->json(Crypto::encrypt([
             'code' => 200,
             'status' => 'success',
             'message' => "Đã vứt bỏ kĩ năng :("
-        ],200);
+        ]),200);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Profile;
 use App\Model\User;
 use App\Model\CateGear;
 use App\Model\UserGear;
+use App\Services\Crypto;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -33,11 +34,11 @@ class InventoryController extends Controller
                 }
             }
         }
-        return response()->json($data,200); 
+        return response()->json(Crypto::encrypt($data),200); 
     }
     public function available()
     {
-        return response()->json(Auth::user()->gears->where('pivot.status',0)->load('cates','character'));
+        return response()->json(Crypto::encrypt(Auth::user()->gears->where('pivot.status',0)->load('cates','character')));
     }
     public function delete(Request $request)
     {
@@ -71,7 +72,7 @@ class InventoryController extends Controller
                 'message' => "Không tìm thấy trang bị"
             ];
         }
-        return response()->json($response,200);
+        return response()->json(Crypto::encrypt($response),200);
     }
     public function removeEquipment(Request $request)
     {
@@ -107,7 +108,7 @@ class InventoryController extends Controller
                 'message' => "Không tìm thấy trang bị"
             ];
         }
-        return response()->json($response,200);
+        return response()->json(Crypto::encrypt($response),200);
     }
     public function equipment(Request $request)
     {
@@ -175,6 +176,6 @@ class InventoryController extends Controller
                 'message' => "Vật phẩm không tồn tại hoặc đã được trang bị"
             ];
         }
-        return response()->json($response,200);
+        return response()->json(Crypto::encrypt($response),200);
     }
 }
