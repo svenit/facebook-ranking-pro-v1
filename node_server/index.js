@@ -1,7 +1,5 @@
 const port = 3000;
 const io = require('socket.io')(port);
-const Redis = require('ioredis');
-const redis = new Redis();
 const axios = require('axios');
 const Room = require('./rooms');
 const Player = require('./players');
@@ -22,16 +20,7 @@ let defaultPvpConfig = {
     timePerTurn: parseInt(PVP_TIME_PER_TURN)
 }
 
-redis.subscribe('channel');
-redis.on('message',(channel, message) => {
-    let { event, data } = JSON.parse(message);
-    console.log(event, data);
-    io.emit(event, data);
-});
-
-
 console.log('App is runnig at port', port);
-
 
 try
 {
