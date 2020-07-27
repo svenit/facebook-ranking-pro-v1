@@ -19,6 +19,7 @@
     },
     "dependencies": {
         "axios": "^0.19.2",
+        "dotenv": "^8.2.0",
         "ioredis": "^4.16.0",
         "mysql": "^2.18.1",
         "nodemon": "^2.0.4",

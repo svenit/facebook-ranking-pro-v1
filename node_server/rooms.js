@@ -11,7 +11,8 @@ let Room = function(id) {
         players: [],
         masterId: null,
         timePerTurn: 0,
-        playerSetTurn: []
+        playerSetTurn: [],
+        logs: []
     }
 
     let turnTimeout;
@@ -30,6 +31,7 @@ let Room = function(id) {
         self.timeRemaining = timeRemaining;
         self.isFighting = false;
         self.timePerTurn = timePerTurn;
+        self.logs = [];
         self.players.map(player => player.remake());
         clearTimeout(turnTimeout);
     };
@@ -50,12 +52,12 @@ let Room = function(id) {
                 }
             });
             /* Decrement effect turn */
-            console.log(1, player.passiveEffect);
             self.handleEffectsTurn({player, effect: player.passiveEffect});
             self.handleEffectsTurn({player, effect: player.selfEffect});
             self.handleEffectsTurn({player, effect: player.selfDebuffEffect});
             /* Increment energy */
             player.status.energy += player.status.energy == player.playerInfo.power.energy ? 0 : 20;
+            self.logs.push(`\n----------- [ Lượt thứ ${self.currentTurn} ] ----------- \n`);
             /* Next turn if player is stunned or disconnected */
             if(player.status.stun.turn > 0 || !player.isConnect || typeof(ioServer.sockets.sockets[player.socketId]) == 'undefined') {
                 /* If the player is stunned, passing turn to other player */
@@ -64,6 +66,7 @@ let Room = function(id) {
                 }
                 /* If cannot connect to player, set player status is disconnected */
                 player.isConnect = typeof(socketServer[player.socketId]) != 'undefined';
+                self.logs.push(`${player.playerInfo.infor.name} bị choáng hoặc không thể kết nối \n`);
                 return self.nextTurn();
             }
             self.turnIndex = player.uid;
@@ -71,6 +74,7 @@ let Room = function(id) {
                 room: self,
                 message: 'Đến lượt của bạn'
             }));
+            self.logs.push(`\n\`Lượt của ${player.playerInfo.infor.name}\`\n\n`);
             self.triggerTimeOut();
         }
     };
