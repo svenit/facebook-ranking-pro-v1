@@ -66,7 +66,7 @@
                                 <div class="row row-sm">
                                     <div style="z-index:1" v-for="(skill,index) in pvp.match.me.playerInfo.skills" :key="index" class="mb-2 col-12">
                                         <span :class="`skill avatar w-56 ${skill.options.currentCoolDown !== 0 || pvp.match.me.status.energy < skill.options.energy ? 'loading not-allow' : ''}`" style="border-radius:0px !important" :key="index">
-                                            <img @click="fightSkill(skill)" :style="{filter: pvp.match.me.uid == pvp.match.room.turnIndex && pvp.match.me.status.energy >= skill.options.energy && skill.options.currentCoolDown == 0 ? '' : 'grayscale(100%)',position:'relative'}" width="100%" :src="skill.image" alt=".">
+                                            <img @click="fightSkill(skill)" :style="{filter: pvp.match.me.uid == pvp.match.room.turnIndex && pvp.match.me.status.energy >= skill.options.energy && skill.options.currentCoolDown == 0 && !skill.options.isPassive ? '' : 'grayscale(100%)',position:'relative'}" width="100%" :src="skill.image" alt=".">
                                             <span v-if="skill.options.currentCoolDown !== 0" class="pixel-font" style="position:absolute;left:43%;top:28%;color:#fff">@{{ skill.options.currentCoolDown }}</span>
                                         </span>
                                     </div>
@@ -104,10 +104,10 @@
                         </div>
                         <div v-if="pvp.match.status == 'FIGHTING'">
                             <div :style="{position: 'absolute', bottom: `${(35 + pvp.match.enemy.effectAnimation.length/6)}%`, left: '30%',width:'150px'}" class="animated flash normal row skill-effect">
-                                <div v-if="pvp.match.status == 'FIGHTING' && pvp.match.target == pvp.match.enemy.playerInfo.infor.uid">
-                                    <img class="col-auto pixel up-to-down" style="width:25px;padding:0;transform:rotate(90deg) translate(0%, -200%);filter: hue-rotate(300deg);margin:0 auto" src="{{ asset('assets/images/target.png') }}">
+                                <div class="col-12" v-if="pvp.match.status == 'FIGHTING' && pvp.match.target == pvp.match.enemy.playerInfo.infor.uid">
+                                    <img class="col-auto pixel up-to-down" style="width:25px;padding:0;transform:rotate(90deg) translate(0%, -150%);filter: hue-rotate(300deg);margin:0 auto" src="{{ asset('assets/images/target.png') }}">
                                 </div>
-                                <div>
+                                <div class="col-12">
                                     <img v-for="(animation, index) in pvp.match.enemy.effectAnimation" class="col-auto pixel" style="width:25px;padding:0" :src="`{{ asset('assets/images/effects') }}/${animation}.png`">
                                 </div>
                             </div>

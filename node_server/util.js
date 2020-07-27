@@ -2,20 +2,6 @@ const CryptoJS = require('./cryto');
 let key = "let author = 'sven307';console.log(author);";
 
 const Util = {
-    
-    renderSkillEffectMessage: function({name, unit, type, turn}) {
-        let effectsMap = {
-            hp: 'HP hồi',
-            energy: 'Mana hồi',
-            strength: 'Sức Mạnh tăng',
-            intelligent: 'Trí Tuệ tăng',
-            agility: 'Nhanh Nhẹn tăng',
-            lucky: 'May Mắn tăng',
-            armor_strength: 'Kháng Công tăng',
-            armor_intelligent: 'Kháng Phép tăng'
-        };
-        return `${effectsMap[name]} ${unit}${type == 'percent' ? '%' : ''} trong vòng ${turn} lượt <br>`
-    },
     handleUnit: function ({player, unit, type, baseOn}) {
         let totalDamage = 0;
         switch(type) {

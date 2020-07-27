@@ -1,4 +1,5 @@
 {
+    "isPassive": false,
     "buffSkill": false,
     "energy": 100,
     "coolDown": 2,
@@ -6,35 +7,125 @@
     "damageType": "number",
     "damageBaseOn": "strength",
     "backgroundAnimation": "dark",
+    "timeExecute": 2000,
+    "position": "freeze",
     "setSelfTarget": {
         "probability": 0,
-        "turn": 0
+        "turn": 0,
+        "target": "only",
+        "description": "Kích hoạt hiệu ứng khiêu khích"
     },
     "clearAllCoolDown": {
-        "probability": 0
+        "probability": 0,
+        "description": "Hồi chiêu tất cả các kỹ năng"
     },
     "clearAllDebuff": {
-        "probability": 100
+        "probability": 100,
+        "description": "Xóa bỏ tất cả hiệu ứng bất lợi"
     },
     "stun": {
         "probability": 50,
         "turn": 2,
-        "animation": "stun"
+        "animation": "stun",
+        "description": "Hiệu ứng choáng kích hoạt"
     },
     "silient": {
         "probability": 0,
         "turn": 0,
-        "animation": "silient"
+        "animation": "silient",
+        "description": "Hiệu ứng câm lặng kích hoạt"
     },
     "passiveEffect": {
-        "available": [],
+        "available": ["hp"],
         "decreDamageIn": {
             "probability": 0,
             "unit": 0,
             "type": "percent",
             "turn": 0,
+            "initTurn": 0,
             "baseOn": "strength",
-            "animation": null
+            "animation": null,
+            "description": null       
+        },
+        "hp": {
+            "unit": 10,
+            "type": "percent",
+            "probability": 50,
+            "turn": 2, 
+            "initTurn": 2,
+            "animation": "buff-hp",
+            "baseOn": "hp",
+            "description": "+10% HP"
+        },
+        "energy": {
+            "unit": 5,
+            "type": "percent",
+            "probability": 100,
+            "turn": 1,
+            "initTurn": 1,
+            "animation": "buff-mana",
+            "baseOn": "energy",
+            "description": "+5% Mana"
+        },
+        "strength": {
+            "unit": 20,
+            "type": "percent",
+            "probability": 100,
+            "turn": 3, 
+            "initTurn": 3,
+            "animation": "buff-strength",
+            "baseOn": "strength",
+            "description": "+20% Sức Mạnh Vật Lý"
+        },
+        "intelligent": {
+            "unit": 0,
+            "type": "percent",
+            "probability": 0,
+            "turn": 0,
+            "initTurn": 0,
+            "animation": null,
+            "baseOn": "intelligent",
+            "description": null
+        },
+        "agility": {
+            "unit": 0,
+            "type": "percent",
+            "probability": 0,
+            "turn": 0,
+            "initTurn": 0,
+            "animation": null,
+            "baseOn": "agility",
+            "description": null
+        },
+        "lucky": {
+            "unit": 0,
+            "type": "percent",
+            "probability": 0,
+            "turn": 0,
+            "initTurn": 0,
+            "animation": null,
+            "baseOn": "lucky",
+            "description": null
+        },
+        "armor_strength": {
+            "unit": 0,
+            "type": "percent",
+            "probability": 0,
+            "turn": 0,
+            "initTurn": 0,
+            "animation": null,
+            "baseOn": "armor_strength",
+            "description": null
+        },
+        "armor_intelligent": {
+            "unit": 0,
+            "type": "percent",
+            "probability": 0,
+            "turn": 0,
+            "initTurn": 0,
+            "animation": null,
+            "baseOn": "armor_intelligent",
+            "description": null
         }
     },
     "selfSpecialEffect": {
@@ -45,66 +136,83 @@
             "type": "percent",
             "turn": 2,
             "baseOn": "strength",
-            "animation": "cover"
+            "animation": "cover",
+            "description": "Hiệu ứng vỏ bọc kích hoạt! Có 70% cơ hội giảm 30% sát thương nhận vào"
         }
     },
     "selfEffect": {
-        "available": ["hp", "energy"],
+        "available": ["hp", "energy", "strength"],
         "hp": {
             "unit": 10,
             "type": "percent",
-            "probability": 30,
+            "probability": 50,
             "turn": 2, 
-            "animation": "buff-hp"
+            "animation": "buff-hp",
+            "baseOn": "hp",
+            "description": "+10% HP trong 2 lượt"
         },
         "energy": {
             "unit": 5,
             "type": "percent",
             "probability": 100,
             "turn": 1,
-            "animation": "buff-mana"
+            "animation": "buff-mana",
+            "baseOn": "energy",
+            "description": "+5% Mana trong 1 lượt"
         },
         "strength": {
-            "unit": 0,
+            "unit": 20,
             "type": "percent",
-            "probability": 0,
-            "turn": 0, 
-            "animation": null
+            "probability": 100,
+            "turn": 3, 
+            "animation": "buff-strength",
+            "baseOn": "strength",
+            "description": "+20% Sát Thương Vật Lý trong 3 lượt"
         },
         "intelligent": {
             "unit": 0,
             "type": "percent",
             "probability": 0,
             "turn": 0,
-            "animation": null
+            "animation": null,
+            "baseOn": "intelligent",
+            "description": null
         },
         "agility": {
             "unit": 0,
             "type": "percent",
             "probability": 0,
             "turn": 0,
-            "animation": null
+            "animation": null,
+            "baseOn": "agility",
+            "description": null
         },
         "lucky": {
             "unit": 0,
             "type": "percent",
             "probability": 0,
             "turn": 0,
-            "animation": null
+            "animation": null,
+            "baseOn": "lucky",
+            "description": null
         },
         "armor_strength": {
             "unit": 0,
             "type": "percent",
             "probability": 0,
             "turn": 0,
-            "animation": null
+            "animation": null,
+            "baseOn": "armor_strength",
+            "description": null
         },
         "armor_intelligent": {
             "unit": 0,
             "type": "percent",
             "probability": 0,
             "turn": 0,
-            "animation": null
+            "animation": null,
+            "baseOn": "armor_intelligent",
+            "description": null
         }
     },
     "enemySpecialEffect": {
@@ -115,66 +223,83 @@
             "type": "percent",
             "turn": 1,
             "baseOn": "strength",
-            "animation": "tick"
+            "animation": "tick",
+            "description": "Hiệu ứng đánh dấu kích hoạt! Sát thương vật lý +30% ở lượt đánh tiếp theo"
         }
     },
     "enemyEffect": {
-        "available": [],
+        "available": ["hp"],
         "hp": {
-            "unit": 0,
+            "unit": -20,
             "type": "percent",
-            "probability": 0,
-            "turn": 0,
-            "animation": null
+            "probability": 100,
+            "turn": 3,
+            "animation": "debuff-hp",
+            "baseOn": "hp",
+            "description": "-20% HP trong 3 lượt"
         },
         "energy": {
             "unit": 0,
             "type": "percent",
             "probability": 0,
             "turn": 0,
-            "animation": null
+            "animation": null,
+            "baseOn": "energy",
+            "description": null
         },
         "strength": {
             "unit": 0,
             "type": "percent",
             "probability": 0,
             "turn": 0,
-            "animation": null
+            "animation": null,
+            "baseOn": "strength",
+            "description": null
         },
         "intelligent": {
             "unit": 0,
             "type": "percent",
             "probability": 0,
             "turn": 0,
-            "animation": null
+            "animation": null,
+            "baseOn": "intelligent",
+            "description": null
         },
         "agility": {
             "unit": 0,
             "type": "percent",
             "probability": 0,
             "turn": 0,
-            "animation": null
+            "animation": null,
+            "baseOn": "armor_intelligent",
+            "description": null
         },
         "lucky": {
             "unit": 0,
             "type": "percent",
             "probability": 0,
             "turn": 0,
-            "animation": null
+            "animation": null,
+            "baseOn": "lucky",
+            "description": null
         },
         "armor_strength": {
             "unit": 0,
             "type": "percent",
             "probability": 0,
             "turn": 2,
-            "animation": null
+            "animation": null,
+            "baseOn": "armor_strength",
+            "description": null
         },
         "armor_intelligent": {
             "unit": 0,
             "type": "percent",
             "probability": 0,
             "turn": 0,
-            "animation": null
+            "animation": null,
+            "baseOn": "armor_intelligent",
+            "description": null
         }
     }
 }

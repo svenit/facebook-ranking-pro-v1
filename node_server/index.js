@@ -209,7 +209,7 @@ function handleConnect(socket) {
                                             let availableEffects = skillOptions[effects[i]];
                                             for(let j in availableEffects.available) {
                                                 let effectKey = availableEffects.available[j];
-                                                let { unit, type, turn, probability, animation } = availableEffects[effectKey];
+                                                let { unit, type, turn, probability, animation, description } = availableEffects[effectKey];
                                                 if(probability >= randomProbability)
                                                 {
                                                     switch(effects[i]) {
@@ -220,8 +220,18 @@ function handleConnect(socket) {
                                                                 turn,
                                                                 animation
                                                             };
-                                                            message += '[ Hiệu ứng cơ bản kích hoạt ] - ' + Util.renderSkillEffectMessage({name: effectKey, unit, type, turn});
+                                                            message += `[ ${playerAtk[0].playerInfo.infor.name} ]  ${description} </br>`;
                                                             playerAtk[0].pushSkillEffects(animation);
+                                                        break;
+                                                        case 'enemyEffect':
+                                                            targetPlayer[0].selfDebuffEffect[effectKey] = {
+                                                                unit,
+                                                                type, 
+                                                                turn,
+                                                                animation
+                                                            };
+                                                            message += `[ ${targetPlayer[0].playerInfo.infor.name} ]  ${description} </br>`;
+                                                            targetPlayer[0].pushSkillEffects(animation);
                                                         break;
                                                     }
                                                 }

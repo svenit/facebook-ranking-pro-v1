@@ -455,6 +455,10 @@
                     this.notify('Kỹ năng chưa hồi!');
                     return;
                 }
+                if(skill.options.isPassive) {
+                    this.notify('Không thể sử dụng kỹ năng bị động');
+                    return;
+                }
                 this.socket.emit(btoa('fightSkill'), this.AESEncryptJSON({
                     room: page.room, 
                     user,

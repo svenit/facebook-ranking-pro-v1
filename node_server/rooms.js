@@ -50,15 +50,10 @@ let Room = function(id) {
                 }
             });
             /* Decrement effect turn */
-            let playerEffects = Object.keys(player.selfEffect);
-            for(let i in playerEffects) {
-                let { animation } = player.selfEffect[playerEffects[i]];
-                let turn = --player.selfEffect[playerEffects[i]].turn;
-                if(turn == 0) {
-                    player.removeSkillEffect(animation);
-                    delete player.selfEffect[playerEffects[i]];
-                }
-            }
+            console.log(1, player.passiveEffect);
+            self.handleEffectsTurn({player, effect: player.passiveEffect});
+            self.handleEffectsTurn({player, effect: player.selfEffect});
+            self.handleEffectsTurn({player, effect: player.selfDebuffEffect});
             /* Increment energy */
             player.status.energy += player.status.energy == player.playerInfo.power.energy ? 0 : 20;
             /* Next turn if player is stunned or disconnected */
@@ -79,6 +74,18 @@ let Room = function(id) {
             self.triggerTimeOut();
         }
     };
+
+    self.handleEffectsTurn = function({player, effect}) {
+        let playerEffects = Object.keys(effect);
+        for(let i in playerEffects) {
+            let { animation } = effect[playerEffects[i]];
+            let turn = --effect[playerEffects[i]].turn;
+            if(turn <= 0) {
+                player.removeSkillEffect(animation);
+                delete effect[playerEffects[i]];
+            }
+        }
+    }
 
     self.triggerTimeOut = function() {
         turnTimeout = setTimeout(() => {

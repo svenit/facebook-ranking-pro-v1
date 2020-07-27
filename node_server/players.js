@@ -1,4 +1,5 @@
 let selfEffect = {};
+let selfDebuffEffect = {};
 let passiveEffect = {};
 let selfSpecialEffect = {};
 
@@ -37,6 +38,7 @@ let Player = function({uid, team, playerInfo, roomId}) {
         effectAnimation: [],
         status: Object.assign({}, status),
         selfEffect: Object.assign({}, selfEffect),
+        selfDebuffEffect:  Object.assign({}, selfDebuffEffect),
         passiveEffect: Object.assign({}, passiveEffect),
         selfSpecialEffect: Object.assign({}, selfSpecialEffect),
     };
@@ -45,8 +47,9 @@ let Player = function({uid, team, playerInfo, roomId}) {
         self.effectAnimation = [];
         self.status = Object.assign({}, status);
         self.selfEffect = Object.assign({}, selfEffect);
+        self.selfDebuffEffect = Object.assign({}, selfDebuffEffect);
         self.passiveEffect = Object.assign({}, passiveEffect);
-        self.selfSpecialEffect = Object.assign({}, selfSpecialEffect);
+        self.selfSpecialEffect = Object.assign({}, selfSpecialEffect); 
     };
 
     self.findSkill = function(id) {
@@ -54,9 +57,7 @@ let Player = function({uid, team, playerInfo, roomId}) {
     };
 
     self.pushSkillEffects = function(name) {
-        if(!self.effectAnimation.includes(name)) {
-            self.effectAnimation.push(name);
-        }
+        self.effectAnimation.push(name);
     }
 
     self.removeSkillEffect = function(name) {
@@ -75,6 +76,29 @@ let Player = function({uid, team, playerInfo, roomId}) {
         self.status.lucky = self.playerInfo.power.lucky;
         self.status.armor_strength = self.playerInfo.power.armor_strength;
         self.status.armor_intelligent = self.playerInfo.power.armor_intelligent;
+
+        /* Setup passive skill */
+        self.passiveEffect = Object.assign({}, passiveEffect);
+        self.playerInfo.skills.filter(skill => skill.options.isPassive).map(skill => {
+            if(skill.options.passiveEffect.available.length > 0) {
+                let availablePassiveSkills = skill.options.passiveEffect.available;
+                for(let i in availablePassiveSkills) {
+                    let effectKey = availablePassiveSkills[i];
+                    let { unit, type, probability, initTurn, animation, baseOn, description  } = skill.options.passiveEffect[effectKey];
+                    self.passiveEffect[effectKey] = {
+                        unit,
+                        type,
+                        probability,
+                        turn: initTurn,
+                        initTurn,
+                        animation,
+                        baseOn,
+                        description
+                    };
+                    self.effectAnimation.push(animation);
+                }
+            };
+        });
     };
 
     return self;
