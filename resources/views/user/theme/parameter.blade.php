@@ -6,7 +6,7 @@
     </div>
 @endif
 @if(!request()->is('pvp/room/*'))
-<div id="character" ref="character" @click="index()"  style="margin-bottom:20px" data-title="tooltip" title="Click để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" class="character-sprites hoverable">
+<div id="character" ref="character" @click="index()"  style="margin-bottom:20px;position:relative" data-title="tooltip" title="Click để xem thông số" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body" class="character-sprites hoverable">
     <span v-if="data.pet" style="z-index:2" :class="`Mount_Body_${data.pet.class_tag}`"></span>
     <span style="z-index:2" class="skin_f5a76e up-to-down"></span>
     <span style="z-index:2" class="broad_shirt_black up-to-down"></span>
