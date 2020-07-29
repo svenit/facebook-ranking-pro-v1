@@ -136,15 +136,6 @@
                                 <span class="text-gold">Vé Chat : {{ number_format($detail->chat_with_strangers_times) }}</span>
                             </div>
                             <div class="col-6  mt-2">
-                                <span class="text-info">Bài Viết : {{ number_format($detail->posts) }}</span>
-                            </div>
-                            <div class="col-6  mt-2">
-                                <span class="text-info">Biểu Cảm : {{ number_format($detail->reactions) }}</span>
-                            </div>
-                            <div class="col-6  mt-2">
-                                <span class="text-info">Bình Luận : {{ number_format($detail->comments) }}</span>
-                            </div>
-                            <div class="col-6  mt-2">
                                 <span class="text-warning">Điểm Hoạt Động : {{ number_format($detail->coins) }}</span>
                             </div>
                             <div class="col-6  mt-2">

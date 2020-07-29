@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Auth;
 use Carbon\Carbon;
 use App\Model\User;
 use App\Model\Config;
-use App\Services\HttpCURL;
 use Illuminate\Support\Str;
+use App\Services\DiscordBot;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +43,7 @@ class LoginController extends Controller
         set_time_limit(60);
 
         $callback = Socialite::driver('facebook')->user();
-        $callback->expired = now()->addMinutes(5);
+        $callback->expired = now()->addMinutes(100);
 
         Session::put('user_callback',$callback);
         $userAuthentication = User::whereProviderId($callback->id)->first();
@@ -99,30 +99,62 @@ class LoginController extends Controller
         
         if(Session::has('user_callback') && $userCallback->expired > now())
         {
-            $token = explode('-', $request->token);
-            if(isset($token[0], $token[1]))
+            if(Hash::check($userCallback->id, $request->token))
             {
-                if(Hash::check($userCallback->id, $token[0]))
+                if(Str::contains($request->url,'https://discord.com/channels'))
                 {
-                    if(Str::contains($request->url,'https://www.facebook.com/groups'))
+                    if(preg_match_all('/\d+/m', $request->url, $matches) && isset($matches[0]))
                     {
-                        $getComment = explode('?comment_id=',$request->url);
-                        if(isset($getComment[1]) && gettype((int)$getComment[1]) == 'integer')
+                        $matches = $matches[0];
+                        if(count($matches) == 3 && $matches[0] == env('DISCORD_SERVER_ID') && $matches[1] == env('DISCORD_CONFIRM_CHANNEL_ID'))
                         {
-                            $getComment = $getComment[1];
-                            $endpoint = "https://graph.facebook.com/$getComment?access_token=".$this->config()->confirm_access_token;
-                            $api = json_decode(HttpCURL::get($endpoint),TRUE);
-                            if(isset($api) && empty($api['error']))
+                            list($discordServer, $discordChannel, $discordMessage) = $matches;
+                            $discordBot = new DiscordBot();
+                            $message = $discordBot->getMessage($discordChannel, $discordMessage);
+                            if(isset($message))
                             {
-                                $messageToken = explode('-', $api['message']);
-                                if(Hash::check($userCallback->id, $messageToken[0]) && $api['id'] == $getComment && $api['from']['name'] == $userCallback->name)
+                                if(Hash::check($userCallback->id, $message->content))
                                 {
-                                    $userAuthentication->provider_id = $userCallback->id;
-                                    $userAuthentication->save();
+                                    // $userAuthentication = new User();
+                                    // $userAuthentication->provider_id = $userCallback->id;
+                                    // $userAuthentication->discord_id = $message->author->id;
+                                    // $userAuthentication->save();
 
-                                    Auth::loginUsingId($userAuthentication->id);
-                                    Session::forget('user_callback');
-
+                                    // Auth::loginUsingId($userAuthentication->id);
+                                    // Session::forget('user_callback');
+                                    $now = date('H:i:s d/m/Y');
+                                    $discordBot->reactionMessage($discordChannel, $message->id, urlencode('✅'));
+                                    $discordBot->sendMessage(env('DISCORD_VERIFIED_WEBHOOK'), [
+                                        'content' => "<@{$message->author->id}>",
+                                        'embeds' => [
+                                            [
+                                                'author' => [
+                                                    'name' => $userCallback->name,
+                                                    'url' => $userCallback->profileUrl,
+                                                    'icon_url' => $userCallback->avatar
+                                                ],
+                                                "fields" => [
+                                                    [
+                                                        "name" => "Welcome :partying_face:",
+                                                        "value" => "Chào mừng thợ săn **{$userCallback->name}** đến với Solo Level Simulator!"
+                                                    ],
+                                                    [
+                                                        "name" => "Join Game :beers:",
+                                                        "value" => env('APP_URL')
+                                                    ]
+                                                ],
+                                                'thumbnail' => [
+                                                    'url' => $userCallback->avatar
+                                                ],
+                                                'footer' => [
+                                                    'text' => "Tin nhắn được tạo lúc: {$now}"
+                                                ]
+                                            ]
+                                        ],
+                                        'allowed_mentions' => [
+                                            'parse' => ['users']
+                                        ]
+                                    ]);
                                     return back()->with([
                                         'status' => 'success',
                                         'message' => 'Xác thực tài khoản thành công'
@@ -130,46 +162,31 @@ class LoginController extends Controller
                                 }
                                 else
                                 {
-                                    return back()->withErrors([
-                                        'Token không trùng nhau'
-                                    ]);
+                                    $message = 'Mã Token không chính xác! Hãy chắc rằng bạn đã nhập đúng mã Token!';
                                 }
-                            }
-                            else
-                            {
-                                return back()->withErrors([
-                                    'Lỗi server ! Xin lỗi đã làm ảnh hưởng đến quá trình trải nghiệm của bạn. 
-                                    Chúng tôi sẽ sửa chữa nhanh nhất có thể mời bạn quay lại sau'
-                                ]);
                             }
                         }
                         else
                         {
-                            return back()->withErrors([
-                                'URL không đúng định dạng'
-                            ]);
+                            $message = 'URL không đúng định dạng';
                         }
+                        
                     }
                     else
                     {
-                        return back()->withErrors([
-                            'URL không đúng định dạng'
-                        ]);
+                        $message = 'URL không đúng định dạng';
                     }
                 }
                 else
                 {
-                    return back()->withErrors([
-                        'Token không hợp lệ'
-                    ]);
+                    $message = 'URL không đúng định dạng';
                 }
             }
             else
             {
-                return back()->withErrors([
-                    'Token không hợp lệ'
-                ]);
+                $message = 'Token không hợp lệ';
             }
+            return back()->withErrors($message);
         }
         return redirect()->route('oauth.index');
     }

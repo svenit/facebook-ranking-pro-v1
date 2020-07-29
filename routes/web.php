@@ -21,7 +21,7 @@ Route::get('test/{id}',function($id){
 });
 
 Route::get('chat/stranger/exit','User\Chat\StrangerController@exit')->name('user.chat.stranger.exit');
-Route::group(['middleware' => ['maintaince','redirect.action']], function () {
+Route::group(['middleware' => ['maintaince', 'redirect.action']], function () {
     Route::group(['prefix' => 'oauth','as' => 'oauth.','namespace' => 'Auth'], function () {
         Route::get('login', 'LoginController@showLoginForm')->name('index');
         Route::get('logout','LoginController@logout')->name('logout');

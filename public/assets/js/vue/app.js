@@ -89,11 +89,6 @@
                     exp: 0,
                     coins: 'Đang tải...',
                     gold: 'Đang tải...',
-                    activities: {
-                        posts: 0,
-                        reactions: 0,
-                        comments: 0
-                    },
                     provider_id: "0",
                     active: "",
                     pvp_points: 0
@@ -136,11 +131,6 @@
                     exp: 0,
                     coins: 'Đang tải...',
                     gold: 'Đang tải...',
-                    activities: {
-                        posts: 0,
-                        reactions: 0,
-                        comments: 0
-                    },
                     provider_id: "0",
                     active: ""
                 },

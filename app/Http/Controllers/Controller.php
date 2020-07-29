@@ -41,7 +41,7 @@ class Controller extends BaseController
                     'user_id' => Auth::id()
                 ],[
                     'user_id' => Auth::id(),
-                    'path' => url()->current(),
+                    'path' => Request::path(),
                     'route' => Request::route()->getName() ?? '',
                     'redirect' => $redirect == 1 ? true : false
                 ]);
@@ -55,7 +55,7 @@ class Controller extends BaseController
             }
             else
             {
-                if($tracking->path != url()->current())
+                if($tracking->path != Request::path())
                 {
                     return redirect()->route('user.index')->with([
                         'status' => 'error',

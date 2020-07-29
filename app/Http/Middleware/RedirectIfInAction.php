@@ -18,9 +18,9 @@ class RedirectIfInAction
     public function handle($request, Closure $next)
     {
         $tracking = Tracking::whereUserId(Auth::id())->first();
-        if(isset($tracking) && $tracking->redirect == 1 && url()->current() != $tracking->path)
+        if(isset($tracking) && $tracking->redirect == 1 && $request->path() != $tracking->path)
         {
-            return redirect()->intended($tracking->path)->with([
+            return redirect($tracking->path)->with([
                 'status' => 'warning',
                 'message' => 'Vui lòng bấm vào thoát trước khi bạn muốn thực hiện hành động khác'
             ]);

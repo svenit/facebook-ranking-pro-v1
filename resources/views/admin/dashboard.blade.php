@@ -123,7 +123,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-4">
+                        {{-- <div class="col-4">
                             <div class="card vip-bordered" data-sr-id="36"
                                 style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
                                 <div class="card-body">
@@ -153,7 +153,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-4">
                             <div class="card vip-bordered" data-sr-id="37"
                                 style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
