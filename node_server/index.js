@@ -9,6 +9,7 @@ require('dotenv').config();
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
 
 let { PVP_PLAYERS_SLOT, PVP_TIME_FINISH, PVP_TIME_PER_TURN, DISCORD_SERVER_LOG, DISCORD_PVP_LOG } = process.env;
+
 let users = [];
 let players = [];
 let pvpRooms = [];
@@ -63,6 +64,10 @@ try
             socket.userId = id;
             socket.name = name;
             users[socket.id] = socket;
+            io.sockets.emit(Util.btoa('current-online'), Util.AESEncryptJSON({
+                count: io.engine.clientsCount,
+                time: Util.now()
+            }));
         });
         socket.on(Util.btoa('joinPvpRoom'), data => {
             let { room, playerInfo } = Util.AESDecryptJSON(data);
@@ -175,7 +180,9 @@ try
                             {
                                 let skillOptions = playerAtkSkill[0].options;
                                 if(skillOptions.currentCoolDown == 0 && skillOptions.energy <= playerAtk[0].status.energy) {
+                                    let totalDamage = 0;
                                     let message = '';
+                                    let targetPlayerMessage = '';
                                     let sumAgility = playerAtk[0].status.agility + targetPlayer[0].status.agility;
                                     let sumLucky = playerAtk[0].status.lucky + targetPlayer[0].status.lucky;
                                     /* Calculate the probability success */
@@ -186,9 +193,10 @@ try
                                         let [ minDamage, maxDamage ] = skillOptions.damageRange;
                                         let damageRange = Math.floor(Math.random() * (parseFloat(maxDamage) - parseFloat(minDamage)) + parseFloat(minDamage));
                                         /* Sum damage */
-                                        let totalDamage = Util.handleUnit({player: playerAtk[0], unit: damageRange, type: skillOptions.damageType, baseOn: skillOptions.damageBaseOn});
+                                        totalDamage = Util.handleUnit({player: playerAtk[0], unit: damageRange, type: skillOptions.damageType, baseOn: skillOptions.damageBaseOn});
                                         if((playerAtk[0].status.lucky/sumLucky) * 100 >= randomProbability) {
                                             totalDamage *= 2;
+                                            targetPlayerMessage += 'Critical';
                                         }
                                         let effects = ['selfSpecialEffect', 'selfEffect', 'enemySpecialEffect', 'enemyEffect'];
                                         /* Check buff skill */
@@ -232,16 +240,36 @@ try
                                         }
                                         /* Set skill cool down, decrement hp of enemy */
                                         playerAtkSkill[0].options.currentCoolDown = playerAtkSkill[0].options.coolDown;
-                                        targetPlayer[0].status.hp -= totalDamage;
+                                        totalDamage = -totalDamage;
+                                        targetPlayer[0].status.hp += totalDamage;
                                     }
                                     else {
                                         message = `${playerAtk[0].playerInfo.infor.name} sử dụng kỹ năng thất bại!<br>`;
+                                        targetPlayerMessage = 'Miss';
                                     }
                                     joinedRoom.logs.push(message);
                                     playerAtk[0].status.energy -= skillOptions.energy;
                                     io.in(room.roomId).emit(Util.btoa('listenPvp'), Util.AESEncryptJSON({
                                         room: pvpRooms[room.roomId], 
-                                        message
+                                        message,
+                                        hit: {
+                                            skill: {
+                                                animation: playerAtkSkill[0].animation,
+                                                backgroundAnimation: skillOptions.backgroundAnimation,
+                                                timeExecute: skillOptions.timeExecute,
+                                                position: skillOptions.position
+                                            },
+                                            targetPlayer: {
+                                                id: target,
+                                                hp: totalDamage,
+                                                energy: 0,
+                                                message: targetPlayerMessage
+                                            },
+                                            playerAtk: {
+                                                id: user.id,
+                                                animation: skillOptions.playerAnimation
+                                            }
+                                        }
                                     }));
                                     joinedRoom.clearTurn();
                                     joinedRoom.nextTurn();
@@ -276,6 +304,10 @@ try
 
         socket.on('disconnect', () => {
             let user = users[socket.id];
+            io.sockets.emit(Util.btoa('current-online'), Util.AESEncryptJSON({
+                count: io.engine.clientsCount,
+                time: Util.now()
+            }));
             playerExitPvp(user, socket);
         });
     }

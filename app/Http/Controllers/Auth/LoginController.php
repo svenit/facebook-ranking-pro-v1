@@ -115,13 +115,6 @@ class LoginController extends Controller
                             {
                                 if(Hash::check($userCallback->id, $message->content))
                                 {
-                                    // $userAuthentication = new User();
-                                    // $userAuthentication->provider_id = $userCallback->id;
-                                    // $userAuthentication->discord_id = $message->author->id;
-                                    // $userAuthentication->save();
-
-                                    // Auth::loginUsingId($userAuthentication->id);
-                                    // Session::forget('user_callback');
                                     $now = date('H:i:s d/m/Y');
                                     $discordBot->reactionMessage($discordChannel, $message->id, urlencode('✅'));
                                     $discordBot->sendMessage(env('DISCORD_VERIFIED_WEBHOOK'), [
@@ -155,6 +148,17 @@ class LoginController extends Controller
                                             'parse' => ['users']
                                         ]
                                     ]);
+
+                                    $user = new User();
+                                    $user->name = $userCallback->name;
+                                    $user->provider_id = $userCallback->id;
+                                    $user->discord_id = $message->author->id;
+                                    $user->character_id = env('NO_CHARACTER_ID');
+                                    $user->status = 1;
+                                    $user->save();
+
+                                    Auth::login($user);
+
                                     return back()->with([
                                         'status' => 'success',
                                         'message' => 'Xác thực tài khoản thành công'
@@ -162,6 +166,7 @@ class LoginController extends Controller
                                 }
                                 else
                                 {
+                                    $discordBot->reactionMessage($discordChannel, $message->id, urlencode('❌'));
                                     $message = 'Mã Token không chính xác! Hãy chắc rằng bạn đã nhập đúng mã Token!';
                                 }
                             }

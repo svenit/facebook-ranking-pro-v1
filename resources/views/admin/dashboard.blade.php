@@ -9,6 +9,11 @@
         <div class="page-content page-container" id="page-content">
             <div class="padding-x">
                 <div class="col-12">
+                    <div class="row">
+                        <div class="col-12">
+                            <div id="current-online"></div>
+                        </div>
+                    </div>
                     <div class="row row-sm">
                         <div class="col-8">
                             <div class="row row-sm">
@@ -92,99 +97,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-4">
-                            <div class="card vip-bordered" data-sr-id="35"
-                                style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
-                                <div class="card-body">
-                                    <div class="d-md-flex">
-                                        <div class="flex">
-                                            <div class="text-highlight">{{ number_format($users->sum('posts')) }}</div>
-                                        </div>
-                                        <div><small class="text-muted">Bài Viết</small></div>
-                                    </div>
-                                    <div class="w-50" style="height: 30px">
-                                        <div class="chartjs-size-monitor"
-                                            style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
-                                            <div class="chartjs-size-monitor-expand"
-                                                style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-                                                <div
-                                                    style="position:absolute;width:1000000px;height:1000000px;left:0;top:0">
-                                                </div>
-                                            </div>
-                                            <div class="chartjs-size-monitor-shrink"
-                                                style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-                                                <div style="position:absolute;width:200%;height:200%;left:0; top:0">
-                                                </div>
-                                            </div>
-                                        </div><canvas id="chart-line-1" width="196" height="60"
-                                            class="chartjs-render-monitor"
-                                            style="display: block; height: 30px; width: 98px;"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- <div class="col-4">
-                            <div class="card vip-bordered" data-sr-id="36"
-                                style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
-                                <div class="card-body">
-                                    <div class="d-md-flex">
-                                        <div class="flex">
-                                            <div class="text-highlight">{{ number_format($users->sum('reactions')) }}</div>
-                                        </div>
-                                        <div><small class="text-muted">Biểu Cảm</small></div>
-                                    </div>
-                                    <div class="w-50" style="height: 30px">
-                                        <div class="chartjs-size-monitor"
-                                            style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
-                                            <div class="chartjs-size-monitor-expand"
-                                                style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-                                                <div
-                                                    style="position:absolute;width:1000000px;height:1000000px;left:0;top:0">
-                                                </div>
-                                            </div>
-                                            <div class="chartjs-size-monitor-shrink"
-                                                style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-                                                <div style="position:absolute;width:200%;height:200%;left:0; top:0">
-                                                </div>
-                                            </div>
-                                        </div><canvas id="chart-line-2" width="196" height="60"
-                                            class="chartjs-render-monitor"
-                                            style="display: block; height: 30px; width: 98px;"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> --}}
-                        <div class="col-4">
-                            <div class="card vip-bordered" data-sr-id="37"
-                                style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
-                                <div class="card-body">
-                                    <div class="d-md-flex">
-                                        <div class="flex">
-                                            <div class="text-highlight">{{ number_format($users->sum('comments')) }}</div>
-                                        </div>
-                                        <div><small class="text-muted">Bình Luận</small></div>
-                                    </div>
-                                    <div class="w-50" style="height: 30px">
-                                        <div class="chartjs-size-monitor"
-                                            style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
-                                            <div class="chartjs-size-monitor-expand"
-                                                style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-                                                <div
-                                                    style="position:absolute;width:1000000px;height:1000000px;left:0;top:0">
-                                                </div>
-                                            </div>
-                                            <div class="chartjs-size-monitor-shrink"
-                                                style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-                                                <div style="position:absolute;width:200%;height:200%;left:0; top:0">
-                                                </div>
-                                            </div>
-                                        </div><canvas id="chart-line-3" width="196" height="60"
-                                            class="chartjs-render-monitor"
-                                            style="display: block; height: 30px; width: 98px;"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="col-md-7">
                             <div class="card vip-bordered" data-sr-id="48" style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
                                 <div class="p-3-4">
@@ -201,7 +113,7 @@
                                                 <td style="min-width:30px;text-align:center">{{ $key + 1 }}</td>
                                                 <td>
                                                     <div class="avatar-group">
-                                                        <a href="#" class="avatar ajax w-32" data-toggle="tooltip" title="" data-pjax-state="" data-original-title="Lobortis"><img src="http://graph.facebook.com/{{ $user->user_id }}/picture?type=normal" alt="."></a>
+                                                        <a href="#" class="avatar ajax w-32" data-toggle="tooltip" title="" data-pjax-state="" data-original-title="Lobortis"><img src="http://graph.facebook.com/{{ $user->provider_id }}/picture?type=normal" alt="."></a>
                                                     </div>
                                                 </td>
                                                 <td class="flex"><a href="#" class="text-gold item-company ajax h-1x" data-pjax-state="">{{ $user->name }}</a>
@@ -239,4 +151,61 @@
 </div>
 @endsection
 @push('js')
+    <script>
+      $(document).ready(() => {
+            var options = {
+                chart: {
+                    sparkline: {
+                        enabled:!1
+                    },
+                    height:250,
+                    type:"area",
+                    toolbar:{
+                        show:!1
+                    }
+                },
+                yaxis:{
+                    show:!1
+                },
+                dataLabels: {
+                    enabled:!0,
+                    background:{
+                        enabled:!0,
+                        borderRadius:2
+                    }
+                },
+                fill:{
+                    type:"gradient",
+                    gradient:{
+                        shade:"dark",
+                        type:"horizontal",
+                        shadeIntensity:.5,
+                        inverseColors:!0,
+                        opacityFrom:1,
+                        opacityTo:.8,
+                        stops:[0,50,100],
+                        colorStops:[]
+                    }
+                },
+                theme:{
+                    mode:"dark",
+                    palette:"palette1",
+                    monochrome:{
+                        enabled:!1,
+                        color:"#333",
+                        shadeTo:"dark",
+                        shadeIntensity:1
+                    }
+                },
+                labels: [],
+                series: [{
+                    name: 'Realtime User Tracking',
+                    data: []
+                }]
+            };
+            window.currentOnlineChart = new ApexCharts(document.querySelector("#current-online"),options);
+            window.currentOnlineChart.render();
+        });
+    </script>
+    <script src="{{ asset('assets/js/vue/app.js') }}"></script>
 @endpush

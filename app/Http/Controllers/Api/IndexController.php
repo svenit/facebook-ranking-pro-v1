@@ -16,7 +16,7 @@ class IndexController extends Controller
     {
         $param = $param == 'profile' && Auth::check() ? Auth::id() : $param;
         $findUser = User::whereId($param)
-            ->orWhere('user_id', $param)
+            ->orWhere('id', $param)
             ->orWhere('provider_id', $param)
             ->orWhere('name', 'LIKE', "%$param%")
             ->first();

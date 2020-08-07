@@ -9,6 +9,7 @@
     "backgroundAnimation": "dark",
     "timeExecute": 2000,
     "position": "freeze",
+    "playerAnimation": "slideInRight",
     "setSelfTarget": {
         "probability": 0,
         "turn": 0,

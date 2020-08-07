@@ -13,27 +13,50 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 </head>
 
-<body class="bg-dark layout-row">
-    <div id="app" class="dark h-v d-flex flex align-items-center">
-        <div style="border-radius:5px;width:600px;margin:0px" class="bg-dark mx-auto w-xl w-auto-xs animate fadeIn text-center">
-            <div>
-                <div class="mb-3"><img style="width:150px" src="{{ asset('assets/images/app.png') }}" class="">
-                <div class="text-warning mt-3 font-bold">Addictive Text-Based Fantasy MMORPG!</div>
-                </div>
-                <div class="mb-3" v-html="story"></div>
-                <div v-if="next && step < stories.length - 1" @click="nextStory" class="mt-15" style="margin-top:10px;">
-                    <a href="#" @click="skipStotry" class="mr-2 btn btn-rounded btn-outline-danger">
-                        <span class="mx-2">Bỏ Qua</span>
-                    </a>
-                    <a href="#" class="btn btn-rounded btn-secondary">
-                        <span class="mx-2">Tiếp</span>
-                    </a>
-                </div>
-                <div v-if="next && step == stories.length - 1" class="animated pulse infinite mt-15" style="margin-top:10px;">
-                    <a href="{{ Route('user.character.set') }}" class="btn btn-rounded btn-outline-warning">
-                        <i class="fas fa-swords"></i>
-                        <span class="mx-2">Thức Tỉnh</span>
-                    </a>
+<body style="background: #000">  
+    <div id="app">
+        <video muted="muted" autoplay loop style="height:100vh;" width="100%">
+            <source src="{{ asset('assets/video/gate-2.mp4') }}" type="video/mp4">
+            Your browser does not support HTML video.
+        </video>  
+        <div style="position: absolute;margin:0 auto;left:50%;top:10%;transform:translate(-50%, 0)" class="dark">
+            <div style="border-radius:5px;width:600px;margin:0px" class="mx-auto w-xl w-auto-xs animate fadeIn text-center">
+                <div>
+                    <div class="mb-3"><img style="width:150px" src="{{ asset('assets/images/app.png') }}" class="">
+                    <div class="text-warning mt-3 font-bold">Addictive Text-Based Fantasy MMORPG!</div>
+                    </div>
+                    <div class="mb-3 text-light" v-html="story"></div>
+                    <div v-if="next && step < stories.length - 1" @click="nextStory" class="mt-15" style="margin-top:10px;">
+                        <span href="#" @click="skipStotry" class="mr-2 btn btn-rounded btn-outline-light">
+                            <span class="mx-2">Bỏ Qua</span>
+                        </span>
+                        <span class="btn btn-rounded btn-warning">
+                            <span class="mx-2">Tiếp</span>
+                        </span>
+                    </div>
+                    <div v-if="next && step == stories.length - 1" class="mt-15" style="margin-top:20px;">
+                        <div class="animated slideInDown normal row justify-content-md-center">
+                            <div class="col-auto">
+                                <img src="{{ asset('assets/images/class/assassin.png') }}">
+                            </div>
+                            <div class="col-auto">
+                                <img src="{{ asset('assets/images/class/paladin.png') }}">
+                            </div>
+                            <div class="col-auto">
+                                <img src="{{ asset('assets/images/class/archer.png') }}">
+                            </div>
+                            <div class="col-auto">
+                                <img src="{{ asset('assets/images/class/wizard.png') }}">
+                            </div>
+                            <div class="col-auto">
+                                <img src="{{ asset('assets/images/class/priest.png') }}">
+                            </div>
+                        </div>
+                        <a href="{{ Route('user.character.set') }}" class="animated normal pulse infinite btn btn-rounded btn-outline-warning" style="margin-top:25px">
+                            <i class="fas fa-swords"></i>
+                            <span class="mx-2">Thức Tỉnh</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -41,7 +64,7 @@
 </body>
 <style>
     a:hover{
-        color: #fff !important;
+        color: #000 !important;
     }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.2/dist/sweetalert2.all.min.js"></script>
@@ -55,7 +78,7 @@
     let i = 0;
     new Vue({
         el:'#app',
-        data:{
+        data: {
             step:0,
             next:false,
             story:'',
@@ -71,40 +94,34 @@
                 "Và dường như phép màu đó đã trở thành hiện thực, đã có những người nhận được sức mạnh vượt trội và có khả năng đối trọi lại với lũ quái vật...",
                 "Từng người từng người một được nhận thứ sức mạnh đó, họ bắt đầu lập tổ đội với chung một mục đích là tiêu diệt lũ quái vật và đóng những cánh cổng lại...",
                 "Họ - những người thức tỉnh sức mạnh được mọi người gọi là [ Thợ Săn ]"
-            ],
+            ]
         },
-        created()
-        {
+        created() {
             this.typeWriter();
         },
         methods:{
-            typeWriter() 
-            {
-                if(i < this.stories[this.step].length)
-                {
+            typeWriter() {
+                if(i < this.stories[this.step].length) {
                     this.story += this.stories[this.step].charAt(i);
                     i++;
                     setTimeout(this.typeWriter, 30);
-                    if(i == this.stories[this.step].length)
-                    {
+                    if(i == this.stories[this.step].length) {
                         this.next = true;
                     }
                 }
             },
-            nextStory()
-            {
+            nextStory() {
                 this.next = false;
                 this.story = '';
                 this.step++;
                 i = 0;
                 this.typeWriter();
             },
-            skipStotry()
-            {
+            skipStotry() {
                 if(confirm('Bỏ qua phần giới thiệu?'))
                 {
                     this.step = this.stories.length - 1;
-                    this.story = this.stories[this.step];
+                    this.story = '';
                 }
             }
         }

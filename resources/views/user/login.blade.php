@@ -60,11 +60,15 @@
     </script>
 @endif
 <script>
+    let video1 = document.getElementById('video1');
+    let video2 = document.getElementById('video2');
+    video1.playbackRate = 3;
+    video2.playbackRate = 2;
     setTimeout(() => {
         document.getElementById('card').style.display = 'block';
-        document.getElementById('video1').style.display = 'none';
-        document.getElementById('video2').style.display = 'block';
-    }, 15000);
+        video1.style.display = 'none';
+        video2.style.display = 'block';
+    }, 15000/3);
     function showIntroduce()
     {
         Swal.fire('',"<div style='margin-bottom:20px'><img src='{{ asset('assets/images/app.png') }}'></div>{!! $content !!}",'');

@@ -11,11 +11,9 @@ use App\Http\Requests\CharacterRequest;
 
 class CharacterController extends Controller
 {
-    private $noCharacter = 0;
-
     public function choose()
     {
-        if(Auth::check() && Auth::user()->character_id == $this->noCharacter)
+        if(Auth::check() && Auth::user()->character_id == env('NO_CHARACTER_ID'))
         {
             $characters = Character::avaiable();
             return view('user.character.choose')->with([
@@ -26,9 +24,9 @@ class CharacterController extends Controller
     }
     public function set()
     {
-        if(Auth::check() && Auth::user()->character_id == $this->noCharacter)
+        if(Auth::check() && Auth::user()->character_id == env('NO_CHARACTER_ID'))
         {
-            $character = Character::where('id', '!=', $this->noCharacter)->inRandomOrder()->first();
+            $character = Character::where('id', '!=', env('NO_CHARACTER_ID'))->inRandomOrder()->first();
             $user = User::findOrFail(Auth::id());
 
             $user->character_id = $character->id;
@@ -52,7 +50,7 @@ class CharacterController extends Controller
             $user->save();
             return redirect()->route('user.index')->with([
                 'status' => '',
-                'message' => "Chào mừng [ Player ] - Bạn đã thức tỉnh thành công E Rank {$character->name}"
+                'message' => "Chào mừng [ Player ] - Bạn đã thức tỉnh thành công E Rank - {$character->name}"
             ]);
         }
         abort(404);

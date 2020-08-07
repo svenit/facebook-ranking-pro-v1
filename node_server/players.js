@@ -57,7 +57,9 @@ let Player = function({uid, team, playerInfo, roomId}) {
     };
 
     self.pushSkillEffects = function(name) {
-        self.effectAnimation.push(name);
+        if(!self.effectAnimation.includes(name)) {
+            self.effectAnimation.push(name);
+        }
     }
 
     self.removeSkillEffect = function(name) {

@@ -184,6 +184,8 @@
                 rooms: [],
                 match: {
                     target: null,
+                    targetPlayer: {},
+                    playerAtk: {},
                     isReady: false,
                     room: {},
                     status: 'NO_ENEMY',
@@ -220,6 +222,9 @@
                 await this.index();
                 if (typeof page == "undefined" || page == null) {} else {
                     switch (page.path) {
+                        case 'admin.dashboard':
+                            await this.globalSocket();
+                        break;
                         case 'pvp.list':
                             await this.listFightRoom();
                             setInterval(() => {
@@ -307,6 +312,23 @@
                     this.notify('Đã có lỗi xảy ra, xin vui lòng tải lại trang');
                 }
             },
+            async globalSocket() {
+                let currentOnline = {
+                    count: [],
+                    time: []
+                };
+                this.socket.on(btoa('current-online'), data => {
+                    let { count, time } = this.AESDecryptJSON(data);
+                    currentOnline.count.push(count);
+                    currentOnline.time.push(time);
+                    window.currentOnlineChart.updateOptions({
+                        series: [{
+                            data: currentOnline.count
+                        }],
+                        labels: currentOnline.time
+                    });
+                });
+            },
             shuffleString(str) {
                 return str.split('').sort(function(){return 0.5-Math.random()}).join('');
             },
@@ -352,8 +374,7 @@
                 this.socket.emit(btoa('joinPvpRoom'), this.AESEncryptJSON({room: page.room, playerInfo: this.data}));
                 this.socket.on(btoa('listenPvp'), data => {
                     if(data != 'undefined') {
-                        let { room, message, finishPvp } = this.AESDecryptJSON(data);
-                        console.log(room);
+                        let { room, message, finishPvp, hit } = this.AESDecryptJSON(data);
                         if(room.id == page.room.roomId) {
                             if(room.players.length == room.slot) {
                                 this.setPlayerInRoom(room);
@@ -373,7 +394,18 @@
                                 console.log('Kết thúc', room);
                                 return;
                             }
-                            this.notify(message);
+                            if(typeof(hit) != 'undefined') {
+                                let { targetPlayer, playerAtk } = hit;
+                                this.pvp.match.targetPlayer = targetPlayer;
+                                this.pvp.match.playerAtk = playerAtk;
+                                setTimeout(() => {
+                                    this.pvp.match.targetPlayer = {};
+                                    this.pvp.match.playerAtk = {};
+                                }, 1000);
+                            }
+                            if(message != null) {
+                                this.notify(message);
+                            }
                         }
                     }
                 });

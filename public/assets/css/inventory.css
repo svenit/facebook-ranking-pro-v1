@@ -96,6 +96,34 @@
     background-size: 100%;
     background-position: bottom;
 }
+.buff-mana-pet {
+    transform: rotate3d(150, 1, 1, 45deg);
+    background-image: url(../images/effects/buff-mana-bg.png);
+    width: 150%;
+    height: 170%;
+    top: 20px;
+    z-index: 0 !important;
+    image-rendering:pixelated;
+    background-repeat: no-repeat;
+    position: absolute;
+    left: -10px;
+    background-size: 100%;
+    background-position: bottom;
+}
+.buff-mana {
+    transform: rotate3d(150, 1, 1, 45deg);
+    background-image: url(../images/effects/buff-mana-bg.png) !important;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    image-rendering:pixelated;
+    top: 30px;
+    z-index: 0 !important;
+    position: absolute;
+    left: 13px;
+    background-size: 100%;
+    background-position: bottom;
+}
 .has-pvp-broken-with-pet {
     transform: rotate3d(150, 1, 1, 45deg);
     background-image: url(../images/broken-stone.gif) !important;
@@ -207,4 +235,10 @@
 .strength-increagility
 {
     background-image: url(../images/effects/speedup.png);
+}
+
+.enemy-decrement-hp {
+    z-index: 99999999999;
+    position: absolute;
+    text-shadow: 1px 1px 10px #333, 1px 1px 10px #333;
 }

@@ -28,7 +28,7 @@
                 <div class="col-6 col-auto">
                     <div class="">
                         <div class="">
-                            <div @click="handleClickCharacter(data, true)" :style="{transform: 'scaleX(-1)',position:'absolute',bottom:`${data.pet ? '11%' : '5%'}`,right:'30%'}" title="Nhấp vào để xem thông số" style="margin:0px 10px 35px 0px" class="character-sprites hoverable">
+                            <div @click="handleClickCharacter(data, true)" :style="{transform: 'scaleX(-1) scale(.8)',position:'absolute',bottom:`${data.pet ? '11%' : '5%'}`,right:'30%'}" title="Nhấp vào để xem thông số" style="margin:0px 10px 35px 0px" class="character-sprites hoverable pvp-char animated normal" :class="`${pvp.match.playerAtk.id == pvp.match.me.uid && pvp.match.targetPlayer.id != pvp.match.playerAtk.id ? 'fadeInLeft' : ''} ${pvp.match.targetPlayer.id == pvp.match.me.uid ? 'flash' : ''}`">
                                 <span v-if="data.pet" style="z-index:1" :class="`Mount_Body_${data.pet.class_tag}`"></span>
                                 <span style="z-index:2" class="skin_f5a76e up-to-down"></span>
                                 <span style="z-index:2" class="broad_shirt_black up-to-down"></span>
@@ -41,6 +41,7 @@
                                 <span v-if="data.pet" style="z-index:50" :class="`Mount_Head_${data.pet.class_tag}`"></span>
                                 <div :class="`${data.pet ? 'shadow-pet' : 'shadow-character'} animated slow infinite pulse`"></div>
                                 <div v-if="pvp.match.me.uid == pvp.match.room.turnIndex && pvp.match.status == 'FIGHTING'" :class="`${data.pet ? 'has-pvp-turn-with-pet' : 'has-pvp-turn-no-pet'}`"></div>
+                                <div v-if="pvp.match.status == 'FIGHTING'" v-for="(animation, index) in pvp.match.me.effectAnimation" :class="`${animation}${data.pet ? '-pet' : ''}`"></div>
                             </div>
                             <div v-if="pvp.match.status == 'FIGHTING'">
                                 <div :style="{position: 'absolute', bottom: `${(35 + (pvp.match.me.effectAnimation.length/6))}%`, right: '30%',width:'150px'}" class="animated flash normal row skill-effect">
@@ -48,7 +49,7 @@
                                         <img class="col-auto pixel up-to-down" style="width:25px;padding:0;transform:rotate(90deg) translate(0%, -150%);filter: hue-rotate(300deg);margin:0 auto" src="{{ asset('assets/images/target.png') }}">
                                     </div>
                                     <div class="col-12 row">
-                                        <img v-for="(animation, index) in pvp.match.me.effectAnimation" class="col-auto pixel" style="width:25px;padding:0" :src="`{{ asset('assets/images/effects') }}/${animation}.png`">
+                                        <img v-for="(animation, index) in pvp.match.me.effectAnimation" class="col-auto pixel" style="width:20px;padding:0" :src="`{{ asset('assets/images/effects') }}/${animation}.png`">
                                     </div>
                                 </div>
                                 <div>
@@ -77,7 +78,7 @@
                 </div>
                 <div v-if="pvp.match.status == 'CONNECT_ENEMY' || pvp.match.status == 'FIGHTING'" style="float:right" class="col-6 col-auto">
                     <div class="">
-                        <div class="character-sprites hoverable" :style="{position:'absolute',bottom:`${pvp.match.enemy.playerInfo.pet ? '11%' : '5%'}`,left:'30%',zIndex:999,filter: (pvp.match.enemy.isReady || pvp.match.status == 'FIGHTING') && pvp.match.enemy.isConnect ? 'none' : 'grayscale(1)'}"  @click="handleClickCharacter(pvp.match.enemy.playerInfo, false)" title="Nhấp vào để xem thông số" style="margin:0px 10px 35px 0px">
+                        <div class="animated normal character-sprites hoverable pvp-char" :class="`${pvp.match.playerAtk.id == pvp.match.enemy.uid && pvp.match.targetPlayer.id != pvp.match.playerAtk.id ? 'fadeInLeft' : ''} ${pvp.match.targetPlayer.id == pvp.match.enemy.uid ? 'flash' : ''}`" :style="{position:'absolute',transform:'scale(.8)',bottom:`${pvp.match.enemy.playerInfo.pet ? '11%' : '5%'}`,left:'30%',zIndex:999,filter: (pvp.match.enemy.isReady || pvp.match.status == 'FIGHTING') && pvp.match.enemy.isConnect ? 'none' : 'grayscale(1)'}"  @click="handleClickCharacter(pvp.match.enemy.playerInfo, false)" title="Nhấp vào để xem thông số" style="margin:0px 10px 35px 0px">
                             <span style="z-index: 1"  v-if="pvp.match.enemy.playerInfo.pet" :class="`Mount_Body_${pvp.match.enemy.playerInfo.pet.class_tag}`"></span>
                             <span style="z-index:2" class="skin_f5a76e up-to-down"></span>
                             <span style="z-index:2" class="broad_shirt_black up-to-down"></span>
@@ -92,8 +93,14 @@
                             <div v-if="pvp.match.enemy.isReady && pvp.match.status == 'CONNECT_ENEMY'" style="position: absolute; left:30%;text-shadow: 1px 1px 10px #333, 1px 1px 10px #333;top:-15%" class="animated tada infinite slower pixel-font text-warning text-center slow">READY!</div>
                             <div v-if="!pvp.match.enemy.isConnect" style="position: absolute;top:-10%;font-size: 12px;filter: drop-shadow(2px 4px 6px black);" class="enemy-decrement-hp animated flash infinite slower pixel-font text-center slower">DISCONNECTED...</div>
                             <div v-if="pvp.match.enemy.uid == pvp.match.room.turnIndex" :class="`${pvp.match.enemy.playerInfo.pet ? 'has-pvp-turn-with-pet' : 'has-pvp-turn-no-pet'}`"></div>
+                            <div v-if="pvp.match.status == 'FIGHTING'">
+                                <div v-for="(animation, index) in pvp.match.enemy.effectAnimation" :class="`${animation}${pvp.match.enemy.playerInfo.pet ? '-pet' : ''}`"></div>
+                                <div v-if="pvp.match.targetPlayer.id == pvp.match.enemy.uid">
+                                    <div class="enemy-decrement-hp animated slideOutUp pixel-font text-warning text-center normal">@{{ numberFormatDetail(pvp.match.targetPlayer.hp) }} HP</div>
+                                    <div class="enemy-decrement-hp animated slideOutUp pixel-font text-danger text-center slow">@{{ pvp.match.targetPlayer.message }}</div>
+                                </div>
+                            </div>
                             {{-- <div v-if="pvp.yourAttack" :style="{backgroundImage:`url(${pvp.yourSkillAnimation})`,backgroundSize:'110%',position:'absolute',backgroundPosition:'center',width: '150%',height: '150%',bottom: `${pvp.match.enemy.playerInfo.pet ? '-60px' : '-20px'}`,left: 0,zIndex: '9999'}"></div>
-                            <div v-if="pvp.yourAttackDamage" class="enemy-decrement-hp infinite animated slideOutUp pixel-font text-warning text-center slow">- @{{ numberFormatDetail(pvp.yourAttackDamage) }} HP</div>
                             <div v-if="pvp.yourAttack" :class="`${pvp.match.enemy.playerInfo.pet ? 'has-pvp-broken-with-pet' : 'has-pvp-broken-no-pet'}`"></div>
                             <div v-for="(effected, index) in pvp.enemyEffected">
                                 <div v-if="effected" :class="`${pvp.match.enemy.playerInfo.pet ? 'has-pvp-effect-with-pet' : 'has-pvp-effect-no-pet'} ${index}`" class="animated flash"></div>
@@ -108,7 +115,7 @@
                                     <img class="col-auto pixel up-to-down" style="width:25px;padding:0;transform:rotate(90deg) translate(0%, -150%);filter: hue-rotate(300deg);margin:0 auto" src="{{ asset('assets/images/target.png') }}">
                                 </div>
                                 <div class="col-12">
-                                    <img v-for="(animation, index) in pvp.match.enemy.effectAnimation" class="col-auto pixel" style="width:25px;padding:0" :src="`{{ asset('assets/images/effects') }}/${animation}.png`">
+                                    <img v-for="(animation, index) in pvp.match.enemy.effectAnimation" class="col-auto pixel" style="width:20px;padding:0" :src="`{{ asset('assets/images/effects') }}/${animation}.png`">
                                 </div>
                             </div>
                             <div>
