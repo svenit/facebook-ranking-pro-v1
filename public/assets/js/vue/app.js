@@ -17,6 +17,8 @@
     const app = new Vue({
         el: '#app',
         data: {
+            firebase: null,
+            userCount: 0,
             author: "let author = 'sven307';console.log(author);",
             socket: null,
             loading: true,
@@ -202,6 +204,8 @@
             selected: [],
         },
         async created() {
+            this.firebase = firebase;
+            firebase = '';
             this.token = await this.bind(document.getElementById('main').getAttribute('data-id'));
             axios.defaults.params = {};
             axios.interceptors.request.use(request => {
@@ -221,12 +225,10 @@
             });
             if (config.auth) {
                 await this.index();
+                this.globalSocket();
                 await this.listGlobalChat('global');
                 if (typeof page == "undefined" || page == null) {} else {
                     switch (page.path) {
-                        case 'admin.dashboard':
-                            await this.globalSocket();
-                        break;
                         case 'pvp.list':
                             await this.listFightRoom();
                             setInterval(() => {
@@ -314,21 +316,24 @@
                     this.notify('Đã có lỗi xảy ra, xin vui lòng tải lại trang');
                 }
             },
-            async globalSocket() {
+            globalSocket() {
                 let currentOnline = {
                     count: [],
                     time: []
                 };
                 this.socket.on(btoa('current-online'), data => {
                     let { count, time } = this.AESDecryptJSON(data);
-                    currentOnline.count.push(count);
-                    currentOnline.time.push(time);
-                    window.currentOnlineChart.updateOptions({
-                        series: [{
-                            data: currentOnline.count
-                        }],
-                        labels: currentOnline.time
-                    });
+                    this.userCount = count;
+                    if(page.path == 'admin.dashboard') {
+                        currentOnline.count.push(count);
+                        currentOnline.time.push(time);
+                        window.currentOnlineChart.updateOptions({
+                            series: [{
+                                data: currentOnline.count
+                            }],
+                            labels: currentOnline.time
+                        });
+                    }
                 });
             },
             shuffleString(str) {
@@ -669,12 +674,12 @@
             async listGlobalChat(channel) {
                 const self = this;
                 this.loading = true;
-                await firebase.database().ref(channel).on('child_added', function (data) {
+                await this.firebase.database().ref(channel).on('child_added', function (data) {
                     self.chat.messages.push(data.val());
                     $('#chat-box').stop().animate({
                         scrollTop: 1000000000000000000
                     }, $('#chat-box').scrollHeight);
-                    this.gotoBottomChat();
+                    self.gotoBottomChat();
                     if (self.chat.isIn && self.chat.noti && data.val().id != user.id) {
                         const audio = new Audio(`${config.root}/assets/sound/ting.mp3`);
                         audio.play();
@@ -687,11 +692,26 @@
             },
             async sendMessage(type) {
                 try {
+                    if(!this.data.infor.config.canChatInGlobal){
+                        return Swal.fire('', 'Bạn đã bị cấm chat trong kênh này', 'error');
+                    }
+                    let commands = ['sudo clear --all'];
                     if (this.chat.isIn) {
                         if (this.chat.text == '' || !this.chat.text.trim() || this.chat.uploading) {
                             return;
                         }
-                        await firebase.database().ref('global').push({
+                        console.log(this.data);
+                        if(commands.includes(this.chat.text) && this.data.infor.isAdmin == 1) {
+                            switch(this.chat.text) {
+                                case 'sudo clear --all':
+                                    await this.firebase.database().ref('global').remove();
+                                    this.chat.messages = [];
+                                    Swal.fire('', 'Đã xóa hết tin nhắn', 'success');
+                                break;
+                            }
+                            return;
+                        }
+                        await this.firebase.database().ref('global').push({
                             id: user.provider_id,
                             name: user.name,
                             time: new Date().getTime(),
@@ -787,7 +807,7 @@
                     self.notify(`Người lạ đã ngắt kết nối :(`);
                     self.chat.messages = [];
                     self.chat.block = true;
-                    firebase.database().ref(channel).remove();
+                    this.firebase.database().ref(channel).remove();
                 });
                 this.listGlobalChat(channel);
             },
@@ -797,7 +817,7 @@
                         if (this.chat.text == '' || !this.chat.text.trim() || this.chat.uploading) {
                             return;
                         }
-                        await firebase.database().ref(`strangers/rooms/${page.room.name}`).push({
+                        await this.firebase.database().ref(`strangers/rooms/${page.room.name}`).push({
                             id: page.user.id,
                             time: new Date().getTime(),
                             message: this.chat.text,

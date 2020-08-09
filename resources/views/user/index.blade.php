@@ -2,7 +2,7 @@
 @section('content')
 
 @section('hero','Trang Chủ')
-@section('sub_hero',"Xin chào, $welcome")
+@section('sub_hero',"Xin chào")
 
 <div class="page-content page-container" id="page-content">
     <div class="padding-x">
@@ -12,6 +12,26 @@
                 <div class="row row-sm">
                     <div class="col-md-12">
                         <div class="row row-sm">
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="card vip-bordered">
+                                    <div class="card-body row">
+                                        <div class="col-4">
+                                            <img width="100%" src="{{ asset('assets/images/quests/presenter.png') }}">
+                                        </div>
+                                        <div class="col-8" style="position: relative;">
+                                            <img src="{{ asset('assets/images/comment.png') }}">
+                                            <p class="text-dark" style="width:195px;position: absolute;top:15px;left:15px">
+                                                {{ $presenterTask }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="card vip-bordered">
+                                    @{{ userCount }}
+                                </div>
+                            </div>
                             <div class="col-12">
                                 <div class="card vip-bordered" style="margin-top:20px;">
                                     <div class="card-body">
@@ -67,7 +87,7 @@
                 </div>
             </div>
         </div>
-        <div style="margin-top:25px;" class="block p-3 normal-bordered">
+        {{-- <div style="margin-top:25px;" class="block p-3 normal-bordered">
             <div id="carouselCaptions" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
                     <li data-target="#carouselCaptions" data-slide-to="0" class="active"></li>
@@ -106,7 +126,7 @@
             <div class="corner corner-top-right"></div> 
             <div class="corner corner-bottom-left"></div> 
             <div class="corner corner-bottom-right">
-        </div>
+        </div> --}}
     </div>
 </div>
 @endsection

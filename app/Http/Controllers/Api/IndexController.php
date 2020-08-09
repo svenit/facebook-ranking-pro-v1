@@ -39,7 +39,9 @@ class IndexController extends Controller
                         'gold' => $helper->gold(),
                         'pvp_points' => $helper->user()->pvp_points,
                         'provider_id' => $helper->user()->provider_id,
-                        'energy' => $helper->user()->energy
+                        'energy' => $helper->user()->energy,
+                        'isAdmin' => $helper->user()->isAdmin,
+                        'config' => $helper->user()->config
                     ],
                     'rank' => [
                         'power' => $helper->rankPower()

@@ -53,9 +53,10 @@ class LoginController extends Controller
             if($userAuthentication->status)
             {
                 Auth::loginUsingId($userAuthentication->id,TRUE);
+                $user = Auth::user();
                 return redirect()->route('user.index')->with([
                     'status' => 'success',
-                    'message' => 'Đăng nhập thành công'
+                    'message' => "Chào mừng [ {$user->name} ] đã quay trở lại!"
                 ]);
             }
             return redirect()->route('oauth.index')->with([

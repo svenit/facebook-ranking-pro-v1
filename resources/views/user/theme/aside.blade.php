@@ -696,13 +696,28 @@
                                 <p style="margin-top:20px">( Trống )</p>
                             </div>
                             <div v-else class="chat-list">
-                                <div v-for="(msg,index) in chat.messages" :key="index" class="chat-item hoverable" :data-class="msg.id == {{ Auth::user()->provider_id }} ? 'alt' : 'null'" v-if="msg.message && msg.id && msg.name && msg.time" data-sr-id="32" style="margin-bottom: 5px;padding:5px 0px;visibility: visible; transform: none; opacity: 1; transition: transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s;">
-                                    <a v-if="msg.id != {{ Auth::user()->provider_id }}" class="avatar w-40" data-pjax-state="">
-                                        <img class="image" :src="`http://graph.facebook.com/${msg.id}/picture?type=normal`" alt=".">
-                                    </a>
+                                <div v-for="(msg,index) in chat.messages" :key="index" class="chat-item hoverable" v-if="msg.message && msg.id && msg.name && msg.time" data-sr-id="32" style="margin-bottom: 5px;padding:5px 0px;visibility: visible; transform: none; opacity: 1; transition: transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s;">
                                     <div class="chat-body">
-                                        <div :style="{maxWidth:'300px',color:'#333',borderRadius:'25px !important',backgroundColor:msg.id == {{ Auth::user()->provider_id }} ? '#e7ad55' : 'whitesmoke',}" class="chat-content rounded msg small-font">@{{ msg.message }}</div>
-                                        <div class="chat-date date">@{{ timeAgo(msg.time) }} trước</div>
+                                        <table class="mdl-data-table mdl-js-data-table" style="width:100%;border:0;">
+                                            <tbody id="chatArea">
+                                                <tr>
+                                                    <th style="padding:0;width:20px;vertical-align:middle;padding-left:10px">
+                                                        <div class="avatar-container">
+                                                            <img style="width:50px;height:50px;object-fit:cover" class="mr-2 avatar avatar-circle" :src="`http://graph.facebook.com/${msg.id}/picture?type=normal`">
+                                                        </div>
+                                                    </th>
+                                                    <th style="text-align:left;white-space:initial;word-break:break-word;line-height:18px;padding-top:5px;padding-bottom:5px;">
+                                                        <span>
+                                                            <span class="text-gold" style="font-size:12px;font-weight: initial;">@{{ msg.name }}</span>
+                                                        </span>
+                                                        <br> 
+                                                        <small style="font-size:10px;">@{{ timeAgo(msg.time) }}</small>
+                                                        <br>
+                                                        <span style="font-size: 13px;font-weight: initial;" class="text-muted">@{{ msg.message }}</span>
+                                                    </th>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -767,14 +782,14 @@
                                 <li><a href="{{ Route('user.top.activities') }}" class=""><span class="nav-text">Hoạt Động</span></a></li>
                             </ul>
                         </li>
-                        <li class="{{ Request::is('events/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="coffee"></i></span> <span
+                        <li class="{{ Request::is('events/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><img style="width:20px" src="{{ asset('assets/images/Casino.png') }}"></span> <span
                                     class="nav-text">Cansino</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('user.events.wheel') }}" class=""><span class="nav-text">VQMM</span></a></li>
                                 <li><a href="{{ Route('user.events.lucky-box') }}" class=""><span class="nav-text">Cá Cược</span></a></li>
                             </ul>
                         </li>
-                        <li class="{{ Request::is('shop/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shopping-cart"></i></span> <span
+                        <li class="{{ Request::is('shop/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><img style="width:20px" src="{{ asset('assets/images/Shop.png') }}"></span> <span
                             class="nav-text">Cửa Hàng</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('user.shop.index',['cate' => 'items']) }}" class=""><span class="nav-text">Vật Phẩm</span></a></li>
@@ -786,7 +801,7 @@
                                 <li><a href="{{ Route('user.shop.index',['cate' => 'skills']) }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
                             </ul>
                         </li>
-                        <li class="{{ Request::is('oven/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="git-branch"></i></span> <span
+                        <li class="{{ Request::is('oven/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><img style="width:20px" src="{{ asset('assets/images/Smith.png') }}"></span> <span
                             class="nav-text">Tiệm Rèn</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('user.oven.gem') }}" class=""><span class="nav-text">Khảm Ngọc</span></a></li>
@@ -800,7 +815,7 @@
                                 <li><a href="{{ Route('user.explore.recovery-room.index') }}" class=""><span class="nav-text">Phòng Hồi Phục</span></a></li>
                             </ul>
                         </li>
-                        <li class="{{ Request::is('guild/*') || Request::is('guild')  ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="users"></i></span> <span
+                        <li class="{{ Request::is('guild/*') || Request::is('guild')  ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><img style="width:20px" src="{{ asset('assets/images/Guild.png') }}"></span> <span
                             class="nav-text">Bang Hội</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 @if(empty(Auth::user()->guildMember))
@@ -813,19 +828,19 @@
                                 @endif
                             </ul>
                         </li>
-                        <li class="{{ Request::is('pvp/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
+                        <li class="{{ Request::is('pvp/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><img style="width:20px" src="{{ asset('assets/images/PVP_Icon.png') }}"></span> <span
                             class="nav-text">PVP Arena</span><span class="nav-badge"><b class="badge-circle xs text-success"></b></span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('user.pvp.index') }}" class=""><span class="nav-text">Tham Gia</span></a></li>
                             </ul>
                         </li>
-                        <li class="{{ Request::is('chat/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="message-circle"></i></span> <span
+                        {{-- <li class="{{ Request::is('chat/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="message-circle"></i></span> <span
                             class="nav-text">Chat</span> <span class="nav-badge"><b class="badge-circle xs text-success"></b></span><span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
                                 <li><a href="{{ Route('user.chat.global') }}" class=""><span class="nav-text">Thế Giới</span></a></li>
                                 <li><a onclick="return confirm('Bạn đang có {{ Auth::user()->stranger_chat_times ?? 0 }} vé chat ! Tham gia ?')" href="{{ Route('user.chat.stranger.join') }}" class=""><span class="nav-text">CVNL</span></a></li>
                             </ul>
-                        </li>
+                        </li> --}}
                         <li><a href="{{ Route('user.giftcode.index') }}" class=""><span class="nav-icon"><i data-feather="gift"></i></span> <span
                             class="nav-text">Quà Tặng</span></a>
                         </li>
