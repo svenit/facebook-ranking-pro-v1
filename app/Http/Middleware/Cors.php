@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Session;
 
 class Cors
 {
+    protected $except = [
+        'api/v1/wheel'
+    ];
     /**
      * Handle an incoming request.
      *
@@ -17,6 +20,9 @@ class Cors
      */
     public function handle($request, Closure $next)
     {
+        if(in_array($request->path(), $this->except)) {
+            return $next($request);
+        }
         if(env('APP_PROTECTED_API'))
         {
             if(isset($request->bearer))

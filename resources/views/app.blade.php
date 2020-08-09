@@ -85,9 +85,11 @@
 				@endif
 				@yield('content')
 			</div>
+			<div style="z-index:999;position:fixed;bottom:0;right:0;margin-bottom:25px;margin-right:20px;">
+				<button @click="gotoBottomChat" data-toggle="modal" data-target="#global-chat" class="btn btn-outline-light btn-rounded" id="show_chat_wa"><img src="{{ asset('assets/images/icon-pack/message-box.png') }}" style="padding-right:10px;"> Thế Giới</button>
+			</div>
 			<div id="footer" style="margin-top:0px" class="page-footer">
 				<div class="d-flex p-3"><span copyright-id="{{ config('services.crypto.salt') }}" class="copyright text-sm pixel-font text-muted flex">&copy;Copyright {{ date('Y') }} Coded by <a class="text-gold" href="https://facebook.com/sven307">Sven</a></span>
-					<div style="font-family: pixel !important" class="text-sm text-muted">Version {{ env('APP_VERSION') }}</div>
 				</div>
 			</div>
 		</div>
@@ -103,6 +105,7 @@
 		@auth
 			const user = {
 				id: {{ Auth::id() }},
+				provider_id: {{ Auth::user()->provider_id }},
 				name: "{{ Auth::user()->name }}",
 				character: "{{ Auth::user()->character->name }}"
 			};

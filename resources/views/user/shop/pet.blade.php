@@ -22,7 +22,7 @@
                                     <button type="button" class="btn btn-secondary active">
                                         {{ number_format($pet->price) }} {{ $pet->price_type == 0 ? 'Vàng' : 'KC' }}
                                     </button> 
-                                    <button @click="buyPet({{ $pet->id }},$event)" style="border-top-left-radius:0px;border-bottom-left-radius:0px" type="button" class="btn btn-secondary">Mua</button>
+                                    <button @click="buyPet({{ json_encode($pet) }},$event)" style="border-top-left-radius:0px;border-bottom-left-radius:0px" type="button" class="btn btn-secondary">Mua</button>
                                 </div>
                             </div>
                         </div>

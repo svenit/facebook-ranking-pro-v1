@@ -29,14 +29,14 @@
                                     <div style="margin:15px 0px"  data-title="tooltip" title="Click vào để xem chi tiết" class="col-6 col-md-4 col-lg-3">
                                         <div class="card vip-bordered">
                                             <div @click="showSkillsDescription({{ json_encode($item) }},0,'{{ $skill->name }}')" class="text-center hoverable">
-                                                <img style="border:1px solid {{ $item->rgb }};border-radius:5px" src="{{ $item->image }}">
+                                                <img class="mt-2" style="border:1px solid {{ $item->rgb }};border-radius:5px;width:68px;height:68px;object-fit:cover" src="{{ $item->image }}">
                                                 <p style="margin-top:10px;color:{{ $item->rgb }}">{{ $item->name }}</p>
                                             </div>
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-secondary active">
                                                     {{ number_format($item->price) }} {{ $item->price_type == 0 ? 'Vàng' : 'KC' }}
                                                 </button> 
-                                                <button @click="buySkill({{ $item->id }},$event)" style="border-top-left-radius:0px;border-bottom-left-radius:0px" type="button" class="btn btn-secondary">Mua</button>
+                                                <button @click="buySkill({{ json_encode($item) }},$event)" style="border-top-left-radius:0px;border-bottom-left-radius:0px" type="button" class="btn btn-secondary">Mua</button>
                                             </div>
                                         </div>
                                     </div>

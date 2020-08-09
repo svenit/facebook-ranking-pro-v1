@@ -99,9 +99,6 @@
         room:{
             name:"{{ $room->name }}",
             people:{{ $room->people }}
-        },
-        pusher:{
-            key:"{{ \App\Income\CustomeConnection::pusher()['app_key'] }}"
         }
     };
 </script>

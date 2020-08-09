@@ -91,7 +91,8 @@
                     gold: 'Đang tải...',
                     provider_id: "0",
                     active: "",
-                    pvp_points: 0
+                    pvp_points: 0,
+                    energy: 0
                 },
                 stats: {
                     data: {},
@@ -220,6 +221,7 @@
             });
             if (config.auth) {
                 await this.index();
+                await this.listGlobalChat('global');
                 if (typeof page == "undefined" || page == null) {} else {
                     switch (page.path) {
                         case 'admin.dashboard':
@@ -234,17 +236,17 @@
                         case 'pvp.room':
                             await this.pvpRoom();
                             break;
-                        case 'chat.global':
-                            await this.listGlobalChat('global');
-                            break;
-                        case 'chat.stranger':
-                            if (page.room.people == 2) {
-                                this.chat.block = false;
-                            } else {
-                                this.chat.message = [];
-                            }
-                            await this.chatRoom();
-                            break;
+                        // case 'chat.global':
+                        //     await this.listGlobalChat('global');
+                        //     break;
+                        // case 'chat.stranger':
+                        //     if (page.room.people == 2) {
+                        //         this.chat.block = false;
+                        //     } else {
+                        //         this.chat.message = [];
+                        //     }
+                        //     await this.chatRoom();
+                        //     break;
                         case 'inventory.index':
                             await this.invetory();
                             break;
@@ -672,7 +674,8 @@
                     $('#chat-box').stop().animate({
                         scrollTop: 1000000000000000000
                     }, $('#chat-box').scrollHeight);
-                    if (self.chat.isIn && self.chat.noti && data.val().id != page.user.id) {
+                    this.gotoBottomChat();
+                    if (self.chat.isIn && self.chat.noti && data.val().id != user.id) {
                         const audio = new Audio(`${config.root}/assets/sound/ting.mp3`);
                         audio.play();
                     }
@@ -689,21 +692,25 @@
                             return;
                         }
                         await firebase.database().ref('global').push({
-                            id: page.user.id,
-                            name: page.user.name,
+                            id: user.provider_id,
+                            name: user.name,
                             time: new Date().getTime(),
                             message: this.chat.text,
                             type: type
                         });
                         this.chat.text = '';
-                        $('#chat-box').animate({
-                            scrollTop: 1000000000000000000
-                        }, 0);
+                        this.gotoBottomChat();
                     }
                 } catch (e) {
                     this.notify('Đã có lỗi xảy ra');
                     console.log(e);
                 }
+            },
+            gotoBottomChat() {
+                setTimeout(() => {
+                    let chatBox = document.getElementById('chat-box');
+                    chatBox.scrollTop = (chatBox.scrollHeight + screen.height) * 100000000000000;
+                }, 500);
             },
             showInputFile() {
                 $('#file').click();
@@ -817,7 +824,9 @@
             async inventoryAvailable() {
                 this.loading = true;
                 let res = await axios.get(`${config.apiUrl}/profile/inventory/available`);
-                this.gears = res.data;
+                if(res.data.code != 500) {
+                    this.gears = res.data;
+                }
                 this.loading = false;
             },
             async deleteEquipment(data) {
@@ -864,70 +873,103 @@
                 this.notify(res.data.message);
                 this.loading = false;
             },
-            async buyEquip(id, e) {
-                if (confirm('Mua trang bị này ?')) {
-                    let res = await axios.post(`${config.apiUrl}/shop/buy-equip`, {
-                        id: id
-                    })
-                    this.notify(res.data.message);
-                    if (res.data.code == 200) {
-                        await this.index();
+            async buyEquip(item, e) {
+                Swal.fire({
+                    title: `<div style="border:1px solid ${item.rgb};margin:0 auto" class="pixel text-center ${item.shop_tag}"></div>`,
+                    html: `<p class="text-gold"><strong>${item.name}</strong></p><p class="text-silver" style="font-size:13px">${item.description || '( Không có mô tả cho trang bị này )'}</p>`,
+                    showCancelButton: true,
+                    confirmButtonText: 'Mua',
+                    cancelButtonText: 'Hủy',
+                    footer: '<a href="#">Bạn không đủ vàng hay kim cương?</a>',
+                  }).then(async (result) => {
+                    if (result.value) {
+                        let res = await axios.post(`${config.apiUrl}/shop/buy-equip`, {id: item.id});
+                        if (res.data.code == 200) {
+                            await this.index();
+                            e.target.innerHTML = 'Đã mua';
+                        }
+                        Swal.fire('', res.data.message, res.data.status);
                     }
-                    if (res.data.code == 200) {
-                        e.target.innerHTML = 'Đã mua';
-                    }
-                    this.loading = false;
-                }
+                }).catch((e) => {
+                    Swal.showValidationMessage('Đã có lỗi xảy ra');
+                });
             },
-            async buySkill(id, e) {
-                if (confirm('Mua kỹ năng này ?')) {
-                    let res = await axios.post(`${config.apiUrl}/shop/buy-skill`, {
-                        id: id
-                    })
-                    if (res.data.code == 200) {
-                        await this.index();
+            async buySkill(item, e) {
+                Swal.fire({
+                    title: `<img src="${item.image}" class="pixel text-center" style="border:1px solid ${item.rgb};margin:0 auto" width="60px">`,
+                    html: `<p class="text-gold"><strong>${item.name}</strong></p><div class="text-silver" style="font-size:13px">${item.description || '( Không có mô tả cho kỹ năng này )'}</div>`,
+                    showCancelButton: true,
+                    confirmButtonText: 'Mua',
+                    cancelButtonText: 'Hủy',
+                    showLoaderOnConfirm: true,
+                    footer: '<a href="#">Bạn không đủ vàng hay kim cương?</a>',
+                  }).then(async (result) => {
+                    if (result.value) {
+                        let res = await axios.post(`${config.apiUrl}/shop/buy-skill`, {id: item.id});
+                        if (res.data.code == 200) {
+                            await this.index();
+                            e.target.innerHTML = 'Đã mua';
+                        }
+                        Swal.fire('', res.data.message, res.data.status);
                     }
-                    this.notify(res.data.message);
-                    if (res.data.code == 200) {
-                        e.target.innerHTML = 'Đã mua';
-                    }
-                    this.loading = false;
-                }
+                }).catch((e) => {
+                    Swal.showValidationMessage('Đã có lỗi xảy ra');
+                });
             },
-            async buyPet(id, e) {
-                if (confirm('Mua thú cưỡi này ?')) {
-                    let res = await axios.post(`${config.apiUrl}/shop/buy-pet`, {
-                        id: id
-                    })
-                    if (res.data.code == 200) {
-                        await this.index();
+            async buyPet(item, e) {
+                Swal.fire({
+                    title: `<div style="border:1px solid ${item.rgb};margin:0 auto;" class="pixel Mount_Icon_${item.class_tag}"></div>`,
+                    html: `<p class="text-gold"><strong>${item.name}</strong></p><p class="text-silver" style="font-size:13px">${item.description || '( Không có mô tả cho thú cưỡi này )'}</p>`,
+                    showCancelButton: true,
+                    confirmButtonText: 'Mua',
+                    cancelButtonText: 'Hủy',
+                    footer: '<a href="#">Bạn không đủ vàng hay kim cương?</a>',
+                  }).then(async (result) => {
+                    if (result.value) {
+                        let res = await axios.post(`${config.apiUrl}/shop/buy-pet`, {id: item.id});
+                        if (res.data.code == 200) {
+                            await this.index();
+                            e.target.innerHTML = 'Đã mua';
+                        }
+                        Swal.fire('', res.data.message, res.data.status);
                     }
-                    this.notify(res.data.message);
-                    if (res.data.code == 200) {
-                        e.target.innerHTML = 'Đã mua';
-                    }
-                    this.loading = false;
-                }
+                }).catch((e) => {
+                    Swal.showValidationMessage('Đã có lỗi xảy ra');
+                });
             },
-            async buyItem(id, e) {
-                var quantity = prompt('Nhập số lượng cần mua');
-                quantity = parseInt(quantity);
-                if (quantity && typeof quantity == 'number' && quantity > 0 && quantity <= 99999) {
-                    let res = await axios.post(`${config.apiUrl}/shop/buy-item`, {
-                        id: id,
-                        quantity: quantity
-                    })
-                    if (res.data.code == 200) {
-                        await this.index();
+            async buyItem(item, e) {
+                Swal.fire({
+                    title: `<div class="character-sprites" style="margin:0 auto;width:68px;height:68px;border:1px solid #cd8e2c"><div class="pixel ${item.class_tag}"></div></div>`,
+                    html: `<p class="text-gold"><strong>${item.name}</strong></p><p class="text-silver" style="font-size:13px">${item.description || '( Không có mô tả cho vật phẩm này )'}</p><small class="small-font text text-muted">Vui lòng nhập số lượng cần mua</small>`,
+                    input: 'number',
+                    confirmButtonText: 'Mua',
+                    showCancelButton: true,
+                    cancelButtonText: 'Đóng',
+                    showLoaderOnConfirm: true,
+                    footer: '<a href="#">Bạn không đủ vàng hay kim cương?</a>',
+                    preConfirm: quantity => {
+                        return axios.post(`${config.apiUrl}/shop/buy-item`, {
+                            id: item.id,
+                            quantity: quantity
+                        }).then(async (res) => {
+                            if(res.data.code == 200) {
+                                await this.index();
+                                e.target.innerHTML = 'Đã mua';
+                                return res.data;
+                            }
+                            Swal.showValidationMessage(res.data.message);
+                        }).catch((e) => {
+                            Swal.showValidationMessage('Đã có lỗi xảy ra');
+                        });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                  }).then((result) => {
+                    if (result.value) {
+                        if(result.value.code == 200) {
+                            return Swal.fire('', result.value.message, result.value.status);
+                        }
                     }
-                    this.notify(res.data.message);
-                    if (res.data.code == 200) {
-                        e.target.innerHTML = 'Đã mua';
-                    }
-                } else {
-                    this.notify('Số lượng quá lớn hoặc không hợp lệ');
-                }
-                this.loading = false;
+                });
             },
             async pet() {
                 this.loading = true;
@@ -1031,9 +1073,9 @@
                 }
             },
             async incrementStat(stat) {
-                var point = prompt('Nhập số điểm bạn muốn cộng');
+                var point = prompt('Nhập số điểm bạn muốn tăng');
                 point = parseInt(point);
-                if (point && typeof point == 'number' && point > 0) {
+                if (typeof(point) != 'undefined' && point > 0) {
                     if (point > this.data.stats.available) {
                         this.notify('Bạn không đủ điểm');
                     } else {
@@ -1046,8 +1088,6 @@
                         await this.index();
                         this.loading = false;
                     }
-                } else {
-                    this.notify('Giá trị lỗi');
                 }
             },
             async removeGem(data) {
@@ -1069,25 +1109,39 @@
                     this.loading = false;
                 }
             },
-            async buyGem(gem) {
-                var quantity = prompt('Nhập số lượng cần mua');
-                quantity = parseInt(quantity);
-                if (quantity && typeof quantity == 'number' && quantity > 0 && quantity <= 10) {
-                    let res = await axios.post(`${config.apiUrl}/shop/buy-gem`, {
-                        id: gem,
-                        quantity: quantity
-                    })
-                    if (res.data.code == 200) {
-                        await this.index();
+            async buyGem(item, e) {
+                Swal.fire({
+                    title: `<div class="pixel text-center gem ${item.image}" style="border:1px solid ${item.rgb};margin:0 auto} width="60px"></div>`,
+                    html: `<p class="text-gold"><strong>${item.name}</strong></p><p class="text-silver" style="font-size:13px">${item.description || '( Không có mô tả cho vật phẩm này )'}</p><small class="small-font text text-muted">Vui lòng nhập số lượng cần mua</small>`,
+                    input: 'number',
+                    confirmButtonText: 'Mua',
+                    showCancelButton: true,
+                    cancelButtonText: 'Đóng',
+                    showLoaderOnConfirm: true,
+                    footer: '<a href="#">Bạn không đủ vàng hay kim cương?</a>',
+                    preConfirm: quantity => {
+                        return axios.post(`${config.apiUrl}/shop/buy-gem`, {
+                            id: item.id,
+                            quantity: quantity
+                        }).then(async (res) => {
+                            if(res.data.code == 200) {
+                                await this.index();
+                                e.target.innerHTML = 'Đã mua';
+                                return res.data;
+                            }
+                            Swal.showValidationMessage(res.data.message);
+                        }).catch((e) => {
+                            Swal.showValidationMessage('Đã có lỗi xảy ra');
+                        });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                  }).then((result) => {
+                    if (result.value) {
+                        if(result.value.code == 200) {
+                            return Swal.fire('', result.value.message, result.value.status);
+                        }
                     }
-                    this.notify(res.data.message);
-                    if (res.data.code == 200) {
-                        e.target.innerHTML = 'Đã mua';
-                    }
-                } else {
-                    this.notify('Số lượng quá lớn hoặc không hợp lệ');
-                }
-                this.loading = false;
+                });
             },
             async insertGemToGear() {
                 if (this.oven.gear.id && this.oven.gem.id) {

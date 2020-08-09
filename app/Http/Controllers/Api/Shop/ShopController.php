@@ -268,14 +268,18 @@ class ShopController extends Controller
     {
         $validate = Validator::make($request->all(),[
             'id' => 'required|numeric|exists:items,id',
-            'quantity' => 'required|numeric|min:1|max:9999'
+            'quantity' => 'required|numeric|between:1,9999'
+        ], [
+            'quantity.required' => 'Bạn chưa nhập số lượng cần mua',
+            'quantity.between' => 'Số lượng chỉ được trong khoảng 1-9999',
+            'quantity.numeric' => 'Số lượng không đúng định dạng'
         ]);
         if($validate->fails())
         {
             return response()->json(Crypto::encrypt([
                 'code' => 500,
                 'status' => 'error',
-                'message' => 'Vật phẩm không tồn tại hoặc số lượng không chính xác'
+                'message' => $validate->errors()->first()
             ]),200);
         }
         else
@@ -358,13 +362,17 @@ class ShopController extends Controller
     {
         $validate = Validator::make($request->all(),[
             'id' => 'required|exists:gems,id',
-            'quantity' => 'required|between:0,10'
+            'quantity' => 'required|numeric|between:0,10'
+        ], [
+            'quantity.required' => 'Bạn chưa nhập số lượng cần mua',
+            'quantity.between' => 'Số lượng chỉ được trong khoảng 1-10',
+            'quantity.numeric' => 'Số lượng không đúng định dạng'
         ]);
         if($validate->fails())
         {
             return response()->json(Crypto::encrypt([
                 'code' => 500,
-                'message' => 'Lỗi',
+                'message' => $validate->errors()->first(),
                 'status' => 'error'
             ]));
         }

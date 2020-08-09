@@ -35,7 +35,7 @@
                                             <button type="button" class="btn btn-secondary active">
                                                 {{ number_format($item->price) }} {{ $item->price_type == 0 ? 'Vàng' : 'KC' }}
                                             </button> 
-                                            <button @click="buyEquip({{ $item->id }},$event)" style="border-top-left-radius:0px;border-bottom-left-radius:0px" type="button" class="btn btn-secondary">Mua</button>
+                                            <button @click="buyEquip({{ json_encode($item) }},$event)" style="border-top-left-radius:0px;border-bottom-left-radius:0px" type="button" class="btn btn-secondary">Mua</button>
                                         </div>
                                     </div>
                                 </div>

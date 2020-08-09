@@ -16,7 +16,7 @@ class InventoryController extends Controller
 {
     public function __construct()
     {
-        return $this->middleware('prevent.api')->except(['__invoke']);
+        return $this->middleware('prevent.api')->except(['__invoke', 'available']);
     }
     public function __invoke()
     {

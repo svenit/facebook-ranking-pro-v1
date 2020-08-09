@@ -15,7 +15,7 @@
             </div>
             <div style="overflow:auto;height:200px" class="modal-body">
                 <div class="p-4">
-                    <p class="pixel-font text-gold" style="text-align:center !important;">{{ isset(Auth::user()->config['rank']) ? Auth::user()->config['rank'] : 'ERROR' }} RANK</p>
+                    <p class="pixel-font text-gold" style="text-align:center !important;">{{ isset(Auth::user()->config['rank']) ? Auth::user()->config['rank'] : 'E' }} RANK <img style="width:16px" :src="data.infor.character.avatar"></p>
                     <div style="margin:0 auto;position:relative;right:-15px;transform:scaleX(-1)" class="character-sprites hoverable">
                         <span v-if="data.pet" :class="`Mount_Body_${data.pet.class_tag}`"></span>
                         <span style="z-index:2" class="skin_f5a76e up-to-down"></span>
@@ -37,7 +37,7 @@
                     </div>
                     <div class="col-12 d-flex">
                         <div class="flex">
-                                <div class="text-info">
+                                <div class="text-info pixel-font small-font">
                                 Level 
                                 @{{ data.level.current_level }} 
                                 <i class="fas fa-arrow-right"></i> 
@@ -52,57 +52,57 @@
                     </div>
                     <div class="col-6 d-flex">
                         <div class="flex">
-                            <div class="text-light"><small><i class="fas fa-chevron-double-up"></i> Level <strong
-                                        class="text-light">@{{ data.level.current_level }}</strong></small>
+                            <div class="text-light pixel-font small-font"><i class="normal-text fas fa-chevron-double-up"></i> Level <strong
+                                        class="text-light">@{{ data.level.current_level }}</strong>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 d-flex">
                         <div class="flex">
-                            <div class="text-success"><small><i class="fas fa-heart"></i> HP <strong
-                                        class="text-success">@{{ data.power.hp }}</strong></small>
+                            <div class="text-success pixel-font small-font"><i class="normal-text fas fa-heart"></i> HP <strong
+                                        class="text-success">@{{ data.power.hp }}</strong>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 d-flex mt-2">
                         <div class="flex">
-                            <div class="text-danger"><small><i class="fas fa-swords"></i> STR <strong
-                                        class="text-danger">@{{ data.power.strength }}</strong></small>
+                            <div class="text-danger pixel-font small-font"><i class="normal-text fas fa-swords"></i> STR <strong
+                                        class="text-danger">@{{ data.power.strength }}</strong>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 d-flex mt-2">
                         <div class="flex">
-                            <div class="text-info"><small><i class="fas fa-brain"></i> INT <strong
-                                        class="text-info">@{{ data.power.intelligent }}</strong></small>
+                            <div class="text-info pixel-font small-font"><i class="normal-text fas fa-brain"></i> INT <strong
+                                        class="text-info">@{{ data.power.intelligent }}</strong>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 d-flex mt-2">
                         <div class="flex">
-                            <div class="text-primary"><small><i class="fas fa-bolt"></i> AGI <strong
+                            <div class="text-primary"><small><i class="normal-text fas fa-bolt"></i> AGI <strong
                                         class="text-primary">@{{ data.power.agility }}</strong></small>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 d-flex mt-2">
                         <div class="flex">
-                            <div class="text-warning"><small><i class="fas fa-stars"></i> LUK <strong
-                                        class="text-warning">@{{ data.power.lucky }}</strong></small>
+                            <div class="text-warning pixel-font small-font"><i class="normal-text fas fa-stars"></i> LUK <strong
+                                        class="text-warning">@{{ data.power.lucky }}</strong>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 d-flex mt-2">
                         <div class="flex">
-                            <div class="text-silver"><small><i class="fas fa-shield"></i> DEF <strong
-                                        class="text-silver">@{{ data.power.armor_strength }}</strong></small>
+                            <div class="text-silver pixel-font small-font"><i class="normal-text fas fa-shield"></i> DEF <strong
+                                        class="text-silver">@{{ data.power.armor_strength }}</strong>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 d-flex mt-2">
                         <div class="flex">
-                            <div class="text-purple"><small><i class="fal fa-dice-d20"></i> AM <strong
-                                        class="text-purple">@{{ data.power.armor_intelligent }}</strong></small>
+                            <div class="text-purple pixel-font small-font"><i class="normal-text fal fa-dice-d20"></i> AM <strong
+                                        class="text-purple">@{{ data.power.armor_intelligent }}</strong>
                             </div>
                         </div>
                     </div>
@@ -110,31 +110,31 @@
                 <br>
                 <p class="text-gold">Thông Tin</p>
                 <div class="row row-sm">
-                    <div class="col-6 d-flex">
+                    <div class="col-6 d-flex my-2">
                         <div class="flex">
-                            <div class="text-muted"><small><i class="fas fa-trophy mr-2"></i> <strong
-                                        class="text-muted">Top @{{ numberFormatDetail(data.rank.power) }}</strong></small>
+                            <div class="text-muted"><small><img style="width:15px" class="mr-1" src="{{ asset('assets/images/icon-pack/gold.png') }}"> <strong
+                                        class="text-muted pixel-font small-font"> @{{ numberFormat(data.infor.coins) }}</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex my-2">
+                        <div class="flex">
+                            <div class="text-muted"><small><img style="width:15px" class="mr-1" src="{{ asset('assets/images/icon-pack/diamond.png') }}"> <strong
+                                        class="text-muted pixel-font small-font"> @{{ numberFormat(data.infor.gold) }}</strong></small>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 d-flex">
                         <div class="flex">
-                            <div class="text-muted"><small><i class="fas fa-fist-raised mr-2"></i> <strong
-                                class="text-muted"> @{{ numberFormat(data.power.total) }}</strong></small>
+                            <div class="text-muted"><small><img style="width:15px" class="mr-1" src="{{ asset('assets/images/icon-pack/pvp-point.png') }}"> <strong
+                                class="text-muted pixel-font small-font"> @{{ numberFormatDetail(data.infor.pvp_points) }}</strong></small>
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 d-flex mt-2">
+                    <div class="col-6 d-flex">
                         <div class="flex">
-                            <div class="text-muted"><small><i class="fas fa-usd-circle mr-2"></i> <strong
-                                        class="text-muted">@{{ numberFormat(data.infor.coins) }}</strong></small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 d-flex mt-2">
-                        <div class="flex">
-                            <div class="text-muted"><small><i class="fas fa-gem mr-2"></i> <strong
-                                        class="text-muted">@{{ numberFormat(data.infor.gold) }}</strong></small>
+                            <div class="text-muted"><small><img style="width:15px" class="mr-1" src="{{ asset('assets/images/icon-pack/energy.png') }}"> <strong
+                                        class="text-muted pixel-font small-font"> @{{ numberFormatDetail(data.infor.energy) }}</strong></small>
                             </div>
                         </div>
                     </div>
@@ -678,6 +678,54 @@
         </div>
     </div>
 </div>
+<div id="global-chat" style="z-index: 99999999" class="modal global-chat fade modal-right" data-backdrop="true">
+    <div style="overflow:auto" class="modal-dialog modal-right w-xl">
+        <div style="min-height:100vh;background:#111 !important" class="modal-content vip-bordered no-radius">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div style="padding:0; margin:10px 0px" class="modal-body">
+                <div class="scrollable hover" id="chat-box" style="height:80vh">
+                    <div class="list">
+                        <div>
+                            <div v-if="chat.messages.length == 0" class="text-center">
+                                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M21.1641 38.997C23.6931 40.262 26.7301 41 30.0001 41C31.1791 41 32.3261 40.898 33.4321 40.716L42.0001 45V36.919C44.4821 34.805 46.0001 32.038 46.0001 29C46.0001 27.962 45.8241 26.958 45.4941 26.001" stroke="#808080" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M22 2C10.954 2 2 9.163 2 18C2 21.594 3.499 24.9 6 27.571V38L15.665 33.167C17.658 33.7 19.783 34 22 34C33.046 34 42 26.837 42 18C42 9.163 33.046 2 22 2Z" fill="#F2F2F2" stroke="#808080" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <p style="margin-top:20px">( Trống )</p>
+                            </div>
+                            <div v-else class="chat-list">
+                                <div v-for="(msg,index) in chat.messages" :key="index" class="chat-item hoverable" :data-class="msg.id == {{ Auth::user()->provider_id }} ? 'alt' : 'null'" v-if="msg.message && msg.id && msg.name && msg.time" data-sr-id="32" style="margin-bottom: 5px;padding:5px 0px;visibility: visible; transform: none; opacity: 1; transition: transform 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.5s cubic-bezier(0.6, 0.2, 0.1, 1) 0s;">
+                                    <a v-if="msg.id != {{ Auth::user()->provider_id }}" class="avatar w-40" data-pjax-state="">
+                                        <img class="image" :src="`http://graph.facebook.com/${msg.id}/picture?type=normal`" alt=".">
+                                    </a>
+                                    <div class="chat-body">
+                                        <div :style="{maxWidth:'300px',color:'#333',borderRadius:'25px !important',backgroundColor:msg.id == {{ Auth::user()->provider_id }} ? '#e7ad55' : 'whitesmoke',}" class="chat-content rounded msg small-font">@{{ msg.message }}</div>
+                                        <div class="chat-date date">@{{ timeAgo(msg.time) }} trước</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-auto b-t" id="chat-form">
+                    <div class="p-2">
+                        <div class="input-group">
+                            <input @keyup.enter="sendMessage('text','global')" v-model="chat.text" type="text" class="form-control p-3 no-shadow no-border" placeholder="Nhập tin nhắn..." id="newField">
+                            <button @click="sendMessage('text','global')" class="btn btn-icon btn-rounded gd-success" type="button" id="newBtn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up">
+                                    <line x1="12" y1="19" x2="12" y2="5"></line>
+                                    <polyline points="5 12 12 5 19 12"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @if(!request()->is('pvp/room/*'))
 <div id="aside-left" class="page-sidenav no-shrink bg-light nav-dropdown fade hide" aria-hidden="true">
     <div class="sidenav h-100 modal-dialog bg-light normal-bordered">
@@ -687,9 +735,9 @@
         <div class="flex scrollable hover">
             <div class="nav-active-text-primary" data-nav>
                 <ul class="nav bg">
-                    <li class="nav-header hidden-folded"><span class="text-muted">Hệ Thống</span></li>
+                    <li class="nav-header hidden-folded"><span class="text-muted">Hiệp Hội</span></li>
                     <li><a class="no-ajax" href="{{ Route('user.index') }}"><span class="nav-icon"><i
-                                    data-feather="box"></i></span> <span class="nav-text">Hệ Thống</span></a></li>
+                                    data-feather="box"></i></span> <span class="nav-text">Hiệp Hội</span></a></li>
                 </ul>
                 <ul class="nav">
                     @if(!Request::is('admin/*'))

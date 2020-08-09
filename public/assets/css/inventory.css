@@ -242,3 +242,52 @@
     position: absolute;
     text-shadow: 1px 1px 10px #333, 1px 1px 10px #333;
 }
+
+.small-font {
+    font-size: 10px !important;
+}
+
+.normal-text {
+    font-size: 14px !important;
+    margin-right: 2px;
+}
+
+.swal2-file, .swal2-input, .swal2-textarea {
+    border: none !important;
+    color: #cd8e2c !important;
+    background-color: #050508 !important;
+}
+
+.swal2-file, .swal2-input, .swal2-textarea:focus {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.swal2-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+.swal2-validation-message {
+    background-color: #050508 !important;
+    font-size: 15px !important;
+}
+
+.swal2-styled.swal2-confirm {
+    background: #232733 !important;
+    padding: 10px 40px !important;
+}
+
+.swal2-styled.swal2-cancel {
+    background: #bb283d !important;
+    padding: 10px 40px !important;
+}
+
+.swal2-footer {
+    border-top: 1px solid #000 !important;
+    font-size: 14px !important;
+}
+
+.swal2-footer a {
+    color: #545454 !important;
+}

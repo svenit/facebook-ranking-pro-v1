@@ -32,12 +32,14 @@ class IndexController extends Controller
                         'name' => $helper->user()->name,
                         'character' => [
                             'name' => $helper->character()->name,
+                            'avatar' => asset($helper->character()->avatar)
                         ],
                         'exp' => (int)$helper->user()->exp,
                         'coins' => $helper->coins(),
                         'gold' => $helper->gold(),
                         'pvp_points' => $helper->user()->pvp_points,
-                        'provider_id' => $helper->user()->provider_id
+                        'provider_id' => $helper->user()->provider_id,
+                        'energy' => $helper->user()->energy
                     ],
                     'rank' => [
                         'power' => $helper->rankPower()

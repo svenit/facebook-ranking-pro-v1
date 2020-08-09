@@ -23,7 +23,7 @@ class PreventTracking
         $tracking = Tracking::where('user_id',Auth::id())->first();
         if($checkTracking->checkTracking() && Request::route()->getName() != $tracking->route)
         {
-            return redirect()->back()->with([
+            return redirect()->route('user.index')->with([
                 'message' => 'Bạn đang thực hiện một hành động khác',
                 'status' => 'warning'
             ]);

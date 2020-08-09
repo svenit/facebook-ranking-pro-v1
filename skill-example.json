@@ -10,6 +10,7 @@
     "timeExecute": 2000,
     "position": "freeze",
     "playerAnimation": "slideInRight",
+    "target": 1,
     "setSelfTarget": {
         "probability": 0,
         "turn": 0,

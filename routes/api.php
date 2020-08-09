@@ -24,6 +24,7 @@ Route::group(['namespace' => 'Api','middleware' => ['cors', 'auth']], function (
         Route::post('exit-match','BaseController@exitMatch');
     });
     Route::group(['prefix' => 'wheel','namespace' => 'Wheel'], function () {
+        Route::get('/','IndexController');
         Route::get('check','CheckController');
         Route::post('spin','SpinController');
     });
@@ -67,7 +68,7 @@ Route::group(['namespace' => 'Api','middleware' => ['cors', 'auth']], function (
             Route::post('remove','GemController@remove');
         });
     });
-    Route::group(['prefix' => 'oven','namespace' => 'Oven'], function () {
+    Route::group(['prefix' => 'oven','namespace' => 'Oven','middleware' => 'prevent.api'], function () {
         Route::post('insert-gem-to-gear','InsertGemToGearController@insert');
     });
 });

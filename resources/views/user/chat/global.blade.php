@@ -92,9 +92,9 @@
 @endif
 <script>
     var page = {
-        path:'chat.global',
-        user:{
-            id:{{ Auth::user()->user_id }},
+        path: 'chat.global',
+        user: {
+            id:"{{ Auth::user()->user_id }}",
             name:"{{ Auth::user()->name }}"
         }
     };
