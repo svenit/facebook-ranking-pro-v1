@@ -291,3 +291,29 @@
 .swal2-footer a {
     color: #545454 !important;
 }
+
+.navbar-menu-fix {
+    position: fixed;
+    z-index: 2;
+    top: 100px;
+    right: 30px;
+    width: 84px;
+    height: 600px;
+    background-image: url(../images/bg_navbar.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+}
+.navbar-menu-fix img {
+    display: block;
+    width: 70%;
+    margin: auto;
+}
+.navbar-menu-fix a:hover {
+    background-image: url(../images/select_navbar.png);
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    background-position-y: 50%;
+}

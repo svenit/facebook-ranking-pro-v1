@@ -73,6 +73,10 @@ class Controller extends BaseController
     {
         return Tracking::whereUserId(Auth::id())->first() ? true : false;
     }
+    public function getTrackingHref()
+    {
+        return Tracking::whereUserId(Auth::id())->first()->path ?? '#';
+    }
     public function updatePower()
     {
         $userId = Auth::id();

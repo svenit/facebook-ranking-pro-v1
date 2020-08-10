@@ -46,7 +46,7 @@
                             <div v-if="pvp.match.status == 'FIGHTING'">
                                 <div :style="{position: 'absolute', bottom: `${(35 + (pvp.match.me.effectAnimation.length/6))}%`, right: '30%',width:'150px'}" class="animated flash normal row skill-effect">
                                     <div class="col-12" v-if="pvp.match.status == 'FIGHTING' && pvp.match.target == pvp.match.me.playerInfo.infor.uid">
-                                        <img class="col-auto pixel up-to-down" style="width:25px;padding:0;transform:rotate(90deg) translate(0%, -150%);filter: hue-rotate(300deg);margin:0 auto" src="{{ asset('assets/images/target.png') }}">
+                                        <img class="col-auto pixel up-to-down" style="width:25px;padding:0;translate(0%, -150%);filter: hue-rotate(300deg);margin:0 auto" src="{{ asset('assets/images/target.gif') }}">
                                     </div>
                                     <div class="col-12 row">
                                         <img v-for="(animation, index) in pvp.match.me.effectAnimation" class="col-auto pixel" style="width:20px;padding:0" :src="`{{ asset('assets/images/effects') }}/${animation}.png`">
@@ -112,7 +112,7 @@
                         <div v-if="pvp.match.status == 'FIGHTING'">
                             <div :style="{position: 'absolute', bottom: `${(35 + pvp.match.enemy.effectAnimation.length/6)}%`, left: '30%',width:'150px'}" class="animated flash normal row skill-effect">
                                 <div class="col-12" v-if="pvp.match.status == 'FIGHTING' && pvp.match.target == pvp.match.enemy.playerInfo.infor.uid">
-                                    <img class="col-auto pixel up-to-down" style="width:25px;padding:0;transform:rotate(90deg) translate(0%, -150%);filter: hue-rotate(300deg);margin:0 auto" src="{{ asset('assets/images/target.png') }}">
+                                    <img class="col-auto pixel up-to-down" style="width:25px;padding:0;transform:translate(0%, -150%);filter: hue-rotate(300deg);margin:0 auto" src="{{ asset('assets/images/target.gif') }}">
                                 </div>
                                 <div class="col-12">
                                     <img v-for="(animation, index) in pvp.match.enemy.effectAnimation" class="col-auto pixel" style="width:20px;padding:0" :src="`{{ asset('assets/images/effects') }}/${animation}.png`">

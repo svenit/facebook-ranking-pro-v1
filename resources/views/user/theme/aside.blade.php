@@ -1,12 +1,4 @@
 @auth
-@php
-    $tracking = new \App\Http\Controllers\Controller();
-@endphp
-@if($tracking->checkTracking())
-    <div style="position:fixed;top:10%;right:0px;padding:10px;z-index:99999" class="ultra-bordered card fixed-action-branch">
-        <span>Bạn đang ở trong một hoạt động</span>
-    </div>
-@endif
 <div v-if="data" class="modal fade modal-left" data-backdrop="true">
     <div style="overflow:auto;width:350px;" class="modal-dialog modal-left w-xl">
         <div style="min-height:100vh;background:#111 !important;" class="modal-content vip-bordered no-radius">
@@ -747,7 +739,7 @@
         <div class="navbar"><a href="{{ Route('user.index') }}" class="navbar-brand">
             <img src="{{ asset('assets/images/app.png') }}">
             <span style="font-weight:inherit;" class="pixel-font hidden-folded text-warning d-inline l-s-n-1x">{{ env('APP_NAME') }}</span></a></div>
-        <div class="flex scrollable hover">
+        <div class="flex scrollable hover left-side">
             <div class="nav-active-text-primary" data-nav>
                 <ul class="nav bg">
                     <li class="nav-header hidden-folded"><span class="text-muted">Hiệp Hội</span></li>
@@ -807,13 +799,16 @@
                                 <li><a href="{{ Route('user.oven.gem') }}" class=""><span class="nav-text">Khảm Ngọc</span></a></li>
                             </ul>
                         </li>
-                        <li class="{{ Request::is('explore/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="map"></i></span> <span
-                            class="nav-text">Khám Phá</span> <span class="nav-caret"></span></a>
+                        <li class="{{ Request::is('explore/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><img style="width:20px" src="{{ asset('assets/images/Quest.png') }}"></span> <span
+                            class="nav-text">Nhiệm Vụ</span> <span class="nav-caret"></span></a>
                             <ul class="nav-sub nav-mega">
-                                <li><a href="#" class=""><span class="nav-text">Dungeon</span></a></li>
-                                <li><a href="#" class=""><span class="nav-text">Nhiệm Vụ</span></a></li>
-                                <li><a href="{{ Route('user.explore.recovery-room.index') }}" class=""><span class="nav-text">Phòng Hồi Phục</span></a></li>
+                                <li><a href="#" class=""><span class="nav-text">Hàng Ngày</span></a></li>
+                                <li><a href="#" class=""><span class="nav-text">Thành Tựu</span></a></li>
+                                {{-- <li><a href="{{ Route('user.recovery-room.index') }}" class=""><span class="nav-text">Phòng Hồi Phục</span></a></li> --}}
                             </ul>
+                        </li>
+                        <li class="{{ Request::is('dungeon/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><img style="width:20px" src="{{ asset('assets/images/Dungeon.png') }}"></span> <span
+                            class="nav-text">Dungeon</span></a>
                         </li>
                         <li class="{{ Request::is('guild/*') || Request::is('guild')  ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><img style="width:20px" src="{{ asset('assets/images/Guild.png') }}"></span> <span
                             class="nav-text">Bang Hội</span> <span class="nav-caret"></span></a>
@@ -841,7 +836,7 @@
                                 <li><a onclick="return confirm('Bạn đang có {{ Auth::user()->stranger_chat_times ?? 0 }} vé chat ! Tham gia ?')" href="{{ Route('user.chat.stranger.join') }}" class=""><span class="nav-text">CVNL</span></a></li>
                             </ul>
                         </li> --}}
-                        <li><a href="{{ Route('user.giftcode.index') }}" class=""><span class="nav-icon"><i data-feather="gift"></i></span> <span
+                        <li><a href="{{ Route('user.giftcode.index') }}" class=""><span class="nav-icon"><img style="width:20px" src="{{ asset('assets/images/Gif.png') }}"></span> <span
                             class="nav-text">Quà Tặng</span></a>
                         </li>
                     @endif

@@ -887,7 +887,7 @@ div.table-responsive>div.dataTables_wrapper>div.row>div[class^="col-"]:last-chil
     padding-right: 0
 }
 
-.apexcharts-canvas.apexcharts-theme-dark svg{
+.apexcharts-canvas.apexcharts-theme-dark {
     background: transparent !important;
 }
 

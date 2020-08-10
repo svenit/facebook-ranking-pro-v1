@@ -26,6 +26,7 @@
 	<link rel="stylesheet" href="{{ asset('assets/css/inventory.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/css/gem.css') }}">
 	<link href="{{ asset('cdn/css/all.min.css') }}" rel="stylesheet">
+	<link rel="stylesheet" href="https://introjs.com/introjs.css">
 	<meta name="csrf-token" content="{{ csrf_token() }}"/>
 	@stack('css')
 </head>
@@ -85,8 +86,22 @@
 				@endif
 				@yield('content')
 			</div>
-			<div style="z-index:999;position:fixed;bottom:0;right:0;margin-bottom:25px;margin-right:20px;">
-				<button @click="gotoBottomChat" data-toggle="modal" data-target="#global-chat" class="btn btn-outline-light btn-rounded" id="show_chat_wa"><img src="{{ asset('assets/images/icon-pack/message-box.png') }}" style="padding-right:10px;"> Thế Giới</button>
+			<div v-if="!moreMenu" @click="moreMenu = true" style="position: fixed; right:-10px;top:50%;transform:rotate(180deg)">
+				<img width="70%" src="{{ asset('assets/images/more-menu.png') }}">
+			</div>
+			<div v-else>
+				<div @click="moreMenu = false" style="position: fixed; right:-6px;top:50%;">
+					<img width="70%" src="{{ asset('assets/images/more-menu.png') }}">
+				</div>
+				<div class="animated slideInRight faster navbar-menu-fix">
+					@php
+						$tracking = new \App\Http\Controllers\Controller();
+					@endphp
+					@if($tracking->checkTracking())
+						<a data-title="tooltip" title="Bạn đang ở trong một hoạt động" href="{{ url($tracking->getTrackingHref()) }}" class="btn btn-transparent" id="show_chat_wa"><img src="{{ asset('assets/images/icon-pack/no-action.png') }}"></a>
+					@endif
+					<a @click="gotoBottomChat" data-toggle="modal" data-target="#global-chat" class="btn btn-transparent" id="show_chat_wa"><img src="{{ asset('assets/images/icon-pack/message-box.png') }}"></a>
+				</div>
 			</div>
 			<div id="footer" style="margin-top:0px" class="page-footer">
 				<div class="d-flex p-3"><span copyright-id="{{ config('services.crypto.salt') }}" class="copyright text-sm pixel-font text-muted flex">&copy;Copyright {{ date('Y') }} Coded by <a class="text-gold" href="https://facebook.com/sven307">Sven</a></span>
@@ -100,6 +115,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.2/dist/sweetalert2.all.min.js"></script>	
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+	<script src="https://introjs.com/intro.js"></script>
 	<script src="{{ mix('js/vendor.min.js') }}"></script>
 	<script>
 		@auth

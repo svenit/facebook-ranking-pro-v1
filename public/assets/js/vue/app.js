@@ -17,6 +17,7 @@
     const app = new Vue({
         el: '#app',
         data: {
+            moreMenu: false,
             firebase: null,
             userCount: 0,
             author: "let author = 'sven307';console.log(author);",
@@ -271,6 +272,10 @@
                     }
                 }
                 this.postLocation();
+                $(function () {
+                    $('[data-title="tooltip"]').tooltip()
+                });
+                // introJs().start();
             }
             this.loading = false;
             this.flash = false;
