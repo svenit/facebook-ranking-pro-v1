@@ -1,38 +1,57 @@
 <div id="header" class="page-header">
     <div class="navbar navbar-expand-lg">
+        <div class="ml-4 profile-badge row" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body"  @click="index()">
+            <div style="padding:0;" class="col-3">
+                <img style="position:absolute;width:62px" src="{{ asset('assets/images/pvp-ranks/master_1.png') }}">
+                <img style="width:60px" class="circle mr-3" src="http://graph.facebook.com/{{ Auth::user()->provider_id }}/picture?type=normal" alt="...">
+            </div>
+            <div class="col-9 pl-4 mt-1">
+                <span class="pixel-font small-font pr-5" style="color:#37a8d8">LV@{{ data.level.current_level }}</span>
+                <img style="width:17px" src="{{ asset('assets/images/icon/Question.png') }}">
+                <div class="mt-1 mb-1" style="height: 3px;background:#534738">
+                    <div :style="{width:data.level.percent + '%', height:'3px', backgroundColor: '#37a8d8'}"></div>
+                </div>
+                <span style="background:#524839;padding:0px 10px;border-radius:3px;font-size:12px;">
+                    {{ Auth::user()->name }}
+                </span>
+            </div>
+        </div>
         <ul class="nav navbar-menu order-1 order-lg-2">
-            <li class="nav-item dropdown"><a class="nav-link px-2" data-toggle="dropdown">
-                <img src="https://web.simple-mmo.com/img/icons/one/icon041.png">
-            </a>
-                <div class="dropdown-menu dropdown-menu-center mt-3 w animate fadeIn">
-                    <div class="setting px-3">
-                        <div class="mb-2 text-muted"><strong>Cài đặt :</strong></div>
-                        <div class="mb-3" id="settingLayout"><label
-                                class="ui-check ui-check-rounded my-1 d-block"><input type="checkbox"
-                                    name="stickyHeader"> <i></i> <small>Cố định phần đầu</small></label><label
-                                class="ui-check ui-check-rounded my-1 d-block"><input type="checkbox"
-                                    name="stickyAside"> <i></i> <small>Cố định phần bên</small></label><label
-                                class="ui-check ui-check-rounded my-1 d-block"><input type="checkbox"
-                                    name="foldedAside"> <i></i> <small>Thu gọn phần bên</small></label><label
-                                class="ui-check ui-check-rounded my-1 d-block"><input type="checkbox"
-                                    name="hideAside"> <i></i> <small>Ẩn phần bên</small></label></div>
-                        <div class="mb-2 text-muted"><strong>Giao diện :</strong></div>
-                        <div class="mb-2">
-                            <label class="radio radio-inline ui-check ui-check-md">
-                                <input
-                                    type="radio" name="bg" value=""> <i></i>
-                            </label>
-                            <label
-                                class="radio radio-inline ui-check ui-check-color ui-check-md"><input
-                                    type="radio" name="bg" value="bg-dark"> <i class="bg-dark"></i>
-                                </label>
-                        </div>
-                    
-                    </div>
+            <li class="profile-badge icon-badge row py-1 mr-4">
+                <div class="col-1">
+                    <img style="width:17px" src="{{ asset('assets/images/icon-pack/pvp-point.png') }}">
+                </div>
+                <div class="col-7 ">
+                    <strong class="pixel-font small-font notranslate"> @{{ numberFormat(data.infor.pvp_points) }}</strong>
+                </div>
+                <div class="col-1">
+                    <img style="width:17px" src="{{ asset('assets/images/icon/Question.png') }}">
+                </div>
+            </li>
+            <li class="profile-badge icon-badge row py-1 mr-4">
+                <div class="col-1">
+                    <img style="width:17px" src="{{ asset('assets/images/icon-pack/gold.png') }}">
+                </div>
+                <div class="col-7">
+                    <strong class="pixel-font small-font notranslate"> @{{ numberFormat(data.infor.coins) }}</strong>
+                </div>
+                <div class="col-1">
+                    <img style="width:17px" src="{{ asset('assets/images/icon/Add.png') }}">
+                </div>
+            </li>
+            <li class="profile-badge icon-badge row py-1 mr-4">
+                <div class="col-1">
+                    <img style="width:17px" src="{{ asset('assets/images/icon-pack/diamond.png') }}">
+                </div>
+                <div class="col-7">
+                    <strong class="pixel-font small-font notranslate"> @{{ numberFormat(data.infor.gold) }}</strong>
+                </div>
+                <div class="col-1">
+                    <img style="width:17px" src="{{ asset('assets/images/icon/Add.png') }}">
                 </div>
             </li>
             @auth
-            <li class="nav-item dropdown"><a class="nav-link px-2 mr-lg-2" data-toggle="dropdown">
+            {{-- <li class="nav-item dropdown"><a class="nav-link px-2 mr-lg-2" data-toggle="dropdown">
                 <img src="https://web.simple-mmo.com/img/icons/one/icon027.png"> <span class="badge badge-pill badge-up bg-primary">{{ $notifications['unread'] ?? 0 }}</span></a>
                 <div style="width:500px" class="dropdown-menu dropdown-menu-right mt-3 w-md animate fadeIn p-0">
                     <div class="scrollable hover" style="max-height: 250px">
@@ -57,9 +76,19 @@
                             <i class="fa fa-angle-right text-muted"></i></a>
                     </div>
                 </div>
-            </li>
+            </li> --}}
+            {{-- <li class="nav-item dropdown">
+                <div class="nav-link px-2 mr-lg-2" data-toggle="dropdown">
+                    <img style="width:35px" :src="asset(`assets/images/flag/${currentLang}.png`)">
+                    <div class="dropdown-menu dropdown-menu-right mt-3 w-md animate fadeIn">
+                        <div v-for="(lang, index) in languages" :key="index" @click="setLanguage(lang.icon)" class="mb-1 dropdown-item">
+                            <img class="mr-2" style="width:20px" :src="asset(`assets/images/flag/${lang.icon}.png`)"><span>@{{ lang.name }}</span>
+                        </div>
+                    </div>
+                </div>
+            </li> --}}
             @endauth
-            <li class="nav-item dropdown"><a href="#" data-toggle="dropdown"
+            {{-- <li class="nav-item dropdown"><a href="#" data-toggle="dropdown"
                     class="nav-link d-flex align-items-center px-2 text-color"><span class="avatar w-24"
                         style="margin: -2px"><img src="{{ Auth::check() ? 'http://graph.facebook.com/'.Auth::user()->provider_id.'/picture?type=normal' : 'https://image.flaticon.com/icons/png/512/149/149071.png' }}" alt="..."></span></a>
                 <div class="dropdown-menu dropdown-menu-right w mt-3 animate fadeIn">
@@ -87,7 +116,7 @@
             <li class="nav-item d-lg-none"><a href="#" class="nav-link px-2" data-toggle="collapse"
                     data-toggle-class data-target="#navbarToggler"><i data-feather="search"></i></a></li>
             <li class="nav-item d-lg-none"><a class="nav-link px-1" data-toggle="modal" data-target="#aside-left"><i
-                        data-feather="menu"></i></a></li>
+                        data-feather="menu"></i></a></li> --}}
         </ul>
     </div>
 </div>

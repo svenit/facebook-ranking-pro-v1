@@ -20,7 +20,7 @@
                                 </div>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-secondary active">
-                                        {{ number_format($gem->price) }} {{ $gem->price_type == 0 ? 'Vàng' : 'KC' }}
+                                        {{ number_format($gem->price) }} <img style="width:16px" class="ml-2" src="{{ showUnit($gem->price_type) }}">
                                     </button> 
                                     <button @click="buyGem({{ json_encode($gem) }},$event)" style="border-top-left-radius:0px;border-bottom-left-radius:0px" type="button" class="btn btn-secondary">Mua</button>
                                 </div>

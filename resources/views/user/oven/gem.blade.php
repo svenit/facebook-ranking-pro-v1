@@ -8,7 +8,8 @@
     <div class="page-content page-container" id="page-content">
         <div class="padding-x">
             @include('user.theme.parameter')
-            <div style="padding:10px;background-image:url(https://i.pinimg.com/originals/48/03/80/4803801198a61516931d72be78ec4b01.gif) !important;" class="card vip-bordered">
+            @include('user.oven.base')
+            <div style="padding:10px;" class="card vip-bordered">
                 <div style="padding: 10px 0px 10px 30px;" class="row">
                     <div style="margin-bottom:10px" class="col-lg-6 col-md-12 col-sm-12">
                         <div style="background:#191818;padding:10px;border-radius:10px;border:1px solid #000;width:100%" class="row">
@@ -40,7 +41,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="row" style="width:100%">
-                            <div class="col-12" style="max-height:300px;overflow:auto">
+                            <div class="col-12" style="max-height:200px;overflow:auto">
                                 <div style="background:#191818;padding:10px;border-radius:10px;border:1px solid #000" class="row">
                                     <div v-for="(gear, index) in gears" @click="oven.gear = gear" data-tooltip="toggle" title="Click vào trang bị mà bạn muốn khảm" id="droppable" class="hoverable col-auto">
                                         <div style="background:transparent !important" class="card">
@@ -52,7 +53,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12" style="max-height:300px;overflow:auto;margin-top:10px">
+                            <div class="col-12" style="max-height:200px;overflow:auto;margin-top:10px">
                                 <div style="background:#191818;padding:10px;border-radius:10px;border:1px solid #000" class="row">
                                     <div v-for="(gem, index) in gems" @click="oven.gem = gem" data-tooltip="toggle" title="Click vào ngọc bổ trợ mà bạn muốn khảm" id="droppable" class="hoverable col-auto">
                                         <div style="background:transparent !important" class="card">

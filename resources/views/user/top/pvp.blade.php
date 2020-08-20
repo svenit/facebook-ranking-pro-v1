@@ -48,24 +48,24 @@
                                 </thead>
                                 <tbody>
                                     @foreach($ranks as $key => $rank)
-                                        <tr onclick="showInfor({{ $rank->id }})" class="{{ Auth::check() && Auth::id() == $rank->id ? 'bg-secondary' : '' }}">
+                                        <tr @click="showUserInfor({{ $rank->id }})" class="{{ Auth::check() && Auth::id() == $rank->id ? 'bg-secondary' : '' }}">
                                             @php
                                                 $page = request()->page && request()->page != 1 ? request()->page - 1 : 0;
                                             @endphp
                                             <td style=""><small class="text-muted">{{ $page * 10 + $key + 1}}</small></td>
                                             <td>
-                                                <a target="_blank" href="https://fb.com/{{ $rank->user_id }}">
+                                                <a target="_blank" href="https://fb.com/{{ $rank->provider_id }}">
                                                     <span style="width:50px" class="avatar">
                                                         <span class="avatar-status {{ $rank->isOnline() ? 'on' : 'off' }} b-white avatar-right"></span>
                                                         <img class="profile-picture"
-                                                            src="https://graph.facebook.com/{{ $rank->user_id }}/picture"
+                                                            src="https://graph.facebook.com/{{ $rank->provider_id }}/picture"
                                                             alt="profile-picture" height="50">
                                                     </span>
                                                 </a>
                                             </td>
                                             <td style=""><small class="text-gold">{{ $rank->name }}</small></td>
                                             <td style=""><span
-                                                class="item-amount d-none d-sm-block text-sm text-info">{{ $rank->character->name }}</span>
+                                                class="item-amount d-none d-sm-block text-sm text-info"><img data-title="tooltip" title="{{ $rank->character->name }}" class="pixel" style="width:40px" src="{{ asset("assets/images/class/{$rank->character->avatar}-icon.png") }}"></span>
                                             </td>
                                             <td class="flex" style=""><a href="#"
                                                 class="item-title d-none d-sm-block text-color text-danger">{{ number_format($rank->pvp_points) }}</a>
@@ -91,12 +91,3 @@
 </div>
 </div>
 @endsection
-
-@push('js')
-<script>
-    function showInfor(id)
-    {
-        return app.showUserInfor(id);
-    }
-</script>
-@endpush

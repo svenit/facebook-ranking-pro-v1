@@ -25,8 +25,11 @@
 	<link rel="stylesheet" href="{{ mix('css/app.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/css/inventory.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/css/gem.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/ui.css') }}">
 	<link href="{{ asset('cdn/css/all.min.css') }}" rel="stylesheet">
 	<link rel="stylesheet" href="https://introjs.com/introjs.css">
+	<link href='https://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
+	<link rel="icon" href="{{ asset('favicon.ico') }}" sizes="32px" type="image/x-icon">
 	<meta name="csrf-token" content="{{ csrf_token() }}"/>
 	@stack('css')
 </head>
@@ -63,18 +66,34 @@
 			You don't have javascript enabled.  Good luck with that.
 		</div>
 	</noscript>
-	<div id="app" style="height:100%;min-height:100vh" class="layout-row" v-if="!detect">
+	<div style="height:100%;min-height:100vh;background-image:url({{ asset('assets/images/icon/Screen-Parttern-Left.png') }});position:fixed;width:3%;filter: brightness(0.5);"></div>
+	<div style="height:100%;min-height:100vh;background-image:url({{ asset('assets/images/icon/Screen-Parttern-Right.png') }});position:fixed;right:0;width:3%;filter: brightness(0.5);"></div>
+	<div id="app" style="height:640px;width:94%;margin:0 auto;" class="layout-row" v-if="!detect">
 		@if(!request()->is('admin/*'))
 			<div v-if="flash" id="loader" class="loading-screen">
 				<div class="loading-spinner" style=""><div class="loading-spinner-box"><div class="cube"><div class="side"></div><div class="side"></div><div class="side"></div><div class="side"></div><div class="side"></div><div class="side"></div></div><div class="loading-spinner-ment">
-					<p class="mt-5">Đang tải dữ liệu...</p></div></div></div>
+					<p notranslate class="mt-5 pixel-font notranslate">Loading...</p></div></div></div>
 			</div>
 		@endif
 		@include('user.theme.aside')
-		<div data-id="{{ session('client_key') }}" id="main" style="background: url({{ asset('assets/images/background.jpg') }});" class="layout-column flex">
+		<div style="position: fixed;top:15%;" class="ml-4 aside-icon profile-badge">
+			<div class="col">
+				<img class="text-center footer-icon" src="{{ asset('assets/images/icon/Dungeon.png') }}">
+				<p class="text-center">Boss</p>
+			</div>
+			<div class="col">
+				<img class="text-center footer-icon" src="{{ asset('assets/images/icon/Blue-Gate.gif') }}">
+				<p class="text-center">Dungeon</p>
+			</div>
+			<div class="col">
+				<img class="text-center footer-icon" src="{{ asset('assets/images/icon/PVP.png') }}">
+				<p class="text-center">PVP</p>
+			</div>
+		</div>
+		<div data-id="{{ session('client_key') }}" id="main" style="border-radius:3px;background: url({{ asset('assets/images/icon/Background.png') }});image-rendering: pixelated;background-position:top;background-size:cover;background-repeat: no-repeat" class="layout-column flex">
 			@include('user.theme.header')
 			<div id="content" class="flex">
-				@if(!request()->is('pvp/room/*'))
+				{{-- @if(!request()->is('pvp/room/*'))
 				<div class="page-hero page-container" id="page-hero">
 					<div class="padding d-flex">
 						<div style="width:100%" class="vip-bordered page-title">
@@ -83,7 +102,7 @@
 						</div>
 					</div>
 				</div>
-				@endif
+				@endif --}}
 				@yield('content')
 			</div>
 			<div v-if="!moreMenu" @click="moreMenu = true" style="position: fixed; right:-10px;top:50%;transform:rotate(180deg)">
@@ -103,8 +122,34 @@
 					<a @click="gotoBottomChat" data-toggle="modal" data-target="#global-chat" class="btn btn-transparent" id="show_chat_wa"><img src="{{ asset('assets/images/icon-pack/message-box.png') }}"></a>
 				</div>
 			</div>
-			<div id="footer" style="margin-top:0px" class="page-footer">
-				<div class="d-flex p-3"><span copyright-id="{{ config('services.crypto.salt') }}" class="copyright text-sm pixel-font text-muted flex">&copy;Copyright {{ date('Y') }} Coded by <a class="text-gold" href="https://facebook.com/sven307">Sven</a></span>
+			<div id="footer" style="position:fixed;bottom:0;left:5%" copyright-id="{{ config('services.crypto.salt') }}" class="copyright page-footer row">
+				<div class="col-auto">
+					<img class="text-center footer-icon" src="{{ asset('assets/images/icon/Character.png') }}">
+					<p class="text-center mt-2">Nhân Vật</p>
+				</div>
+				<div class="col-auto">
+					<img class="text-center footer-icon" src="{{ asset('assets/images/icon/Shop.png') }}">
+					<p class="text-center mt-2">Cửa Hàng</p>
+				</div>
+				<div class="col-auto">
+					<img class="text-center footer-icon" src="{{ asset('assets/images/icon/Quest.png') }}">
+					<p class="text-center mt-2">Nhiệm Vụ</p>
+				</div>
+				<div class="col-auto">
+					<img class="text-center footer-icon" src="{{ asset('assets/images/icon/Rank.png') }}">
+					<p class="text-center mt-2">Xếp Hạng</p>
+				</div>
+				<div class="col-auto">
+					<img class="text-center footer-icon" src="{{ asset('assets/images/icon/Guild.png') }}">
+					<p class="text-center mt-2">Bang Hội</p>
+				</div>
+				<div class="col-auto">
+					<img class="text-center footer-icon" src="{{ asset('assets/images/icon/Casino.png') }}">
+					<p class="text-center mt-2">Casino</p>
+				</div>
+				<div class="col-auto">
+					<img class="text-center footer-icon" src="{{ asset('assets/images/icon/Back.png') }}">
+					<p class="text-center mt-2">Trở Lại</p>
 				</div>
 			</div>
 		</div>
@@ -115,8 +160,9 @@
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.2/dist/sweetalert2.all.min.js"></script>	
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+	<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 	<script src="https://introjs.com/intro.js"></script>
-	<script src="{{ mix('js/vendor.min.js') }}"></script>
+	<script async src="{{ mix('js/vendor.min.js') }}"></script>
 	<script>
 		@auth
 			const user = {
@@ -126,6 +172,9 @@
 				character: "{{ Auth::user()->character->name }}"
 			};
 		@endauth
+		function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'vi', multilanguagePage: true}, 'gg-translate');
+        }
 	</script>
 	@stack('js')
 	@if(session('message'))

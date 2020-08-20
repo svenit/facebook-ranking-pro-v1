@@ -87,6 +87,25 @@ class Helper
             'percent' => isset($nextLevel) ? round(((int)$this->user()->exp/$nextLevel->exp_required)*100) : 100
         ];
     }
+    public function rank() 
+    {
+        $rankLevels = [
+            'E' => 1,
+            'D' => 20,
+            'C' => 40,
+            'B' => 65,
+            'A' => 100,
+            'S' => 170
+        ];
+        $currentLevel = $this->nextLevel()['current_level'];
+        return array_reverse(array_keys(collect($rankLevels)->filter(function($item) use($currentLevel){
+            return $item <= $currentLevel;
+        })->toArray()))[0] ?? 'E';
+    }
+    public function pvpBrand()
+    {
+        return 1;
+    }
     public function coins()
     {
         return $this->user()->getCoins();

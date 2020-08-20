@@ -1068,6 +1068,38 @@ div.table-responsive>div.dataTables_wrapper>div.row>div[class^="col-"]:last-chil
         top: -1.5px;
     }
 }
+
+.goog-logo-link {
+    display:none !important;
+ } 
+ 
+ .goog-te-gadget{
+    color: transparent !important;
+    position: relative;
+    top:20px;
+ }
+.goog-te-combo {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + 1rem + 2px);
+    padding: .5rem .75rem;
+    font-size: .9375rem !important;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #12263f;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #d2ddec;
+    border-radius: .375rem;
+    -webkit-transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.goog-te-banner-frame {
+    display: none !important;
+}
+body {
+    top: 0px !important;
+}
 /**
  * Minified by jsDelivr using clean-css v4.2.1.
  * Original file: /npm/toastify-js@1.7.0/src/toastify.css

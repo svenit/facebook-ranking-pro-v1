@@ -17,7 +17,7 @@ class TopController extends Controller
         $search = $request->search;
         $ranks = User::orderByDesc('full_power')
         ->where('name','LIKE',"%{$search}%")
-        ->orWhere('user_id',$search)
+        ->orWhere('id',$search)
         ->orWhere('provider_id',$search)
         ->paginate($this->perPage);
         return view('user.top.power',compact('ranks'));
@@ -27,7 +27,7 @@ class TopController extends Controller
         $search = $request->search;
         $ranks = User::orderByDesc('exp')
         ->where('name','LIKE',"%{$search}%")
-        ->orWhere('user_id',$search)
+        ->orWhere('id',$search)
         ->orWhere('provider_id',$search)
         ->paginate($this->perPage);
         return view('user.top.level',compact('ranks'));
@@ -37,7 +37,7 @@ class TopController extends Controller
         $search = $request->search;
         $ranks = User::orderByDesc('pvp_points')
         ->where('name','LIKE',"%{$search}%")
-        ->orWhere('user_id',$search)
+        ->orWhere('id',$search)
         ->orWhere('provider_id',$search)
         ->paginate($this->perPage);
         return view('user.top.pvp',compact('ranks'));
@@ -47,7 +47,7 @@ class TopController extends Controller
         $search = $request->search;
         $ranks = User::orderByDesc(DB::raw('coins + income_coins'))
         ->where('name','LIKE',"%{$search}%")
-        ->orWhere('user_id',$search)
+        ->orWhere('id',$search)
         ->orWhere('provider_id',$search)
         ->paginate($this->perPage);
         return view('user.top.coin',compact('ranks'));
@@ -57,19 +57,9 @@ class TopController extends Controller
         $search = $request->search;
         $ranks = User::orderByDesc('gold')
         ->where('name','LIKE',"%{$search}%")
-        ->orWhere('user_id',$search)
+        ->orWhere('id',$search)
         ->orWhere('provider_id',$search)
         ->paginate($this->perPage);
         return view('user.top.gold',compact('ranks'));
-    }
-    public function activities(Request $request)
-    {
-        $search = $request->search;
-        $ranks = User::orderByDesc('coins')
-        ->where('name','LIKE',"%{$search}%")
-        ->orWhere('user_id',$search)
-        ->orWhere('provider_id',$search)
-        ->paginate($this->perPage);
-        return view('user.top.activities',compact('ranks'));
     }
 }

@@ -1,267 +1,488 @@
 @auth
 <div v-if="data" class="modal fade modal-left" data-backdrop="true">
-    <div style="overflow:auto;width:350px;" class="modal-dialog modal-left w-xl">
-        <div style="min-height:100vh;background:#111 !important;" class="modal-content vip-bordered no-radius">
-            <div class="modal-header">
-                <button class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div style="overflow:auto;height:200px" class="modal-body">
-                <div class="p-4">
-                    <p class="pixel-font text-gold" style="text-align:center !important;">{{ isset(Auth::user()->config['rank']) ? Auth::user()->config['rank'] : 'E' }} RANK <img style="width:16px" :src="data.infor.character.avatar"></p>
-                    <div style="margin:0 auto;position:relative;right:-15px;transform:scaleX(-1)" class="character-sprites hoverable">
-                        <span v-if="data.pet" :class="`Mount_Body_${data.pet.class_tag}`"></span>
-                        <span style="z-index:2" class="skin_f5a76e up-to-down"></span>
-                        <span style="z-index:2" class="broad_shirt_black up-to-down"></span>
-                        <span style="z-index:2" class="head_0 up-to-down"></span>
-                        <span class=""></span>
-                        <span v-for="(gear,index) in data.gears" :key="index">
-                            <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="`${e} ${gear.cates.animation} up-to-down`" :style="{zIndex:gear.cates.z_index}"></span>
-                            <span v-else :class="`${gear.class_tag} ${gear.cates.animation} up-to-down`" :style="{zIndex:gear.cates.z_index}"></span>
-                        </span>
-                        <span v-if="data.pet" style="z-index:50" :class="`Mount_Head_${data.pet.class_tag}`"></span>
+    <div style="max-width:700px" class="modal-dialog modal-ui">
+        <div class="modal-content" style="position: relative">
+            <div v-if="loading" class="loading-in-component loading-spinner-box">
+                <div class="loading-component">
+                    <div class="cube">
+                        <div class="side"></div>
+                        <div class="side"></div>
+                        <div class="side"></div>
+                        <div class="side"></div>
+                        <div class="side"></div>
                     </div>
-                    <div style="margin-bottom:60px" v-if="data.pet"></div>
-                    <p style="margin-top:20px" class="text-muted text-center">@{{ data.infor.name }} ( @{{ data.infor.character.name }} )</p>
+                    <div class="loading-spinner-ment">
+                        <p notranslate class="mt-5 pixel-font notranslate">Loading...</p>
+                    </div>
                 </div>
-                <div class="row row-sm">
-                    <div class="col-12 d-flex">
-                        <p class="text-gold pixel-font">LC : @{{ numberFormat(data.power.total) }} </p>
+            </div>
+            <div class="modal-header">
+                @include('components.border')
+                <span class="modal-text">Nhân Vật</span>
+                <button class="close" data-dismiss="modal">
+                    <img style="width:20px" src="{{ asset('assets/images/icon/Close.png') }}">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="p-3">
+                    <div class="b-b">
+                        <div class="nav-active-border b-primary bottom">
+                            <ul class="nav" id="myTab" role="tablist">
+                                <li data-title="tooltip" title="Tổng quan" class="nav-item">
+                                    <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile-tab-control" role="tab" aria-controls="" aria-selected="true">
+                                        <img class="text-center" style="width:20px;height:20px;object-fit:contain" src="{{ asset('assets/images/icon/Character.png') }}">
+                                    </a>
+                                </li>
+                                <li data-title="tooltip" title="Chỉ số sức mạnh" class="nav-item">
+                                    <a class="nav-link" id="skill-tab" data-toggle="tab" href="#skill-tab-control" role="tab" aria-controls="" aria-selected="true">
+                                        <img class="text-center" style="width:20px;height:20px;object-fit:contain" src="{{ asset('assets/images/icon/Stats.png') }}">
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="skill-tab" data-toggle="tab" href="#skill-tab-control" role="tab" aria-controls="" aria-selected="true">
+                                        <img class="text-center" style="width:20px;height:20px;object-fit:contain" src="{{ asset('assets/images/icon/Skill.png') }}">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="col-12 d-flex">
-                        <div class="flex">
-                                <div class="text-info pixel-font small-font">
-                                Level 
-                                @{{ data.level.current_level }} 
-                                <i class="fas fa-arrow-right"></i> 
-                                @{{ data.level.next_level }} 
-                                ( @{{ data.level.percent }} % )
-                                <div @click="notify(`Bạn cần ${(data.level.next_level_exp - data.level.current_user_exp)} kinh nghiệm nữa để lên cấp`)" class="progress my-3 circle" style="height:6px">
-                                    <div class="progress-bar circle gd-info" data-title="tooltip" :title="`Bạn cần ${(data.level.next_level_exp - data.level.current_user_exp)} kinh nghiệm nữa để lên cấp`" :style="{width:data.level.percent + '%'}">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="profile-tab-control" role="tabpanel" aria-labelledby="profile-tab">
+                            <div class="row">
+                                <div class="pr-1 col-lg-6 col-md-6 col-sm-12">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="item-preview">
+                                                <img style="position: absolute; right: 5%;width: 40px" class="pixel" src="{{ asset('assets/images/icon/Dark-Badge.png') }}">
+                                                <img class="pixel" data-title="tooltip" :title="data.infor.character.name" style="position: absolute; right: 7.5%;width:25px;" :src="asset(`assets/images/class/${data.infor.character.avatar}-icon.png`)">
+                                                @include('components.border')
+                                                <div style="margin:0 auto;position:relative;right:-15px;transform:scaleX(-1)" class="character-sprites hoverable">
+                                                    <span v-if="data.pet" :class="`Mount_Body_${data.pet.class_tag}`"></span>
+                                                    <span style="z-index:2" class="skin_f5a76e up-to-down"></span>
+                                                    <span style="z-index:2" class="broad_shirt_black up-to-down"></span>
+                                                    <span style="z-index:2" class="head_0 up-to-down"></span>
+                                                    <span class=""></span>
+                                                    <span v-for="(gear,index) in data.gears" :key="index">
+                                                        <span v-if="gear.class_tag.includes(' ')" v-for="e in gear.class_tag.split(' ')" :class="`${e} ${gear.cates.animation} up-to-down`" :style="{zIndex:gear.cates.z_index}"></span>
+                                                        <span v-else :class="`${gear.class_tag} ${gear.cates.animation} up-to-down`" :style="{zIndex:gear.cates.z_index}"></span>
+                                                    </span>
+                                                    <span v-if="data.pet" style="z-index:50" :class="`Mount_Head_${data.pet.class_tag}`"></span>
+                                                </div>
+                                                <div style="margin-bottom:60px" v-if="data.pet"></div>
+                                                <div class="normal-badge">
+                                                    <img class="pixel" src="{{ asset('assets/images/icon/Normal-Badge.png') }}">
+                                                    <span data-title="tooltip" :title="`${data.rank.brand} Rank`" class="pixel-font small-font">@{{ data.rank.brand }}</span>
+                                                </div>
+                                                <div class="footer">
+                                                    <div style="font-size:15px" class="modal-text item-name modal-title text-md text-center">
+                                                        <img style="width:17px; height:17px;transform:scaleX(-1)" class="mr-1 pixel" src="{{ asset('assets/images/icon/Bar.png') }}">
+                                                        @{{ data.infor.name }}
+                                                        <img style="width:17px; height:17px" class="ml-1 pixel" src="{{ asset('assets/images/icon/Bar.png') }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mt-2">
+                                            <div style="position: relative;">
+                                                @include('components.border')
+                                                <div style="height:158px;background:#212121" class="item-description">
+                                                    <img style="width:50px;display:block;margin:10px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
+                                                    <div class="row row-sm p-3">
+                                                        <div v-for="(gear,index) in data.gears" :key="index" style="margin-bottom:15px" class="col-3 d-flex" data-title="tooltip" title="Click để xem chi tiết" >
+                                                            <div class="flex">
+                                                                <div @click="showGearsDescription(gear,1)" style="background-color: #292828;border-radius: 50%;" :class="[`pixel text-center ${gear.shop_tag}`]">
+                                                                    <img class="pixel" style="width: 70px;" src="{{ asset('assets/images/icon/Item-Frame.png') }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div v-for="n in parseInt(8 - data.gears.length)" :key="n + Math.random(1,10)" style="margin-bottom:15px" class="col-3 d-flex">
+                                                            <div class="flex">
+                                                                <div style="background-color: #292828;border-radius: 50%;" class="pixel text-center">
+                                                                    <img class="pixel" style="width: 70px;" src="{{ asset('assets/images/icon/Item-Frame.png') }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pl-1 col-lg-6 col-md-6 col-sm-12 notranslate">
+                                    <div class="stats-preview">
+                                        @include('components.border')
+                                        <div class="item">
+                                            <div class="flex">
+                                                <div class="text-silver row justify-content-between">
+                                                    <div class="col-auto pixel-font small-font">Level</div>
+                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">LV@{{ data.level.current_level }} ( @{{ data.level.percent }} % )</strong></div>
+                                                </div>
+                                                <div @click="notify(`Bạn cần ${numberFormatDetail(data.level.next_level_exp - data.level.current_user_exp)} kinh nghiệm nữa để lên cấp`)" class="progress my-3 circle" style="height:12px;border-radius:0px;">
+                                                    <div class="progress-bar pixel-font" style="background:#ffdd44;border-radius:0px;color:#333;height:12px" data-title="tooltip" :title="`Bạn cần ${numberFormatDetail(data.level.next_level_exp - data.level.current_user_exp)} kinh nghiệm nữa để lên cấp`" :style="{width:data.level.percent + '%'}">
+                                                        <span style="font-size:6px;margin-bottom:3px">@{{ data.level.next_level_exp }}/@{{ data.level.current_user_exp }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item mt-2">
+                                            <div class="flex">
+                                                <div class="text-silver row justify-content-between">
+                                                    <div class="col-auto pixel-font small-font">Class</div>
+                                                    <div class="col-auto">
+                                                        <img class="pixel" style="width:25px;" :src="asset(`assets/images/class/${data.infor.character.avatar}-icon.png`)">
+                                                        <strong class="text-warning pixel-font small-font">
+                                                            @{{ data.infor.character.name }}
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item mt-2">
+                                            <div class="flex">
+                                                <div class="text-silver row justify-content-between">
+                                                    <div data-title="tooltip" title="Sinh lực" class="col-auto pixel-font small-font">HP</div>
+                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.raw_power.hp }} <span class="text-success">( +@{{ data.power.hp - data.raw_power.hp }} )</span></strong></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item mt-2">
+                                            <div class="flex">
+                                                <div class="text-silver row justify-content-between">
+                                                    <div data-title="tooltip" title="Sát thương vật lý" class="col-auto pixel-font small-font">STR</div>
+                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.raw_power.strength }} <span class="text-success">( +@{{ data.power.strength - data.raw_power.strength }} )</span></strong></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item mt-2">
+                                            <div class="flex">
+                                                <div class="text-silver row justify-content-between">
+                                                    <div data-title="tooltip" title="Sát thương phép thuật" class="col-auto pixel-font small-font">INT</div>
+                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.raw_power.intelligent }} <span class="text-success">( +@{{ data.power.intelligent - data.raw_power.intelligent }} )</span></strong></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item mt-2">
+                                            <div class="flex">
+                                                <div class="text-silver row justify-content-between">
+                                                    <div data-title="tooltip" title="Nhanh nhẹn" class="col-auto pixel-font small-font">AGI</div>
+                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.raw_power.agility }} <span class="text-success">( +@{{ data.power.agility - data.raw_power.agility }} )</span></strong></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item mt-2">
+                                            <div class="flex">
+                                                <div class="text-silver row justify-content-between">
+                                                    <div data-title="tooltip" title="May mắn" class="col-auto pixel-font small-font">LUK</div>
+                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.raw_power.lucky }} <span class="text-success">( +@{{ data.power.lucky - data.raw_power.lucky }} )</span></strong></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item mt-2">
+                                            <div class="flex">
+                                                <div class="text-silver row justify-content-between">
+                                                    <div data-title="tooltip" title="Kháng sát thương vật lý" class="col-auto pixel-font small-font">DEF</div>
+                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.raw_power.armor_strength }} <span class="text-success">( +@{{ data.power.armor_strength - data.raw_power.armor_strength }} )</span></strong></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item mt-2">
+                                            <div class="flex">
+                                                <div class="text-silver row justify-content-between">
+                                                    <div data-title="tooltip" title="Kháng phép" class="col-auto pixel-font small-font">AM</div>
+                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.raw_power.armor_intelligent }} <span class="text-success">( +@{{ data.power.armor_intelligent - data.raw_power.armor_intelligent }} )</span></strong></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="skill-tab-control" role="tabpanel" aria-labelledby="skill-tab">
+                            <div class="row">
+                                <div class="col-12 mb-1">
+                                    <div class="item-preview">
+                                        @include('components.border')
+                                        <p class="px-3 pt-3">Tăng điểm chỉ số sức mạnh của bạn</p>
+                                    </div>
+                                </div>
+                                <div class="pr-1 col-lg-6 col-md-6 col-sm-12">
+                                    <div style="background: #343521;" class="item-preview">
+                                        <img style="position: absolute; right: 5%;width: 40px" class="pixel" src="{{ asset('assets/images/icon/Dark-Badge.png') }}">
+                                        <img class="pixel" data-title="tooltip" :title="data.infor.character.name" style="position: absolute; right: 7.5%;width:25px;" :src="asset(`assets/images/class/${data.infor.character.avatar}-icon.png`)">
+                                        @include('components.border')
+                                        <img width="60%" style="display:block;margin:0 auto" src="{{ asset('assets/images/icon/Stats-Point.png') }}">
+                                        <div class="normal-badge" style="margin-bottom:5rem">
+                                            <img style="width:150px;height:60px" src="{{ asset('assets/images/icon/Red-Ribon.png') }}" class="pixel">
+                                            <span data-title="tooltip" title="Điểm chỉ số dư" style="top:18px" class="text-light pixel-font small-font">
+                                                @{{ data.stats.available }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pl-1 col-lg-6 col-md-6 col-sm-12 notranslate">
+                                    <div class="stats-preview">
+                                        @include('components.border')
+                                        <div class="item mt-2">
+                                            <div class="flex">
+                                                <div class="text-silver row justify-content-between">
+                                                    <div data-title="tooltip" title="Sinh lực" class="col-auto pixel-font small-font">HP</div>
+                                                    <div class="col-auto">
+                                                        <strong class="text-warning pixel-font small-font">
+                                                            @{{ data.stats.data.health_points }}
+                                                            <span class="text-success">( x3 )</span>
+                                                        </strong>
+                                                        <img @click="incrementStat('health_points')" style="width:17px" class="ml-2" src="{{ asset('assets/images/icon/Add.png') }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item mt-2">
+                                            <div class="flex">
+                                                <div class="text-silver row justify-content-between">
+                                                    <div data-title="tooltip" title="Sát thương vật lý" class="col-auto pixel-font small-font">STR</div>
+                                                    <div class="col-auto">
+                                                        <strong class="text-warning pixel-font small-font">
+                                                            @{{ data.stats.data.strength }}
+                                                            <span class="text-success">( x1.5 )</span>
+                                                        </strong>
+                                                        <img @click="incrementStat('strength')" style="width:17px" class="ml-2" src="{{ asset('assets/images/icon/Add.png') }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item mt-2">
+                                            <div class="flex">
+                                                <div class="text-silver row justify-content-between">
+                                                    <div data-title="tooltip" title="Sát thương phép thuật" class="col-auto pixel-font small-font">INT</div>
+                                                    <div class="col-auto">
+                                                        <strong class="text-warning pixel-font small-font">
+                                                            @{{ data.stats.data.intelligent }}
+                                                            <span class="text-success">( x1.5 )</span>
+                                                        </strong>
+                                                        <img @click="incrementStat('intelligent')" style="width:17px" class="ml-2" src="{{ asset('assets/images/icon/Add.png') }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item mt-2">
+                                            <div class="flex">
+                                                <div class="text-silver row justify-content-between">
+                                                    <div data-title="tooltip" title="Nhanh nhẹn" class="col-auto pixel-font small-font">AGI</div>
+                                                    <div class="col-auto">
+                                                        <strong class="text-warning pixel-font small-font">
+                                                            @{{ data.stats.data.agility }}
+                                                            <span class="text-success">( x1 )</span>
+                                                        </strong>
+                                                        <img @click="incrementStat('agility')" style="width:17px" class="ml-2" src="{{ asset('assets/images/icon/Add.png') }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item mt-2">
+                                            <div class="flex">
+                                                <div class="text-silver row justify-content-between">
+                                                    <div data-title="tooltip" title="May mắn" class="col-auto pixel-font small-font">LUK</div>
+                                                    <div class="col-auto">
+                                                        <strong class="text-warning pixel-font small-font">
+                                                            @{{ data.stats.data.lucky }}
+                                                            <span class="text-success">( x1 )</span>
+                                                        </strong>
+                                                        <img @click="incrementStat('lucky')" style="width:17px" class="ml-2" src="{{ asset('assets/images/icon/Add.png') }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item mt-2">
+                                            <div class="flex">
+                                                <div class="text-silver row justify-content-between">
+                                                    <div data-title="tooltip" title="Kháng sát thương vật lý" class="col-auto pixel-font small-font">DEF</div>
+                                                    <div class="col-auto">
+                                                        <strong class="text-warning pixel-font small-font">
+                                                            @{{ data.stats.data.armor_strength }} 
+                                                            <span class="text-success">( x1 )</span>
+                                                        </strong>
+                                                        <img @click="incrementStat('armor_strength')" style="width:17px" class="ml-2" src="{{ asset('assets/images/icon/Add.png') }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item mt-2">
+                                            <div class="flex">
+                                                <div class="text-silver row justify-content-between">
+                                                    <div data-title="tooltip" title="Kháng phép" class="col-auto pixel-font small-font">AM</div>
+                                                    <div class="col-auto">
+                                                        <strong class="text-warning pixel-font small-font">
+                                                            @{{ data.stats.data.armor_intelligent }}
+                                                            <span class="text-success">( x1 )</span>
+                                                         </strong>
+                                                        <img @click="incrementStat('armor_intelligent')" style="width:17px" class="ml-2" src="{{ asset('assets/images/icon/Add.png') }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 d-flex">
-                        <div class="flex">
-                            <div class="text-light pixel-font small-font"><i class="normal-text fas fa-chevron-double-up"></i> Level <strong
-                                        class="text-light">@{{ data.level.current_level }}</strong>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 d-flex">
-                        <div class="flex">
-                            <div class="text-success pixel-font small-font"><i class="normal-text fas fa-heart"></i> HP <strong
-                                        class="text-success">@{{ data.power.hp }}</strong>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 d-flex mt-2">
-                        <div class="flex">
-                            <div class="text-danger pixel-font small-font"><i class="normal-text fas fa-swords"></i> STR <strong
-                                        class="text-danger">@{{ data.power.strength }}</strong>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 d-flex mt-2">
-                        <div class="flex">
-                            <div class="text-info pixel-font small-font"><i class="normal-text fas fa-brain"></i> INT <strong
-                                        class="text-info">@{{ data.power.intelligent }}</strong>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 d-flex mt-2">
-                        <div class="flex">
-                            <div class="text-primary"><small><i class="normal-text fas fa-bolt"></i> AGI <strong
-                                        class="text-primary">@{{ data.power.agility }}</strong></small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 d-flex mt-2">
-                        <div class="flex">
-                            <div class="text-warning pixel-font small-font"><i class="normal-text fas fa-stars"></i> LUK <strong
-                                        class="text-warning">@{{ data.power.lucky }}</strong>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 d-flex mt-2">
-                        <div class="flex">
-                            <div class="text-silver pixel-font small-font"><i class="normal-text fas fa-shield"></i> DEF <strong
-                                        class="text-silver">@{{ data.power.armor_strength }}</strong>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 d-flex mt-2">
-                        <div class="flex">
-                            <div class="text-purple pixel-font small-font"><i class="normal-text fal fa-dice-d20"></i> AM <strong
-                                        class="text-purple">@{{ data.power.armor_intelligent }}</strong>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-                <br>
-                <p class="text-gold">Thông Tin</p>
-                <div class="row row-sm">
-                    <div class="col-6 d-flex my-2">
-                        <div class="flex">
-                            <div class="text-muted"><small><img style="width:15px" class="mr-1" src="{{ asset('assets/images/icon-pack/gold.png') }}"> <strong
-                                        class="text-muted pixel-font small-font"> @{{ numberFormat(data.infor.coins) }}</strong></small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 d-flex my-2">
-                        <div class="flex">
-                            <div class="text-muted"><small><img style="width:15px" class="mr-1" src="{{ asset('assets/images/icon-pack/diamond.png') }}"> <strong
-                                        class="text-muted pixel-font small-font"> @{{ numberFormat(data.infor.gold) }}</strong></small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 d-flex">
-                        <div class="flex">
-                            <div class="text-muted"><small><img style="width:15px" class="mr-1" src="{{ asset('assets/images/icon-pack/pvp-point.png') }}"> <strong
-                                class="text-muted pixel-font small-font"> @{{ numberFormatDetail(data.infor.pvp_points) }}</strong></small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 d-flex">
-                        <div class="flex">
-                            <div class="text-muted"><small><img style="width:15px" class="mr-1" src="{{ asset('assets/images/icon-pack/energy.png') }}"> <strong
-                                        class="text-muted pixel-font small-font"> @{{ numberFormatDetail(data.infor.energy) }}</strong></small>
-                            </div>
-                        </div>
-                    </div>
+            </div>
+            <div class="modal-footer">
+                <div data-dismiss="modal" class="btn-red pixel-btn mr-4">
+                    Đóng <img style="width:16px" src="{{ asset('assets/images/icon/Close-White.png') }}">
                 </div>
-                <br>
-                <p class="text-gold">Trang Bị</p>
-                <div class="row row-sm">
-                    <div v-for="(gear,index) in data.gears" :key="index" style="margin-bottom:15px" class="col-3 d-flex" data-title="tooltip" title="Click để xem chi tiết" >
-                        <div class="flex">
-                            <div @click="showGearsDescription(gear,1)" :class="`pixel hoverable ${gear.shop_tag}`" :style="{borderRadius:'5px',border:`1px solid ${gear.rgb}`,backgroundColor:'#272727'}"></div>
-                        </div>
-                    </div>
-                    <div v-for="n in parseInt(8 - data.gears.length)" :key="n + Math.random(1,10)" style="margin-bottom:15px" class="col-3 d-flex">
-                        <div class="flex">
-                            <div class="hoverable" :style="{width:'68px',height:'68px',borderRadius:'5px',border:'1px dashed #ccc',background:'#4e4e4e'}">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <p class="text-gold">Kỹ Năng</p>
-                <div class="row row-sm">
-                    <div v-for="(skill,index) in data.skills" :key="index" style="margin-bottom:15px" class="col-3 d-flex">
-                        <div data-title="tooltip" title="Click để xem chi tiết" class="flex hoverable">
-                            <img title @click="showSkillsDescription(skill,1)" data-toggle="tooltip" :style="{borderRadius:'5px',width:'68px',height:'68px',border:`1px solid ${skill.rgb}`}" :src="skill.image">
-                        </div>
-                    </div>
-                    <div v-for="n in parseInt(4 - data.skills.length)" :key="n + Math.random(1,10)" style="margin-bottom:15px" class="col-3 d-flex">
-                        <div class="flex">
-                            <div class="hoverable" :style="{width:'68px',height:'68px',borderRadius:'5px',border:'1px dashed #ccc',background:'#4e4e4e'}">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <p class="text-gold">Chỉ Số ( Điểm : @{{ numberFormat(data.stats.used) }}/@{{ numberFormat(data.stats.available) }} )</p>
-                <div id="stats"></div>
             </div>
         </div>
     </div>
 </div>
 @endauth
 <div id="gear" v-if="detailGear.data" class="modal fade gear top-off" data-backdrop="true" aria-hidden="true" style="display: none;">
-    <div style="max-width:700px" class="modal-dialog">
-        <div class="lighting-box modal-content bg-dark">
-            <div class="modal-header">
-                <button class="close" data-dismiss="modal">×</button>
+    <div style="max-width:700px" class="modal-dialog modal-ui">
+        <div class="lighting-box modal-content">
+            <div style="position: relative;" class="modal-header">
+                @include('components.border')
+                <span class="modal-text">Trang Bị</span>
+                <button class="close" data-dismiss="modal">
+                    <img style="width:20px" src="{{ asset('assets/images/icon/Close.png') }}">
+                </button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-4">
-                        <div :style="{border:`1px solid ${detailGear.data.rgb}`,margin:'0 auto'}" :class="[`pixel text-center ${detailGear.data.shop_tag}`]"></div>
-                        <p :style="{fontSize:'14px',color:`${detailGear.data.rgb}`,marginTop:'20px'}" class="modal-title text-md text-center">@{{ detailGear.data.name }}</p>
-                        <p :style="{fontSize:'14px',marginTop:'10px'}" class="modal-title text-md text-center">( @{{ detailGear.data.character.name }} - @{{ detailGear.data.cates.name }} )</p>
-                    </div>
-                    <div class="col-8">
-                        <div class="row">
-                            <div class="col-6 d-flex">
-                                <div class="flex">
-                                    <div class="text-light"><small><i class="fas fa-chevron-double-up"></i> Level yêu cầu : <strong
-                                        class="text-light">@{{ detailGear.data.level_required }}</strong></small>
+                <div class="p-3">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="item-preview">
+                                        <span style="padding:10px;font-weight:bold">[ @{{ detailGear.data.cates.name }} ]</span>
+                                        <img style="position: absolute; right: 5%;width: 40px" class="pixel" src="{{ asset('assets/images/icon/Dark-Badge.png') }}">
+                                        <img class="pixel" style="position: absolute; right: 7.5%;width:25px;" :src="asset(`assets/images/class/${detailGear.data.character.avatar}-icon.png`)">
+                                        @include('components.border')
+                                        <div style="margin:42px auto;background-color: #554334;border-radius: 50%;" :class="[`pixel text-center ${detailGear.data.shop_tag}`]">
+                                            <img class="pixel" style="width: 70px;" src="{{ asset('assets/images/icon/Item-Frame.png') }}">
+                                        </div>
+                                        <div class="normal-badge">
+                                            <img class="pixel" src="{{ asset('assets/images/icon/Normal-Badge.png') }}">
+                                            <span class="pixel-font small-font">0</span>
+                                        </div>
+                                        <div class="footer">
+                                            <div style="font-size:15px" class="modal-text item-name modal-title text-md text-center">
+                                                <img style="width:17px; height:17px;transform:scaleX(-1)" class="mr-1 pixel" src="{{ asset('assets/images/icon/Bar.png') }}">
+                                                @{{ detailGear.data.name }}
+                                                <img style="width:17px; height:17px" class="ml-1 pixel" src="{{ asset('assets/images/icon/Bar.png') }}">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-6 d-flex">
-                                <div class="flex">
-                                    <div class="text-success"><small><i class="fas fa-heart"></i> Sinh Lực <strong
-                                        class="text-success">+ @{{ detailGear.data.health_points.default }} ( +@{{ detailGear.data.health_points.percent }}% )</strong></small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6 d-flex mt-2">
-                                <div class="flex">
-                                    <div class="text-danger"><small><i class="fas fa-swords"></i> Sức Mạnh <strong
-                                        class="text-danger">+ @{{ detailGear.data.strength.default }} ( +@{{ detailGear.data.strength.percent }}% )</strong></small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6 d-flex mt-2">
-                                <div class="flex">
-                                    <div class="text-info"><small><i class="fas fa-brain"></i> Trí Tuệ <strong
-                                        class="text-info">+ @{{ detailGear.data.intelligent.default }} ( +@{{ detailGear.data.intelligent.percent }}% )</strong></small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6 d-flex mt-2">
-                                <div class="flex">
-                                    <div class="text-primary"><small><i class="fas fa-bolt"></i> Nhanh Nhẹn <strong
-                                        class="text-primary">+ @{{ detailGear.data.agility.default }} ( +@{{ detailGear.data.agility.percent }}% )</strong></small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6 d-flex mt-2">
-                                <div class="flex">
-                                    <div class="text-warning"><small><i class="fas fa-stars"></i> May Mắn <strong
-                                        class="text-warning">+ @{{ detailGear.data.lucky.default }} ( +@{{ detailGear.data.lucky.percent }}% )</strong></small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6 d-flex mt-2">
-                                <div class="flex">
-                                    <div class="text-silver"><small><i class="fas fa-shield"></i> Kháng Công <strong
-                                        class="text-silver">+ @{{ detailGear.data.armor_strength.default }} ( +@{{ detailGear.data.armor_strength.percent }}% )</strong></small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6 d-flex mt-2">
-                                <div class="flex">
-                                    <div class="text-purple"><small><i class="fal fa-dice-d20"></i> Kháng Phép <strong
-                                        class="text-purple">+ @{{ detailGear.data.armor_intelligent.default }} ( +@{{ detailGear.data.armor_intelligent.percent }}% )</strong></small>
+                                <div class="col-12 mt-2">
+                                    <div class="item-description">
+                                        @include('components.border')
+                                        <img style="width:50px;display:block;margin:10px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
+                                        <p style="color:#706753;font-size:12px;margin:10px">@{{ detailGear.data.description ?? 'Không có mô tả nào về trang bị này' }}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-12">
-                        <div style="margin:10px 20px" class="row">
-                            <div v-for="(gem, index) in detailGear.data.gems" :key="index" style="padding:5px" class="col-auto">
-                                <div :style="{border:`1px solid ${gem.gem_item.rgb}`}" :class="`gem ${gem.gem_item.image}`" @click="showGem(gem,detailGear.permission)" width="40px"></div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 notranslate">
+                            <div class="stats-preview">
+                                @include('components.border')
+                                <div class="item">
+                                    <div class="flex">
+                                        <div class="text-silver row justify-content-between">
+                                            <div data-title="tooltip" title="Cấp độ yêu cầu" class="col-auto pixel-font small-font">Level</div>
+                                            <div class="col-auto"><strong class="text-warning pixel-font small-font">LV@{{ detailGear.data.level_required }}</strong></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item mt-2">
+                                    <div class="flex">
+                                        <div class="text-silver row justify-content-between">
+                                            <div data-title="tooltip" title="Sinh lực" class="col-auto pixel-font small-font">HP</div>
+                                            <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ detailGear.data.health_points.default }} <span class="text-success">( +@{{ detailGear.data.health_points.percent }}% )</span></strong></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item mt-2">
+                                    <div class="flex">
+                                        <div class="text-silver row justify-content-between">
+                                            <div data-title="tooltip" title="Sát thương vật lý" class="col-auto pixel-font small-font">STR</div>
+                                            <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ detailGear.data.strength.default }} <span class="text-success">( +@{{ detailGear.data.strength.percent }}% )</span></strong></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item mt-2">
+                                    <div class="flex">
+                                        <div class="text-silver row justify-content-between">
+                                            <div data-title="tooltip" title="Sát thương phép thuật" class="col-auto pixel-font small-font">INT</div>
+                                            <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ detailGear.data.intelligent.default }} <span class="text-success">( +@{{ detailGear.data.intelligent.percent }}% )</span></strong></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item mt-2">
+                                    <div class="flex">
+                                        <div class="text-silver row justify-content-between">
+                                            <div data-title="tooltip" title="Nhanh nhẹn" class="col-auto pixel-font small-font">AGI</div>
+                                            <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ detailGear.data.agility.default }} <span class="text-success">( +@{{ detailGear.data.agility.percent }}% )</span></strong></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item mt-2">
+                                    <div class="flex">
+                                        <div class="text-silver row justify-content-between">
+                                            <div data-title="tooltip" title="May mắn" class="col-auto pixel-font small-font">LUK</div>
+                                            <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ detailGear.data.lucky.default }} <span class="text-success">( +@{{ detailGear.data.lucky.percent }}% )</span></strong></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item mt-2">
+                                    <div class="flex">
+                                        <div class="text-silver row justify-content-between">
+                                            <div data-title="tooltip" title="Kháng sát thương vật lý" class="col-auto pixel-font small-font">DEF</div>
+                                            <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ detailGear.data.armor_strength.default }} <span class="text-success">( +@{{ detailGear.data.armor_strength.percent }}% )</span></strong></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item mt-2">
+                                    <div class="flex">
+                                        <div class="text-silver row justify-content-between">
+                                            <div data-title="tooltip" title="Kháng phép" class="col-auto pixel-font small-font">AM</div>
+                                            <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ detailGear.data.armor_intelligent.default }} <span class="text-success">( +@{{ detailGear.data.armor_intelligent.percent }}% )</span></strong></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item mt-2">
+                                    <div class="row mx-1" v-if="detailGear.permission == 1">
+                                        <div v-for="(gem, index) in detailGear.data.gems" :key="index" style="padding:5px" class="col-auto">
+                                            <div style="background-color: #554334;border-radius: 50%;" @click="showGem(gem, detailGear.permission)" :class="`gem ${gem.gem_item.image}`">
+                                                <img class="pixel" style="width: 50px;" src="{{ asset('assets/images/icon/Gem-Frame.png') }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mx-1" v-else>
+                                        <div v-for="n in 4" :key="n" style="padding:5px" class="col-auto">
+                                            <div style="background-color: #554334;border-radius: 50%;" class="">
+                                                <img class="pixel" style="width: 50px;" src="{{ asset('assets/images/icon/Gem-Frame.png') }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div style="margin:20px 10px" class="col-12">
-                        <p>@{{ detailGear.data.description }}</p>
                     </div>
                 </div>
             </div>
             <div v-if="detailGear.permission == 1" class="modal-footer">
-                <button type="button" @click="deleteEquipment(detailGear.data)" class="btn bg-danger-lt" data-dismiss="modal">
-                    Vứt Bỏ
-                </button>
-                <button v-if="detailGear.data.pivot.status == 0" type="button" @click="equipment(detailGear.data)" class="btn btn-success" data-dismiss="modal">
-                    Trang bị
-                </button>
-                <button v-else type="button" @click="removeEquipment(detailGear.data)" class="btn btn-secondary" data-dismiss="modal">
-                    Tháo
-                </button>
+                <div v-if="detailGear.data.pivot.status == 0" type="button" @click="equipment(detailGear.data)" class="btn-green pixel-btn mr-4" data-dismiss="modal">
+                    Trang bị <img style="width:16px" src="{{ asset('assets/images/icon/Equip.png') }}">
+                </div>
+                <div v-else type="button" @click="removeEquipment(detailGear.data)" class="btn-yellow pixel-btn mr-4">
+                    Tháo <img style="width:16px" src="{{ asset('assets/images/icon/Unequip.png') }}">
+                </div>
+                <div @click="deleteEquipment(detailGear.data)" class="btn-red pixel-btn mr-4">
+                    Vứt Bỏ <img style="width:16px" src="{{ asset('assets/images/icon/Delete.png') }}">
+                </div>
+                <div data-dismiss="modal" class="btn-red pixel-btn mr-4">
+                    Đóng <img style="width:16px" src="{{ asset('assets/images/icon/Close-White.png') }}">
+                </div>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -734,226 +955,10 @@
     </div>
 </div>
 @if(!request()->is('pvp/room/*'))
-<div id="aside-left" class="page-sidenav no-shrink bg-light nav-dropdown fade hide" aria-hidden="true">
-    <div class="sidenav h-100 modal-dialog bg-light normal-bordered">
-        <div class="navbar"><a href="{{ Route('user.index') }}" class="navbar-brand">
-            <img src="{{ asset('assets/images/app.png') }}">
-            <span style="font-weight:inherit;" class="pixel-font hidden-folded text-warning d-inline l-s-n-1x">{{ env('APP_NAME') }}</span></a></div>
-        <div class="flex scrollable hover left-side">
-            <div class="nav-active-text-primary" data-nav>
-                <ul class="nav bg">
-                    <li class="nav-header hidden-folded"><span class="text-muted">Hiệp Hội</span></li>
-                    <li><a class="no-ajax" href="{{ Route('user.index') }}"><span class="nav-icon"><i
-                                    data-feather="box"></i></span> <span class="nav-text">Hiệp Hội</span></a></li>
-                </ul>
-                <ul class="nav">
-                    @if(!Request::is('admin/*'))
-                        <li class="nav-header hidden-folded"><span class="text-muted">Hoạt Động</span></li>
-                        <li class="{{ Request::is('profile/*') ? 'active' : '' }}"><a href="#"><span class="nav-icon"><i data-feather="user"></i></span> <span
-                            class="nav-text">Nhân Vật</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('user.profile.item.index') }}" class=""><span class="nav-text">Vật Phẩm</span></a></li>
-                                <li><a href="{{ Route('user.profile.gem.index') }}" class=""><span class="nav-text">Ngọc Bổ Trợ</span></a></li>
-                                <li><a href="{{ Route('user.profile.inventory.index') }}" class=""><span class="nav-text">Trang Bị</span></a></li>
-                                <li><a href="{{ Route('user.profile.pet.index') }}" class=""><span class="nav-text">Thú Cưỡi</span></a></li>
-                                <li><a href="{{ Route('user.profile.skill.index') }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
-                                <li><a href="{{ Route('user.profile.stat.index') }}" class=""><span class="nav-text">Chỉ Số</span></a></li>
-                                @auth
-                                    <li><a href="{{ Route('user.profile.message.index') }}" class=""><span class="nav-text">Tin Nhắn @if(isset($notifications) && $notifications['unread'] > 0)<span class="nav-badge"><b class="badge badge-pill gd-warning">{{ $notifications['unread'] ?? 0 }}</b></span>@endif</span></a></li>
-                                @endauth
-                            </ul>
-                        </li>
-                        <li class="{{ Request::is('top/*') ? 'active' : '' }}"><a href="#"><span class="nav-icon"><i data-feather="award"></i></span> <span
-                            class="nav-text">BXH</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('user.top.power') }}" class=""><span class="nav-text">Lực Chiến</span></a></li>
-                                <li><a href="{{ Route('user.top.level') }}" class=""><span class="nav-text">Cấp Độ</span></a></li>
-                                <li><a href="{{ Route('user.top.pvp') }}" class=""><span class="nav-text">PVP Arena</span></a></li>
-                                <li><a href="{{ Route('user.top.coin') }}" class=""><span class="nav-text">Vàng</span></a></li>
-                                <li><a href="{{ Route('user.top.gold') }}" class=""><span class="nav-text">Kim Cương</span></a></li>
-                                <li><a href="{{ Route('user.top.activities') }}" class=""><span class="nav-text">Hoạt Động</span></a></li>
-                            </ul>
-                        </li>
-                        <li class="{{ Request::is('events/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><img style="width:20px" src="{{ asset('assets/images/Casino.png') }}"></span> <span
-                                    class="nav-text">Cansino</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('user.events.wheel') }}" class=""><span class="nav-text">VQMM</span></a></li>
-                                <li><a href="{{ Route('user.events.lucky-box') }}" class=""><span class="nav-text">Cá Cược</span></a></li>
-                            </ul>
-                        </li>
-                        <li class="{{ Request::is('shop/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><img style="width:20px" src="{{ asset('assets/images/Shop.png') }}"></span> <span
-                            class="nav-text">Cửa Hàng</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('user.shop.index',['cate' => 'items']) }}" class=""><span class="nav-text">Vật Phẩm</span></a></li>
-                                <li><a href="{{ Route('user.shop.index',['cate' => 'gems']) }}" class=""><span class="nav-text">Ngọc Bổ Trợ</span></a></li>
-                                @foreach($menuShop as $menu)
-                                    <li><a href="{{ Route('user.shop.index',['cate' => str_slug($menu->name)]) }}" class=""><span class="nav-text">{{ $menu->name }}</span></a></li>
-                                @endforeach
-                                <li><a href="{{ Route('user.shop.index',['cate' => 'pets']) }}" class=""><span class="nav-text">Thú Cưỡi</span></a></li>
-                                <li><a href="{{ Route('user.shop.index',['cate' => 'skills']) }}" class=""><span class="nav-text">Kỹ Năng</span></a></li>
-                            </ul>
-                        </li>
-                        <li class="{{ Request::is('oven/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><img style="width:20px" src="{{ asset('assets/images/Smith.png') }}"></span> <span
-                            class="nav-text">Tiệm Rèn</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('user.oven.gem') }}" class=""><span class="nav-text">Khảm Ngọc</span></a></li>
-                            </ul>
-                        </li>
-                        <li class="{{ Request::is('explore/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><img style="width:20px" src="{{ asset('assets/images/Quest.png') }}"></span> <span
-                            class="nav-text">Nhiệm Vụ</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="#" class=""><span class="nav-text">Hàng Ngày</span></a></li>
-                                <li><a href="#" class=""><span class="nav-text">Thành Tựu</span></a></li>
-                                {{-- <li><a href="{{ Route('user.recovery-room.index') }}" class=""><span class="nav-text">Phòng Hồi Phục</span></a></li> --}}
-                            </ul>
-                        </li>
-                        <li class="{{ Request::is('dungeon/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><img style="width:20px" src="{{ asset('assets/images/Dungeon.png') }}"></span> <span
-                            class="nav-text">Dungeon</span></a>
-                        </li>
-                        <li class="{{ Request::is('guild/*') || Request::is('guild')  ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><img style="width:20px" src="{{ asset('assets/images/Guild.png') }}"></span> <span
-                            class="nav-text">Bang Hội</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                @if(empty(Auth::user()->guildMember))
-                                    <li><a href="{{ Route('user.guild.create.form') }}" class=""><span class="nav-text">Tạo</span></a></li>
-                                @else
-                                    <li><a href="{{ Route('user.guild.lobby') }}" class=""><span class="nav-text">Đại Sảnh</span></a></li>
-                                    <li><a href="#" class=""><span class="nav-text">Thành Viên</span></a></li>
-                                    <li><a href="#" class=""><span class="nav-text">Hoạt Động</span></a></li>
-                                    <li><a href="#" class=""><span class="nav-text">Thiết Lập</span></a></li>
-                                @endif
-                            </ul>
-                        </li>
-                        <li class="{{ Request::is('pvp/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><img style="width:20px" src="{{ asset('assets/images/PVP_Icon.png') }}"></span> <span
-                            class="nav-text">PVP Arena</span><span class="nav-badge"><b class="badge-circle xs text-success"></b></span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('user.pvp.index') }}" class=""><span class="nav-text">Tham Gia</span></a></li>
-                            </ul>
-                        </li>
-                        {{-- <li class="{{ Request::is('chat/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="message-circle"></i></span> <span
-                            class="nav-text">Chat</span> <span class="nav-badge"><b class="badge-circle xs text-success"></b></span><span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('user.chat.global') }}" class=""><span class="nav-text">Thế Giới</span></a></li>
-                                <li><a onclick="return confirm('Bạn đang có {{ Auth::user()->stranger_chat_times ?? 0 }} vé chat ! Tham gia ?')" href="{{ Route('user.chat.stranger.join') }}" class=""><span class="nav-text">CVNL</span></a></li>
-                            </ul>
-                        </li> --}}
-                        <li><a href="{{ Route('user.giftcode.index') }}" class=""><span class="nav-icon"><img style="width:20px" src="{{ asset('assets/images/Gif.png') }}"></span> <span
-                            class="nav-text">Quà Tặng</span></a>
-                        </li>
-                    @endif
-                    @if(Auth::check() && Auth::user()->isAdmin)
-                        <li class="nav-header hidden-folded"><span class="text-muted">Admin Cpanel</span></li>
-                        <li><a href="{{ Route('admin.dashboard.index') }}"><span class="nav-icon"><i
-                            data-feather="cpu"></i></span> <span class="nav-text">Tổng Quan</span></a></li>
-                        <li><a href="#" class=""><span class="nav-icon"><i data-feather="download"></i></span> <span
-                                    class="nav-text">Cập Nhật</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('admin.update-points') }}" class=""><span class="nav-text">Điểm Hoạt Động</span></a></li></li>
-                            </ul>
-                        </li>
-                        <li class="{{ Request::is('admin/analytics/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="pie-chart"></i></span> <span
-                            class="nav-text">Truy Cập</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('admin.analytics.total') }}" class=""><span class="nav-text">Tổng Quan</span></a></li></li>
-                                <li><a href="{{ Route('admin.analytics.hour') }}" class=""><span class="nav-text">Theo Giờ</span></a></li></li>
-                                <li><a href="{{ Route('admin.analytics.day') }}" class=""><span class="nav-text">Theo Ngày</span></a></li></li>
-                                <li><a href="{{ Route('admin.analytics.view-most') }}" class=""><span class="nav-text">Xem Nhiều</span></a></li></li>
-                                <li><a href="{{ Route('admin.analytics.setting.index') }}" class=""><span class="nav-text">Cài Đặt</span></a></li></li>
-                            </ul>
-                        </li>
-                        <li class="{{ Request::is('admin/users/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="users"></i></span> <span
-                            class="nav-text">Người Dùng</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('admin.users.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
-                            </ul>
-                        </li>
-                        <li class="{{ Request::is('admin/gears/*') || Request::is('admin/cate-gears/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="archive"></i></span> <span
-                            class="nav-text">Trang Bị</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('admin.cate-gears.list') }}" class=""><span class="nav-text">Danh Mục</span></a></li></li>
-                                <li><a href="{{ Route('admin.gears.add') }}" class=""><span class="nav-text">Thêm</span></a></li></li>
-                                <li><a href="{{ Route('admin.gears.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
-                            </ul>
-                        </li>
-                        <li class="{{ Request::is('admin/pets/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="gitlab"></i></span> <span
-                            class="nav-text">Thú Cưỡi</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('admin.pets.add') }}" class=""><span class="nav-text">Thêm</span></a></li></li>
-                                <li><a href="{{ Route('admin.pets.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
-                            </ul>
-                        </li>
-                        <li class="{{ Request::is('admin/items/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="package"></i></span> <span
-                            class="nav-text">Vật Phẩm</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('admin.items.add') }}" class=""><span class="nav-text">Thêm</span></a></li></li>
-                                <li><a href="{{ Route('admin.items.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
-                            </ul>
-                        </li>
-                        <li class="{{ Request::is('admin/skills/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="book-open"></i></span> <span
-                            class="nav-text">Kỹ Năng</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('admin.skills.add') }}" class=""><span class="nav-text">Thêm</span></a></li></li>
-                                <li><a href="{{ Route('admin.skills.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
-                            </ul>
-                        </li>
-                        <li class="{{ Request::is('admin/levels/*') ? 'active' : '' }}"><a href="{{ Route('admin.levels.list') }}" class=""><span class="nav-icon"><i data-feather="trending-up"></i></span> <span
-                            class="nav-text">Cấp Độ</span></a>
-                        </li>
-                        <li class="{{ Request::is('admin/characters/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="user"></i></span> <span
-                            class="nav-text">Nhân Vật</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('admin.pets.add') }}" class=""><span class="nav-text">Thêm</span></a></li></li>
-                                <li><a href="{{ Route('admin.pets.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
-                            </ul>
-                        </li>
-                        <li class="{{ Request::is('admin/recovery-rooms/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="rss"></i></span> <span
-                            class="nav-text">Phòng Hồi Phục</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('admin.pets.add') }}" class=""><span class="nav-text">Thêm</span></a></li></li>
-                                <li><a href="{{ Route('admin.pets.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
-                            </ul>
-                        </li>
-                        <li class="{{ Request::is('admin/pushers/*') ? 'active' : '' }}"><a href="{{ Route('admin.pushers.list') }}" class=""><span class="nav-icon"><i data-feather="database"></i></span> <span
-                            class="nav-text">Pushers</span></a>
-                        </li>
-                        <li class="{{ Request::is('admin/events/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="gift"></i></span> <span
-                            class="nav-text">Giải Trí</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('admin.events.add') }}" class=""><span class="nav-text">Thêm</span></a></li></li>
-                                <li><a href="{{ Route('admin.events.list') }}" class=""><span class="nav-text">Danh Sách</span></a></li></li>
-                            </ul>
-                        </li>
-                        <li class="{{ Request::is('admin/chats/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="message-square"></i></span> <span
-                            class="nav-text">Chat</span></span></a>
-                        </li>
-                        <li class="{{ Request::is('admin/pvps/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="shield"></i></span> <span
-                            class="nav-text">PVP</span></span></a>
-                        </li>
-                        <li class="{{ Request::is('admin/trackings/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="play"></i></span> <span
-                            class="nav-text">Theo Dõi</span></span></a>
-                        </li>
-                        <li class="{{ Request::is('admin/settings/*') ? 'active' : '' }}"><a href="#" class=""><span class="nav-icon"><i data-feather="settings"></i></span> <span
-                            class="nav-text">Cài Đặt</span> <span class="nav-caret"></span></a>
-                            <ul class="nav-sub nav-mega">
-                                <li><a href="{{ Route('admin.settings.config') }}" class=""><span class="nav-text">Cấu Hình</span></a></li></li>
-                                <li><a href="#" class=""><span class="nav-text">Slider</span></a></li></li>
-                            </ul>
-                        </li>
-                    @endif
-                </ul>
-            </div>
-        </div>
-        @auth
-            <div class="no-shrink">
-                <div class="p-3 d-flex align-items-center">
-                    <div class="text-sm hidden-folded {{ Auth::user()->energy >= 60 ? 'text-success' : 'text-danger' }}">Sức Khỏe : {{ Auth::user()->energy }} <i class="fas fa-walking"></i></div>
-                </div>
-            </div>
-        @endauth
-    </div>
-</div>
+    {{-- @include('user.theme.menu') --}}
 @endif
 @if(!request()->is('admin/*'))
-<div v-if="loading" id="modal-sm" class="modal fade show" data-backdrop="true" style="display: block;" aria-modal="true">
+{{-- <div v-if="loading" id="modal-sm" class="modal fade show" data-backdrop="true" style="display: block;" aria-modal="true">
     <div class="modal-dialog modal-sm">
         <div style="background:transparent !important" class="modal-content">
             <div class="modal-body">
@@ -963,10 +968,10 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 @push('js')
     @auth
-    <script>
+    {{-- <script>
         $(document).ready(() => {
             var options = {
                 chart: {
@@ -1021,9 +1026,9 @@
             var chart = new ApexCharts(document.querySelector("#stats"),options);
             chart.render();
         });
-    </script>
+    </script> --}}
     @endauth
-    <script src="{{ asset('assets/js/vue/app.js') }}"></script>
+	<script async src="{{ mix('js/bundle.min.js') }}"></script>
 @endpush
 @endif
 <button class="btn btn-white btn-block mb-2" style="display:none" id="trigger-gear" data-toggle="modal" data-target="#gear"></button>

@@ -32,7 +32,7 @@ class IndexController extends Controller
                         'name' => $helper->user()->name,
                         'character' => [
                             'name' => $helper->character()->name,
-                            'avatar' => asset($helper->character()->avatar)
+                            'avatar' => $helper->character()->avatar
                         ],
                         'exp' => (int)$helper->user()->exp,
                         'coins' => $helper->coins(),
@@ -44,10 +44,21 @@ class IndexController extends Controller
                         'config' => $helper->user()->config
                     ],
                     'rank' => [
-                        'power' => $helper->rankPower()
+                        'brand' => $helper->rank(),
+                        'pvp_brand' => $helper->pvpBrand()
                     ],
                     'stats' => Auth::id() == $findUser->id ? $helper->stats() : [],
                     'level' => $helper->nextLevel(),
+                    'raw_power' => [
+                        'hp' => $helper->user()['health_points'],
+                        'strength' => $helper->user()['strength'],
+                        'agility' => $helper->user()['agility'],
+                        'intelligent' => $helper->user()['intelligent'],
+                        'lucky' => $helper->user()['lucky'],
+                        'energy' => $helper->user()->default_energy,
+                        'armor_strength' => $helper->user()['armor_strength'],
+                        'armor_intelligent' => $helper->user()['armor_intelligent'],
+                    ],
                     'power' => [
                         'total' => $helper->fullPower($findUser->id),
                         'hp' => $helper->power()['health_points'],

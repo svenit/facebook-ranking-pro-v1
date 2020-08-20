@@ -6,7 +6,7 @@
 
 <div class="page-content page-container" id="page-content">
     <div class="padding-x">
-        @include('user.theme.parameter')
+        {{-- @include('user.theme.parameter')
         <div class="row row-sm sr">
             <div class="col-md-12 col-lg-12">
                 <div class="row row-sm">
@@ -16,7 +16,7 @@
                                 <div class="card vip-bordered">
                                     <div class="card-body row">
                                         <div class="col-4">
-                                            <img width="100%" src="{{ asset('assets/images/quests/presenter.png') }}">
+                                            <img class="pixel" width="100%" src="{{ asset('assets/images/quests/presenter.png') }}">
                                         </div>
                                         <div class="col-8" style="position: relative;">
                                             <img src="{{ asset('assets/images/comment.png') }}">
@@ -86,7 +86,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         {{-- <div style="margin-top:25px;" class="block p-3 normal-bordered">
             <div id="carouselCaptions" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
@@ -139,8 +139,7 @@
     @endif
     <script>
         const page = {
-            path:'map',
-            map:"hometown"
+            path: 'home',
         };
     </script>
 @endpush

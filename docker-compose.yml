@@ -1,0 +1,54 @@
+version: '3'
+services: 
+  nginx: 
+    container_name: 'nginx'
+    image: nginx:1.14.2-alpine
+    restart: always
+    volumes: 
+      - ./docker/nginx:/etc/nginx/conf.d
+      - .:/usr/share/nginx/html
+    ports: 
+      - 8080:80
+    links: 
+      - laravel
+      - mysql
+  laravel: 
+    container_name: 'laravel'
+    build: 
+      context: .
+      dockerfile: docker/Dockerfile
+    restart: always
+    env_file: ".env"
+    volumes: 
+      - .:/usr/share/nginx/html
+    depends_on:
+      - mysql
+      - redis
+  node:
+    container_name: 'node'
+    image: node:latest
+    restart: always
+    env_file: ".env"
+    ports: 
+        - 3000:3000
+  redis: 
+    container_name: 'redis'
+    image: redis:latest
+    restart: always
+    ports: 
+        - 6379:6379
+  mysql:
+    container_name: 'mysql'
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    env_file: ".env"
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    ports: 
+     - 3007:3006
+    environment: 
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: codezone
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root

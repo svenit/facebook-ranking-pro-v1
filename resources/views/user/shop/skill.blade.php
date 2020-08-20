@@ -34,7 +34,7 @@
                                             </div>
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-secondary active">
-                                                    {{ number_format($item->price) }} {{ $item->price_type == 0 ? 'Vàng' : 'KC' }}
+                                                    {{ number_format($item->price) }} <img style="width:16px" class="ml-2" src="{{ showUnit($item->price_type) }}">
                                                 </button> 
                                                 <button @click="buySkill({{ json_encode($item) }},$event)" style="border-top-left-radius:0px;border-bottom-left-radius:0px" type="button" class="btn btn-secondary">Mua</button>
                                             </div>
