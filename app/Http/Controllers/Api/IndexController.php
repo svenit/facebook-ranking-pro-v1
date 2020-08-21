@@ -38,6 +38,7 @@ class IndexController extends Controller
                         'coins' => $helper->coins(),
                         'gold' => $helper->gold(),
                         'pvp_points' => $helper->user()->pvp_points,
+                        'fame' => $helper->user()->fame,
                         'provider_id' => $helper->user()->provider_id,
                         'energy' => $helper->user()->energy,
                         'isAdmin' => $helper->user()->isAdmin,
@@ -45,7 +46,14 @@ class IndexController extends Controller
                     ],
                     'rank' => [
                         'brand' => $helper->rank(),
-                        'pvp_brand' => $helper->pvpBrand()
+                        'fame' => $helper->fameBrand(),
+                        'pvp' => $helper->pvpBrand()
+                    ],
+                    'top' => [
+                        'power' => $helper->getRank('full_power'),
+                        'fame' => $helper->getRank('fame'),
+                        'pvp' => $helper->getRank('pvp_points'),
+                        'level' => $helper->getRank('exp'),
                     ],
                     'stats' => Auth::id() == $findUser->id ? $helper->stats() : [],
                     'level' => $helper->nextLevel(),

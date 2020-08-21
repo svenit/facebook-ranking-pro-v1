@@ -1,7 +1,7 @@
 const mix = require('laravel-mix');
 const WebpackObfuscator = require('webpack-obfuscator');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const ProductionMode = true;
+const ProductionMode = false;
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management

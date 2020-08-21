@@ -56,7 +56,7 @@ class InsertGemToGearController extends Controller
                                 'user_gem_id' => $gem->first()->id,
                                 'gem_id' => $request->gem_id
                             ]);
-                            Auth::user()->decrement('income_coins', $paid);
+                            Auth::user()->decrement('coins', $paid);
                             $gem->update([
                                 'status' => 1
                             ]);

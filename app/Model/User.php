@@ -21,7 +21,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'user_id','provider_id', 'discord_id','character_id','coins',
-        'income_coins','exp','isAdmin','config',
+        'exp','isAdmin','config',
         'name', 'email', 'password','location','status','stats','stat_points'
     ];
 
@@ -56,7 +56,7 @@ class User extends Authenticatable
     }
     public function getCoins()
     {
-        return $this->coins + $this->income_coins;
+        return $this->coins;
     }
     public function character()
     {

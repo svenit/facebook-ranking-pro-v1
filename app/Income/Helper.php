@@ -5,12 +5,11 @@ namespace App\Income;
 use App\Model\User;
 use App\Model\Level;
 use App\Model\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
 class Helper
 {
-    private $rankCoin = 1;
-    private $rankPower = 1;
     public $config;
     private $userID;
 
@@ -104,7 +103,181 @@ class Helper
     }
     public function pvpBrand()
     {
-        return 1;
+        $rankLevels = [
+            [
+                'id' => 0,
+                'mark' => 1,
+                'point' => 0,
+                'name' => 'Đồng 1',
+                'icon' => 'bronze_1',
+                'group' => 'Bronze'
+            ],
+            [
+                'id' => 1,
+                'mark' => 2,
+                'point' => 100,
+                'name' => 'Đồng 2',
+                'icon' => 'bronze_2',
+                'group' => 'Bronze'
+            ],
+            [
+                'id' => 2,
+                'mark' => 3,
+                'point' => 300,
+                'name' => 'Đồng 3',
+                'icon' => 'bronze_3',
+                'group' => 'Bronze'
+            ],
+            [
+                'id' => 3,
+                'mark' => 4,
+                'point' => 700,
+                'name' => 'Đồng 4',
+                'icon' => 'bronze_4',
+                'group' => 'Bronze'
+            ],
+            [
+                'id' => 4,
+                'mark' => 5,
+                'point' => 1000,
+                'name' => 'Đồng 5',
+                'icon' => 'bronze_5',
+                'group' => 'Bronze'
+            ],
+            [
+                'id' => 5,
+                'mark' => 6,
+                'point' => 1500,
+                'name' => 'Đồng 6',
+                'icon' => 'bronze_6',
+                'group' => 'Bronze'
+            ],
+            [
+                'id' => 6,
+                'mark' => 1,
+                'point' => 2200,
+                'name' => 'Bạc 1',
+                'icon' => 'silver_1',
+                'group' => 'Silver'
+            ],
+            [
+                'id' => 7,
+                'mark' => 2,
+                'point' => 3000,
+                'name' => 'Bạc 2',
+                'icon' => 'silver_2',
+                'group' => 'Silver'
+            ],
+            [
+                'id' => 8,
+                'mark' => 3,
+                'point' => 4500,
+                'name' => 'Bạc 3',
+                'icon' => 'silver_3',
+                'group' => 'Silver'
+            ],
+            [
+                'id' => 9,
+                'mark' => 4,
+                'point' => 7000,
+                'name' => 'Bạc 4',
+                'icon' => 'silver_4',
+                'group' => 'Silver'
+            ],
+            [
+                'id' => 10,
+                'mark' => 5,
+                'point' => 13000,
+                'name' => 'Bạc 5',
+                'icon' => 'silver_5',
+                'group' => 'Silver'
+            ],
+            [
+                'id' => 11,
+                'mark' => 6,
+                'point' => 20000,
+                'name' => 'Bạc 6',
+                'icon' => 'silver_6',
+                'group' => 'Silver'
+            ],
+        ];
+        $currentPvPPoints = $this->user()->pvp_points;
+        $currentPvP = array_reverse(collect($rankLevels)->filter(function($item) use($currentPvPPoints){
+            return $item['point'] <= $currentPvPPoints;
+        })->values()->toArray())[0];
+        $currentPvP['next'] = $rankLevels[$currentPvP['id'] + 1] ?? $currentPvP;
+        return $currentPvP ?? $rankLevels[0];
+    }
+    public function fameBrand()
+    {
+        $rankLevels = [
+            [
+                'id' => 0,
+                'point' => 0,
+                'icon' => 'bronze_1',
+            ],
+            [
+                'id' => 1,
+                'point' => 100,
+                'icon' => 'bronze_2',
+            ],
+            [
+                'id' => 2,
+                'point' => 300,
+                'icon' => 'bronze_3',
+            ],
+            [
+                'id' => 3,
+                'point' => 700,
+                'icon' => 'bronze_4',
+            ],
+            [
+                'id' => 4,
+                'point' => 1000,
+                'icon' => 'bronze_5',
+            ],
+            [
+                'id' => 5,
+                'point' => 1500,
+                'icon' => 'bronze_6',
+            ],
+            [
+                'id' => 6,
+                'point' => 2200,
+                'icon' => 'silver_1',
+            ],
+            [
+                'id' => 7,
+                'point' => 3000,
+                'icon' => 'silver_2',
+            ],
+            [
+                'id' => 8,
+                'point' => 4500,
+                'icon' => 'silver_3',
+            ],
+            [
+                'id' => 9,
+                'point' => 7000,
+                'icon' => 'silver_4',
+            ],
+            [
+                'id' => 10,
+                'point' => 13000,
+                'icon' => 'silver_5',
+            ],
+            [
+                'id' => 11,
+                'point' => 20000,
+                'icon' => 'silver_6',
+            ],
+        ];
+        $currentFamePoints = $this->user()->fame;
+        $currentFame = array_reverse(collect($rankLevels)->filter(function($item) use($currentFamePoints){
+            return $item['point'] <= $currentFamePoints;
+        })->values()->toArray())[0];
+        $currentFame['next'] = $rankLevels[$currentFame['id'] + 1] ?? $currentFame;
+        return $currentFame ?? $rankLevels[0];
     }
     public function coins()
     {
@@ -118,25 +291,10 @@ class Helper
     {
         return $this->user()->gold;
     }
-    public function rankCoin() : int
+
+    public function getRank($field)
     {
-        $userCompare = $this->coins();
-        User::where('character_id','!=',0)->chunkById(2000,function($users) use($userCompare){
-            $users->each(function($user) use($userCompare) {
-                $userCompare < $this->coinsCustom($user->coins,$user->income_coins) ? $this->rankCoin++ : $this->rankCoin; 
-            });
-        });
-        return $this->rankCoin;
-    }
-    public function rankPower()
-    {
-        $userCompare = $this->user()->full_power;
-        User::where('character_id','!=',0)->whereNotNull('provider_id')->chunkById(2000,function($users) use($userCompare){
-            $users->each(function($user) use ($userCompare){
-                $userCompare < $user->full_power ? $this->rankPower++ : $this->rankPower;
-            });
-        });
-        return $this->rankPower;
+        return collect(DB::select(DB::raw("SELECT er.*, (@rank := if(@points = {$field}, @rank, if(@points := {$field}, @rank + 1, @rank + 1 ) ) ) AS ranking FROM users er CROSS JOIN (SELECT @rank := 0, @points := -1) params ORDER BY {$field} DESC")))->where('id', $this->user()->id)->values()[0]->ranking;
     }
 
     public function stats()

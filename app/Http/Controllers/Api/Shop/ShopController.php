@@ -44,7 +44,7 @@ class ShopController extends Controller
                     case 0:
                         if(Auth::user()->getCoins() >= $item->price)
                         {
-                            Auth::user()->decrement('income_coins',$item->price);
+                            Auth::user()->decrement('coins',$item->price);
                             Auth::user()->gears()->attach($item->id,[
                                 'status' => 0
                             ]);
@@ -132,7 +132,7 @@ class ShopController extends Controller
                         case 0:
                             if(Auth::user()->getCoins() >= $item->price)
                             {
-                                Auth::user()->decrement('income_coins',$item->price);
+                                Auth::user()->decrement('coins',$item->price);
                                 Auth::user()->skills()->attach($item->id,[
                                     'status' => 0
                                 ]);
@@ -210,7 +210,7 @@ class ShopController extends Controller
                     case 0:
                         if(Auth::user()->getCoins() >= $item->price)
                         {
-                            Auth::user()->decrement('income_coins',$item->price);
+                            Auth::user()->decrement('coins',$item->price);
                             Auth::user()->pets()->attach($item->id,[
                                 'status' => 0
                             ]);
@@ -292,7 +292,7 @@ class ShopController extends Controller
                     case 0:
                         if(Auth::user()->getCoins() >= $item->price * $request->quantity)
                         {
-                            Auth::user()->decrement('income_coins',$item->price * $request->quantity);
+                            Auth::user()->decrement('coins',$item->price * $request->quantity);
                             $this->checkItem($request,$item);
                             $response = [
                                 'code' => 200,
@@ -385,7 +385,7 @@ class ShopController extends Controller
                     if(Auth::user()->getCoins() >= $item->price * $request->quantity)
                     {
                         DB::transaction(function () use($item, $request){
-                            Auth::user()->decrement('income_coins',$item->price * $request->quantity);
+                            Auth::user()->decrement('coins',$item->price * $request->quantity);
                             for($i = 0; $i < $request->quantity; $i++)
                             {
                                 UserGem::create([

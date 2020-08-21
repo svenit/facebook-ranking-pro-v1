@@ -19,7 +19,7 @@ class CheckController extends Controller
         {
             if(Auth::user()->getCoins() >= $this->price)
             {
-                $paid = Auth::user()->decrement('income_coins',$this->price);
+                $paid = Auth::user()->decrement('coins', $this->price);
                 if(isset($paid))
                 {
                     Session::put('spinning',true);

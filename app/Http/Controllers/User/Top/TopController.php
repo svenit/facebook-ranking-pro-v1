@@ -45,7 +45,7 @@ class TopController extends Controller
     public function coin(Request $request)
     {
         $search = $request->search;
-        $ranks = User::orderByDesc(DB::raw('coins + income_coins'))
+        $ranks = User::orderByDesc('coins')
         ->where('name','LIKE',"%{$search}%")
         ->orWhere('id',$search)
         ->orWhere('provider_id',$search)

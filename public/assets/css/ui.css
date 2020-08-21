@@ -63,6 +63,8 @@
 }
 
 .modal-ui .modal-footer {
+    background: #333521;
+    border-top: 1px solid #6c5922;
     border-left: 5px solid #343521;
     border-right: 5px solid #343521;
     border-bottom: 5px solid #343521;
@@ -252,6 +254,32 @@
     background: #fbb550 !important;
 }
 
+.btn-brown {
+    background: #726753 !important;
+    text-shadow: 1px 1px rgb(0, 0, 0, .3);
+}
+
+.btn-brown:before {
+    background: #726753 !important;
+}
+
+.btn-brown:after {
+    background: #726753 !important;
+}
+
+.btn-dark {
+    background: #2f2d21 !important;
+    text-shadow: 1px 1px rgb(0, 0, 0, .3);
+}
+
+.btn-dark:before {
+    background: #2f2d21 !important;
+}
+
+.btn-dark:after {
+    background: #2f2d21 !important;
+}
+
 .modal-ui .b-b {
     border: 0px !important;
 }
@@ -290,4 +318,41 @@
     position: absolute;
     top: 50%;
     left: 50%;
+}
+
+.modal-ui .p-2 {
+    padding: 0px .7rem !important;
+}
+
+.ui-center {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.spotlight-item {
+    background-color: #524a38;
+    background-image: url(../images/icon/Spotlight-Yellow.png);
+    position: relative;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-blend-mode: exclusion;
+    background-position: top;
+}
+
+@media (min-width: 568px) {
+    .col-ui {
+        flex: 0 0 25%;
+        max-width: calc(25% - 6px);
+        margin: 3px;
+    }
+}
+@media (max-width: 568px) {
+    .col-ui {
+        flex: 0 0 50%;
+        max-width: calc(50% - 6px);
+        margin: 3px;
+    }
 }

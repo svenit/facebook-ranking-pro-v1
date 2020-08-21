@@ -28,7 +28,6 @@ class CreateUsersTable extends Migration
             $table->string('reactions')->default(0);
             $table->string('comments')->default(0);
             $table->bigInteger('coins')->default(0);
-            $table->bigInteger('income_coins')->default(0);
             $table->bigInteger('gold')->default(0);
             $table->string('exp')->default(0);
             $table->bigInteger('strength')->default(0);

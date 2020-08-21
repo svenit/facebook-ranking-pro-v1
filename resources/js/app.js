@@ -120,6 +120,7 @@ window.axios = require('axios');
                     gold: 'Đang tải...',
                     provider_id: "0",
                     active: "",
+                    fame: 0,
                     pvp_points: 0,
                     energy: 0
                 },
@@ -129,7 +130,19 @@ window.axios = require('axios');
                     available: 0
                 },
                 rank: {
-                    brand: 'E'
+                    brand: 'E',
+                    fame: {
+                        next: {}
+                    },
+                    pvp: {
+                        next: {}
+                    }
+                },
+                top: {
+                    fame: 0,
+                    level: 0,
+                    pvp: 0,
+                    power: 0
                 },
                 level: {
                     next_level: "0",
@@ -237,77 +250,71 @@ window.axios = require('axios');
             selected: [],
         },
         async created() {
-            this.firebase = firebase;
-            firebase = '';
-            this.token = await this.bind(document.getElementById('main').getAttribute('data-id'));
-            axios.defaults.params = {};
-            axios.interceptors.request.use(request => {
-                request.headers.common['pragma'] = this.token;
-                request.params = {
-                    bearer: this.shuffleString(config.bearer),
-                    secret_key: config.bearer,
-                    hash: this.shuffleString(config.bcrypt),
-                    _token: document.querySelector(['meta[name=csrf-token]']).content
-                };
-                return request;
-            });
-            axios.interceptors.response.use(async (response) => {
-                await this.refreshToken(response);
-                response.data = await this.AESDecryptJSONServer(atob(response.data));
-                return response;
-            });
-            if (config.auth) {
-                await this.index();
-                this.globalSocket();
-                await this.listGlobalChat('global');
-                if (typeof page == "undefined" || page == null) {} else {
-                    switch (page.path) {
-                        case 'pvp.list':
-                            await this.listFightRoom();
-                            setInterval(() => {
-                                this.listFightRoom();
-                            }, 5000);
-                            break;
-                        case 'pvp.room':
-                            await this.pvpRoom();
-                            break;
-                        // case 'chat.global':
-                        //     await this.listGlobalChat('global');
-                        //     break;
-                        // case 'chat.stranger':
-                        //     if (page.room.people == 2) {
-                        //         this.chat.block = false;
-                        //     } else {
-                        //         this.chat.message = [];
-                        //     }
-                        //     await this.chatRoom();
-                        //     break;
-                        case 'inventory.index':
-                            await this.invetory();
-                            break;
-                        case 'pet.index':
-                            await this.pet();
-                            break;
-                        case 'skill.index':
-                            await this.skill();
-                            break;
-                        case 'item.index':
-                            await this.item();
-                            break;
-                        case 'gem.index':
-                            await this.gem();
-                            break;
-                        case 'oven.gem':
-                            await this.inventoryAvailable();
-                            await this.gem();
-                            break;
-                    }
-                }
-                this.postLocation();
-                $(function () {
-                    $('[data-title="tooltip"]').tooltip()
+            try {
+                this.firebase = firebase;
+                firebase = '';
+                this.token = await this.bind(document.getElementById('main').getAttribute('data-id'));
+                axios.defaults.params = {};
+                axios.interceptors.request.use(request => {
+                    request.headers.common['pragma'] = this.token;
+                    request.params = {
+                        bearer: this.shuffleString(config.bearer),
+                        secret_key: config.bearer,
+                        hash: this.shuffleString(config.bcrypt),
+                        _token: document.querySelector(['meta[name=csrf-token]']).content
+                    };
+                    return request;
                 });
-                // introJs().start();
+                axios.interceptors.response.use(async (response) => {
+                    await this.refreshToken(response);
+                    response.data = await this.AESDecryptJSONServer(atob(response.data));
+                    return response;
+                });
+                if (config.auth) {
+                    await this.index();
+                    this.globalSocket();
+                    await this.listGlobalChat('global');
+                    if (typeof page == "undefined" || page == null) {} else {
+                        switch (page.path) {
+                            case 'pvp.list':
+                                await this.listFightRoom();
+                                setInterval(() => {
+                                    this.listFightRoom();
+                                }, 5000);
+                                break;
+                            case 'pvp.room':
+                                await this.pvpRoom();
+                                break;
+                            case 'inventory.index':
+                                await this.invetory();
+                                break;
+                            case 'pet.index':
+                                await this.pet();
+                                break;
+                            case 'skill.index':
+                                await this.skill();
+                                break;
+                            case 'item.index':
+                                await this.item();
+                                break;
+                            case 'gem.index':
+                                await this.gem();
+                                break;
+                            case 'oven.gem':
+                                await this.inventoryAvailable();
+                                await this.gem();
+                                break;
+                        }
+                    }
+                    this.postLocation();
+                    $(function () {
+                        $('[data-title="tooltip"]').tooltip()
+                    });
+                    // introJs().start();
+                }
+            }
+            catch(e) {
+                Swal.fire('', 'Đã có lỗi xảy ra, xin vui lòng tải lại trang', 'error');
             }
             this.loading = false;
             this.flash = false;
@@ -336,6 +343,7 @@ window.axios = require('axios');
                 try {
                     this.loading = true;
                     let res = await axios.get(`${config.apiUrl}/user/profile`);
+                    console.log(res.data);
                     if(this.socket == null) {
                         let tokenKey = this.AESEncrypt(this.token);
                         let ref = this.AESEncrypt(res.headers.cookie);
@@ -348,7 +356,6 @@ window.axios = require('axios');
                     this.data = res.data;
                     this.loading = false;
                 } catch (e) {
-                    console.log(e);
                     this.loading = false;
                     this.notify('Đã có lỗi xảy ra, xin vui lòng tải lại trang');
                 }
@@ -665,7 +672,6 @@ window.axios = require('axios');
                     this.loading = false;
                     $('#show-infor-user').click();
                 } catch (e) {
-                    console.log(e);
                     this.loading = false;
                     this.notify('Đã có lỗi xảy ra, xin vui lòng thử lại');
                 }
@@ -778,7 +784,6 @@ window.axios = require('axios');
                     }
                 } catch (e) {
                     this.notify('Đã có lỗi xảy ra');
-                    console.log(e);
                 }
             },
             gotoBottomChat() {
@@ -887,7 +892,6 @@ window.axios = require('axios');
                     }
                 } catch (e) {
                     this.notify('Đã có lỗi xảy ra');
-                    console.log(e);
                 }
             },
             async invetory() {

@@ -136,10 +136,7 @@
                                 <span class="text-gold">Vé Chat : {{ number_format($detail->chat_with_strangers_times) }}</span>
                             </div>
                             <div class="col-6  mt-2">
-                                <span class="text-warning">Điểm Hoạt Động : {{ number_format($detail->coins) }}</span>
-                            </div>
-                            <div class="col-6  mt-2">
-                                <span class="text-warning">Điểm Thưởng : {{ number_format($detail->income_coins) }}</span>
+                                <span class="text-warning">Vàng : {{ number_format($detail->coins) }}</span>
                             </div>
                             <div class="col-6  mt-2">
                                 <span class="text-warning">Điểm Hạng : {{ number_format($detail->pvp_points) }}</span>
@@ -284,8 +281,8 @@
                                             </select>
                                         </div>
                                         <div class="form-group col-6">
-                                            <label class="text-muted" for="exampleInputEmail1">Tiền Thưởng</label>
-                                            <input type="number" class="form-control" value="{{ $detail->income_coins }}" name="income_coins" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                                            <label class="text-muted" for="exampleInputEmail1">Vàng</label>
+                                            <input type="number" class="form-control" value="{{ $detail->coins }}" name="coins" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
                                         </div>
                                         <div class="form-group col-6">
                                             <label class="text-muted" for="exampleInputEmail1">Kim Cương</label>

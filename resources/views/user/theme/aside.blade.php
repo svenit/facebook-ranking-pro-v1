@@ -28,8 +28,13 @@
                     <div class="b-b">
                         <div class="nav-active-border b-primary bottom">
                             <ul class="nav" id="myTab" role="tablist">
+                                <li data-title="tooltip" title="Cơ bản" class="nav-item">
+                                    <a class="nav-link active" id="basic-tab" data-toggle="tab" href="#basic-tab-control" role="tab" aria-controls="" aria-selected="true">
+                                        <img class="text-center" style="width:20px;height:20px;object-fit:contain" src="{{ asset('assets/images/icon/Infor.png') }}">
+                                    </a>
+                                </li>
                                 <li data-title="tooltip" title="Tổng quan" class="nav-item">
-                                    <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile-tab-control" role="tab" aria-controls="" aria-selected="true">
+                                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile-tab-control" role="tab" aria-controls="" aria-selected="true">
                                         <img class="text-center" style="width:20px;height:20px;object-fit:contain" src="{{ asset('assets/images/icon/Character.png') }}">
                                     </a>
                                 </li>
@@ -47,9 +52,95 @@
                         </div>
                     </div>
                     <div class="tab-content">
-                        <div class="tab-pane fade show active" id="profile-tab-control" role="tabpanel" aria-labelledby="profile-tab">
-                            <div class="row">
-                                <div class="pr-1 col-lg-6 col-md-6 col-sm-12">
+                        <div class="tab-pane fade show active" id="basic-tab-control" role="tabpanel" aria-labelledby="basic-tab">
+                            <div class="row p-2">
+                                <div class="p-1 col-12">
+                                    <div style="background: #33301d" class="item-preview">
+                                        @include('components.border')
+                                        <div class="row p-3">
+                                            <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                                <div class="row">
+                                                    <div class="col-3 pr-0">
+                                                        <img style="position:absolute;width:62px" :src="asset(`assets/images/pvp-ranks/${data.rank.fame.icon}.png`)">
+                                                        <img style="width:60px" class="circle mr-3" src="http://graph.facebook.com/{{ Auth::user()->provider_id }}/picture?type=normal" alt="...">
+                                                    </div>
+                                                    <div style="border-right: 2px solid #4c4534" class="pl-2 col-9">
+                                                        <span class="pixel-font small-font pr-5" style="color:#37a8d8">LV@{{ data.level.current_level }}</span>
+                                                        <div class="mt-1 mb-2" style="height: 3px;background:#534738">
+                                                            <div :style="{width:data.level.percent + '%', height:'3px', backgroundColor: '#37a8d8'}"></div>
+                                                        </div>
+                                                        <span style="background:#544431;padding:3px 10px;border-radius:3px;font-size:12px;">
+                                                            {{ Auth::user()->name }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-12 ui-center">
+                                                <div class="ui-center-inside w-100 ml-2">
+                                                    <div class="pixel-btn p-3 btn-brown">
+                                                        <div class="row justify-content-between">
+                                                            <div class="col-4">
+                                                                <span style="font-size:16px !important">Danh Tiếng</span>
+                                                            </div>
+                                                            <div style="background:#524a3a;border-radius:3px" class="col-8">
+                                                                <span style="font-size:12px" class="pixel-font text-warning">
+                                                                    @{{ numberFormatDetail(data.infor.fame) }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-1 col-12">
+                                    <div style="background: #d9c8a6">
+                                        <div class="row px-3 py-0">
+                                            <div class="col-ui spotlight-item">
+                                                @include('components.border')
+                                                <img style="width:50px;display:block;margin:10px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
+                                                <p class="text-light pixel-font text-center" style="font-size:11px">Rank</p>
+                                                <h2 class="text-center text-light pixel-font mb-3" style="height:50px">@{{ data.rank.brand }}</h2>
+                                                <div class="pixel-btn m-3 btn-dark mt-5 text-center" style="padding:6px">
+                                                    @{{ data.rank.brand }} Rank
+                                                </div>
+                                            </div>
+                                            <div class="col-ui spotlight-item">
+                                                @include('components.border')
+                                                <img style="width:50px;display:block;margin:10px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
+                                                <p class="text-light pixel-font text-center" style="font-size:11px">PVP</p>
+                                                <img class="mb-3" style="width:50px;height:50px;display:block;margin:0 auto" :src="asset(`assets/images/icon/${data.rank.pvp.group}.png`)">
+                                                <div class="pixel-btn m-3 btn-dark mt-5 text-center" style="padding:6px">
+                                                    @{{ data.rank.pvp.name }}
+                                                </div>
+                                            </div>
+                                            <div class="col-ui spotlight-item">
+                                                @include('components.border')
+                                                <img style="width:50px;display:block;margin:10px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
+                                                <p class="text-light pixel-font text-center" style="font-size:11px">Top LC</p>
+                                                <img class="mb-3" style="width:50px;height:50px;display:block;margin:0 auto;object-fit:contain" src="{{ asset('assets/images/icon/Red-Crown.png') }}">
+                                                <div class="pixel-btn m-3 btn-dark mt-5 text-center" style="padding:6px">
+                                                    Top @{{ data.top.power }}
+                                                </div>
+                                            </div>
+                                            <div class="col-ui spotlight-item">
+                                                @include('components.border')
+                                                <img style="width:50px;display:block;margin:10px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
+                                                <p class="text-light pixel-font text-center" style="font-size:11px">Top Level</p>
+                                                <img class="mb-3" style="width:50px;height:50px;display:block;margin:0 auto;object-fit:contain" src="{{ asset('assets/images/icon/Purple-Crown.png') }}">
+                                                <div class="pixel-btn m-3 btn-dark mt-5 text-center" style="padding:6px">
+                                                    Top @{{ data.top.level }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="profile-tab-control" role="tabpanel" aria-labelledby="profile-tab">
+                            <div class="row p-2">
+                                <div class="p-1 col-lg-6 col-md-6 col-sm-12">
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="item-preview">
@@ -76,7 +167,7 @@
                                                 <div class="footer">
                                                     <div style="font-size:15px" class="modal-text item-name modal-title text-md text-center">
                                                         <img style="width:17px; height:17px;transform:scaleX(-1)" class="mr-1 pixel" src="{{ asset('assets/images/icon/Bar.png') }}">
-                                                        @{{ data.infor.name }}
+                                                        <span class="text-light">@{{ data.infor.name }}</span>
                                                         <img style="width:17px; height:17px" class="ml-1 pixel" src="{{ asset('assets/images/icon/Bar.png') }}">
                                                     </div>
                                                 </div>
@@ -108,7 +199,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="pl-1 col-lg-6 col-md-6 col-sm-12 notranslate">
+                                <div class="p-1 col-lg-6 col-md-6 col-sm-12 notranslate">
                                     <div class="stats-preview">
                                         @include('components.border')
                                         <div class="item">
@@ -198,14 +289,14 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="skill-tab-control" role="tabpanel" aria-labelledby="skill-tab">
-                            <div class="row">
-                                <div class="col-12 mb-1">
+                            <div class="row p-2">
+                                <div class="col-12 mb-1 p-1">
                                     <div class="item-preview">
                                         @include('components.border')
                                         <p class="px-3 pt-3">Tăng điểm chỉ số sức mạnh của bạn</p>
                                     </div>
                                 </div>
-                                <div class="pr-1 col-lg-6 col-md-6 col-sm-12">
+                                <div class="p-1 col-lg-6 col-md-6 col-sm-12">
                                     <div style="background: #343521;" class="item-preview">
                                         <img style="position: absolute; right: 5%;width: 40px" class="pixel" src="{{ asset('assets/images/icon/Dark-Badge.png') }}">
                                         <img class="pixel" data-title="tooltip" :title="data.infor.character.name" style="position: absolute; right: 7.5%;width:25px;" :src="asset(`assets/images/class/${data.infor.character.avatar}-icon.png`)">
@@ -219,7 +310,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="pl-1 col-lg-6 col-md-6 col-sm-12 notranslate">
+                                <div class="p-1 col-lg-6 col-md-6 col-sm-12 notranslate">
                                     <div class="stats-preview">
                                         @include('components.border')
                                         <div class="item mt-2">
@@ -338,9 +429,9 @@
 @endauth
 <div id="gear" v-if="detailGear.data" class="modal fade gear top-off" data-backdrop="true" aria-hidden="true" style="display: none;">
     <div style="max-width:700px" class="modal-dialog modal-ui">
-        <div class="lighting-box modal-content">
-            <div style="position: relative;" class="modal-header">
-                @include('components.border')
+        <div style="position: relative;" class="lighting-box modal-content">
+            @include('components.border')
+            <div class="modal-header">
                 <span class="modal-text">Trang Bị</span>
                 <button class="close" data-dismiss="modal">
                     <img style="width:20px" src="{{ asset('assets/images/icon/Close.png') }}">
@@ -470,15 +561,17 @@
                     </div>
                 </div>
             </div>
-            <div v-if="detailGear.permission == 1" class="modal-footer">
-                <div v-if="detailGear.data.pivot.status == 0" type="button" @click="equipment(detailGear.data)" class="btn-green pixel-btn mr-4" data-dismiss="modal">
-                    Trang bị <img style="width:16px" src="{{ asset('assets/images/icon/Equip.png') }}">
-                </div>
-                <div v-else type="button" @click="removeEquipment(detailGear.data)" class="btn-yellow pixel-btn mr-4">
-                    Tháo <img style="width:16px" src="{{ asset('assets/images/icon/Unequip.png') }}">
-                </div>
-                <div @click="deleteEquipment(detailGear.data)" class="btn-red pixel-btn mr-4">
-                    Vứt Bỏ <img style="width:16px" src="{{ asset('assets/images/icon/Delete.png') }}">
+            <div class="modal-footer">
+                <div class="row" v-if="detailGear.permission == 1">
+                    <div v-if="detailGear.data.pivot.status == 0" type="button" @click="equipment(detailGear.data)" class="btn-green pixel-btn mr-4" data-dismiss="modal">
+                        Trang bị <img style="width:16px" src="{{ asset('assets/images/icon/Equip.png') }}">
+                    </div>
+                    <div v-else type="button" @click="removeEquipment(detailGear.data)" class="btn-yellow pixel-btn mr-4">
+                        Tháo <img style="width:16px" src="{{ asset('assets/images/icon/Unequip.png') }}">
+                    </div>
+                    <div @click="deleteEquipment(detailGear.data)" class="btn-red pixel-btn mr-3">
+                        Vứt Bỏ <img style="width:16px" src="{{ asset('assets/images/icon/Delete.png') }}">
+                    </div>
                 </div>
                 <div data-dismiss="modal" class="btn-red pixel-btn mr-4">
                     Đóng <img style="width:16px" src="{{ asset('assets/images/icon/Close-White.png') }}">
