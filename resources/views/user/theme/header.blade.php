@@ -1,4 +1,4 @@
-<div id="header" class="page-header">
+<div id="header" style="position: relative" class="page-header">
     <div class="navbar navbar-expand-lg">
         <div class="ml-4 profile-badge row" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body"  @click="index()">
             <div style="padding:0;" class="col-3">
@@ -18,35 +18,47 @@
         </div>
         <ul class="nav navbar-menu order-1 order-lg-2">
             <li class="profile-badge icon-badge row py-1 mr-4">
-                <div class="col-1">
-                    <img style="width:17px" src="{{ asset('assets/images/icon-pack/pvp-point.png') }}">
+                <div class="col-auto">
+                    <div class="row">
+                        <div class="col-auto">
+                            <img style="width:17px" src="{{ asset('assets/images/icon-pack/pvp-point.png') }}">
+                        </div>
+                        <div class="col-auto">
+                            <strong class="pixel-font small-font notranslate"> @{{ numberFormat(data.infor.pvp_points) }}</strong>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-7 ">
-                    <strong class="pixel-font small-font notranslate"> @{{ numberFormat(data.infor.pvp_points) }}</strong>
-                </div>
-                <div class="col-1">
+                <div class="col-auto">
                     <img style="width:17px" src="{{ asset('assets/images/icon/Question.png') }}">
                 </div>
             </li>
-            <li class="profile-badge icon-badge row py-1 mr-4">
-                <div class="col-1">
-                    <img style="width:17px" src="{{ asset('assets/images/icon-pack/gold.png') }}">
+            <li class="profile-badge icon-badge row py-1 mr-4 justify-content-between">
+                <div class="col-auto">
+                    <div class="row">
+                        <div class="col-auto">
+                            <img style="width:17px" src="{{ asset('assets/images/icon-pack/gold.png') }}">
+                        </div>
+                        <div class="col-auto">
+                            <strong class="pixel-font small-font notranslate"> @{{ numberFormat(data.infor.coins) }}</strong>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-7">
-                    <strong class="pixel-font small-font notranslate"> @{{ numberFormat(data.infor.coins) }}</strong>
-                </div>
-                <div class="col-1">
+                <div class="col-auto">
                     <img style="width:17px" src="{{ asset('assets/images/icon/Add.png') }}">
                 </div>
             </li>
             <li class="profile-badge icon-badge row py-1 mr-4">
-                <div class="col-1">
-                    <img style="width:17px" src="{{ asset('assets/images/icon-pack/diamond.png') }}">
+                <div class="col-auto">
+                    <div class="row">
+                        <div class="col-auto">
+                            <img style="width:17px" src="{{ asset('assets/images/icon-pack/diamond.png') }}">
+                        </div>
+                        <div class="col-auto">
+                            <strong class="pixel-font small-font notranslate"> @{{ numberFormat(data.infor.gold) }}</strong>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-7">
-                    <strong class="pixel-font small-font notranslate"> @{{ numberFormat(data.infor.gold) }}</strong>
-                </div>
-                <div class="col-1">
+                <div class="col-auto">
                     <img style="width:17px" src="{{ asset('assets/images/icon/Add.png') }}">
                 </div>
             </li>

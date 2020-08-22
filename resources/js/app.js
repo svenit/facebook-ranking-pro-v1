@@ -308,7 +308,7 @@ window.axios = require('axios');
                     }
                     this.postLocation();
                     $(function () {
-                        $('[data-title="tooltip"]').tooltip()
+                        $('[data-title="tooltip"]').tooltip();
                     });
                     // introJs().start();
                 }

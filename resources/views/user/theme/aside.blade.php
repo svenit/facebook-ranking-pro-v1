@@ -20,11 +20,11 @@
                 @include('components.border')
                 <span class="modal-text">Nhân Vật</span>
                 <button class="close" data-dismiss="modal">
-                    <img style="width:20px" src="{{ asset('assets/images/icon/Close.png') }}">
+                    <img style="width:30px" src="{{ asset('assets/images/icon/Close-Light.png') }}">
                 </button>
             </div>
             <div class="modal-body">
-                <div class="p-3">
+                <div class="py-3 px-2">
                     <div class="b-b">
                         <div class="nav-active-border b-primary bottom">
                             <ul class="nav" id="myTab" role="tablist">
@@ -86,6 +86,7 @@
                                                                 <span style="font-size:12px" class="pixel-font text-warning">
                                                                     @{{ numberFormatDetail(data.infor.fame) }}
                                                                 </span>
+                                                                <img style="float: right;top:3px;position: relative;" width="18px" src="{{ asset('assets/images/icon/Question.png') }}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -97,7 +98,7 @@
                                 <div class="p-1 col-12">
                                     <div style="background: #d9c8a6">
                                         <div class="row px-3 py-0">
-                                            <div class="col-ui spotlight-item">
+                                            <div class="col-ui spotlight-item item">
                                                 @include('components.border')
                                                 <img style="width:50px;display:block;margin:10px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
                                                 <p class="text-light pixel-font text-center" style="font-size:11px">Rank</p>
@@ -106,7 +107,7 @@
                                                     @{{ data.rank.brand }} Rank
                                                 </div>
                                             </div>
-                                            <div class="col-ui spotlight-item">
+                                            <div class="col-ui spotlight-item item">
                                                 @include('components.border')
                                                 <img style="width:50px;display:block;margin:10px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
                                                 <p class="text-light pixel-font text-center" style="font-size:11px">PVP</p>
@@ -115,20 +116,20 @@
                                                     @{{ data.rank.pvp.name }}
                                                 </div>
                                             </div>
-                                            <div class="col-ui spotlight-item">
+                                            <div class="col-ui spotlight-item item">
                                                 @include('components.border')
                                                 <img style="width:50px;display:block;margin:10px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
                                                 <p class="text-light pixel-font text-center" style="font-size:11px">Top LC</p>
-                                                <img class="mb-3" style="width:50px;height:50px;display:block;margin:0 auto;object-fit:contain" src="{{ asset('assets/images/icon/Red-Crown.png') }}">
+                                                <img class="mb-3" style="width:50px;height:50px;display:block;margin:0 auto;object-fit:contain" src="{{ asset('assets/images/icon/Rank.png') }}">
                                                 <div class="pixel-btn m-3 btn-dark mt-5 text-center" style="padding:6px">
                                                     Top @{{ data.top.power }}
                                                 </div>
                                             </div>
-                                            <div class="col-ui spotlight-item">
+                                            <div class="col-ui spotlight-item item">
                                                 @include('components.border')
                                                 <img style="width:50px;display:block;margin:10px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
                                                 <p class="text-light pixel-font text-center" style="font-size:11px">Top Level</p>
-                                                <img class="mb-3" style="width:50px;height:50px;display:block;margin:0 auto;object-fit:contain" src="{{ asset('assets/images/icon/Purple-Crown.png') }}">
+                                                <img class="mb-3" style="width:50px;height:50px;display:block;margin:0 auto;object-fit:contain" src="{{ asset('assets/images/icon/Red-Crown.png') }}">
                                                 <div class="pixel-btn m-3 btn-dark mt-5 text-center" style="padding:6px">
                                                     Top @{{ data.top.level }}
                                                 </div>
@@ -434,13 +435,13 @@
             <div class="modal-header">
                 <span class="modal-text">Trang Bị</span>
                 <button class="close" data-dismiss="modal">
-                    <img style="width:20px" src="{{ asset('assets/images/icon/Close.png') }}">
+                    <img style="width:30px" src="{{ asset('assets/images/icon/Close-Light.png') }}">
                 </button>
             </div>
             <div class="modal-body">
-                <div class="p-3">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="py-2 px-4">
+                    <div class="row tab-content p-1">
+                        <div class="col-lg-6 col-md-6 col-sm-12 p-1">
                             <div class="row">
                                 <div class="col-12">
                                     <div class="item-preview">
@@ -473,7 +474,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 notranslate">
+                        <div class="col-lg-6 col-md-6 col-sm-12 notranslate p-1">
                             <div class="stats-preview">
                                 @include('components.border')
                                 <div class="item">

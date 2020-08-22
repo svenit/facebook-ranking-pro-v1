@@ -76,7 +76,7 @@
 			</div>
 		@endif
 		@include('user.theme.aside')
-		<div style="position: fixed;top:15%;" class="ml-4 aside-icon profile-badge">
+		<div style="position: absolute;top:15%;" class="ml-4 aside-icon profile-badge">
 			<div class="col">
 				<img class="text-center footer-icon" src="{{ asset('assets/images/icon/Dungeon.png') }}">
 				<p class="text-center">Boss</p>
@@ -90,19 +90,9 @@
 				<p class="text-center">PVP</p>
 			</div>
 		</div>
-		<div data-id="{{ session('client_key') }}" id="main" style="border-radius:3px;background: url({{ asset('assets/images/icon/Background.png') }});image-rendering: pixelated;background-position:top;background-size:cover;background-repeat: no-repeat" class="layout-column flex">
+		<div data-id="{{ session('client_key') }}" id="main" style="border-radius:3px;background: url({{ asset('assets/images/icon/Background-2.png') }});image-rendering: pixelated;background-position:top;background-size:cover;background-repeat: no-repeat" class="layout-column flex">
 			@include('user.theme.header')
 			<div id="content" class="flex">
-				{{-- @if(!request()->is('pvp/room/*'))
-				<div class="page-hero page-container" id="page-hero">
-					<div class="padding d-flex">
-						<div style="width:100%" class="vip-bordered page-title">
-							<h2 data-title="tooltip" class="ribbon"> <button style="background:transparent;border:none">@yield('hero')</button></h2>
-							<p style="margin-top:40px" class="text-muted text-center">@yield('sub_hero','')</p>
-						</div>
-					</div>
-				</div>
-				@endif --}}
 				@yield('content')
 			</div>
 			<div v-if="!moreMenu" @click="moreMenu = true" style="position: fixed; right:-10px;top:50%;transform:rotate(180deg)">
@@ -122,7 +112,7 @@
 					<a @click="gotoBottomChat" data-toggle="modal" data-target="#global-chat" class="btn btn-transparent" id="show_chat_wa"><img src="{{ asset('assets/images/icon-pack/message-box.png') }}"></a>
 				</div>
 			</div>
-			<div id="footer" style="position:fixed;bottom:0;left:5%" copyright-id="{{ config('services.crypto.salt') }}" class="copyright page-footer row">
+			<div id="footer" style="position:absolute;bottom:0;left:5%" copyright-id="{{ config('services.crypto.salt') }}" class="copyright page-footer row">
 				<div class="col-auto">
 					<img class="text-center footer-icon" src="{{ asset('assets/images/icon/Character.png') }}">
 					<p class="text-center mt-2">Nhân Vật</p>
@@ -155,6 +145,7 @@
 		</div>
 	</div>
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+	<script src="https://www.jqueryscript.net/demo/Powerful-Customizable-jQuery-Carousel-Slider-OWL-Carousel/owl-carousel/owl.carousel.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-database.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.2/dist/sweetalert2.all.min.js"></script>	
@@ -162,7 +153,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 	<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 	<script src="https://introjs.com/intro.js"></script>
-	<script async src="{{ mix('js/vendor.min.js') }}"></script>
+	<script src="{{ mix('js/vendor.min.js') }}"></script>
 	<script>
 		@auth
 			const user = {
@@ -174,7 +165,7 @@
 		@endauth
 		function googleTranslateElementInit() {
             new google.translate.TranslateElement({pageLanguage: 'vi', multilanguagePage: true}, 'gg-translate');
-        }
+		}
 	</script>
 	@stack('js')
 	@if(session('message'))
