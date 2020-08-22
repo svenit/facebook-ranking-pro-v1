@@ -210,68 +210,7 @@ class Helper
     }
     public function fameBrand()
     {
-        $rankLevels = [
-            [
-                'id' => 0,
-                'point' => 0,
-                'icon' => 'bronze_1',
-            ],
-            [
-                'id' => 1,
-                'point' => 100,
-                'icon' => 'bronze_2',
-            ],
-            [
-                'id' => 2,
-                'point' => 300,
-                'icon' => 'bronze_3',
-            ],
-            [
-                'id' => 3,
-                'point' => 700,
-                'icon' => 'bronze_4',
-            ],
-            [
-                'id' => 4,
-                'point' => 1000,
-                'icon' => 'bronze_5',
-            ],
-            [
-                'id' => 5,
-                'point' => 1500,
-                'icon' => 'bronze_6',
-            ],
-            [
-                'id' => 6,
-                'point' => 2200,
-                'icon' => 'silver_1',
-            ],
-            [
-                'id' => 7,
-                'point' => 3000,
-                'icon' => 'silver_2',
-            ],
-            [
-                'id' => 8,
-                'point' => 4500,
-                'icon' => 'silver_3',
-            ],
-            [
-                'id' => 9,
-                'point' => 7000,
-                'icon' => 'silver_4',
-            ],
-            [
-                'id' => 10,
-                'point' => 13000,
-                'icon' => 'silver_5',
-            ],
-            [
-                'id' => 11,
-                'point' => 20000,
-                'icon' => 'silver_6',
-            ],
-        ];
+        $rankLevels = config('game.fame');
         $currentFamePoints = $this->user()->fame;
         $currentFame = array_reverse(collect($rankLevels)->filter(function($item) use($currentFamePoints){
             return $item['point'] <= $currentFamePoints;

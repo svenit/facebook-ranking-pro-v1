@@ -1308,6 +1308,7 @@ window.axios = require('axios');
                 return (num / si[i].value).toFixed(3).replace(rx, "$1") + si[i].symbol;
             },
             numberFormatDetail(num) {
+                num = parseInt(num);
                 return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
             }
         },

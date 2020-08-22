@@ -198,6 +198,12 @@ class User extends Authenticatable
         $helper = new Helper($id);
         return $this->power()->sum() + $helper->level();
     }
+
+    public function getFame()
+    {
+        $helper = new Helper($this->id);
+        return $helper->fameBrand();
+    }
     
     public function level()
     {

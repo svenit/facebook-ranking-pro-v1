@@ -1,6 +1,6 @@
 <div id="header" style="position: relative" class="page-header">
     <div class="navbar navbar-expand-lg">
-        <div class="ml-4 profile-badge row" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body"  @click="index()">
+        <div class="ml-4 profile-badge row" data-toggle="modal" data-target=".modal-profile" data-toggle-class="modal-open-aside" data-target="body" @click="index()">
             <div style="padding:0;" class="col-3">
                 <img style="position:absolute;width:62px" :src="asset(`assets/images/pvp-ranks/${data.rank.fame.icon}.png`)">
                 <img style="width:60px" class="circle mr-3" src="http://graph.facebook.com/{{ Auth::user()->provider_id }}/picture?type=normal" alt="...">
