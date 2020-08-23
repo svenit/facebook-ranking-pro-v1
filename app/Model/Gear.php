@@ -22,7 +22,7 @@ class Gear extends Model
         'health_points' => 'array',
     ];
     protected $hidden = [
-        'character_id','cate_gear_id','status','created_at','updated_at'
+        'character_id', 'cate_gear_id' ,'created_at','updated_at'
     ];
     public function users()
     {

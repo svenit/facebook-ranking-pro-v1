@@ -22,7 +22,7 @@
                                         <div style="margin:42px auto;background-color: #554334;border-radius: 50%;" :class="[`pixel text-center ${detailGear.data.shop_tag}`]">
                                             <img class="pixel" style="width: 70px;" src="{{ asset('assets/images/icon/Item-Frame.png') }}">
                                         </div>
-                                        <div class="normal-badge">
+                                        <div v-if="detailGear.permission == 1" class="normal-badge">
                                             <img class="pixel" src="{{ asset('assets/images/icon/Normal-Badge.png') }}">
                                             <span class="pixel-font small-font">0</span>
                                         </div>

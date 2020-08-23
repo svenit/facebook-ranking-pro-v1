@@ -76,24 +76,15 @@
                             <div class="p-2" style="background: #554839">
                                 <div style="padding:10px" class="row">
                                     <div class="col-lg-2 col-md-3 col-sm-12 shop-menu p-2" style="padding-top:10px !important">
-                                        <div style="max-height:300px;overflow:auto" class="nav nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                        <div style="max-height:60vh;overflow:auto" class="nav nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                             <div @click="loadShop('item', true)" class="nav-link nav-link-white active" id="v-pills-item-tab" data-toggle="pill" href="#v-pills-item" role="tab" aria-controls="v-pills-item" aria-selected="true">
                                                 <img width="25px" src="{{ asset('assets/images/icon/Shop-Item.png') }}" class="mr-2 align-middle"> Vật Phẩm
                                             </div>
                                             @foreach($menuShop as $menu)
-                                                <div class="nav-link nav-link-white" id="v-pills-{{ str_slug($menu->name) }}-tab" data-toggle="pill" href="#v-pills-{{ str_slug($menu->name) }}" role="tab" aria-controls="v-pills-{{ str_slug($menu->name) }}" aria-selected="false">
+                                                <div @click="loadShop('{{ str_slug($menu->name) }}', true)" class="nav-link nav-link-white" id="v-pills-equipment-tab" data-toggle="pill" href="#v-pills-equipment" role="tab" aria-controls="v-pills-equipment" aria-selected="false">
                                                     <img width="25px" src="{{ asset('assets/images/icon/Shop-Equipment.png') }}" class="mr-2 align-middle"> {{ $menu->name }}
                                                 </div>
                                             @endforeach
-                                            <div class="nav-link nav-link-white" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">
-
-                                            </div>
-                                            <div class="nav-link nav-link-white" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">
-
-                                            </div>
-                                            <div class="nav-link nav-link-white" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">
-
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-10 col-md-9 col-sm-12 p-2">
@@ -127,7 +118,7 @@
                                                             <div class="p-1 col-12">
                                                                 <div style="background: #33301d" class="item-preview">
                                                                     @include('components.border')
-                                                                    <div style="max-height:350px;overflow:auto" class="row px-4 py-2">
+                                                                    <div style="max-height:270px;overflow:auto" class="row px-4 py-2">
                                                                         <div v-for="(item, index) in shop" :key="index" v-if="item.hot" class="col-ui col-ui-divide spotlight-item special-item">
                                                                             <img style="position: absolute;top:0;left:0;width:40px" src="{{ asset('assets/images/icon/Hot-Ribbon.png') }}">
                                                                             <img style="width:50px;display:block;margin:7px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
@@ -153,7 +144,7 @@
                                                             <div class="p-1 col-12">
                                                                 <div style="background: #33301d" class="item-preview">
                                                                     @include('components.border')
-                                                                    <div style="max-height:350px;overflow:auto" class="row px-4 py-2">
+                                                                    <div style="max-height:270px;overflow:auto" class="row px-4 py-2">
                                                                         <div v-for="(item, index) in shop" :key="index" class="col-ui col-ui-divide softlight-item item">
                                                                             <img style="width:50px;display:block;margin:7px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
                                                                             <p class="text-light text-center" style="font-size:13px">@{{ item.name }}</p>
@@ -167,6 +158,50 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="v-pills-equipment" role="tabpanel" aria-labelledby="v-pills-equipment-tab">
+                                                <div class="b-b">
+                                                    <div class="nav-active-border b-primary bottom">
+                                                        <ul class="nav" id="myTab" role="tablist">
+                                                            @foreach($characters as $key => $character)
+                                                            <li data-title="tooltip" title="{{ $character->name }}" class="nav-item">
+                                                                <a class="nav-link {{ $character->id == Auth::user()->character->id ? 'active' : '' }}" id="character-{{ $character->avatar }}-tab" data-toggle="tab" href="#character-{{ $character->avatar }}-tab-control" role="tab" aria-controls="" aria-selected="true">
+                                                                    <img class="pixel" style="width:20px;height:20px;object-fit:contain" src="{{ asset("assets/images/class/{$character->avatar}.png") }}">
+                                                                </a>
+                                                            </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-content">
+                                                    @foreach($characters as $key => $character)
+                                                    <div class="tab-pane fade {{ $character->id == Auth::user()->character->id ? 'show active' : '' }}" id="character-{{ $character->avatar }}-tab-control" role="tabpanel" aria-labelledby="character-{{ $character->avatar }}-tab">
+                                                        <div class="row p-2">
+                                                            <div class="p-1 col-12">
+                                                                <div class="item-preview px-3 pt-3 pixel shop-background">
+                                                                    @include('components.border')
+                                                                    <img class="pixel" width="120px" src="{{ asset('assets/images/icon/Seller.png') }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="p-1 col-12">
+                                                                <div style="background: #33301d" class="item-preview">
+                                                                    @include('components.border')
+                                                                    <div style="max-height:270px;overflow:auto" class="row px-4 py-2">
+                                                                        <div v-for="(item, index) in shop.{{ $character->avatar }}" :key="index" @click="showGearsDescription(item, 0)" class="col-ui col-ui-divide softlight-item item">
+                                                                            <img style="width:50px;display:block;margin:7px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
+                                                                            <p class="text-light text-center" style="font-size:13px">@{{ item.name }}</p>
+                                                                            <div class="mb-3" style="height:50px;display:block;margin:15% auto 0px auto;object-fit:contain;" style="margin:0 auto !important" :class="`pixel ${item.shop_tag}`"></div>
+                                                                            <div @click="buyEquip(item ,$event)" class="pixel-font text-warning small-font pixel-btn m-3 btn-dark mt-5 text-center" style="padding:6px">
+                                                                                <img width="17px" class="mr-2" :src="asset(`assets/images/icon-pack/${getCurrency(item.price_type)}.png`)">@{{ numberFormatDetail(item.price) }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @endforeach
                                                 </div>
                                             </div>
                                         </div>

@@ -36,31 +36,5 @@ class AppServiceProvider extends ServiceProvider
         Carbon::setLocale('vi');
         Schema::defaultStringLength(191);
         Validator::extend('recaptcha', 'App\Validators\ReCaptcha@validate');
-        
-        if(Schema::hasTable('cate_gears'))
-        {
-            View::composer(['user.shop.base','user.theme.aside'], function ($view) 
-            {
-                $cateGears = Cache::rememberForever('menuShop', function () use($view) {
-                    return CateGear::all();
-                });  
-                $view->with('menuShop', $cateGears);  
-            });
-        }
-        if(Schema::hasTable('notifications'))
-        {
-            View::composer('user.theme.*', function ($view) 
-            {
-                if(Auth::check())
-                {
-                    $view->with('notifications', [
-                        'data' => Auth::user()->notifications,
-                        'all' => Auth::user()->notifications->count(),
-                        'read' => Auth::user()->readNotifications->count(),
-                        'unread' => Auth::user()->unreadNotifications->count()
-                    ]);
-                }   
-            });
-        }
     }
 }

@@ -30,6 +30,7 @@ Route::group(['namespace' => 'Api','middleware' => ['cors', 'auth']], function (
     });
     Route::group(['prefix' => 'shop','namespace' => 'Shop'], function () {
         Route::get('item', 'IndexController@item');
+        Route::get('{id}', 'IndexController@equipment');
         Route::post('buy-equip','ShopController@buyEquip');
         Route::post('buy-skill','ShopController@buySkill');
         Route::post('buy-pet','ShopController@buyPet');

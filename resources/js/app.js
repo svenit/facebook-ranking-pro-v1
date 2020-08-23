@@ -622,6 +622,7 @@ window.axios = require('axios');
                 $('#trigger-pet').click();
             },
             showGearsDescription(data, permission) {
+                console.log(data);
                 this.detailGear = {
                     data: data,
                     permission: permission
