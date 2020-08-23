@@ -387,6 +387,23 @@
         max-width: calc(25% - 6px);
         margin: 3px;
     }
+    .list-item-responsive {
+        height: 60vh;
+        overflow: auto;
+    }
+}
+
+@media (max-width: 767px) {
+    .list-item-responsive {
+        height: 20vh;
+        overflow: auto;
+    }
+}
+
+@media (max-width: 441px) {
+    .modal-ui .nav-link {
+        padding: 10px 15px !important;
+    }
 }
 
 @media (max-width: 568px) {
@@ -460,4 +477,9 @@
 .shop-background {
     background-image: url(../images/icon/Shop-Background.png) !important; 
     background-size: contain !important;
+}
+
+.modal-dialog {
+    max-width: 90%;
+    margin: 1.75rem auto;
 }

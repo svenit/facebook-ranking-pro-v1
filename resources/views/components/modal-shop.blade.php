@@ -76,7 +76,7 @@
                             <div class="p-2" style="background: #554839">
                                 <div style="padding:10px" class="row">
                                     <div class="col-lg-2 col-md-3 col-sm-12 shop-menu p-2" style="padding-top:10px !important">
-                                        <div style="max-height:60vh;overflow:auto" class="nav nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                        <div class="nav nav-pills list-item-responsive" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                             <div @click="loadShop('item', true)" class="nav-link nav-link-white active" id="v-pills-item-tab" data-toggle="pill" href="#v-pills-item" role="tab" aria-controls="v-pills-item" aria-selected="true">
                                                 <img width="25px" src="{{ asset('assets/images/icon/Shop-Item.png') }}" class="mr-2 align-middle"> Vật Phẩm
                                             </div>
@@ -188,11 +188,11 @@
                                                                 <div style="background: #33301d" class="item-preview">
                                                                     @include('components.border')
                                                                     <div style="max-height:270px;overflow:auto" class="row px-4 py-2">
-                                                                        <div v-for="(item, index) in shop.{{ $character->avatar }}" :key="index" @click="showGearsDescription(item, 0)" class="col-ui col-ui-divide softlight-item item">
+                                                                        <div v-for="(item, index) in shop.{{ $character->avatar }}" :key="index" class="col-ui col-ui-divide softlight-item item">
                                                                             <img style="width:50px;display:block;margin:7px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
                                                                             <p class="text-light text-center" style="font-size:13px">@{{ item.name }}</p>
-                                                                            <div class="mb-3" style="height:50px;display:block;margin:15% auto 0px auto;object-fit:contain;" style="margin:0 auto !important" :class="`pixel ${item.shop_tag}`"></div>
-                                                                            <div @click="buyEquip(item ,$event)" class="pixel-font text-warning small-font pixel-btn m-3 btn-dark mt-5 text-center" style="padding:6px">
+                                                                            <div @click="showGearsDescription(item, 0)" class="mb-3" style="height:50px;display:block;margin:15% auto 0px auto;object-fit:contain;" style="margin:0 auto !important" :class="`pixel ${item.shop_tag}`"></div>
+                                                                            <div @click="buyEquip(item ,$event)" data-title="tooltip" title="Mua" class="pixel-font text-warning small-font pixel-btn m-3 btn-dark mt-5 text-center" style="padding:6px">
                                                                                 <img width="17px" class="mr-2" :src="asset(`assets/images/icon-pack/${getCurrency(item.price_type)}.png`)">@{{ numberFormatDetail(item.price) }}
                                                                             </div>
                                                                         </div>

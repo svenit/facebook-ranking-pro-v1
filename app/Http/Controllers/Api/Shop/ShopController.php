@@ -48,6 +48,7 @@ class ShopController extends Controller
                             Auth::user()->gears()->attach($item->id,[
                                 'status' => 0
                             ]);
+                            $this->clearMyCache();
                             $response = [
                                 'code' => 200,
                                 'status' => 'success',
@@ -70,6 +71,7 @@ class ShopController extends Controller
                             Auth::user()->gears()->attach($item->id,[
                                 'status' => 0
                             ]);
+                            $this->clearMyCache();
                             $response = [
                                 'code' => 200,
                                 'status' => 'success',
@@ -136,6 +138,7 @@ class ShopController extends Controller
                                 Auth::user()->skills()->attach($item->id,[
                                     'status' => 0
                                 ]);
+                                $this->clearMyCache();
                                 $response = [
                                     'code' => 200,
                                     'status' => 'success',
@@ -158,6 +161,7 @@ class ShopController extends Controller
                                 Auth::user()->skills()->attach($item->id,[
                                     'status' => 0
                                 ]);
+                                $this->clearMyCache();
                                 $response = [
                                     'code' => 200,
                                     'status' => 'success',
@@ -214,6 +218,7 @@ class ShopController extends Controller
                             Auth::user()->pets()->attach($item->id,[
                                 'status' => 0
                             ]);
+                            $this->clearMyCache();
                             $response = [
                                 'code' => 200,
                                 'status' => 'success',
@@ -236,6 +241,7 @@ class ShopController extends Controller
                             Auth::user()->pets()->attach($item->id,[
                                 'status' => 0
                             ]);
+                            $this->clearMyCache();
                             $response = [
                                 'code' => 200,
                                 'status' => 'success',
@@ -294,6 +300,7 @@ class ShopController extends Controller
                         {
                             Auth::user()->decrement('coins',$item->price * $request->quantity);
                             $this->checkItem($request,$item);
+                            $this->clearMyCache();
                             $response = [
                                 'code' => 200,
                                 'status' => 'success',
@@ -314,6 +321,7 @@ class ShopController extends Controller
                         {
                             Auth::user()->decrement('gold',$item->price * $request->quantity);
                             $this->checkItem($request,$item);
+                            $this->clearMyCache();
                             $response = [
                                 'code' => 200,
                                 'status' => 'success',

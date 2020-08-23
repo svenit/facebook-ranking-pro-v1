@@ -7,7 +7,6 @@
 <div id="list-fight-room">
     <div class="page-content page-container" id="page-content">
         <div class="padding-x">
-            @include('user.theme.parameter')
             @include('user.profile.base')
             <div class="card vip-bordered">
                 <div style="padding:20px 20px 0px 20px" class="row">
