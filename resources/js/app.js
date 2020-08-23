@@ -218,6 +218,7 @@ window.axios = require('axios');
                 uploading: false,
                 block: true
             },
+            shop: [],
             inventory: {},
             gears: [],
             pets: [],
@@ -965,7 +966,6 @@ window.axios = require('axios');
                         let res = await axios.post(`${config.apiUrl}/shop/buy-equip`, {id: item.id});
                         if (res.data.code == 200) {
                             await this.index();
-                            e.target.innerHTML = 'Đã mua';
                         }
                         Swal.fire('', res.data.message, res.data.status);
                     }
@@ -987,7 +987,6 @@ window.axios = require('axios');
                         let res = await axios.post(`${config.apiUrl}/shop/buy-skill`, {id: item.id});
                         if (res.data.code == 200) {
                             await this.index();
-                            e.target.innerHTML = 'Đã mua';
                         }
                         Swal.fire('', res.data.message, res.data.status);
                     }
@@ -1008,7 +1007,6 @@ window.axios = require('axios');
                         let res = await axios.post(`${config.apiUrl}/shop/buy-pet`, {id: item.id});
                         if (res.data.code == 200) {
                             await this.index();
-                            e.target.innerHTML = 'Đã mua';
                         }
                         Swal.fire('', res.data.message, res.data.status);
                     }
@@ -1033,7 +1031,6 @@ window.axios = require('axios');
                         }).then(async (res) => {
                             if(res.data.code == 200) {
                                 await this.index();
-                                e.target.innerHTML = 'Đã mua';
                                 return res.data;
                             }
                             Swal.showValidationMessage(res.data.message);
@@ -1204,7 +1201,6 @@ window.axios = require('axios');
                         }).then(async (res) => {
                             if(res.data.code == 200) {
                                 await this.index();
-                                e.target.innerHTML = 'Đã mua';
                                 return res.data;
                             }
                             Swal.showValidationMessage(res.data.message);
@@ -1310,6 +1306,25 @@ window.axios = require('axios');
             numberFormatDetail(num) {
                 num = parseInt(num);
                 return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+            },
+            getCurrency(type) {
+                switch(type) {
+                    case 0:
+                        return 'gold';
+                    break;
+                    case 1:
+                        return 'diamond';
+                    break;
+                }
+            },
+            async loadShop(type ,reload = false) {
+                this.loading = true;
+                let res = await axios.get(`${config.apiUrl}/shop/${type}`);
+                if(reload || this.shop.length == 0) {
+                    this.shop = res.data;
+                    console.log(this.shop);
+                }
+                this.loading = false;
             }
         },
     });

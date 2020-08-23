@@ -2,7 +2,7 @@
     <div class="navbar navbar-expand-lg">
         <div class="ml-4 profile-badge row" data-toggle="modal" data-target=".modal-profile" data-toggle-class="modal-open-aside" data-target="body" @click="index()">
             <div style="padding:0;" class="col-3">
-                <img style="position:absolute;width:62px" :src="asset(`assets/images/pvp-ranks/${data.rank.fame.icon}.png`)">
+                <img class="pixel" style="position:absolute;width:62px" :src="asset(`assets/images/pvp-ranks/${data.rank.fame.icon}.png`)">
                 <img style="width:60px" class="circle mr-3" src="http://graph.facebook.com/{{ Auth::user()->provider_id }}/picture?type=normal" alt="...">
             </div>
             <div class="col-9 pl-4 mt-1">
@@ -17,7 +17,7 @@
             </div>
         </div>
         <ul class="nav navbar-menu order-1 order-lg-2">
-            <li class="profile-badge icon-badge row py-1 mr-4">
+            <li class="profile-badge icon-badge row py-1 mr-4 justify-content-between">
                 <div class="col-auto">
                     <div class="row">
                         <div class="col-auto">
@@ -28,7 +28,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-auto">
+                <div class="col-auto p-0">
                     <img style="width:17px" src="{{ asset('assets/images/icon/Question.png') }}">
                 </div>
             </li>
@@ -43,11 +43,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-auto">
+                <div class="col-auto p-0">
                     <img style="width:17px" src="{{ asset('assets/images/icon/Add.png') }}">
                 </div>
             </li>
-            <li class="profile-badge icon-badge row py-1 mr-4">
+            <li class="profile-badge icon-badge row py-1 mr-4 justify-content-between">
                 <div class="col-auto">
                     <div class="row">
                         <div class="col-auto">
@@ -58,7 +58,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-auto">
+                <div class="col-auto p-0">
                     <img style="width:17px" src="{{ asset('assets/images/icon/Add.png') }}">
                 </div>
             </li>

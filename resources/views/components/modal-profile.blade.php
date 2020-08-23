@@ -29,22 +29,22 @@
                             <ul class="nav" id="myTab" role="tablist">
                                 <li data-title="tooltip" title="Cơ bản" class="nav-item">
                                     <a class="nav-link active" id="basic-tab" data-toggle="tab" href="#basic-tab-control" role="tab" aria-controls="" aria-selected="true">
-                                        <img class="text-center" style="width:20px;height:20px;object-fit:contain" src="{{ asset('assets/images/icon/Infor.png') }}">
+                                        <img class="text-center pixel" style="width:20px;height:20px;object-fit:contain" src="{{ asset('assets/images/icon/Infor.png') }}">
                                     </a>
                                 </li>
                                 <li data-title="tooltip" title="Tổng quan" class="nav-item">
                                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile-tab-control" role="tab" aria-controls="" aria-selected="true">
-                                        <img class="text-center" style="width:20px;height:20px;object-fit:contain" src="{{ asset('assets/images/icon/Character.png') }}">
+                                        <img class="text-center pixel" style="width:20px;height:20px;object-fit:contain" src="{{ asset('assets/images/icon/Character.png') }}">
                                     </a>
                                 </li>
                                 <li data-title="tooltip" title="Chỉ số sức mạnh" class="nav-item">
                                     <a class="nav-link" id="skill-tab" data-toggle="tab" href="#skill-tab-control" role="tab" aria-controls="" aria-selected="true">
-                                        <img class="text-center" style="width:20px;height:20px;object-fit:contain" src="{{ asset('assets/images/icon/Stats.png') }}">
+                                        <img class="text-center pixel" style="width:20px;height:20px;object-fit:contain" src="{{ asset('assets/images/icon/Stats.png') }}">
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="skill-tab" data-toggle="tab" href="#skill-tab-control" role="tab" aria-controls="" aria-selected="true">
-                                        <img class="text-center" style="width:20px;height:20px;object-fit:contain" src="{{ asset('assets/images/icon/Skill.png') }}">
+                                        <img class="text-center pixel" style="width:20px;height:20px;object-fit:contain" src="{{ asset('assets/images/icon/Skill.png') }}">
                                     </a>
                                 </li>
                             </ul>
@@ -60,7 +60,7 @@
                                             <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <div class="row">
                                                     <div class="col-3 pr-0">
-                                                        <img style="position:absolute;width:62px" :src="asset(`assets/images/pvp-ranks/${data.rank.fame.icon}.png`)">
+                                                        <img class="pixel" style="position:absolute;width:62px" :src="asset(`assets/images/pvp-ranks/${data.rank.fame.icon}.png`)">
                                                         <img style="width:60px" class="circle mr-3" src="http://graph.facebook.com/{{ Auth::user()->provider_id }}/picture?type=normal" alt="...">
                                                     </div>
                                                     <div style="border-right: 2px solid #4c4534" class="pl-2 col-9">
@@ -85,7 +85,7 @@
                                                                 <span style="font-size:12px" class="pixel-font text-warning">
                                                                     @{{ numberFormatDetail(data.infor.fame) }}
                                                                 </span>
-                                                                <img style="float: right;top:3px;position: relative;" data-dismiss="modal" data-toggle="modal" data-target=".modal-fame" data-toggle-class="modal-open-aside" data-target="body" width="18px" src="{{ asset('assets/images/icon/Question.png') }}">
+                                                                <img data-title="tooltip" title="Xem thông tin chi tiết" style="float: right;top:3px;position: relative;" data-dismiss="modal" data-toggle="modal" data-target=".modal-fame" data-toggle-class="modal-open-aside" data-target="body" width="18px" src="{{ asset('assets/images/icon/Question.png') }}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -301,8 +301,8 @@
                                         <img style="position: absolute; right: 5%;width: 40px" class="pixel" src="{{ asset('assets/images/icon/Dark-Badge.png') }}">
                                         <img class="pixel" data-title="tooltip" :title="data.infor.character.name" style="position: absolute; right: 7.5%;width:25px;" :src="asset(`assets/images/class/${data.infor.character.avatar}-icon.png`)">
                                         @include('components.border')
-                                        <img width="60%" style="display:block;margin:0 auto" src="{{ asset('assets/images/icon/Stats-Point.png') }}">
-                                        <div class="normal-badge" style="margin-bottom:5rem">
+                                        <img width="60%" class="pixel" style="display:block;margin:0 auto" src="{{ asset('assets/images/icon/Stats-Point.png') }}">
+                                        <div class="normal-badge" style="margin-bottom:4.2rem">
                                             <img style="width:150px;height:60px" src="{{ asset('assets/images/icon/Red-Ribon.png') }}" class="pixel">
                                             <span data-title="tooltip" title="Điểm chỉ số dư" style="top:18px" class="text-light pixel-font small-font">
                                                 @{{ data.stats.available }}

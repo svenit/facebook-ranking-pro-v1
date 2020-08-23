@@ -5,6 +5,11 @@
     border-radius: 3px;
 }
 
+.shop-icon-badge {
+    background: #261e15;
+    border-radius: 3px;
+}
+
 .icon-badge {
     top: -15px;
     position: relative;
@@ -301,7 +306,12 @@
 
 .modal-ui .nav-link {
     padding: 10px 20px !important;
+    color: #53493b;
 }
+.modal-ui .nav-link:hover {
+    color: #53493b !important;
+}
+
 
 .modal-ui .nav-item .active {
     background-color: #f3efd9;
@@ -315,7 +325,7 @@
 }
 
 .modal-ui .nav-item a:hover {
-    color: #fff !important;
+    color: #53493b !important;
 }
 
 #SvgjsSvg1089 {
@@ -387,6 +397,14 @@
     }
 }
 
+@media (max-width: 991px) {
+    .col-ui-divide {
+        flex: 0 0 50%;
+        max-width: calc(50% - 6px);
+        margin: 3px;
+    }
+}
+
 .modal-ui .close {
     opacity: 1 !important;
 }
@@ -404,4 +422,42 @@
 
 .modal-ui .fame-active{
     border: 2px solid #b9b717;
+}
+
+.modal-ui .shop-menu {
+    background-color: #3d352a;
+}
+
+.modal-ui .shop-menu .nav-link {
+    background: #746a56;
+    color: #fff;
+    border-radius: 0px;
+    margin-bottom: 10px;
+    position: relative;
+    box-shadow: inset 3px 3px #5a5242;
+    width: 100%;
+}
+
+.modal-ui .shop-menu .active{
+    background: #76bb55;
+    box-shadow: inset 3px 3px #619e44;
+}
+
+.modal-ui .shop-menu .nav a:hover {
+    color: #fff !important;
+}
+
+.modal-ui .nav-link-white:hover {
+    color: #fff !important;
+}
+
+.modal-ui .special-item {
+    border-width: 5px;
+    border-style: solid;
+    border-image: url(../images/icon/Special-Border.png) 25% round;
+}
+
+.shop-background {
+    background-image: url(../images/icon/Shop-Background.png) !important; 
+    background-size: contain !important;
 }

@@ -54,7 +54,7 @@ class ShopController extends Controller
     public function item()
     {
         $items = Cache::rememberForever('shop.item', function () {
-            return Item::where('status',1)->get();
+            return Item::where('status', 1)->get();
         });
         return view('user.shop.item',compact('items'));
     }

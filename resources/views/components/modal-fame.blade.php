@@ -48,7 +48,7 @@
                                         @include('components.border')
                                         <div class="row p-3">
                                             <div class="col-lg-2 col-md-2 col-sm-12 text-center mb-3">
-                                                <img style="position:absolute;width:62px" :src="asset(`assets/images/pvp-ranks/${data.rank.fame.icon}.png`)">
+                                                <img style="position:absolute;width:62px" class="pixel" :src="asset(`assets/images/pvp-ranks/${data.rank.fame.icon}.png`)">
                                                 <img style="width:60px" class="circle" src="http://graph.facebook.com/{{ Auth::user()->provider_id }}/picture?type=normal" alt="...">
                                             </div>
                                             <div class="pl-2 col-lg-8 col-md-8 col-sm-12 ui-center mb-3">
@@ -68,7 +68,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-lg-2 col-md-2 col-sm-12 text-center mb-3">
-                                                <img style="position:absolute;width:62px" :src="asset(`assets/images/pvp-ranks/${data.rank.fame.next.icon}.png`)">
+                                                <img class="pixel" style="position:absolute;width:62px" :src="asset(`assets/images/pvp-ranks/${data.rank.fame.next.icon}.png`)">
                                                 <img style="width:60px" class="circle" src="http://graph.facebook.com/{{ Auth::user()->provider_id }}/picture?type=normal" alt="...">
                                             </div>
                                             <div class="col-12 mt-3">
@@ -98,9 +98,9 @@
                                         @include('components.border')
                                         <div style="max-height:350px;overflow:auto" class="row px-4 py-2">
                                             @foreach(config('game.fame') as $fame)
-                                                <div class="col-ui softlight-item item {{ $fame['icon'] == Auth::user()->getFame()['icon'] ? 'fame-active' : '' }}">
+                                                <div class="col-ui softlight-item item {{ $fame['icon'] == Auth::user()->getFame()['icon'] ? 'special-item' : '' }}">
                                                     <img style="width:50px;display:block;margin:7px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
-                                                    <img class="mb-3" style="width:50px;height:50px;display:block;margin:0 auto;object-fit:contain;transform: translate(0%, 50%);" src="{{ asset("assets/images/pvp-ranks/{$fame['icon']}.png") }}">
+                                                    <img class="mb-3 pixel" style="width:50px;height:50px;display:block;margin:0 auto;object-fit:contain;transform: translate(0%, 50%);" src="{{ asset("assets/images/pvp-ranks/{$fame['icon']}.png") }}">
                                                     <div class="pixel-font text-warning small-font pixel-btn m-3 btn-dark mt-5 text-center" style="padding:6px">
                                                         {{ number_format($fame['point']) }}
                                                     </div>
