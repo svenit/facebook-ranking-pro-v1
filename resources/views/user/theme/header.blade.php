@@ -1,13 +1,13 @@
 <div id="header" style="position: relative" class="page-header">
     <div class="navbar navbar-expand-lg">
-        <div class="ml-4 profile-badge row" data-toggle="modal" data-target=".modal-profile" data-toggle-class="modal-open-aside" data-target="body" @click="index()">
+        <div data-step="2" data-intro="{{ $intro[1] }}" class="ml-4 profile-badge row" data-toggle="modal" data-target=".modal-profile" data-toggle-class="modal-open-aside" data-target="body" @click="index()">
             <div style="padding:0;" class="col-3">
                 <img class="pixel" style="position:absolute;width:62px" :src="asset(`assets/images/pvp-ranks/${data.rank.fame.icon}.png`)">
                 <img style="width:60px" class="circle mr-3" src="http://graph.facebook.com/{{ Auth::user()->provider_id }}/picture?type=normal" alt="...">
             </div>
             <div class="col-9 pl-4 mt-1">
                 <span class="pixel-font small-font pr-5" style="color:#37a8d8">LV@{{ data.level.current_level }}</span>
-                <img style="width:17px" src="{{ asset('assets/images/icon/Question.png') }}">
+                <img style="width:17px" class="pixel" src="{{ asset('assets/images/icon/Question.png') }}">
                 <div class="mt-1 mb-1" style="height: 3px;background:#534738">
                     <div :style="{width:data.level.percent + '%', height:'3px', backgroundColor: '#37a8d8'}"></div>
                 </div>
@@ -17,7 +17,7 @@
             </div>
         </div>
         <ul class="nav navbar-menu order-1 order-lg-2">
-            <li class="profile-badge icon-badge row py-1 mr-4 justify-content-between">
+            <li data-step="3" data-intro="{{ $intro[2] }}" class="profile-badge icon-badge row py-1 mr-4 justify-content-between">
                 <div class="col-auto">
                     <div class="row">
                         <div class="col-auto">
@@ -29,10 +29,10 @@
                     </div>
                 </div>
                 <div class="col-auto p-0">
-                    <img style="width:17px" src="{{ asset('assets/images/icon/Question.png') }}">
+                    <img style="width:17px" class="pixel" src="{{ asset('assets/images/icon/Question.png') }}">
                 </div>
             </li>
-            <li class="profile-badge icon-badge row py-1 mr-4 justify-content-between">
+            <li data-step="4" data-intro="{{ $intro[3] }}" class="profile-badge icon-badge row py-1 mr-4 justify-content-between">
                 <div class="col-auto">
                     <div class="row">
                         <div class="col-auto">
@@ -44,10 +44,10 @@
                     </div>
                 </div>
                 <div class="col-auto p-0">
-                    <img style="width:17px" src="{{ asset('assets/images/icon/Add.png') }}">
+                    <img style="width:17px" class="pixel" src="{{ asset('assets/images/icon/Add.png') }}">
                 </div>
             </li>
-            <li class="profile-badge icon-badge row py-1 mr-4 justify-content-between">
+            <li data-step="5" data-intro="{{ $intro[4] }}" class="profile-badge icon-badge row py-1 mr-4 justify-content-between">
                 <div class="col-auto">
                     <div class="row">
                         <div class="col-auto">
@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <div class="col-auto p-0">
-                    <img style="width:17px" src="{{ asset('assets/images/icon/Add.png') }}">
+                    <img class="pixel" style="width:17px" src="{{ asset('assets/images/icon/Add.png') }}">
                 </div>
             </li>
             @auth

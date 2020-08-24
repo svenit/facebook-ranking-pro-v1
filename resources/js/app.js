@@ -20,6 +20,7 @@ window.axios = require('axios');
     new Vue({
         el: '#app',
         data: {
+            showIntro: false,
             currentLang: sessionStorage.getItem('currentLang') || 'vie',
             languages: [
                 {
@@ -311,7 +312,7 @@ window.axios = require('axios');
                     $(function () {
                         $('[data-title="tooltip"]').tooltip();
                     });
-                    // introJs().start();
+                    // this.showIntroTemplate();
                 }
             }
             catch(e) {
@@ -360,6 +361,18 @@ window.axios = require('axios');
                     this.loading = false;
                     this.notify('Đã có lỗi xảy ra, xin vui lòng tải lại trang');
                 }
+            },
+            showIntroTemplate() {
+                this.showIntro = true;
+                setTimeout(() => {
+                    introJs().start();
+                    let introButton = document.getElementsByClassName('introjs-button');
+                    for(let i in introButton) {
+                        introButton[i].addEventListener('click', () => {
+                            this.showIntro = false;
+                        });
+                    };
+                });
             },
             asset(fileName) {
                 return `${config.root}/${fileName}`;

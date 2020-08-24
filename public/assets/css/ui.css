@@ -479,7 +479,69 @@
     background-size: contain !important;
 }
 
-.modal-dialog {
+.modal-xl {
     max-width: 90%;
     margin: 1.75rem auto;
+}
+
+#footer .dropdown-menu {
+    background-color: rgb(42, 38, 39, .95) !important;
+    border: 1px solid #222;
+    padding: 0;
+    width: 220px;
+}
+
+#footer .dropdown-item-header {
+    background: #131212 !important;
+    border-bottom: 2px solid #464039 !important;
+    padding: 5px !important;
+}
+
+#footer .dropdown-menu .dropdown-item{
+    border-bottom: 2px solid #464039;
+    padding: 8px;
+}
+
+.baw {
+    filter: grayscale(1);
+}
+
+.introjs-tooltip {
+    background-color: #1a150d !important;
+}
+
+.introjs-button {
+    text-shadow: none !important;
+    border: 0px !important;
+    background: #0a0a0a !important;
+}
+
+.introjs-arrow.left-bottom .introjs-arrow.left {
+    border-right-color: #1a150d !important;
+}
+
+.introjs-arrow.right {
+    border-left-color: #1a150d !important;
+}
+
+.introjs-arrow.top {
+    border-bottom-color: #1a150d !important;
+}
+
+.introjs-arrow.button {
+    border-top-color: #1a150d !important;
+}
+
+.introjs-helperLayer {
+    background: #1a150d !important;
+    z-index: 1 !important;
+}
+
+.introjs-helperNumberLayer {
+    background: #1a150d !important;
+    display: none !important;
+}
+
+.introjs-overlay {
+    z-index: 3 !important;
 }

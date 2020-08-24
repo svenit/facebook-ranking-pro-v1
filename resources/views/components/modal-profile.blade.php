@@ -42,11 +42,6 @@
                                         <img class="text-center pixel" style="width:20px;height:20px;object-fit:contain" src="{{ asset('assets/images/icon/Stats.png') }}">
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="skill-tab" data-toggle="tab" href="#skill-tab-control" role="tab" aria-controls="" aria-selected="true">
-                                        <img class="text-center pixel" style="width:20px;height:20px;object-fit:contain" src="{{ asset('assets/images/icon/Skill.png') }}">
-                                    </a>
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -85,7 +80,7 @@
                                                                 <span style="font-size:12px" class="pixel-font text-warning">
                                                                     @{{ numberFormatDetail(data.infor.fame) }}
                                                                 </span>
-                                                                <img data-title="tooltip" title="Xem thông tin chi tiết" style="float: right;top:3px;position: relative;" data-dismiss="modal" data-toggle="modal" data-target=".modal-fame" data-toggle-class="modal-open-aside" data-target="body" width="18px" src="{{ asset('assets/images/icon/Question.png') }}">
+                                                                <img class="pixel" data-title="tooltip" title="Xem thông tin chi tiết" style="float: right;top:3px;position: relative;" data-dismiss="modal" data-toggle="modal" data-target=".modal-fame" data-toggle-class="modal-open-aside" data-target="body" width="18px" src="{{ asset('assets/images/icon/Question.png') }}">
                                                             </div>
                                                         </div>
                                                     </div>

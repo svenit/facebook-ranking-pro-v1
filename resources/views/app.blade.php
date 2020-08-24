@@ -77,16 +77,16 @@
 		@endif
 		@include('user.theme.aside')
 		<div style="position: absolute;top:15%;" class="ml-4 aside-icon profile-badge">
-			<div class="col">
-				<img class="text-center footer-icon" src="{{ asset('assets/images/icon/Dungeon.png') }}">
+			<div data-step="6" data-intro="{{ $intro[5] }}" class="col">
+				<img class="text-center footer-icon pixel" src="{{ asset('assets/images/icon/Dungeon.png') }}">
 				<p class="text-center">Boss</p>
 			</div>
-			<div class="col">
-				<img class="text-center footer-icon" src="{{ asset('assets/images/icon/Blue-Gate.gif') }}">
+			<div data-step="7" data-intro="{{ $intro[6] }}" class="col">
+				<img class="text-center footer-icon pixel" src="{{ asset('assets/images/icon/Blue-Gate.gif') }}">
 				<p class="text-center">Dungeon</p>
 			</div>
-			<div class="col">
-				<img class="text-center footer-icon" src="{{ asset('assets/images/icon/PVP.png') }}">
+			<div data-step="8" data-intro="{{ $intro[7] }}" class="col">
+				<img class="text-center footer-icon pixel" src="{{ asset('assets/images/icon/PVP.png') }}">
 				<p class="text-center">PVP</p>
 			</div>
 		</div>
@@ -111,6 +111,9 @@
 					@endif
 					<a @click="gotoBottomChat" data-toggle="modal" data-target="#global-chat" class="btn btn-transparent" id="show_chat_wa"><img src="{{ asset('assets/images/icon-pack/message-box.png') }}"></a>
 				</div>
+			</div>
+			<div v-if="showIntro" class="intro">
+				<img data-step="1" data-intro="{{ $intro[0] }}" width="150px" class="pixel" src="{{ asset('assets/images/icon/Presenter.png') }}">
 			</div>
 			@include('user.theme.footer')
 		</div>
