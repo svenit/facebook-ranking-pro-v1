@@ -77,8 +77,8 @@
                                                         @{{ numberFormatDetail(data.rank.fame.point) }}
                                                     </div>
                                                     <div class="col-lg-8 col-md-6 col-sm-6">
-                                                        <div @click="notify(`Bạn cần ${numberFormatDetail(data.rank.fame.next.point - data.infor.fame)} điểm nữa để lên cấp`)" class="progress my-3 circle" style="height:6px;border-radius:0px;">
-                                                            <div class="progress-bar pixel-font" style="background:#ffdd44;border-radius:0px;color:#333;height:6px" data-title="tooltip" :title="`Bạn cần ${numberFormatDetail(data.rank.fame.next.point - data.infor.fame)} điểm nữa để lên cấp`" :style="{width:data.level.percent + '%'}"></div>
+                                                        <div @click="notify(`Bạn cần ${numberFormatDetail(data.rank.fame.next.point - data.infor.fame > 0 ? data.rank.fame.next.point - data.infor.fame : 0)} điểm nữa để lên cấp`)" class="progress my-3 circle" style="height:6px;border-radius:0px;">
+                                                            <div class="progress-bar pixel-font" style="background:#ffdd44;border-radius:0px;color:#333;height:6px" data-title="tooltip" :title="`Bạn cần ${numberFormatDetail(data.rank.fame.next.point - data.infor.fame > 0 ? data.rank.fame.next.point - data.infor.fame : 0)} điểm nữa để lên cấp`" :style="{width: getFamePercent() + '%'}"></div>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-2 col-md-3 col-sm-3 pixel-font small-font text-warning text-center-inside">

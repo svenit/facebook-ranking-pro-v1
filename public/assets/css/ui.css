@@ -388,7 +388,7 @@
         margin: 3px;
     }
     .list-item-responsive {
-        height: 60vh;
+        height: 68vh;
         overflow: auto;
     }
 }
@@ -544,4 +544,8 @@
 
 .introjs-overlay {
     z-index: 3 !important;
+}
+
+.swal2-actions.swal2-loading .swal2-styled.swal2-confirm{
+    padding: 0px !important;
 }

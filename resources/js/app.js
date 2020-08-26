@@ -1339,6 +1339,11 @@ window.axios = require('axios');
                     console.log(this.shop);
                 }
                 this.loading = false;
+            },
+            getFamePercent() {
+                let nextFame = parseInt(this.data.rank.fame.next.point);
+                let currentFame = parseInt(this.data.infor.fame);
+                return nextFame - currentFame > 0 ? (currentFame/nextFame)*100 : 100;
             }
         },
     });

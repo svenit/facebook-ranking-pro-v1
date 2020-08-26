@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\Shop;
 
+use App\Model\Gem;
+use App\Model\Pet;
 use App\Model\Gear;
 use App\Model\Item;
 use App\Model\CateGear;
@@ -20,6 +22,34 @@ class IndexController extends Controller
             return Item::where('status', 1)->get();
         });
         return response()->json(Crypto::encrypt($items), 200);
+    }
+
+    public function gems()
+    {
+        $gems = Cache::rememberForever('gem.item', function () {
+            return Gem::where('status', 1)->get();
+        });
+        return response()->json(Crypto::encrypt($gems), 200);
+    }
+
+    public function pet()
+    {
+        $pets = Cache::rememberForever('shop.pet', function () {
+            return Pet::where('status',1)->get();
+        });
+        return response()->json(Crypto::encrypt($pets), 200);
+    }
+
+    public function skill()
+    {
+        $skills = Cache::rememberForever('shop.skill', function () {
+            return Character::with('skills')->where([['id', '!=', env('NO_CHARACTER_ID')]])->get();
+        });
+        $formatSkills = [];
+        foreach ($skills as $key => $skill) {
+            $formatSkills[$skill->avatar] = $skill->skills;
+        }
+        return response()->json(Crypto::encrypt($formatSkills), 200);
     }
 
     public function equipment($cate) {

@@ -62,7 +62,7 @@ class ShopController extends Controller
     public function gem()
     {
         $gems = Cache::rememberForever('gem.item', function () {
-            return Gem::where('status',1)->get();
+            return Gem::where('status', 1)->get();
         });
         return view('user.shop.gem',compact('gems'));
     }

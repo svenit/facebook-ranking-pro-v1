@@ -45,64 +45,18 @@ class Cors
                         ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
                         ->header('Access-Control-Allow-Name', $newToken);
                 }
-                $now = date('H:i:s d/m/Y');
-                $discordBot = new DiscordBot();
-                $user = Auth::user();
-                session()->increment('api_fails');
-                @$discordBot->sendMessage(env('DISCORD_LOG_WEBHOOK'), [
-                    'content' => '@here',
-                    'embeds' => [
-                        [
-                            'color' => 13303808,
-                            'author' => [
-                                'name' => 'Tracking System',
-                            ],
-                            "fields" => [
-                                [
-                                    "name" => "User's Information",
-                                    "value" => "ID: {$user->id} \n Name: {$user->name}"
-                                ],
-                                [
-                                    "name" => "Number of Failures",
-                                    "value" => session()->get('api_fails', 0)
-                                ],
-                                [
-                                    "name" => "IP Address",
-                                    "value" => $request->ip()
-                                ],
-                                [
-                                    "name" => "Current URL",
-                                    "value" => url()->current()
-                                ],
-                                [
-                                    "name" => "API's URL",
-                                    "value" => url()->full()
-                                ],
-                                [
-                                    "name" => "Request Payload",
-                                    "value" => "Token: {$token} \n CSRF-Token: {$request->_token}"
-                                ]
-                            ],
-                            'footer' => [
-                                'text' => "Tin nhắn được tạo lúc: {$now}"
-                            ]
-                        ]
-                    ],
-                    'allowed_mentions' => [
-                        'parse' => ['users']
-                    ]
-                ]);
+                @$this->trackingBot($request);
                 return response()->json([
                     'status' => 'error',
                     'code' => 500,
-                    'message' => "Server Error"
+                    'message' => 'Duplicate request or request expires'
                 ]);
             }
             else
             {
                 return response()->json([
                     'status' => 'error',
-                    'code' => '403',
+                    'code' => 403,
                     'message' => 'Bearer Token is required',
                 ]);
             }
@@ -121,5 +75,52 @@ class Cors
         $message = str_replace(8,"_",$message);
         $message = str_replace(9,"=",$message);
         return $message;
+    }
+
+    public function trackingBot($request)
+    {
+        $now = date('H:i:s d/m/Y');
+        $discordBot = new DiscordBot();
+        $user = Auth::user();
+        session()->increment('api_fails');
+        @$discordBot->sendMessage(env('DISCORD_LOG_WEBHOOK'), [
+            'content' => '@here',
+            'embeds' => [
+                [
+                    'color' => 13303808,
+                    'author' => [
+                        'name' => 'Tracking System',
+                    ],
+                    "fields" => [
+                        [
+                            "name" => "User's Information",
+                            "value" => "ID: {$user->id} \n Name: {$user->name}"
+                        ],
+                        [
+                            "name" => "Number of Failures",
+                            "value" => session()->get('api_fails', 0)
+                        ],
+                        [
+                            "name" => "IP Address",
+                            "value" => $request->ip()
+                        ],
+                        [
+                            "name" => "Current URL",
+                            "value" => url()->current()
+                        ],
+                        [
+                            "name" => "API's URL",
+                            "value" => url()->full()
+                        ]
+                    ],
+                    'footer' => [
+                        'text' => "Tin nhắn được tạo lúc: {$now}"
+                    ]
+                ]
+            ],
+            'allowed_mentions' => [
+                'parse' => ['users']
+            ]
+        ]);
     }
 }

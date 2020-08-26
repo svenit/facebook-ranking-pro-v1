@@ -30,12 +30,15 @@ Route::group(['namespace' => 'Api','middleware' => ['cors', 'auth']], function (
     });
     Route::group(['prefix' => 'shop','namespace' => 'Shop'], function () {
         Route::get('item', 'IndexController@item');
-        Route::get('{id}', 'IndexController@equipment');
+        Route::get('gems', 'IndexController@gems');
+        Route::get('pet', 'IndexController@pet');
+        Route::get('skill', 'IndexController@skill');
         Route::post('buy-equip','ShopController@buyEquip');
         Route::post('buy-skill','ShopController@buySkill');
         Route::post('buy-pet','ShopController@buyPet');
         Route::post('buy-item','ShopController@buyItem');
         Route::post('buy-gem','ShopController@buyGem');
+        Route::get('{id}', 'IndexController@equipment');
     });
     Route::group(['prefix' => 'profile','namespace' => 'Profile'], function () {
         Route::group(['prefix' => 'inventory'], function () {
