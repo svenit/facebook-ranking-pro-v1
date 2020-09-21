@@ -81,7 +81,7 @@ class IndexController extends Controller
                     'pet' => $helper->usingPets()->first(),
                     'gears' => $helper->usingGears(),
                     'skills' => Auth::id() == $findUser->id ? $helper->usingSkills() : []
-                ]),200);                
+                ]),200);
             });
         }
         return response()->json(Crypto::encrypt([
@@ -93,7 +93,7 @@ class IndexController extends Controller
         ]),200);
     }
 
-    public function verifyToken(Request $request) 
+    public function verifyToken(Request $request)
     {
         return $request->token == md5(hash('sha256',md5($this->encode(strrev(session('client_key').'..$!@{a-z0-9}-VYDEPTRAI&*@!LX&&$PHP?1+1'))))) ? 1 : 0;
     }

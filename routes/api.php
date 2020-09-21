@@ -41,12 +41,12 @@ Route::group(['namespace' => 'Api','middleware' => ['cors', 'auth']], function (
         Route::get('{id}', 'IndexController@equipment');
     });
     Route::group(['prefix' => 'profile','namespace' => 'Profile'], function () {
-        Route::group(['prefix' => 'inventory'], function () {
-            Route::get('/','InventoryController');
-            Route::get('available','InventoryController@available');
-            Route::post('equipment','InventoryController@equipment');
-            Route::post('delete','InventoryController@delete');
-            Route::post('remove','InventoryController@removeEquipment');
+        Route::group(['prefix' => 'equipment'], function () {
+            Route::get('/','EquipmentController');
+            Route::get('available','EquipmentController@available');
+            Route::post('use','EquipmentController@use');
+            Route::post('delete','EquipmentController@delete');
+            Route::post('remove','EquipmentController@removeEquipment');
         });
         Route::group(['prefix' => 'pet'], function () {
             Route::get('/','PetController');
@@ -59,7 +59,7 @@ Route::group(['namespace' => 'Api','middleware' => ['cors', 'auth']], function (
             Route::post('use','SkillController@useSkill');
             Route::post('remove','SkillController@removeSkill');
             Route::post('delete','SkillController@deleteSkill');
-        });      
+        });
         Route::group(['prefix' => 'item'], function () {
             Route::get('/','ItemController');
             Route::post('use','ItemController@use');

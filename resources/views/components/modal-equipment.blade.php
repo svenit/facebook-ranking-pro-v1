@@ -20,7 +20,7 @@
                                         <img class="pixel" style="position: absolute; right: 7.5%;width:25px;" :src="asset(`assets/images/class/${detailGear.data.character.avatar}-icon.png`)">
                                         @include('components.border')
                                         <div style="margin:42px auto;background-color: #554334;border-radius: 50%;" :class="[`pixel text-center ${detailGear.data.shop_tag}`]">
-                                            <img class="pixel" style="width: 70px;" src="{{ asset('assets/images/icon/Item-Frame.png') }}">
+                                            <img class="pixel" style="width: 70px;" src="{{ asset('assets/images/icon/Equipment-Frame.png') }}">
                                         </div>
                                         <div v-if="detailGear.permission == 1" class="normal-badge">
                                             <img class="pixel" src="{{ asset('assets/images/icon/Normal-Badge.png') }}">
@@ -134,13 +134,13 @@
             </div>
             <div class="modal-footer">
                 <div class="row" v-if="detailGear.permission == 1">
-                    <div v-if="detailGear.data.pivot.status == 0" type="button" @click="equipment(detailGear.data)" class="btn-green pixel-btn mr-4" data-dismiss="modal">
+                    <div data-dismiss="modal" v-if="detailGear.data.pivot.status == 0" type="button" @click="equipment(detailGear.data)" class="btn-green pixel-btn mr-4" data-dismiss="modal">
                         Trang bị <img style="width:16px" src="{{ asset('assets/images/icon/Equip.png') }}">
                     </div>
-                    <div v-else type="button" @click="removeEquipment(detailGear.data)" class="btn-yellow pixel-btn mr-4">
+                    <div data-dismiss="modal" v-else type="button" @click="removeEquipment(detailGear.data)" class="btn-yellow pixel-btn mr-4">
                         Tháo <img style="width:16px" src="{{ asset('assets/images/icon/Unequip.png') }}">
                     </div>
-                    <div @click="deleteEquipment(detailGear.data)" class="btn-red pixel-btn mr-3">
+                    <div data-dismiss="modal" @click="deleteEquipment(detailGear.data)" class="btn-red pixel-btn mr-3">
                         Vứt Bỏ <img style="width:16px" src="{{ asset('assets/images/icon/Delete.png') }}">
                     </div>
                 </div>

@@ -220,6 +220,7 @@ window.axios = require('axios');
                 block: true
             },
             shop: [],
+            profileInventory: [],
             inventory: {},
             gears: [],
             pets: [],
@@ -231,6 +232,7 @@ window.axios = require('axios');
                 gear: {},
                 action: false
             },
+            modalName: null,
             pvp: {
                 rooms: [],
                 match: {
@@ -566,7 +568,7 @@ window.axios = require('axios');
                     return;
                 }
                 this.socket.emit(btoa('fightSkill'), this.AESEncryptJSON({
-                    room: page.room, 
+                    room: page.room,
                     user,
                     target: this.pvp.match.target,
                     skill
@@ -911,13 +913,13 @@ window.axios = require('axios');
             },
             async invetory() {
                 this.loading = true;
-                let res = await axios.get(`${config.apiUrl}/profile/inventory`);
+                let res = await axios.get(`${config.apiUrl}/profile/equipment`);
                 this.inventory = res.data;
                 this.loading = false;
             },
             async inventoryAvailable() {
                 this.loading = true;
-                let res = await axios.get(`${config.apiUrl}/profile/inventory/available`);
+                let res = await axios.get(`${config.apiUrl}/profile/equipment/available`);
                 if(res.data.code != 500) {
                     this.gears = res.data;
                 }
@@ -926,7 +928,7 @@ window.axios = require('axios');
             async deleteEquipment(data) {
                 if (confirm('Vứt bỏ vật phẩm này ?')) {
                     this.loading = true;
-                    let res = await axios.post(`${config.apiUrl}/profile/inventory/delete`, {
+                    let res = await axios.post(`${config.apiUrl}/profile/equipment/delete`, {
                         id: data.pivot.id,
                         gear_id: data.id
                     });
@@ -938,33 +940,31 @@ window.axios = require('axios');
                     this.loading = false;
                 }
             },
-            async removeEquipment(data) {
+            async removeEquipment(equipment) {
                 this.loading = true;
-                let res = await axios.post(`${config.apiUrl}/profile/inventory/remove`, {
-                    id: data.pivot.id,
-                    gear_id: data.id
-                });
-                if (page.path == 'inventory.index') {
-                    await this.invetory();
-                }
-                if (page.path == 'oven.gem') {
-                    this.inventoryAvailable();
-                }
-                this.index();
-                this.notify(res.data.message);
-                this.loading = false;
-            },
-            async equipment(data) {
-                this.loading = true;
-                let res = await axios.post(`${config.apiUrl}/profile/inventory/equipment`, {
-                    id: data.pivot.id,
-                    gear_id: data.id
+                let { data } = await axios.post(`${config.apiUrl}/profile/equipment/remove`, {
+                    id: equipment.pivot.id,
+                    gear_id: equipment.id
                 });
                 await this.index();
-                if (page.path == 'inventory.index') {
-                    await this.invetory();
+                if (data.code == 200) {
+                    await this.loadProfile('equipment', true);
                 }
-                this.notify(res.data.message);
+                this.inventoryAvailable();
+                this.notify(data.message);
+                this.loading = false;
+            },
+            async equipment(equipment) {
+                this.loading = true;
+                let { data } = await axios.post(`${config.apiUrl}/profile/equipment/use`, {
+                    id: equipment.pivot.id,
+                    gear_id: equipment.id
+                });
+                await this.index();
+                if (data.code == 200) {
+                    await this.loadProfile('equipment', true);
+                }
+                this.notify(data.message);
                 this.loading = false;
             },
             async buyEquip(item, e) {
@@ -1332,11 +1332,21 @@ window.axios = require('axios');
                 }
             },
             async loadShop(type ,reload = false) {
+                this.modalName = type;
                 this.loading = true;
                 let res = await axios.get(`${config.apiUrl}/shop/${type}`);
                 if(reload || this.shop.length == 0) {
                     this.shop = res.data;
-                    console.log(this.shop);
+                }
+                this.loading = false;
+            },
+            async loadProfile(type, reload = false) {
+                this.modalName = type;
+                this.loading = true;
+                let res = await axios.get(`${config.apiUrl}/profile/${type}`);
+                console.log(res.data);
+                if(reload || this.profileInventory.length == 0 || type == 'item') {
+                    this.profileInventory = res.data;
                 }
                 this.loading = false;
             },

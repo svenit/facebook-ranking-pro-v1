@@ -3,9 +3,8 @@
         <div class="dropdown-menu">
             <div class="text-center dropdown-item-header">Nhân Vật</div>
             <a data-toggle="modal" data-target=".modal-profile" data-toggle-class="modal-open-aside" data-target="body" @click="index()" class="dropdown-item" href="#"><img class="mr-1 pixel baw" width="17px" src="{{ asset('assets/images/icon/Infor.png') }}"> Thông Tin & Chỉ Số</a>
-            <a class="dropdown-item" href="#"><img class="mr-1 pixel baw" width="17px" src="{{ asset('assets/images/icon/Item.png') }}"> Vật Phẩm</a>
-            {{-- <a class="dropdown-item" href="#"><img class="mr-1 pixel baw" width="17px" src="{{ asset('assets/images/icon/Gem.png') }}"> Ngọc Bổ Trợ</a> --}}
-            <a class="dropdown-item" href="#"><img class="mr-1 pixel baw" width="17px" src="{{ asset('assets/images/icon/Shop-Equipment.png') }}"> Trang Bị</a>
+            <a @click="loadProfile('item', false)" data-toggle="modal" data-target=".modal-profile-item" data-toggle-class="modal-open-aside" data-target="body" class="dropdown-item" href="#"><img class="mr-1 pixel baw" width="17px" src="{{ asset('assets/images/icon/Item.png') }}"> Vật Phẩm</a>
+            <a @click="loadProfile('equipment', true)" data-toggle="modal" data-target=".modal-profile-equipment" data-toggle-class="modal-open-aside" data-target="body" class="dropdown-item" href="#"><img class="mr-1 pixel baw" width="17px" src="{{ asset('assets/images/icon/Shop-Equipment.png') }}"> Trang Bị</a>
             <a class="dropdown-item" href="#"><img class="mr-1 pixel baw" width="13px" src="{{ asset('assets/images/icon/Skill.png') }}"> Kỹ Năng</a>
             <a class="dropdown-item" href="#"><img class="mr-1 pixel baw" width="17px" src="{{ asset('assets/images/icon/Pet.png') }}"> Pet</a>
         </div>
@@ -13,7 +12,8 @@
         <p class="text-center mt-2">Nhân Vật</p>
     </div>
     <div data-step="10" data-intro="{{ $intro[9] }}" class="col-auto">
-        <img @click="loadShop('item' ,false)" data-toggle="modal" data-target=".modal-shop" data-toggle-class="modal-open-aside" data-target="body" class="text-center footer-icon pixel" src="{{ asset('assets/images/icon/Shop.png') }}">
+        <img @click="loadShop('item' ,false)" data-toggle="mod
+        al" data-target=".modal-shop" data-toggle-class="modal-open-aside" data-target="body" class="text-center footer-icon pixel" src="{{ asset('assets/images/icon/Shop.png') }}">
         <p class="text-center mt-2">Cửa Hàng</p>
     </div>
     <div data-step="11" data-intro="{{ $intro[10] }}" class="col-auto">

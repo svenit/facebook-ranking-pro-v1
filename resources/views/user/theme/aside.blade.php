@@ -1,4 +1,6 @@
 @include('components.modal-profile')
+@include('components.modal-profile-item')
+@include('components.modal-profile-equipment')
 @include('components.modal-fame')
 @include('components.modal-equipment')
 @include('components.modal-shop')
@@ -316,10 +318,10 @@
                     <div class="col-12 d-flex">
                         <div class="flex">
                                 <div class="text-info">
-                                Level 
-                                @{{ user.level.current_level }} 
-                                <i class="fas fa-arrow-right"></i> 
-                                @{{ user.level.next_level }} 
+                                Level
+                                @{{ user.level.current_level }}
+                                <i class="fas fa-arrow-right"></i>
+                                @{{ user.level.next_level }}
                                 ( @{{ user.level.percent }} % )
                                 <div class="progress my-3 circle" style="height:6px">
                                     <div class="progress-bar circle gd-info"
@@ -437,7 +439,7 @@
                                                         <span>
                                                             <span class="text-gold" style="font-size:12px;font-weight: initial;">@{{ msg.name }}</span>
                                                         </span>
-                                                        <br> 
+                                                        <br>
                                                         <small style="font-size:10px;">@{{ timeAgo(msg.time) }}</small>
                                                         <br>
                                                         <span style="font-size: 13px;font-weight: initial;" class="text-muted">@{{ msg.message }}</span>

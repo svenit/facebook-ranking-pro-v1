@@ -177,14 +177,14 @@
                                                         <div v-for="(gear,index) in data.gears" :key="index" style="margin-bottom:15px" class="col-3 d-flex" data-title="tooltip" title="Click để xem chi tiết" >
                                                             <div class="flex">
                                                                 <div @click="showGearsDescription(gear,1)" style="background-color: #2f2d21;border-radius: 50%;" :class="[`pixel text-center ${gear.shop_tag}`]">
-                                                                    <img class="pixel" style="width: 70px;" src="{{ asset('assets/images/icon/Item-Frame.png') }}">
+                                                                    <img class="pixel" style="width: 70px;" src="{{ asset('assets/images/icon/Equipment-Frame.png') }}">
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div v-for="n in parseInt(8 - data.gears.length)" :key="n + Math.random(1,10)" style="margin-bottom:15px" class="col-3 d-flex">
                                                             <div class="flex">
                                                                 <div style="background-color: #2f2d21;border-radius: 50%;width:68px;height:68px" class="pixel text-center">
-                                                                    <img class="pixel" style="width: 70px;" src="{{ asset('assets/images/icon/Item-Frame.png') }}">
+                                                                    <img class="pixel" style="width: 70px;" src="{{ asset('assets/images/icon/Equipment-Frame.png') }}">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -384,7 +384,7 @@
                                                     <div data-title="tooltip" title="Kháng sát thương vật lý" class="col-auto pixel-font small-font">DEF</div>
                                                     <div class="col-auto">
                                                         <strong class="text-warning pixel-font small-font">
-                                                            @{{ data.stats.data.armor_strength }} 
+                                                            @{{ data.stats.data.armor_strength }}
                                                             <span class="text-success">( x1 )</span>
                                                         </strong>
                                                         <img @click="incrementStat('armor_strength')" style="width:17px" class="ml-2" src="{{ asset('assets/images/icon/Add.png') }}">

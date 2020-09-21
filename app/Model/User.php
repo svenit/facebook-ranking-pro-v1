@@ -182,9 +182,9 @@ class User extends Authenticatable
         $allPower = $this->getPower();
         foreach($this->usingGears() as $gear)
         {
-            foreach($properties as $key => $property) 
+            foreach($properties as $key => $property)
             {
-                $properties[$key] += $gear[$key]['default'];
+                $properties[$key] += $gear[$key]['default'] ?? 0;
                 $percentPower[$key] += $gear[$key]['percent'] ?? 0;
             }
         }
@@ -204,7 +204,7 @@ class User extends Authenticatable
         $helper = new Helper($this->id);
         return $helper->fameBrand();
     }
-    
+
     public function level()
     {
         $helper = new Helper($this->id);

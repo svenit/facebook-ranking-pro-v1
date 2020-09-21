@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
-class InventoryController extends Controller
+class EquipmentController extends Controller
 {
     public function __construct()
     {
@@ -30,11 +30,11 @@ class InventoryController extends Controller
                 if($gear->cate_gear_id == $cate->id)
                 {
                     $gear->gems->load(['gems', 'gemItem']);
-                    $data[Str::slug($cate->name)][$key] = $gear->load('cates','character');
+                    $data[Str::slug($cate->name)][$key] = $gear->load('cates', 'character');
                 }
             }
         }
-        return response()->json(Crypto::encrypt($data),200); 
+        return response()->json(Crypto::encrypt($data),200);
     }
     public function available()
     {
@@ -110,9 +110,9 @@ class InventoryController extends Controller
         }
         return response()->json(Crypto::encrypt($response),200);
     }
-    public function equipment(Request $request)
+    public function use(Request $request)
     {
-        $all =  UserGear::with('gear')->where([['user_id',Auth::id()],['status',1]])->get(); 
+        $all =  UserGear::with('gear')->where([['user_id',Auth::id()],['status',1]])->get();
         $find = UserGear::where([['user_id',Auth::id()],['id',$request->id],['gear_id',$request->gear_id]])->first();
         if(isset($find) && $find->status == 0)
         {
@@ -138,7 +138,7 @@ class InventoryController extends Controller
                         $response = [
                             'code' => 200,
                             'status' => 'success',
-                            'message' => "Đã trang bị ".$find->load('gear')->gear->name." thành công !"
+                            'message' => "Đã trang bị ".$find->load('gear')->gear->name." thành công !",
                         ];
                     }
                     else
