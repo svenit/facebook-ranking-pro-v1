@@ -138,11 +138,11 @@
                                 <div class="p-1 col-lg-6 col-md-6 col-sm-12">
                                     <div class="row">
                                         <div class="col-12">
-                                            <div class="item-preview">
+                                            <div class="item-preview" style="height: 222px;">
                                                 <img style="position: absolute; right: 5%;width: 40px" class="pixel" src="{{ asset('assets/images/icon/Dark-Badge.png') }}">
                                                 <img class="pixel" data-title="tooltip" :title="data.infor.character.name" style="position: absolute; right: 7.5%;width:25px;" :src="asset(`assets/images/class/${data.infor.character.avatar}-icon.png`)">
                                                 @include('components.border')
-                                                <div style="margin:0 auto;position:relative;right:-15px;transform:scaleX(-1)" class="character-sprites hoverable">
+                                                <div style="margin:30px auto;position:relative;right:-15px;transform:scaleX(-1)" class="character-sprites hoverable">
                                                     <span v-if="data.pet" :class="`Mount_Body_${data.pet.class_tag}`"></span>
                                                     <span style="z-index:2" class="skin_f5a76e up-to-down"></span>
                                                     <span style="z-index:2" class="broad_shirt_black up-to-down"></span>
@@ -155,11 +155,7 @@
                                                     <span v-if="data.pet" style="z-index:50" :class="`Mount_Head_${data.pet.class_tag}`"></span>
                                                 </div>
                                                 <div style="margin-bottom:60px" v-if="data.pet"></div>
-                                                <div class="normal-badge">
-                                                    <img class="pixel" src="{{ asset('assets/images/icon/Normal-Badge.png') }}">
-                                                    <span data-title="tooltip" :title="`${data.rank.brand} Rank`" class="pixel-font small-font">@{{ data.rank.brand }}</span>
-                                                </div>
-                                                <div class="footer">
+                                                <div class="footer" style="bottom: 0;position: absolute;width: 100%;">
                                                     <div style="font-size:15px" class="modal-text item-name modal-title text-md text-center">
                                                         <img style="width:17px; height:17px;transform:scaleX(-1)" class="mr-1 pixel" src="{{ asset('assets/images/icon/Bar.png') }}">
                                                         <span class="text-light">@{{ data.infor.name }}</span>

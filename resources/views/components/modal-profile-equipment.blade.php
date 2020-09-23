@@ -75,8 +75,8 @@
                         <div style="background: #f5efd9" class="p-1">
                             <div class="p-2" style="background: #554839">
                                 <div style="padding:10px" class="row">
-                                    <div class="col-lg-3 col-md-3 col-sm-3 shop-menu p-2 hide-in-mobile" style="padding-top:10px !important">
-                                        <div style="margin:0 auto;position: absolute;left: 40%; top: 53%;transform:scaleX(-1)" class="character-sprites hoverable">
+                                    <div class="col-lg-3 col-md-3 col-sm-3 shop-menu p-2 hide-in-mobile" style="position: relative;padding-top:10px !important">
+                                        <div style="margin:0 auto;position: absolute;left: 40%;transform:scaleX(-1)" :style="data.pet ? 'bottom: 27%' : 'bottom: 18%'" class="character-sprites hoverable">
                                             <span v-if="data.pet" :class="`Mount_Body_${data.pet.class_tag}`"></span>
                                             <span style="z-index:2" class="skin_f5a76e up-to-down"></span>
                                             <span style="z-index:2" class="broad_shirt_black up-to-down"></span>

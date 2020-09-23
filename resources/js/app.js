@@ -615,7 +615,7 @@ window.axios = require('axios');
                     this.detailGem.data = data.gem_item;
                     this.detailGem.data.pivot = data.gems;
                 }
-                $('#trigger-gem').click();
+                $('#gem').modal('show');
                 var gear = document.getElementById('gear');
                 gear.classList.remove('show');
                 gear.style.display = 'nonde';
@@ -627,22 +627,21 @@ window.axios = require('axios');
                     data: data,
                     permission: permission
                 };
-                $('#trigger-item').click();
+                $('#item').modal('show');
             },
             showInforPet(data, permission) {
                 this.detailPet = {
                     data: data,
                     permission: permission
                 };
-                $('#trigger-pet').click();
+                $('#pet').modal('show');
             },
             showGearsDescription(data, permission) {
-                console.log(data);
                 this.detailGear = {
                     data: data,
                     permission: permission
                 };
-                $('#trigger-gear').click();
+                $('#gear').modal('show');
             },
             showSkillsDescription(data, permission = null, name = null) {
                 this.detailSkill = {
@@ -650,7 +649,7 @@ window.axios = require('axios');
                     permission: permission,
                     character: name || data.character.name
                 };
-                $('#trigger-skill').click();
+                $('#skill').modal('show');
             },
             async useSkill(id) {
                 this.loading = true;

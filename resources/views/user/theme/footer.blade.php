@@ -12,8 +12,7 @@
         <p class="text-center mt-2">Nhân Vật</p>
     </div>
     <div data-step="10" data-intro="{{ $intro[9] }}" class="col-auto">
-        <img @click="loadShop('item' ,false)" data-toggle="mod
-        al" data-target=".modal-shop" data-toggle-class="modal-open-aside" data-target="body" class="text-center footer-icon pixel" src="{{ asset('assets/images/icon/Shop.png') }}">
+        <img @click="loadShop('item' ,false)" data-toggle="modal" data-target=".modal-shop" data-toggle-class="modal-open-aside" data-target="body" class="text-center footer-icon pixel" src="{{ asset('assets/images/icon/Shop.png') }}">
         <p class="text-center mt-2">Cửa Hàng</p>
     </div>
     <div data-step="11" data-intro="{{ $intro[10] }}" class="col-auto">

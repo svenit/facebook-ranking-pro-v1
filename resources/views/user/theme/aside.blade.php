@@ -547,10 +547,5 @@
 	<script async src="{{ mix('js/bundle.min.js') }}"></script>
 @endpush
 @endif
-<button class="btn btn-white btn-block mb-2" style="display:none" id="trigger-gear" data-toggle="modal" data-target="#gear"></button>
-<button class="btn btn-white btn-block mb-2" style="display:none" id="trigger-pet" data-toggle="modal" data-target="#pet"></button>
-<button class="btn btn-white btn-block mb-2" style="display:none" id="trigger-item" data-toggle="modal" data-target="#item"></button>
-<button class="btn btn-white btn-block mb-2" style="display:none" id="trigger-gem" data-toggle="modal" data-target="#gem"></button>
-<button class="btn btn-white btn-block mb-2" style="display:none" id="trigger-skill" data-toggle="modal" data-target="#skill"></button>
 <button id="show-infor-user" style="display:none" data-toggle="modal" data-target=".modal-right" data-toggle-class="modal-open-aside" data-target="body"></button>
 <button id="show-profile" style="display:none" data-toggle="modal" data-target=".modal-left" data-toggle-class="modal-open-aside" data-target="body"></button>

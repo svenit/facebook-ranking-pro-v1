@@ -114,13 +114,18 @@
                                 <div class="item mt-2">
                                     <div class="row mx-1" v-if="detailGear.permission == 1">
                                         <div v-for="(gem, index) in detailGear.data.gems" :key="index" style="padding:5px" class="col-auto">
-                                            <div style="background-color: #554334;border-radius: 50%;" @click="showGem(gem, detailGear.permission)" :class="`gem ${gem.gem_item.image}`">
+                                            <div data-dismiss="modal" style="background-color: #554334;border-radius: 50%;" @click="showGem(gem, detailGear.permission)" :class="`gem ${gem.gem_item.image}`">
+                                                <img class="pixel" style="width: 50px;" src="{{ asset('assets/images/icon/Gem-Frame.png') }}">
+                                            </div>
+                                        </div>
+                                        <div v-for="n in parseInt(3 - detailGear.data.gems.length)" :key="n" style="padding:5px" class="col-auto">
+                                            <div style="background-color: #554334;border-radius: 50%;" class="">
                                                 <img class="pixel" style="width: 50px;" src="{{ asset('assets/images/icon/Gem-Frame.png') }}">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row mx-1" v-else>
-                                        <div v-for="n in 4" :key="n" style="padding:5px" class="col-auto">
+                                        <div v-for="n in 3" :key="n" style="padding:5px" class="col-auto">
                                             <div style="background-color: #554334;border-radius: 50%;" class="">
                                                 <img class="pixel" style="width: 50px;" src="{{ asset('assets/images/icon/Gem-Frame.png') }}">
                                             </div>
