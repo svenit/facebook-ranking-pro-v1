@@ -1,4 +1,4 @@
-<div v-if="data" class="modal fade modal-profile" data-backdrop="true">
+<div v-if="data" class="modal fade modal-profile" id="your-modal-profile" data-backdrop="true">
     <div style="max-width:700px" class="modal-dialog modal-ui">
         <div class="modal-content" style="position: relative">
             <div v-if="loading" class="loading-in-component loading-spinner-box">
@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div class="modal-header">
-                @include('components.border')
+                <border></border>
                 <span class="modal-text">Nhân Vật</span>
                 <button class="close" data-dismiss="modal">
                     <img style="width:30px" src="{{ asset('assets/images/icon/Close-Light.png') }}">
@@ -50,7 +50,7 @@
                             <div class="row p-2">
                                 <div class="p-1 col-12">
                                     <div style="background: #33301d" class="item-preview">
-                                        @include('components.border')
+                                        <border></border>
                                         <div class="row p-3">
                                             <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                                 <div class="row">
@@ -93,7 +93,7 @@
                                     <div style="background: #d9c8a6">
                                         <div class="row px-3 py-0">
                                             <div class="col-ui spotlight-item item">
-                                                @include('components.border')
+                                                <border></border>
                                                 <img style="width:50px;display:block;margin:10px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
                                                 <p class="text-light pixel-font text-center" style="font-size:11px">Rank</p>
                                                 <h2 class="text-center text-light pixel-font mb-3" style="height:50px">@{{ data.rank.brand }}</h2>
@@ -102,7 +102,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-ui spotlight-item item">
-                                                @include('components.border')
+                                                <border></border>
                                                 <img style="width:50px;display:block;margin:10px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
                                                 <p class="text-light pixel-font text-center" style="font-size:11px">PVP</p>
                                                 <img class="mb-3" style="width:50px;height:50px;display:block;margin:0 auto" :src="asset(`assets/images/icon/${data.rank.pvp.group}.png`)">
@@ -111,7 +111,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-ui spotlight-item item">
-                                                @include('components.border')
+                                                <border></border>
                                                 <img style="width:50px;display:block;margin:10px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
                                                 <p class="text-light pixel-font text-center" style="font-size:11px">Top LC</p>
                                                 <img class="mb-3" style="width:50px;height:50px;display:block;margin:0 auto;object-fit:contain" src="{{ asset('assets/images/icon/Rank.png') }}">
@@ -120,7 +120,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-ui spotlight-item item">
-                                                @include('components.border')
+                                                <border></border>
                                                 <img style="width:50px;display:block;margin:10px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
                                                 <p class="text-light pixel-font text-center" style="font-size:11px">Top Level</p>
                                                 <img class="mb-3" style="width:50px;height:50px;display:block;margin:0 auto;object-fit:contain" src="{{ asset('assets/images/icon/Red-Crown.png') }}">
@@ -141,7 +141,7 @@
                                             <div class="item-preview" style="height: 222px;">
                                                 <img style="position: absolute; right: 5%;width: 40px" class="pixel" src="{{ asset('assets/images/icon/Dark-Badge.png') }}">
                                                 <img class="pixel" data-title="tooltip" :title="data.infor.character.name" style="position: absolute; right: 7.5%;width:25px;" :src="asset(`assets/images/class/${data.infor.character.avatar}-icon.png`)">
-                                                @include('components.border')
+                                                <border></border>
                                                 <div style="margin:30px auto;position:relative;right:-15px;transform:scaleX(-1)" class="character-sprites hoverable">
                                                     <span v-if="data.pet" :class="`Mount_Body_${data.pet.class_tag}`"></span>
                                                     <span style="z-index:2" class="skin_f5a76e up-to-down"></span>
@@ -166,7 +166,7 @@
                                         </div>
                                         <div class="col-12 mt-2">
                                             <div style="position: relative;">
-                                                @include('components.border')
+                                                <border></border>
                                                 <div style="height:158px;background:#514a38" class="item-description">
                                                     <img style="width:50px;display:block;margin:10px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
                                                     <div class="row row-sm p-3">
@@ -192,7 +192,7 @@
                                 </div>
                                 <div class="p-1 col-lg-6 col-md-6 col-sm-12 notranslate">
                                     <div class="stats-preview">
-                                        @include('components.border')
+                                        <border></border>
                                         <div class="item">
                                             <div class="flex">
                                                 <div class="text-silver row justify-content-between">
@@ -201,7 +201,7 @@
                                                 </div>
                                                 <div @click="notify(`Bạn cần ${numberFormatDetail(data.level.next_level_exp - data.level.current_user_exp)} kinh nghiệm nữa để lên cấp`)" class="progress my-3 circle" style="height:12px;border-radius:0px;">
                                                     <div class="progress-bar pixel-font" style="background:#ffdd44;border-radius:0px;color:#333;height:12px" data-title="tooltip" :title="`Bạn cần ${numberFormatDetail(data.level.next_level_exp - data.level.current_user_exp)} kinh nghiệm nữa để lên cấp`" :style="{width:data.level.percent + '%'}">
-                                                        <span style="font-size:6px;margin-bottom:3px">@{{ data.level.next_level_exp }}/@{{ data.level.current_user_exp }}</span>
+                                                        <span style="font-size:6px;margin-bottom:3px">@{{ data.level.current_user_exp }}/@{{ data.level.next_level_exp }}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -223,7 +223,7 @@
                                             <div class="flex">
                                                 <div class="text-silver row justify-content-between">
                                                     <div data-title="tooltip" title="Sinh lực" class="col-auto pixel-font small-font">HP</div>
-                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.raw_power.hp }} <span class="text-success">( +@{{ data.power.hp - data.raw_power.hp }} )</span></strong></div>
+                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.power.hp }} ( <span class="text-gold">@{{ data.raw_power.hp }}</span> + <span class="text-success">@{{ data.power.hp - data.raw_power.hp }} )</span></strong></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -231,7 +231,7 @@
                                             <div class="flex">
                                                 <div class="text-silver row justify-content-between">
                                                     <div data-title="tooltip" title="Sát thương vật lý" class="col-auto pixel-font small-font">STR</div>
-                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.raw_power.strength }} <span class="text-success">( +@{{ data.power.strength - data.raw_power.strength }} )</span></strong></div>
+                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.power.strength }} ( <span class="text-gold">@{{ data.raw_power.strength }}</span> + <span class="text-success">@{{ data.power.strength - data.raw_power.strength }} )</span></strong></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -239,7 +239,7 @@
                                             <div class="flex">
                                                 <div class="text-silver row justify-content-between">
                                                     <div data-title="tooltip" title="Sát thương phép thuật" class="col-auto pixel-font small-font">INT</div>
-                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.raw_power.intelligent }} <span class="text-success">( +@{{ data.power.intelligent - data.raw_power.intelligent }} )</span></strong></div>
+                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.power.intelligent }} ( <span class="text-gold">@{{ data.raw_power.intelligent }}</span> + <span class="text-success">@{{ data.power.intelligent - data.raw_power.intelligent }} )</span></strong></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -247,7 +247,7 @@
                                             <div class="flex">
                                                 <div class="text-silver row justify-content-between">
                                                     <div data-title="tooltip" title="Nhanh nhẹn" class="col-auto pixel-font small-font">AGI</div>
-                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.raw_power.agility }} <span class="text-success">( +@{{ data.power.agility - data.raw_power.agility }} )</span></strong></div>
+                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.power.agility }} ( <span class="text-gold">@{{ data.raw_power.agility }}</span> + <span class="text-success">@{{ data.power.agility - data.raw_power.agility }} )</span></strong></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -255,7 +255,7 @@
                                             <div class="flex">
                                                 <div class="text-silver row justify-content-between">
                                                     <div data-title="tooltip" title="May mắn" class="col-auto pixel-font small-font">LUK</div>
-                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.raw_power.lucky }} <span class="text-success">( +@{{ data.power.lucky - data.raw_power.lucky }} )</span></strong></div>
+                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.power.lucky }} ( <span class="text-gold">@{{ data.raw_power.lucky }}</span> + <span class="text-success">@{{ data.power.lucky - data.raw_power.lucky }} )</span></strong></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -263,7 +263,7 @@
                                             <div class="flex">
                                                 <div class="text-silver row justify-content-between">
                                                     <div data-title="tooltip" title="Kháng sát thương vật lý" class="col-auto pixel-font small-font">DEF</div>
-                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.raw_power.armor_strength }} <span class="text-success">( +@{{ data.power.armor_strength - data.raw_power.armor_strength }} )</span></strong></div>
+                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.power.armor_strength }} ( <span class="text-gold">@{{ data.raw_power.armor_strength }}</span> + <span class="text-success">@{{ data.power.armor_strength - data.raw_power.armor_strength }} )</span></strong></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -271,7 +271,7 @@
                                             <div class="flex">
                                                 <div class="text-silver row justify-content-between">
                                                     <div data-title="tooltip" title="Kháng phép" class="col-auto pixel-font small-font">AM</div>
-                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.raw_power.armor_intelligent }} <span class="text-success">( +@{{ data.power.armor_intelligent - data.raw_power.armor_intelligent }} )</span></strong></div>
+                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.power.armor_intelligent }} ( <span class="text-gold">@{{ data.raw_power.armor_intelligent }}</span> + <span class="text-success">@{{ data.power.armor_intelligent - data.raw_power.armor_intelligent }} )</span></strong></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -283,7 +283,7 @@
                             <div class="row p-2">
                                 <div class="col-12 mb-1 p-1">
                                     <div class="item-preview">
-                                        @include('components.border')
+                                        <border></border>
                                         <p class="px-3 pt-3">Tăng điểm chỉ số sức mạnh của bạn</p>
                                     </div>
                                 </div>
@@ -291,7 +291,7 @@
                                     <div style="background: #343521;" class="item-preview">
                                         <img style="position: absolute; right: 5%;width: 40px" class="pixel" src="{{ asset('assets/images/icon/Dark-Badge.png') }}">
                                         <img class="pixel" data-title="tooltip" :title="data.infor.character.name" style="position: absolute; right: 7.5%;width:25px;" :src="asset(`assets/images/class/${data.infor.character.avatar}-icon.png`)">
-                                        @include('components.border')
+                                        <border></border>
                                         <img width="60%" class="pixel" style="display:block;margin:0 auto" src="{{ asset('assets/images/icon/Stats-Point.png') }}">
                                         <div class="normal-badge" style="margin-bottom:4.2rem">
                                             <img style="width:150px;height:60px" src="{{ asset('assets/images/icon/Red-Ribon.png') }}" class="pixel">
@@ -303,7 +303,7 @@
                                 </div>
                                 <div class="p-1 col-lg-6 col-md-6 col-sm-12 notranslate">
                                     <div class="stats-preview">
-                                        @include('components.border')
+                                        <border></border>
                                         <div class="item mt-2">
                                             <div class="flex">
                                                 <div class="text-silver row justify-content-between">

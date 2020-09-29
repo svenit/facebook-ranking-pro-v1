@@ -1,6 +1,8 @@
 window.Vue = require('vue');
 window.axios = require('axios');
 
+import './components/index';
+
 (() => {
     var CryptoJSAesJson = {
         stringify: function (cipherParams) {
@@ -172,40 +174,7 @@ window.axios = require('axios');
                 skills: [],
                 pet: {},
             },
-            user: {
-                infor: {
-                    name: "",
-                    character: {
-                        name: "",
-                        avatar: ""
-                    },
-                    exp: 0,
-                    coins: 'Đang tải...',
-                    gold: 'Đang tải...',
-                    provider_id: "0",
-                    active: ""
-                },
-                rank: {
-                    brand: 'E'
-                },
-                level: {
-                    next_level: "0",
-                    next_level_exp: 0,
-                    current_level: 0,
-                    current_user_exp: 0,
-                    percent: 0
-                },
-                power: {
-                    total: 'Đang tải...',
-                    hp: 0,
-                    strength: 0,
-                    agility: 0,
-                    intelligent: 0,
-                    lucky: 0
-                },
-                gears: [],
-                skills: []
-            },
+            user: {},
             wheel: {
                 spinning: false
             },
@@ -221,6 +190,7 @@ window.axios = require('axios');
             },
             shop: [],
             profileInventory: [],
+            userUtil: [],
             inventory: {},
             gears: [],
             pets: [],
@@ -255,6 +225,8 @@ window.axios = require('axios');
         },
         async created() {
             try {
+                this.user = Object.assign({}, this.data);
+                this.console();
                 this.firebase = firebase;
                 firebase = '';
                 this.token = await this.bind(document.getElementById('main').getAttribute('data-id'));
@@ -319,6 +291,7 @@ window.axios = require('axios');
             }
             catch(e) {
                 Swal.fire('', 'Đã có lỗi xảy ra, xin vui lòng tải lại trang', 'error');
+                console.error(e);
             }
             this.loading = false;
             this.flash = false;
@@ -443,7 +416,7 @@ window.axios = require('axios');
             async postLocation() {
                 navigator.geolocation.getCurrentPosition(async (e) => {
                     if (e.coords && !sessionStorage.getItem('location')) {
-                        await axios.post(`${config.apiUrl}/set-location`, {
+                        await axios.post(`${config.apiUrl}/user-utils/set-location`, {
                             lat: e.coords.latitude,
                             lng: e.coords.longitude,
                             bearer: config.bearer
@@ -531,11 +504,11 @@ window.axios = require('axios');
                 else {
                     if(permission) {
                         this.index();
-                        $('#show-profile').click();
+                        $('#your-modal-profile').click();
                         return;
                     }
                     this.user = data;
-                    $('#show-infor-user').click();
+                    $('#user-modal-profile').modal('show');
                 }
             },
             fightSkill(skill) {
@@ -683,10 +656,10 @@ window.axios = require('axios');
             async showUserInfor(id) {
                 try {
                     this.loading = true;
+                    $('#user-modal-profile').modal('show');
                     let res = await axios.get(`${config.apiUrl}/user/${id}`);
                     this.user = res.data;
                     this.loading = false;
-                    $('#show-infor-user').click();
                 } catch (e) {
                     this.loading = false;
                     this.notify('Đã có lỗi xảy ra, xin vui lòng thử lại');
@@ -768,7 +741,7 @@ window.axios = require('axios');
                 }, 3000);
                 this.loading = false;
             },
-            async sendMessage(type) {
+            async sendMessage(type, channel) {
                 try {
                     if(!this.data.infor.config.canChatInGlobal){
                         return Swal.fire('', 'Bạn đã bị cấm chat trong kênh này', 'error');
@@ -781,16 +754,20 @@ window.axios = require('axios');
                         if(commands.includes(this.chat.text) && this.data.infor.isAdmin == 1) {
                             switch(this.chat.text) {
                                 case 'sudo clear --all':
-                                    await this.firebase.database().ref('global').remove();
+                                    await this.firebase.database().ref(channel).remove();
                                     this.chat.messages = [];
                                     Swal.fire('', 'Đã xóa hết tin nhắn', 'success');
                                 break;
                             }
                             return;
                         }
-                        await this.firebase.database().ref('global').push({
-                            id: user.provider_id,
-                            name: user.name,
+                        let { name, provider_id, uid } = this.data.infor;
+                        let { icon } = this.data.rank.fame;
+                        await this.firebase.database().ref(channel).push({
+                            uid,
+                            provider_id,
+                            name,
+                            fameRank: icon,
                             time: new Date().getTime(),
                             message: this.chat.text,
                             type: type
@@ -799,6 +776,7 @@ window.axios = require('axios');
                         this.gotoBottomChat();
                     }
                 } catch (e) {
+                    console.log(e);
                     this.notify('Đã có lỗi xảy ra');
                 }
             },
@@ -931,9 +909,7 @@ window.axios = require('axios');
                         id: data.pivot.id,
                         gear_id: data.id
                     });
-                    if (page.path == 'inventory.index') {
-                        await this.invetory();
-                    }
+                    await this.loadProfile('equipment', true);
                     this.index();
                     this.notify(res.data.message);
                     this.loading = false;
@@ -945,7 +921,7 @@ window.axios = require('axios');
                     id: equipment.pivot.id,
                     gear_id: equipment.id
                 });
-                await this.index();
+                this.index();
                 if (data.code == 200) {
                     await this.loadProfile('equipment', true);
                 }
@@ -959,7 +935,7 @@ window.axios = require('axios');
                     id: equipment.pivot.id,
                     gear_id: equipment.id
                 });
-                await this.index();
+                this.index();
                 if (data.code == 200) {
                     await this.loadProfile('equipment', true);
                 }
@@ -1343,9 +1319,17 @@ window.axios = require('axios');
                 this.modalName = type;
                 this.loading = true;
                 let res = await axios.get(`${config.apiUrl}/profile/${type}`);
-                console.log(res.data);
                 if(reload || this.profileInventory.length == 0 || type == 'item') {
                     this.profileInventory = res.data;
+                }
+                this.loading = false;
+            },
+            async loadUserUtil(type, reload = false) {
+                this.modalName = type;
+                this.loading = true;
+                let res = await axios.get(`${config.apiUrl}/user-utils/${type}`);
+                if(reload || this.userUtil.length == 0) {
+                    this.userUtil = res.data;
                 }
                 this.loading = false;
             },
@@ -1353,6 +1337,9 @@ window.axios = require('axios');
                 let nextFame = parseInt(this.data.rank.fame.next.point);
                 let currentFame = parseInt(this.data.infor.fame);
                 return nextFame - currentFame > 0 ? (currentFame/nextFame)*100 : 100;
+            },
+            console() {
+                console.log("\n %c %c %c " + config.appName + " - Version: " + config.appVersion + " - Developed by " + config.maintainer + " -  %c  %c  "+ config.root +"  %c %c ♥%c♥%c♥ \n\n", "background: #ff66a5; padding:5px 0;", "background: #ff66a5; padding:5px 0;", "color: #ff66a5; background: #030307; padding:5px 0;", "background: #ff66a5; padding:5px 0;", "background: #ffc3dc; padding:5px 0;", "background: #ff66a5; padding:5px 0;", "color: #ff2424; background: #fff; padding:5px 0;", "color: #ff2424; background: #fff; padding:5px 0;", "color: #ff2424; background: #fff; padding:5px 0;");
             }
         },
     });

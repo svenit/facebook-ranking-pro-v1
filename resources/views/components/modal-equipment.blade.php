@@ -1,7 +1,7 @@
 <div id="gear" v-if="detailGear.data" class="modal fade gear top-off" data-backdrop="true" aria-hidden="true" style="display: none;">
     <div style="max-width:700px" class="modal-dialog modal-ui">
         <div style="position: relative;" class="lighting-box modal-content">
-            @include('components.border')
+            <border></border>
             <div class="modal-header">
                 <span class="modal-text">Trang Bị</span>
                 <button class="close" data-dismiss="modal">
@@ -18,7 +18,7 @@
                                         <span style="padding:10px;font-weight:bold">[ @{{ detailGear.data.cates.name }} ]</span>
                                         <img style="position: absolute; right: 5%;width: 40px" class="pixel" src="{{ asset('assets/images/icon/Dark-Badge.png') }}">
                                         <img class="pixel" style="position: absolute; right: 7.5%;width:25px;" :src="asset(`assets/images/class/${detailGear.data.character.avatar}-icon.png`)">
-                                        @include('components.border')
+                                        <border></border>
                                         <div style="margin:42px auto;background-color: #554334;border-radius: 50%;" :class="[`pixel text-center ${detailGear.data.shop_tag}`]">
                                             <img class="pixel" style="width: 70px;" src="{{ asset('assets/images/icon/Equipment-Frame.png') }}">
                                         </div>
@@ -37,7 +37,7 @@
                                 </div>
                                 <div class="col-12 mt-2">
                                     <div class="item-description">
-                                        @include('components.border')
+                                        <border></border>
                                         <img style="width:50px;display:block;margin:10px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
                                         <p style="color:#706753;font-size:12px;margin:10px">@{{ detailGear.data.description ?? 'Không có mô tả nào về trang bị này' }}</p>
                                     </div>
@@ -46,7 +46,7 @@
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 notranslate p-1">
                             <div class="stats-preview">
-                                @include('components.border')
+                                <border></border>
                                 <div class="item">
                                     <div class="flex">
                                         <div class="text-silver row justify-content-between">
@@ -118,14 +118,14 @@
                                                 <img class="pixel" style="width: 50px;" src="{{ asset('assets/images/icon/Gem-Frame.png') }}">
                                             </div>
                                         </div>
-                                        <div v-for="n in parseInt(3 - detailGear.data.gems.length)" :key="n" style="padding:5px" class="col-auto">
+                                        <div v-for="n in parseInt(detailGear.data.max_gems - detailGear.data.gems.length)" :key="n" style="padding:5px" class="col-auto">
                                             <div style="background-color: #554334;border-radius: 50%;" class="">
                                                 <img class="pixel" style="width: 50px;" src="{{ asset('assets/images/icon/Gem-Frame.png') }}">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row mx-1" v-else>
-                                        <div v-for="n in 3" :key="n" style="padding:5px" class="col-auto">
+                                        <div v-for="n in detailGear.data.max_gems" :key="n" style="padding:5px" class="col-auto">
                                             <div style="background-color: #554334;border-radius: 50%;" class="">
                                                 <img class="pixel" style="width: 50px;" src="{{ asset('assets/images/icon/Gem-Frame.png') }}">
                                             </div>

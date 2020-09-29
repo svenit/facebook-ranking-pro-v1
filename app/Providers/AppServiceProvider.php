@@ -9,7 +9,7 @@ use App\Model\Character;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Cache;
+use App\Services\RedisCache;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        
+
     }
 
     /**
@@ -37,15 +37,15 @@ class AppServiceProvider extends ServiceProvider
         Carbon::setLocale('vi');
         Schema::defaultStringLength(191);
         Validator::extend('recaptcha', 'App\Validators\ReCaptcha@validate');
-        
+
         if(Schema::hasTable('cate_gears'))
         {
-            View::composer(['user.theme.aside', 'app'], function ($view) 
+            View::composer(['user.theme.aside', 'app'], function ($view)
             {
-                $cateGears = Cache::rememberForever('menuShop', function () {
+                $cateGears = RedisCache::rememberForever('menuShop', function () {
                     return CateGear::all();
-                }); 
-                $characters = Cache::rememberForever('characters', function () {
+                });
+                $characters = RedisCache::rememberForever('characters', function () {
                     return Character::where('id', '!=', env('NO_CHARACTER_ID'))->get();
                 });
                 $user = Auth::user();
@@ -69,7 +69,7 @@ class AppServiceProvider extends ServiceProvider
                     'menuShop' => $cateGears,
                     'characters' => $characters,
                     'intro' => $intro,
-                ]);  
+                ]);
             });
         }
     }

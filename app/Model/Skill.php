@@ -6,25 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Skill extends Model
 {
-    protected $fillable = [
-        'name',
-        'character_id',
-        'image',
-        'animation',
-        'power_value',
-        'power_type',
-        'type',
-        'description',
-        'required_level',
-        'passive',
-        'energy',
-        'success_rate',
-        'rgb',
-        'price',
-        'price_type',
-        'status',
-        'effect_value'
-    ];
+    protected $guarded = [];
+
     protected $casts = [
         'effect_value' => 'array',
         'stat' => 'array',

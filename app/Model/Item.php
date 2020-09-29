@@ -6,10 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
 {
-    protected $fillable = [
-        'name','description','class_tag','query','success_rate','price',
-        'price_type','status'
-    ];
+    protected $guarded = [];
+
     protected $hidden = [
         'query','created_at','updated_at'
     ];

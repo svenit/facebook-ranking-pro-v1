@@ -12,7 +12,7 @@
                     <div :style="{width:data.level.percent + '%', height:'3px', backgroundColor: '#37a8d8'}"></div>
                 </div>
                 <span style="background:#524839;padding:0px 10px;border-radius:3px;font-size:12px;">
-                    {{ Auth::user()->name }}
+                    @{{ data.infor.name }}
                 </span>
             </div>
         </div>
@@ -62,6 +62,12 @@
                     <img class="pixel" style="width:17px" src="{{ asset('assets/images/icon/Add.png') }}">
                 </div>
             </li>
+            <li @click="gotoBottomChat" data-toggle="modal" data-target="#global-chat" class="icon-badge row pt-3 mr-4 justify-content-between">
+                <img style="width:50px" src="{{ asset('assets/images/icon/Chat-Box.png') }}">
+            </li>
+            <li class="icon-badge row pt-3 mr-4 justify-content-between">
+                <img style="width:50px" src="{{ asset('assets/images/icon/App-Grid.png') }}">
+            </li>
             @auth
             {{-- <li class="nav-item dropdown"><a class="nav-link px-2 mr-lg-2" data-toggle="dropdown">
                 <img src="https://web.simple-mmo.com/img/icons/one/icon027.png"> <span class="badge badge-pill badge-up bg-primary">{{ $notifications['unread'] ?? 0 }}</span></a>
@@ -104,9 +110,9 @@
                     class="nav-link d-flex align-items-center px-2 text-color"><span class="avatar w-24"
                         style="margin: -2px"><img src="{{ Auth::check() ? 'http://graph.facebook.com/'.Auth::user()->provider_id.'/picture?type=normal' : 'https://image.flaticon.com/icons/png/512/149/149071.png' }}" alt="..."></span></a>
                 <div class="dropdown-menu dropdown-menu-right w mt-3 animate fadeIn">
-                    
+
                     <a class="dropdown-item"
-                        href=""><span>{{ Auth::user()->name ?? 'Xin chào, Khách' }}</span> 
+                        href=""><span>{{ Auth::user()->name ?? 'Xin chào, Khách' }}</span>
                     </a>
                     @guest
                     <a class="dropdown-item"

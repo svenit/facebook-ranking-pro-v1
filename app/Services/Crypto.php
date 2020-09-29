@@ -22,10 +22,10 @@ class Crypto
         $data = openssl_decrypt($ct, 'aes-256-cbc', $key, true, $iv);
         return json_decode($data, true);
     }
-    
+
     public static function encrypt($value)
     {
-        if(env('APP_ENCRYPT_API')) 
+        if(env('APP_ENCRYPT_API'))
         {
             $salt = openssl_random_pseudo_bytes(8);
             $salted = '';

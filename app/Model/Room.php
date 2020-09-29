@@ -6,9 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Room extends Model
 {
-    protected $fillable = [
-        'id','name','password','people'
-    ];
+    protected $guarded = [];
+
     protected $hidden = [
         'password'
     ];

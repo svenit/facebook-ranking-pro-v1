@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Model\Config;
 use App\Income\Helper;
 use App\Model\Tracking;
+use App\Services\RedisCache;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
@@ -87,15 +87,15 @@ class Controller extends BaseController
     public function clearMyCache()
     {
         $userId = Auth::id();
-        Cache::forget("user-{$userId}");
+        $this->removeCache("user-{$userId}");
     }
     public function removeCache($key)
     {
-        Cache::forget($key);
+        RedisCache::delete($key);
     }
     public function removeAllCache()
     {
-        Cache::flush();
+        RedisCache::delete('*');
     }
     public function config()
     {

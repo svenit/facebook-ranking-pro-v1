@@ -19,11 +19,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'user_id','provider_id', 'discord_id','character_id','coins',
-        'exp','isAdmin','config',
-        'name', 'email', 'password','location','status','stats','stat_points'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -152,7 +148,7 @@ class User extends Authenticatable
     public function getPower()
     {
         $properties = [
-            'health_points' => 3,
+            'health_points' => 2,
             'strength' => 1.5,
             'intelligent' => 1.5,
             'agility' => 1,
@@ -161,8 +157,7 @@ class User extends Authenticatable
             'armor_intelligent' => 1
         ];
         $power = [];
-        foreach($properties as $key => $property)
-        {
+        foreach ($properties as $key => $property) {
             $power[$key] = (((collect($this->usingPets())->sum($key) + collect($this->usingGems())->sum($key) + ($this->stats()[$key] ?? 0) + ($this[$key])) * $property) * $this->relife());
         }
         return collect($power);

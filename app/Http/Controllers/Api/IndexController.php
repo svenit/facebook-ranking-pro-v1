@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Model\User;
 use App\Income\Helper;
 use App\Services\Crypto;
+use App\Services\RedisCache;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 
 class IndexController extends Controller
 {
@@ -25,24 +25,26 @@ class IndexController extends Controller
         {
             $ttl = 60 * 24;
             $helper = new Helper($findUser->id);
-            return Cache::remember("user-{$findUser->id}", $ttl, function () use($helper, $findUser){
+            $user = $helper->user();
+            $userPower = $helper->power();
+            return RedisCache::remember("user-{$findUser->id}", $ttl, function () use($helper, $user, $userPower, $findUser){
                 return response()->json(Crypto::encrypt([
                     'infor' => [
-                        'uid' => $helper->user()->id,
-                        'name' => $helper->user()->name,
+                        'uid' => $user->id,
+                        'name' => $user->name,
                         'character' => [
                             'name' => $helper->character()->name,
                             'avatar' => $helper->character()->avatar
                         ],
-                        'exp' => (int)$helper->user()->exp,
+                        'exp' => (int)$user->exp,
                         'coins' => $helper->coins(),
                         'gold' => $helper->gold(),
-                        'pvp_points' => $helper->user()->pvp_points,
-                        'fame' => $helper->user()->fame,
-                        'provider_id' => $helper->user()->provider_id,
-                        'energy' => $helper->user()->energy,
-                        'isAdmin' => $helper->user()->isAdmin,
-                        'config' => $helper->user()->config
+                        'pvp_points' => $user->pvp_points,
+                        'fame' => $user->fame,
+                        'provider_id' => $user->provider_id,
+                        'energy' => $user->energy,
+                        'isAdmin' => $user->isAdmin,
+                        'config' => $user->config
                     ],
                     'rank' => [
                         'brand' => $helper->rank(),
@@ -55,32 +57,32 @@ class IndexController extends Controller
                         'pvp' => $helper->getRank('pvp_points'),
                         'level' => $helper->getRank('exp'),
                     ],
-                    'stats' => Auth::id() == $findUser->id ? $helper->stats() : [],
+                    'stats' => $this->isOwnerData($findUser->id, $helper->stats()),
                     'level' => $helper->nextLevel(),
                     'raw_power' => [
-                        'hp' => $helper->user()['health_points'],
-                        'strength' => $helper->user()['strength'],
-                        'agility' => $helper->user()['agility'],
-                        'intelligent' => $helper->user()['intelligent'],
-                        'lucky' => $helper->user()['lucky'],
-                        'energy' => $helper->user()->default_energy,
-                        'armor_strength' => $helper->user()['armor_strength'],
-                        'armor_intelligent' => $helper->user()['armor_intelligent'],
+                        'hp' => $user['health_points'],
+                        'strength' => $user['strength'],
+                        'agility' => $user['agility'],
+                        'intelligent' => $user['intelligent'],
+                        'lucky' => $user['lucky'],
+                        'energy' => $user->default_energy,
+                        'armor_strength' => $user['armor_strength'],
+                        'armor_intelligent' => $user['armor_intelligent'],
                     ],
                     'power' => [
                         'total' => $helper->fullPower($findUser->id),
-                        'hp' => $helper->power()['health_points'],
-                        'strength' => $helper->power()['strength'],
-                        'agility' => $helper->power()['agility'],
-                        'intelligent' => $helper->power()['intelligent'],
-                        'lucky' => $helper->power()['lucky'],
+                        'hp' => $userPower['health_points'],
+                        'strength' => $userPower['strength'],
+                        'agility' => $userPower['agility'],
+                        'intelligent' => $userPower['intelligent'],
+                        'lucky' => $userPower['lucky'],
                         'energy' => $helper->character()->default_energy,
-                        'armor_strength' => $helper->power()['armor_strength'],
-                        'armor_intelligent' => $helper->power()['armor_intelligent'],
+                        'armor_strength' => $userPower['armor_strength'],
+                        'armor_intelligent' => $userPower['armor_intelligent'],
                     ],
                     'pet' => $helper->usingPets()->first(),
                     'gears' => $helper->usingGears(),
-                    'skills' => Auth::id() == $findUser->id ? $helper->usingSkills() : []
+                    'skills' => $this->isOwnerData($findUser->id, $helper->usingSkills())
                 ]),200);
             });
         }
@@ -91,6 +93,11 @@ class IndexController extends Controller
             'message' => 'Không tìm thấy người này',
             'time' => now(),
         ]),200);
+    }
+
+    public function isOwnerData($userId, $data)
+    {
+        return Auth::id() == $userId ? $data : [];
     }
 
     public function verifyToken(Request $request)

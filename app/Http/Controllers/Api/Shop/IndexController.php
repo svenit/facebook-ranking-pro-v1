@@ -12,13 +12,13 @@ use App\Services\Crypto;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Cache;
+use App\Services\RedisCache;
 
 class IndexController extends Controller
 {
     public function item()
     {
-        $items = Cache::rememberForever('shop.item', function () {
+        $items = RedisCache::rememberForever('shop.item', function () {
             return Item::where('status', 1)->get();
         });
         return response()->json(Crypto::encrypt($items), 200);
@@ -26,7 +26,7 @@ class IndexController extends Controller
 
     public function gems()
     {
-        $gems = Cache::rememberForever('gem.item', function () {
+        $gems = RedisCache::rememberForever('gem.item', function () {
             return Gem::where('status', 1)->get();
         });
         return response()->json(Crypto::encrypt($gems), 200);
@@ -34,7 +34,7 @@ class IndexController extends Controller
 
     public function pet()
     {
-        $pets = Cache::rememberForever('shop.pet', function () {
+        $pets = RedisCache::rememberForever('shop.pet', function () {
             return Pet::where('status',1)->get();
         });
         return response()->json(Crypto::encrypt($pets), 200);
@@ -42,7 +42,7 @@ class IndexController extends Controller
 
     public function skill()
     {
-        $skills = Cache::rememberForever('shop.skill', function () {
+        $skills = RedisCache::rememberForever('shop.skill', function () {
             return Character::with('skills')->where([['id', '!=', env('NO_CHARACTER_ID')]])->get();
         });
         $formatSkills = [];
@@ -53,7 +53,7 @@ class IndexController extends Controller
     }
 
     public function equipment($cate) {
-        $equips = Cache::rememberForever("shop.$cate", function () use ($cate) {
+        $equips = RedisCache::rememberForever("shop.$cate", function () use ($cate) {
             $allCates = CateGear::all();
             $characterGears = [];
             foreach($allCates as $cates)
@@ -68,11 +68,11 @@ class IndexController extends Controller
                     break;
                 }
             }
-            return $characterGears;            
+            return $characterGears;
         });
         if(empty($equips)) {
             abort(404);
         }
-        return response()->json(Crypto::encrypt($equips), 200); 
+        return response()->json(Crypto::encrypt($equips), 200);
     }
 }

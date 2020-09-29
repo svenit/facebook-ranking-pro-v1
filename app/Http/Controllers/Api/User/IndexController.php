@@ -39,4 +39,10 @@ class IndexController extends Controller
             ->get();
         return response()->json(Crypto::encrypt($users),200);
     }
+
+    public function getAllFames()
+    {
+        $allFames = config('game.fame');
+        return response()->json(Crypto::encrypt($allFames), 200);
+    }
 }

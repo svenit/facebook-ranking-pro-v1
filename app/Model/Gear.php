@@ -6,12 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Gear extends Model
 {
-    protected $fillable = [
-        'name','class_tag','shop_tag','character_id','cate_gear_id',
-        'strength','intelligent','agility','lucky','armor_strength',
-        'armor_intelligent','health_points','description','rgb','level_required',
-        'price','price_type','status'
-    ];
+    protected $guarded = [];
+
     protected $casts = [
         'strength' => 'array',
         'intelligent' => 'array',

@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div style="position: relative" class="modal-header">
-                @include('components.border')
+                <border></border>
                 <span class="modal-text">Cửa Hàng</span>
                 <div style="position: absolute;top:55%;right:8%" class="row">
                     <li class="shop-icon-badge icon-badge row justify-content-between mr-4">
@@ -122,13 +122,13 @@
                                                         <div class="row p-2">
                                                             <div class="p-1 col-12">
                                                                 <div class="item-preview px-3 pt-3 shop-background pixel">
-                                                                    @include('components.border')
+                                                                    <border></border>
                                                                     <img class="pixel" width="120px" src="{{ asset('assets/images/icon/Seller.png') }}">
                                                                 </div>
                                                             </div>
                                                             <div class="p-1 col-12">
                                                                 <div style="background: #33301d" class="item-preview">
-                                                                    @include('components.border')
+                                                                    <border></border>
                                                                     <div style="max-height:330px;overflow:auto" class="row px-4 py-2">
                                                                         <div v-for="(item, index) in shop" :key="index" v-if="item.hot" class="col-ui col-ui-divide spotlight-item special-item">
                                                                             <img style="position: absolute;top:0;left:0;width:40px" src="{{ asset('assets/images/icon/Hot-Ribbon.png') }}">
@@ -148,13 +148,13 @@
                                                         <div class="row p-2">
                                                             <div class="p-1 col-12">
                                                                 <div class="item-preview px-3 pt-3 pixel shop-background">
-                                                                    @include('components.border')
+                                                                    <border></border>
                                                                     <img class="pixel" width="120px" src="{{ asset('assets/images/icon/Seller.png') }}">
                                                                 </div>
                                                             </div>
                                                             <div class="p-1 col-12">
                                                                 <div style="background: #33301d" class="item-preview">
-                                                                    @include('components.border')
+                                                                    <border></border>
                                                                     <div style="max-height:330px;overflow:auto" class="row px-4 py-2">
                                                                         <div v-for="(item, index) in shop" :key="index" class="col-ui col-ui-divide softlight-item item">
                                                                             <img style="width:50px;display:block;margin:7px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
@@ -173,13 +173,13 @@
                                                         <div class="row p-2">
                                                             <div class="p-1 col-12">
                                                                 <div class="item-preview px-3 pt-3 pixel shop-background">
-                                                                    @include('components.border')
+                                                                    <border></border>
                                                                     <img class="pixel" width="120px" src="{{ asset('assets/images/icon/Seller.png') }}">
                                                                 </div>
                                                             </div>
                                                             <div class="p-1 col-12">
                                                                 <div style="background: #33301d" class="item-preview">
-                                                                    @include('components.border')
+                                                                    <border></border>
                                                                     <div style="max-height:330px;overflow:auto" class="row px-4 py-2">
                                                                         <div v-for="(gem, index) in shop" :key="index" class="col-ui col-ui-divide softlight-item item">
                                                                             <img style="width:50px;display:block;margin:7px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
@@ -216,13 +216,13 @@
                                                         <div class="row p-2">
                                                             <div class="p-1 col-12">
                                                                 <div class="item-preview px-3 pt-3 pixel shop-background">
-                                                                    @include('components.border')
+                                                                    <border></border>
                                                                     <img class="pixel" width="120px" src="{{ asset('assets/images/icon/Seller.png') }}">
                                                                 </div>
                                                             </div>
                                                             <div class="p-1 col-12">
                                                                 <div style="background: #33301d" class="item-preview">
-                                                                    @include('components.border')
+                                                                    <border></border>
                                                                     <div style="max-height:330px;overflow:auto" class="row px-4 py-2">
                                                                         <div v-for="(item, index) in shop.{{ $character->avatar }}" :key="index" class="col-ui col-ui-divide softlight-item item">
                                                                             <img style="width:50px;display:block;margin:7px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
@@ -260,13 +260,13 @@
                                                         <div class="row p-2">
                                                             <div class="p-1 col-12">
                                                                 <div class="item-preview px-3 pt-3 pixel shop-background">
-                                                                    @include('components.border')
+                                                                    <border></border>
                                                                     <img class="pixel" width="120px" src="{{ asset('assets/images/icon/Seller.png') }}">
                                                                 </div>
                                                             </div>
                                                             <div class="p-1 col-12">
                                                                 <div style="background: #33301d" class="item-preview">
-                                                                    @include('components.border')
+                                                                    <border></border>
                                                                     <div style="max-height:330px;overflow:auto" class="row px-4 py-2">
                                                                         <div v-for="(skill, index) in shop.{{ $character->avatar }}" :key="index" class="col-ui col-ui-divide softlight-item item">
                                                                             <img style="width:50px;display:block;margin:7px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
@@ -301,13 +301,13 @@
                                                         <div class="row p-2">
                                                             <div class="p-1 col-12">
                                                                 <div class="item-preview px-3 pt-3 shop-background pixel">
-                                                                    @include('components.border')
+                                                                    <border></border>
                                                                     <img class="pixel" width="120px" src="{{ asset('assets/images/icon/Seller.png') }}">
                                                                 </div>
                                                             </div>
                                                             <div class="p-1 col-12">
                                                                 <div style="background: #33301d" class="item-preview">
-                                                                    @include('components.border')
+                                                                    <border></border>
                                                                     <div style="max-height:330px;overflow:auto" class="row px-4 py-2">
                                                                         <div v-for="(pet, index) in shop" :key="index" class="col-ui col-ui-divide softlight-item item">
                                                                             <img style="width:50px;display:block;margin:7px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">

@@ -1,15 +1,3 @@
-
-<!--
-	A TextBased Game Platform - Developed by Sven 
-
-  _________      .__           .__                     .__  .__                   _________.__        .__.__          __                
- /   _____/ ____ |  |   ____   |  |   _______  __ ____ |  | |__| ____    ____    /   _____/|__| _____ |__|  | _____ _/  |_  ___________ 
- \_____  \ /  _ \|  |  /  _ \  |  | _/ __ \  \/ // __ \|  | |  |/    \  / ___\   \_____  \ |  |/     \|  |  | \__  \\   __\/  _ \_  __ \
- /        (  <_> )  |_(  <_> ) |  |_\  ___/\   /\  ___/|  |_|  |   |  \/ /_/  >  /        \|  |  Y Y  \  |  |__/ __ \|  | (  <_> )  | \/
-/_______  /\____/|____/\____/  |____/\___  >\_/  \___  >____/__|___|  /\___  /  /_______  /|__|__|_|  /__|____(____  /__|  \____/|__|   
-        \/                               \/          \/             \//_____/           \/          \/             \/                   
-
- -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +8,7 @@
 	<link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
 	<link rel="dns-prefetch" href="//ajax.googleapis.com" />
 	<meta name="description" content="@yield('sub_hero')">
-	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
+	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="{{ mix('css/app.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/css/inventory.css') }}">
@@ -121,7 +109,7 @@
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-database.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.2/dist/sweetalert2.all.min.js"></script>	
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.18.2/dist/sweetalert2.all.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 	<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>

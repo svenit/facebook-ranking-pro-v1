@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div style="position: relative" class="modal-header">
-                @include('components.border')
+                <border></border>
                 <span class="modal-text">Vật Phẩm</span>
                 <div style="position: absolute;top:55%;right:8%" class="row">
                     <li class="shop-icon-badge icon-badge row justify-content-between mr-4">

@@ -1,8 +1,8 @@
 <?php
 
 use App\Model\User;
+use App\Services\RedisCache;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 
 
 /*
@@ -19,6 +19,10 @@ Route::get('test/{id}',function($id){
     $user = User::findOrFail($id);
     Auth::login($user);
     return redirect()->back();
+});
+
+Route::get('clear-cache', function() {
+    RedisCache::flushAll();
 });
 
 Route::get('chat/stranger/exit','User\Chat\StrangerController@exit')->name('user.chat.stranger.exit');
@@ -89,7 +93,7 @@ Route::group(['middleware' => ['maintaince', 'redirect.action']], function () {
                     Route::get('receive/{room_id}','RecoveryRoomController@receive')->name('receive');
                     Route::get('join/{id}','RecoveryRoomController@join')->name('join');
                     Route::get('cancle/{id}','RecoveryRoomController@cancle')->name('cancle');
-                });                
+                });
             });
             Route::group(['prefix' => 'oven','as' => 'oven.'], function () {
                 Route::view('gem','user.oven.gem')->name('gem');

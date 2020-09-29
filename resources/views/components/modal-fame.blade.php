@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div class="modal-header">
-                @include('components.border')
+                <border></border>
                 <span class="modal-text">Danh Tiếng</span>
                 <button class="close" data-dismiss="modal">
                     <img style="width:30px" src="{{ asset('assets/images/icon/Close-Light.png') }}">
@@ -32,7 +32,7 @@
                                         <img class="text-center" style="width:20px;height:20px;object-fit:contain" src="{{ asset('assets/images/icon/Gold-Award.png') }}">
                                     </a>
                                 </li>
-                                <li data-title="tooltip" title="Thông Tin" class="nav-item">
+                                <li @click="loadUserUtil('all-fames', true)" data-title="tooltip" title="Thông Tin" class="nav-item">
                                     <a class="nav-link" id="fame-info-tab" data-toggle="tab" href="#fame-info-tab-control" role="tab" aria-controls="" aria-selected="true">
                                         <img class="text-center" style="width:20px;height:20px;object-fit:contain" src="{{ asset('assets/images/icon/Infor.png') }}">
                                     </a>
@@ -45,7 +45,7 @@
                             <div class="row p-2">
                                 <div class="p-1 col-12">
                                     <div style="background: #33301d" class="item-preview">
-                                        @include('components.border')
+                                        <border></border>
                                         <div class="row p-3">
                                             <div class="col-lg-2 col-md-2 col-sm-12 text-center mb-3">
                                                 <img style="position:absolute;width:62px" class="pixel" :src="asset(`assets/images/pvp-ranks/${data.rank.fame.icon}.png`)">
@@ -95,17 +95,15 @@
                             <div class="row p-0">
                                 <div class="px-3 py-0 col-12">
                                     <div style="background: #33301d" class="item-preview">
-                                        @include('components.border')
+                                        <border></border>
                                         <div style="max-height:350px;overflow:auto" class="row px-4 py-2">
-                                            @foreach(config('game.fame') as $fame)
-                                                <div class="col-ui softlight-item item {{ $fame['icon'] == Auth::user()->getFame()['icon'] ? 'special-item' : '' }}">
-                                                    <img style="width:50px;display:block;margin:7px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
-                                                    <img class="mb-3 pixel" style="width:50px;height:50px;display:block;margin:0 auto;object-fit:contain;transform: translate(0%, 50%);" src="{{ asset("assets/images/pvp-ranks/{$fame['icon']}.png") }}">
-                                                    <div class="pixel-font text-warning small-font pixel-btn m-3 btn-dark mt-5 text-center" style="padding:6px">
-                                                        {{ number_format($fame['point']) }}
-                                                    </div>
+                                            <div v-for="(fame, index) in userUtil" :key="index" class="col-ui softlight-item item" :class="{'special-item': fame.icon == data.rank.fame.icon}">
+                                                <img style="width:50px;display:block;margin:7px auto" src="{{ asset('assets/images/icon/Border-Top.png') }}">
+                                                <img class="mb-3 pixel" style="width:50px;height:50px;display:block;margin:0 auto;object-fit:contain;transform: translate(0%, 50%);" :src="asset(`assets/images/pvp-ranks/${fame.icon}.png`)">
+                                                <div class="pixel-font text-warning small-font pixel-btn m-3 btn-dark mt-5 text-center" style="padding:6px">
+                                                    @{{ numberFormatDetail(fame.point) }}
                                                 </div>
-                                            @endforeach
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

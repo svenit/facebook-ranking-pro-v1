@@ -8,13 +8,13 @@ use App\Model\CateGear;
 use App\Model\Character;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Cache;
+use App\Services\RedisCache;
 
 class ShopController extends Controller
 {
     public function index($cate)
     {
-        $equips = Cache::rememberForever("shop.$cate", function () use ($cate) {
+        $equips = RedisCache::rememberForever("shop.$cate", function () use ($cate) {
             $allCates = CateGear::all();
             $gears = false;
             foreach($allCates as $cates)
@@ -29,7 +29,7 @@ class ShopController extends Controller
                     break;
                 }
             }
-            return $gears;            
+            return $gears;
         });
         if($equips)
         {
@@ -39,21 +39,21 @@ class ShopController extends Controller
     }
     public function skill()
     {
-        $skills = Cache::rememberForever('shop.skill', function () {
+        $skills = RedisCache::rememberForever('shop.skill', function () {
             return Character::with('skills')->where([['id','!=',0]])->get();
         });
-        return view('user.shop.skill',compact('skills')); 
+        return view('user.shop.skill',compact('skills'));
     }
     public function pet()
     {
-        $pets = Cache::rememberForever('shop.pet', function () {
+        $pets = RedisCache::rememberForever('shop.pet', function () {
             return Pet::where('status',1)->get();
         });
         return view('user.shop.pet',compact('pets'));
     }
     public function item()
     {
-        $items = Cache::rememberForever('shop.item', function () {
+        $items = RedisCache::rememberForever('shop.item', function () {
             return Item::where('status', 1)->get();
         });
         return view('user.shop.item',compact('items'));
@@ -61,7 +61,7 @@ class ShopController extends Controller
 
     public function gem()
     {
-        $gems = Cache::rememberForever('gem.item', function () {
+        $gems = RedisCache::rememberForever('gem.item', function () {
             return Gem::where('status', 1)->get();
         });
         return view('user.shop.gem',compact('gems'));
