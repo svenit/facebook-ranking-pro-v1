@@ -57,7 +57,11 @@ class IndexController extends Controller
                         'pvp' => $helper->getRank('pvp_points'),
                         'level' => $helper->getRank('exp'),
                     ],
-                    'stats' => $this->isOwnerData($findUser->id, $helper->stats()),
+                    'stats' => $this->isOwnerData($findUser->id, $helper->stats(), [
+                        'data' => [],
+                        'used' => [],
+                        'available' => []
+                    ]),
                     'level' => $helper->nextLevel(),
                     'raw_power' => [
                         'hp' => $user['health_points'],
@@ -95,9 +99,9 @@ class IndexController extends Controller
         ]),200);
     }
 
-    public function isOwnerData($userId, $data)
+    public function isOwnerData($userId, $data, $defaultData = [])
     {
-        return Auth::id() == $userId ? $data : [];
+        return Auth::id() == $userId ? $data : $defaultData;
     }
 
     public function verifyToken(Request $request)

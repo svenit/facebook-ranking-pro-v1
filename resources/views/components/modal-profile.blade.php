@@ -219,59 +219,15 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="item mt-2">
+                                        <div v-for="(stat, index) in statsBinding" :key="index" class="item mt-2">
                                             <div class="flex">
                                                 <div class="text-silver row justify-content-between">
-                                                    <div data-title="tooltip" title="Sinh lực" class="col-auto pixel-font small-font">HP</div>
-                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.power.hp }} ( <span class="text-gold">@{{ data.raw_power.hp }}</span> + <span class="text-success">@{{ data.power.hp - data.raw_power.hp }} )</span></strong></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item mt-2">
-                                            <div class="flex">
-                                                <div class="text-silver row justify-content-between">
-                                                    <div data-title="tooltip" title="Sát thương vật lý" class="col-auto pixel-font small-font">STR</div>
-                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.power.strength }} ( <span class="text-gold">@{{ data.raw_power.strength }}</span> + <span class="text-success">@{{ data.power.strength - data.raw_power.strength }} )</span></strong></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item mt-2">
-                                            <div class="flex">
-                                                <div class="text-silver row justify-content-between">
-                                                    <div data-title="tooltip" title="Sát thương phép thuật" class="col-auto pixel-font small-font">INT</div>
-                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.power.intelligent }} ( <span class="text-gold">@{{ data.raw_power.intelligent }}</span> + <span class="text-success">@{{ data.power.intelligent - data.raw_power.intelligent }} )</span></strong></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item mt-2">
-                                            <div class="flex">
-                                                <div class="text-silver row justify-content-between">
-                                                    <div data-title="tooltip" title="Nhanh nhẹn" class="col-auto pixel-font small-font">AGI</div>
-                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.power.agility }} ( <span class="text-gold">@{{ data.raw_power.agility }}</span> + <span class="text-success">@{{ data.power.agility - data.raw_power.agility }} )</span></strong></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item mt-2">
-                                            <div class="flex">
-                                                <div class="text-silver row justify-content-between">
-                                                    <div data-title="tooltip" title="May mắn" class="col-auto pixel-font small-font">LUK</div>
-                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.power.lucky }} ( <span class="text-gold">@{{ data.raw_power.lucky }}</span> + <span class="text-success">@{{ data.power.lucky - data.raw_power.lucky }} )</span></strong></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item mt-2">
-                                            <div class="flex">
-                                                <div class="text-silver row justify-content-between">
-                                                    <div data-title="tooltip" title="Kháng sát thương vật lý" class="col-auto pixel-font small-font">DEF</div>
-                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.power.armor_strength }} ( <span class="text-gold">@{{ data.raw_power.armor_strength }}</span> + <span class="text-success">@{{ data.power.armor_strength - data.raw_power.armor_strength }} )</span></strong></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item mt-2">
-                                            <div class="flex">
-                                                <div class="text-silver row justify-content-between">
-                                                    <div data-title="tooltip" title="Kháng phép" class="col-auto pixel-font small-font">AM</div>
-                                                    <div class="col-auto"><strong class="text-warning pixel-font small-font">@{{ data.power.armor_intelligent }} ( <span class="text-gold">@{{ data.raw_power.armor_intelligent }}</span> + <span class="text-success">@{{ data.power.armor_intelligent - data.raw_power.armor_intelligent }} )</span></strong></div>
+                                                    <div data-title="tooltip" :title="stat.name" class="col-auto pixel-font small-font">@{{ stat.acronyms }}</div>
+                                                    <div class="col-auto">
+                                                        <strong class="text-warning pixel-font small-font">
+                                                            @{{ data.power[stat.field] }} ( <span data-title="tooltip" title="Điểm cơ bản" class="text-gold">@{{ data.raw_power[stat.field] }}</span> + <span data-title="tooltip" title="Điểm chỉ số" class="text-gold">@{{ data.stats.data[stat.field] ?? 0 }}</span> + <span data-title="tooltip" title="Các điểm còn lại" class="text-success">@{{ data.power[stat.field] - (data.raw_power[stat.field] ?? 0 + data.stats.data[stat.field]) ?? 0 }} </span> )
+                                                        </strong>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -311,7 +267,7 @@
                                                     <div class="col-auto">
                                                         <strong class="text-warning pixel-font small-font">
                                                             @{{ data.stats.data.health_points }}
-                                                            <span class="text-success">( x3 )</span>
+                                                            <span class="text-success">( x2 )</span>
                                                         </strong>
                                                         <img @click="incrementStat('health_points')" style="width:17px" class="ml-2" src="{{ asset('assets/images/icon/Add.png') }}">
                                                     </div>
