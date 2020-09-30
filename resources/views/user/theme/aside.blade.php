@@ -1,10 +1,10 @@
-@include('components.modal-profile')
 @include('components.modal-profile-item')
 @include('components.modal-profile-equipment')
 @include('components.modal-fame')
 @include('components.modal-equipment')
 @include('components.modal-shop')
-@include('components.modal-user-profile')
+<profile-modal></profile-modal>
+<user-profile-modal></user-profile-modal>
 <div id="gem" v-if="detailGem.data" class="modal fade gear top-off" data-backdrop="true" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content bg-dark">

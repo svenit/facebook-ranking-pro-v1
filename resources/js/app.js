@@ -1,7 +1,9 @@
 window.Vue = require('vue');
 window.axios = require('axios');
 
-import './components/index';
+import '~/components';
+import store from '~/store';
+import '~/mixin';
 
 (() => {
     var CryptoJSAesJson = {
@@ -70,6 +72,7 @@ import './components/index';
     ];
     new Vue({
         el: '#app',
+        store,
         data: {
             showIntro: false,
             currentLang: sessionStorage.getItem('currentLang') || 'vie',
@@ -688,9 +691,11 @@ import './components/index';
                     $('#user-modal-profile').modal('show');
                     let res = await axios.get(`${config.apiUrl}/user/${id}`);
                     this.user = res.data;
+                    await this.$store.dispatch('user/updateData', this.user);
                     this.loading = false;
                 } catch (e) {
                     this.loading = false;
+                    console.log(e);
                     this.notify('Đã có lỗi xảy ra, xin vui lòng thử lại');
                 }
             },
@@ -1369,7 +1374,7 @@ import './components/index';
             },
             console() {
                 console.log("\n %c %c %c " + config.appName + " - Version: " + config.appVersion + " - Developed by " + config.maintainer + " -  %c  %c  "+ config.root +"  %c %c ♥%c♥%c♥ \n\n", "background: #ff66a5; padding:5px 0;", "background: #ff66a5; padding:5px 0;", "color: #ff66a5; background: #030307; padding:5px 0;", "background: #ff66a5; padding:5px 0;", "background: #ffc3dc; padding:5px 0;", "background: #ff66a5; padding:5px 0;", "color: #ff2424; background: #fff; padding:5px 0;", "color: #ff2424; background: #fff; padding:5px 0;", "color: #ff2424; background: #fff; padding:5px 0;");
-            }
+            },
         },
     });
 })();
