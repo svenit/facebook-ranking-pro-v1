@@ -6,6 +6,8 @@ import store from '~/store';
 import '~/mixin';
 import webData from '~/data/web';
 
+const DEFAULT_ERROR_MESSAGE = 'Đã có lỗi xảy ra, xin vui lòng tải lại trang';
+
 (() => {
     var CryptoJSAesJson = {
         stringify: function (cipherParams) {
@@ -46,7 +48,8 @@ import webData from '~/data/web';
                         bearer: this.shuffleString(config.bearer),
                         secret_key: config.bearer,
                         hash: this.shuffleString(config.bcrypt),
-                        _token: document.querySelector(['meta[name=csrf-token]']).content
+                        _token: document.querySelector(['meta[name=csrf-token]']).content,
+                        authenticate_key: md5(parseInt(new Date().getHours()))
                     };
                     return request;
                 });
@@ -68,8 +71,7 @@ import webData from '~/data/web';
                 }
             }
             catch(e) {
-                Swal.fire('', 'Đã có lỗi xảy ra, xin vui lòng tải lại trang', 'error');
-                console.error(e);
+                this.showError(e);
             }
             this.loading = false;
             this.flash = false;
@@ -117,7 +119,7 @@ import webData from '~/data/web';
                     this.loading = false;
                 } catch (e) {
                     this.loading = false;
-                    this.notify('Đã có lỗi xảy ra, xin vui lòng tải lại trang');
+                    this.showError(e);
                 }
             },
             showIntroTemplate() {
@@ -374,7 +376,7 @@ import webData from '~/data/web';
                 $('#gem').modal('show');
                 var gear = document.getElementById('gear');
                 gear.classList.remove('show');
-                gear.style.display = 'nonde';
+                gear.style.display = 'none';
                 document.getElementsByClassName('modal-backdrop')[1].remove();
                 document.getElementsByClassName('modal-backdrop')[0].remove();
             },
@@ -408,32 +410,41 @@ import webData from '~/data/web';
                 $('#skill').modal('show');
             },
             async useSkill(id) {
-                this.loading = true;
-                let res = await axios.post(`${config.apiUrl}/profile/skill/use`, {
-                    id: id
-                });
-                await this.index();
-                this.skill();
-                this.notify(res.data.message);
+                try {
+                    this.loading = true;
+                    let res = await axios.post(`${config.apiUrl}/profile/skill/use`, {
+                        id: id
+                    });
+                    this.index();
+                    this.notify(res.data.message);
+                } catch (e) {
+                    this.showError(e);
+                }
             },
             async removeSkill(id) {
-                this.loading = true;
-                let res = await axios.post(`${config.apiUrl}/profile/skill/remove`, {
-                    id: id
-                });
-                await this.index();
-                this.skill();
-                this.notify(res.data.message);
+                try {
+                    this.loading = true;
+                    let res = await axios.post(`${config.apiUrl}/profile/skill/remove`, {
+                        id: id
+                    });
+                    this.index();
+                    this.notify(res.data.message);
+                } catch (e) {
+                    this.showError(e);
+                }
             },
             async deleteSkill(id) {
                 if (confirm('Vứt bỏ kỹ năng này ?')) {
-                    this.loading = true;
-                    let res = await axios.post(`${config.apiUrl}/profile/skill/delete`, {
-                        id: id
-                    });
-                    await this.index();
-                    this.skill();
-                    this.notify(res.data.message);
+                    try {
+                        this.loading = true;
+                        let res = await axios.post(`${config.apiUrl}/profile/skill/delete`, {
+                            id: id
+                        });
+                        this.index();
+                        this.notify(res.data.message);
+                    } catch (e) {
+                        this.showError(e);
+                    }
                 }
             },
             async showUserInfor(id) {
@@ -445,9 +456,7 @@ import webData from '~/data/web';
                     await this.$store.dispatch('user/updateData', this.user);
                     this.loading = false;
                 } catch (e) {
-                    this.loading = false;
-                    console.log(e);
-                    this.notify('Đã có lỗi xảy ra, xin vui lòng thử lại');
+                    this.showError(e);
                 }
             },
             async checkWheel() {
@@ -561,8 +570,7 @@ import webData from '~/data/web';
                         this.gotoBottomChat();
                     }
                 } catch (e) {
-                    console.log(e);
-                    this.notify('Đã có lỗi xảy ra');
+                    this.showError(e);
                 }
             },
             gotoBottomChat() {
@@ -625,6 +633,7 @@ import webData from '~/data/web';
                 } catch (e) {
                     this.chat.uploading = false;
                     this.chat.percent = 0;
+                    this.showError(e);
                 }
             },
             chatRoom() {
@@ -670,7 +679,7 @@ import webData from '~/data/web';
                         this.notify('Chưa có ai trong phòng !');
                     }
                 } catch (e) {
-                    this.notify('Đã có lỗi xảy ra');
+                    this.showError(e);
                 }
             },
             async invetory() {
@@ -689,43 +698,55 @@ import webData from '~/data/web';
             },
             async deleteEquipment(data) {
                 if (confirm('Vứt bỏ vật phẩm này ?')) {
-                    this.loading = true;
-                    let res = await axios.post(`${config.apiUrl}/profile/equipment/delete`, {
-                        id: data.pivot.id,
-                        gear_id: data.id
-                    });
-                    await this.loadProfile('equipment', true);
-                    this.index();
-                    this.notify(res.data.message);
-                    this.loading = false;
+                    try {
+                        this.loading = true;
+                        let res = await axios.post(`${config.apiUrl}/profile/equipment/delete`, {
+                            id: data.pivot.id,
+                            gear_id: data.id
+                        });
+                        await this.loadProfile('equipment', true);
+                        this.index();
+                        this.notify(res.data.message);
+                        this.loading = false;
+                    } catch (e) {
+                        this.showError(e);
+                    }
                 }
             },
             async removeEquipment(equipment) {
-                this.loading = true;
-                let { data } = await axios.post(`${config.apiUrl}/profile/equipment/remove`, {
-                    id: equipment.pivot.id,
-                    gear_id: equipment.id
-                });
-                this.index();
-                if (data.code == 200) {
-                    await this.loadProfile('equipment', true);
+                try {
+                    this.loading = true;
+                    let { data } = await axios.post(`${config.apiUrl}/profile/equipment/remove`, {
+                        id: equipment.pivot.id,
+                        gear_id: equipment.id
+                    });
+                    this.index();
+                    if (data.code == 200) {
+                        await this.loadProfile('equipment', true);
+                    }
+                    this.inventoryAvailable();
+                    this.notify(data.message);
+                    this.loading = false;
+                } catch (e) {
+                    this.showError(e);
                 }
-                this.inventoryAvailable();
-                this.notify(data.message);
-                this.loading = false;
             },
             async equipment(equipment) {
-                this.loading = true;
-                let { data } = await axios.post(`${config.apiUrl}/profile/equipment/use`, {
-                    id: equipment.pivot.id,
-                    gear_id: equipment.id
-                });
-                this.index();
-                if (data.code == 200) {
-                    await this.loadProfile('equipment', true);
+                try {
+                    this.loading = true;
+                    let { data } = await axios.post(`${config.apiUrl}/profile/equipment/use`, {
+                        id: equipment.pivot.id,
+                        gear_id: equipment.id
+                    });
+                    this.index();
+                    if (data.code == 200) {
+                        await this.loadProfile('equipment', true);
+                    }
+                    this.notify(data.message);
+                    this.loading = false;
+                } catch (e) {
+                    this.showError(e);
                 }
-                this.notify(data.message);
-                this.loading = false;
             },
             async buyEquip(item, e) {
                 Swal.fire({
@@ -739,7 +760,7 @@ import webData from '~/data/web';
                     if (result.value) {
                         let res = await axios.post(`${config.apiUrl}/shop/buy-equip`, {id: item.id});
                         if (res.data.code == 200) {
-                            await this.index();
+                            this.index();
                         }
                         Swal.fire('', res.data.message, res.data.status);
                     }
@@ -760,7 +781,7 @@ import webData from '~/data/web';
                     if (result.value) {
                         let res = await axios.post(`${config.apiUrl}/shop/buy-skill`, {id: item.id});
                         if (res.data.code == 200) {
-                            await this.index();
+                            this.index();
                         }
                         Swal.fire('', res.data.message, res.data.status);
                     }
@@ -780,7 +801,7 @@ import webData from '~/data/web';
                     if (result.value) {
                         let res = await axios.post(`${config.apiUrl}/shop/buy-pet`, {id: item.id});
                         if (res.data.code == 200) {
-                            await this.index();
+                            this.index();
                         }
                         Swal.fire('', res.data.message, res.data.status);
                     }
@@ -804,7 +825,7 @@ import webData from '~/data/web';
                             quantity: quantity
                         }).then(async (res) => {
                             if(res.data.code == 200) {
-                                await this.index();
+                                this.index();
                                 return res.data;
                             }
                             Swal.showValidationMessage(res.data.message);
@@ -828,44 +849,53 @@ import webData from '~/data/web';
                 this.loading = false;
             },
             async ridingPet(data) {
-                this.loading = true;
-                let res = await axios.post(`${config.apiUrl}/profile/pet/riding`, {
-                    id: data.pivot.id,
-                    pet_id: data.id
-                });
-                if (res.data.code == 200) {
-                    await this.index();
-                    this.pet();
-                }
-                this.notify(res.data.message);
-                this.loading = false;
-            },
-            async petDown(data) {
-                this.loading = true;
-                let res = await axios.post(`${config.apiUrl}/profile/pet/pet-down`, {
-                    id: data.pivot.id,
-                    pet_id: data.id
-                });
-                if (res.data.code == 200) {
-                    await this.index();
-                    this.pet();
-                }
-                this.notify(res.data.message);
-                this.loading = false;
-            },
-            async dropPet(data) {
-                if (confirm('Phóng sinh cho thú cưỡi này ?')) {
+                try {
                     this.loading = true;
-                    let res = await axios.post(`${config.apiUrl}/profile/pet/drop-pet`, {
+                    let res = await axios.post(`${config.apiUrl}/profile/pet/riding`, {
                         id: data.pivot.id,
                         pet_id: data.id
                     });
                     if (res.data.code == 200) {
-                        await this.index();
-                        this.pet();
+                        this.index();
                     }
                     this.notify(res.data.message);
                     this.loading = false;
+                } catch (e) {
+                    this.showError(e);
+                }
+            },
+            async petDown(data) {
+                try {
+                    this.loading = true;
+                    let res = await axios.post(`${config.apiUrl}/profile/pet/pet-down`, {
+                        id: data.pivot.id,
+                        pet_id: data.id
+                    });
+                    if (res.data.code == 200) {
+                        this.index();
+                    }
+                    this.notify(res.data.message);
+                    this.loading = false;
+                } catch (e) {
+                    this.showError(e);
+                }
+            },
+            async dropPet(data) {
+                try {
+                    if (confirm('Phóng sinh cho thú cưỡi này ?')) {
+                        this.loading = true;
+                        let res = await axios.post(`${config.apiUrl}/profile/pet/drop-pet`, {
+                            id: data.pivot.id,
+                            pet_id: data.id
+                        });
+                        if (res.data.code == 200) {
+                            this.index();
+                        }
+                        this.notify(res.data.message);
+                        this.loading = false;
+                    }
+                } catch (e) {
+                    this.showError(e);
                 }
             },
             async skill() {
@@ -887,75 +917,85 @@ import webData from '~/data/web';
                 this.loading = false;
             },
             async useItem(data) {
-                var quantity = prompt('Nhập số lượng ');
-                quantity = parseInt(quantity);
-                if (quantity && typeof quantity == 'number' && quantity > 0 && quantity <= 99999) {
-                    this.loading = true;
-                    let res = await axios.post(`${config.apiUrl}/profile/item/use`, {
-                        id: data.pivot.id,
-                        item_id: data.id,
-                        quantity
-                    });
-                    if (res.data.code == 200) {
-                        await this.index();
-                        this.item();
+                try {
+                    var quantity = prompt('Nhập số lượng ');
+                    quantity = parseInt(quantity);
+                    if (quantity && typeof quantity == 'number' && quantity > 0 && quantity <= 99999) {
+                        this.loading = true;
+                        let res = await axios.post(`${config.apiUrl}/profile/item/use`, {
+                            id: data.pivot.id,
+                            item_id: data.id,
+                            quantity
+                        });
+                        if (res.data.code == 200) {
+                            await this.loadProfile('item', true);
+                            this.index();
+                        }
+                        this.notify(res.data.message);
+                        this.loading = false;
                     }
-                    this.notify(res.data.message);
-                    this.loading = false;
+                } catch (e) {
+                    this.showError(e);
                 }
             },
             async deleteItem(data) {
-                var quantity = prompt('Nhập số lượng ');
-                quantity = parseInt(quantity);
-                if (quantity && typeof quantity == 'number' && quantity > 0) {
-                    this.loading = true;
-                    let res = await axios.post(`${config.apiUrl}/profile/item/delete`, {
-                        id: data.pivot.id,
-                        item_id: data.id,
-                        quantity
-                    });
-                    if (res.data.code == 200) {
-                        await this.index();
-                        this.item();
+                try {
+                    var quantity = prompt('Nhập số lượng ');
+                    quantity = parseInt(quantity);
+                    if (quantity && typeof quantity == 'number' && quantity > 0) {
+                        this.loading = true;
+                        let res = await axios.post(`${config.apiUrl}/profile/item/delete`, {
+                            id: data.pivot.id,
+                            item_id: data.id,
+                            quantity
+                        });
+                        if (res.data.code == 200) {
+                            await this.loadProfile('item', true);
+                            this.index();
+                        }
+                        this.notify(res.data.message);
+                        this.loading = false;
                     }
-                    this.notify(res.data.message);
-                    this.loading = false;
+                } catch (e) {
+                    this.showError(e);
                 }
             },
             async incrementStat(stat) {
-                var point = prompt('Nhập số điểm bạn muốn tăng');
-                point = parseInt(point);
-                if (typeof(point) != 'undefined' && point > 0) {
-                    if (point > this.data.stats.available) {
-                        this.notify('Bạn không đủ điểm');
-                    } else {
-                        this.loading = true;
-                        let res = await axios.post(`${config.apiUrl}/profile/stat/increment`, {
-                            stat,
-                            point
-                        });
-                        this.notify(res.data.message);
-                        await this.index();
-                        this.loading = false;
+                try {
+                    var point = prompt('Nhập số điểm bạn muốn tăng');
+                    point = parseInt(point);
+                    if (typeof(point) != 'undefined' && point > 0) {
+                        if (point > this.data.stats.available) {
+                            this.notify('Bạn không đủ điểm');
+                        } else {
+                            this.loading = true;
+                            let res = await axios.post(`${config.apiUrl}/profile/stat/increment`, {
+                                stat,
+                                point
+                            });
+                            this.notify(res.data.message);
+                            this.index();
+                            this.loading = false;
+                        }
                     }
+                } catch (e) {
+                    this.showError(e);
                 }
             },
             async removeGem(data) {
-                if (confirm('Tháo ngọc tinh luyện ?')) {
-                    this.loading = true;
-                    let res = await axios.post(`${config.apiUrl}/profile/gem/remove`, {
-                        id: data.id,
-                        user_gem_id: data.pivot.id
-                    });
-                    this.notify(res.data.message);
-                    await this.index();
-                    if (page.path == 'gem.index' || page.path == 'oven.gem') {
-                        await this.gem();
+                try {
+                    if (confirm('Tháo ngọc tinh luyện ?')) {
+                        this.loading = true;
+                        let res = await axios.post(`${config.apiUrl}/profile/gem/remove`, {
+                            id: data.id,
+                            user_gem_id: data.pivot.id
+                        });
+                        this.notify(res.data.message);
+                        this.index();
+                        this.loading = false;
                     }
-                    if (page.path == 'inventory.index') {
-                        await this.invetory();
-                    }
-                    this.loading = false;
+                } catch (e) {
+                    this.showError(e);
                 }
             },
             async buyGem(item, e) {
@@ -974,7 +1014,7 @@ import webData from '~/data/web';
                             quantity: quantity
                         }).then(async (res) => {
                             if(res.data.code == 200) {
-                                await this.index();
+                                this.index();
                                 return res.data;
                             }
                             Swal.showValidationMessage(res.data.message);
@@ -1090,6 +1130,10 @@ import webData from '~/data/web';
                         return 'diamond';
                     break;
                 }
+            },
+            showError(e) {
+                console.log(e);
+                Swal.fire('', DEFAULT_ERROR_MESSAGE, 'error');
             },
             strSlug(string) {
                 let slug = string.toLowerCase();
