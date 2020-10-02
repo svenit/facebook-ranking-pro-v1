@@ -29,14 +29,18 @@ class Cors
         if(in_array($request->path(), $this->except)) {
             return $next($request);
         }
-        if(env('APP_PROTECTED_API'))
-        {
-            if(isset($request->bearer))
-            {
+        if(env('APP_PROTECTED_API')) {
+            $requiredKeys = ['bearer', 'secret_key', 'hash', '_token', 'authenticate_key'];
+            $missingKeys = [];
+            foreach ($requiredKeys as $key) {
+                if (empty($request[$key])) {
+                    array_push($missingKeys, $key);
+                }
+            }
+            if(count($missingKeys) == 0) {
                 $token = md5(hash('sha256',md5($this->encode(strrev(session('client_key').'..$!@{a-z0-9}-VYDEPTRAI&*@!LX&&$PHP?1+1')))));
-                $authenticateKey = (int)date('H');
-                if($request->_token == csrf_token() && $request->header('pragma') === $token && $authenticateKey == $request->authenticate_key)
-                {
+                $authenticateKey = md5((int)date('H'));
+                if($request->_token == csrf_token() && $request->header('pragma') === $token && $authenticateKey == $request->authenticate_key) {
                     $newToken = uniqid(Str::random(40));
                     Session::forget('client_key');
                     Session::put('client_key', $newToken);
@@ -53,14 +57,12 @@ class Cors
                     'message' => 'Duplicate request or request expires'
                 ]);
             }
-            else
-            {
-                return response()->json([
-                    'status' => 'error',
-                    'code' => 403,
-                    'message' => 'Bearer Token is required',
-                ]);
-            }
+            $missingKeys = implode(', ', $missingKeys);
+            return response()->json([
+                'status' => 'error',
+                'code' => 500,
+                'message' => "{$missingKeys} is required"
+            ]);
         }
         return $next($request);
     }
