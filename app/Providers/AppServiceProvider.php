@@ -42,12 +42,6 @@ class AppServiceProvider extends ServiceProvider
         {
             View::composer(['user.theme.aside', 'app'], function ($view)
             {
-                $cateGears = RedisCache::rememberForever('menuShop', function () {
-                    return CateGear::all();
-                });
-                $characters = RedisCache::rememberForever('characters', function () {
-                    return Character::where('id', '!=', env('NO_CHARACTER_ID'))->get();
-                });
                 $user = Auth::user();
                 $intro = [
                     "Xin chào {$user->name}! Chào mừng bạn đến với Solo Leveling Simulator! Mình là Andy, rất vui được làm người giới thiệu cho bạn.",
@@ -66,8 +60,6 @@ class AppServiceProvider extends ServiceProvider
                     'Nhiều tiền không biết làm gì? Hãy chứng minh độ giàu của bạn bằng cách vào đây',
                 ];
                 $view->with([
-                    'menuShop' => $cateGears,
-                    'characters' => $characters,
                     'intro' => $intro,
                 ]);
             });

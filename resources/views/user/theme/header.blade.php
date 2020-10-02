@@ -68,7 +68,11 @@
             <li class="icon-badge row pt-3 mr-4 justify-content-between">
                 <img style="width:50px" src="{{ asset('assets/images/icon/App-Grid.png') }}">
             </li>
-            @auth
+            <div v-if="chat.messages[chat.messages.length - 1]" style="width: 300px;position: absolute;top: 80px; right: 25px; background: rgb(0, 0, 0, .6)">
+                <div class="w-100 p-2">
+                    @{{ chat.messages[chat.messages.length - 1].message }}
+                </div>
+            </div>
             {{-- <li class="nav-item dropdown"><a class="nav-link px-2 mr-lg-2" data-toggle="dropdown">
                 <img src="https://web.simple-mmo.com/img/icons/one/icon027.png"> <span class="badge badge-pill badge-up bg-primary">{{ $notifications['unread'] ?? 0 }}</span></a>
                 <div style="width:500px" class="dropdown-menu dropdown-menu-right mt-3 w-md animate fadeIn p-0">
@@ -105,7 +109,6 @@
                     </div>
                 </div>
             </li> --}}
-            @endauth
             {{-- <li class="nav-item dropdown"><a href="#" data-toggle="dropdown"
                     class="nav-link d-flex align-items-center px-2 text-color"><span class="avatar w-24"
                         style="margin: -2px"><img src="{{ Auth::check() ? 'http://graph.facebook.com/'.Auth::user()->provider_id.'/picture?type=normal' : 'https://image.flaticon.com/icons/png/512/149/149071.png' }}" alt="..."></span></a>

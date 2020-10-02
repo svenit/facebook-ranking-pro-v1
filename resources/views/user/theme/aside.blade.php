@@ -1,8 +1,8 @@
-@include('components.modal-profile-item')
-@include('components.modal-profile-equipment')
-@include('components.modal-fame')
-@include('components.modal-equipment')
-@include('components.modal-shop')
+<shop-modal></shop-modal>
+<profile-equipment-modal></profile-equipment-modal>
+<profile-item-modal></profile-item-modal>
+<fame-modal></fame-modal>
+<equipment-modal></equipment-modal>
 <profile-modal></profile-modal>
 <user-profile-modal></user-profile-modal>
 <div id="gem" v-if="detailGem.data" class="modal fade gear top-off" data-backdrop="true" aria-hidden="true" style="display: none;">
@@ -352,80 +352,3 @@
         </div>
     </div>
 </div>
-@if(!request()->is('pvp/room/*'))
-    {{-- @include('user.theme.menu') --}}
-@endif
-@if(!request()->is('admin/*'))
-{{-- <div v-if="loading" id="modal-sm" class="modal fade show" data-backdrop="true" style="display: block;" aria-modal="true">
-    <div class="modal-dialog modal-sm">
-        <div style="background:transparent !important" class="modal-content">
-            <div class="modal-body">
-                <div class="text-center">
-                    <div style="margin:0 auto" class="loading"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> --}}
-@push('js')
-    @auth
-    {{-- <script>
-        $(document).ready(() => {
-            var options = {
-                chart: {
-                    sparkline: {
-                        enabled:!1
-                    },
-                    height:250,
-                    type:"radar",
-                    toolbar:{
-                        show:!1
-                    }
-                },
-                yaxis:{
-                    show:!1
-                },
-                dataLabels: {
-                    enabled:!0,
-                    background:{
-                        enabled:!0,
-                        borderRadius:2
-                    }
-                },
-                fill:{
-                    type:"gradient",
-                    gradient:{
-                        shade:"dark",
-                        type:"horizontal",
-                        shadeIntensity:.5,
-                        inverseColors:!0,
-                        opacityFrom:1,
-                        opacityTo:.8,
-                        stops:[0,50,100],
-                        colorStops:[]
-                    }
-                },
-                theme:{
-                    mode:"dark",
-                    palette:"palette1",
-                    monochrome:{
-                        enabled:!1,
-                        color:"#333",
-                        shadeTo:"dark",
-                        shadeIntensity:1
-                    }
-                },
-                series: [{
-                    name: 'Chỉ số',
-                    data: [{{ Auth::user()->stats()['strength'] }}, {{ Auth::user()->stats()['intelligent'] }}, {{ Auth::user()->stats()['agility'] }}, {{ Auth::user()->stats()['lucky'] }}, {{ Auth::user()->stats()['armor_strength'] }}, {{ Auth::user()->stats()['armor_intelligent'] }}],
-                    label: ['Sức Mạnh', 'Trí Tuệ', 'Nhanh Nhẹn', 'May Mắn', 'Kháng Công', 'Kháng Phép']
-                }]
-            };
-            var chart = new ApexCharts(document.querySelector("#stats"),options);
-            chart.render();
-        });
-    </script> --}}
-    @endauth
-	<script async src="{{ mix('js/bundle.min.js') }}"></script>
-@endpush
-@endif

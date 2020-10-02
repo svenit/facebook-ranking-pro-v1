@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 Route::post('verify-token','Api\IndexController@verifyToken');
 Route::get('user/all','Api\User\IndexController@all');
 Route::group(['namespace' => 'Api','middleware' => ['cors', 'auth']], function () {
+    Route::get('app','IndexController@initialApplication');
     Route::get('user/{param}','IndexController@userInfor');
     Route::group(['prefix' => 'user-utils', 'namespace' => 'User'], function () {
         Route::post('set-location','IndexController@setLocation');

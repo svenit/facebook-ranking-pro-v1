@@ -4,6 +4,7 @@ window.axios = require('axios');
 import '~/components';
 import store from '~/store';
 import '~/mixin';
+import webData from '~/data/web';
 
 (() => {
     var CryptoJSAesJson = {
@@ -21,235 +22,11 @@ import '~/mixin';
             return cipherParams;
         }
     };
-    let languages = [
-        {
-            icon: 'vie',
-            name: 'Tiếng Việt'
-        }, {
-            icon: 'en',
-            name: 'English'
-        }, {
-            icon: 'ko',
-            name: '한국어'
-        }, {
-            icon: 'ja',
-            name: '日本人'
-        }, {
-            icon: 'zh-CH',
-            name: '中文'
-        }
-    ];
-    let statsBinding = [
-        {
-            acronyms: 'HP',
-            field: 'hp',
-            name: 'Sinh lực'
-        }, {
-            acronyms: 'STR',
-            field: 'strength',
-            name: 'Sát thương vật lý'
-        }, {
-            acronyms: 'INT',
-            field: 'intelligent',
-            name: 'Sát thương phép thuật'
-        }, {
-            acronyms: 'AGI',
-            field: 'agility',
-            name: 'Nhanh nhẹn'
-        }, {
-            acronyms: 'LUK',
-            field: 'lucky',
-            name: 'May mắn'
-        }, {
-            acronyms: 'DEF',
-            field: 'armor_strength',
-            name: 'Kháng sát thương vật lý'
-        }, {
-            acronyms: 'AM',
-            field: 'armor_intelligent',
-            name: 'Kháng phép'
-        }
-    ];
     new Vue({
         el: '#app',
         store,
         data: {
-            showIntro: false,
-            currentLang: sessionStorage.getItem('currentLang') || 'vie',
-            languages,
-            statsBinding,
-            moreMenu: false,
-            firebase: null,
-            userCount: 0,
-            author: process.env.MIX_APP_SALT,
-            socket: null,
-            loading: true,
-            flash: true,
-            detect: false,
-            token: '',
-            detailGear: {
-                data: {
-                    health_points: {
-                        default: 0,
-                        percent: 0
-                    },
-                    strength: {
-                        default: 0,
-                        percent: 0
-                    },
-                    intelligent: {
-                        default: 0,
-                        percent: 0
-                    },
-                    agility: {
-                        default: 0,
-                        percent: 0
-                    },
-                    lucky: {
-                        default: 0,
-                        percent: 0
-                    },
-                    armor_strength: {
-                        default: 0,
-                        percent: 0
-                    },
-                    armor_intelligent: {
-                        default: 0,
-                        percent: 0
-                    },
-                    character: {},
-                    cates: {}
-                },
-                permission: 0
-            },
-            detailPet: {
-                data: {},
-                permission: 0
-            },
-            detailItem: {
-                data: {},
-                permission: 0
-            },
-            detailGem: {
-                data: {},
-                permission: 0
-            },
-            detailSkill: {
-                data: {
-                    options: {
-                        energy: 0,
-                        coolDown: 0
-                    }
-                },
-                permission: 0,
-            },
-            data: {
-                infor: {
-                    name: "",
-                    character: {
-                        name: "",
-                        avatar: ""
-                    },
-                    exp: 0,
-                    coins: 'Đang tải...',
-                    gold: 'Đang tải...',
-                    provider_id: "0",
-                    active: "",
-                    fame: 0,
-                    pvp_points: 0,
-                    energy: 0
-                },
-                stats: {
-                    data: {},
-                    used: 0,
-                    available: 0
-                },
-                rank: {
-                    brand: 'E',
-                    fame: {
-                        next: {}
-                    },
-                    pvp: {
-                        next: {}
-                    }
-                },
-                top: {
-                    fame: 0,
-                    level: 0,
-                    pvp: 0,
-                    power: 0
-                },
-                level: {
-                    next_level: "0",
-                    next_level_exp: 0,
-                    current_level: 0,
-                    current_user_exp: 0,
-                    percent: 0
-                },
-                raw_power: {
-                    total: 'Đang tải...',
-                    hp: 0,
-                    strength: 0,
-                    agility: 0,
-                    intelligent: 0,
-                    lucky: 0
-                },
-                power: {
-                    total: 'Đang tải...',
-                    hp: 0,
-                    strength: 0,
-                    agility: 0,
-                    intelligent: 0,
-                    lucky: 0
-                },
-                gears: [],
-                skills: [],
-                pet: {},
-            },
-            user: {},
-            wheel: {
-                spinning: false
-            },
-            chat: {
-                messages: [],
-                text: '',
-                isIn: false,
-                noti: true,
-                percent: 0,
-                previewImage: '',
-                uploading: false,
-                block: true
-            },
-            shop: [],
-            profileInventory: [],
-            userUtil: [],
-            inventory: {},
-            gears: [],
-            pets: [],
-            skills: [],
-            items: [],
-            gems: [],
-            oven: {
-                gem: {},
-                gear: {},
-                action: false
-            },
-            modalName: null,
-            pvp: {
-                rooms: [],
-                match: {
-                    target: null,
-                    targetPlayer: {},
-                    playerAtk: {},
-                    isReady: false,
-                    room: {},
-                    status: 'NO_ENEMY',
-                    me: {
-                        effectAnimation: []
-                    },
-                    enemy: {}
-                }
-            },
+            ...webData,
             /* Admin */
             shop_tag: '',
             rgb: '',
@@ -279,41 +56,10 @@ import '~/mixin';
                     return response;
                 });
                 if (config.auth) {
+                    await this.initialApplication();
                     await this.index();
                     this.globalSocket();
                     await this.listGlobalChat('global');
-                    if (typeof page == "undefined" || page == null) {} else {
-                        switch (page.path) {
-                            case 'pvp.list':
-                                await this.listFightRoom();
-                                setInterval(() => {
-                                    this.listFightRoom();
-                                }, 5000);
-                                break;
-                            case 'pvp.room':
-                                await this.pvpRoom();
-                                break;
-                            case 'inventory.index':
-                                await this.invetory();
-                                break;
-                            case 'pet.index':
-                                await this.pet();
-                                break;
-                            case 'skill.index':
-                                await this.skill();
-                                break;
-                            case 'item.index':
-                                await this.item();
-                                break;
-                            case 'gem.index':
-                                await this.gem();
-                                break;
-                            case 'oven.gem':
-                                await this.inventoryAvailable();
-                                await this.gem();
-                                break;
-                        }
-                    }
                     this.postLocation();
                     $(function () {
                         $('[data-title="tooltip"]').tooltip();
@@ -348,11 +94,16 @@ import '~/mixin';
             },
         },
         methods: {
+            async initialApplication() {
+                this.loading = true;
+                let res = await axios.get(`${config.apiUrl}/app`);
+                this.app = res.data;
+                this.loading = false;
+            },
             async index() {
                 try {
                     this.loading = true;
                     let res = await axios.get(`${config.apiUrl}/user/profile`);
-                    console.log(res.data);
                     if(this.socket == null) {
                         let tokenKey = this.AESEncrypt(this.token);
                         let ref = this.AESEncrypt(res.headers.cookie);
@@ -765,7 +516,7 @@ import '~/mixin';
                         scrollTop: 1000000000000000000
                     }, $('#chat-box').scrollHeight);
                     self.gotoBottomChat();
-                    if (self.chat.isIn && self.chat.noti && data.val().id != user.id) {
+                    if (self.chat.isIn && self.chat.noti && data.val().uid != this.data.infor.uid) {
                         const audio = new Audio(`${config.root}/assets/sound/ting.mp3`);
                         audio.play();
                     }
@@ -1339,6 +1090,26 @@ import '~/mixin';
                         return 'diamond';
                     break;
                 }
+            },
+            strSlug(string) {
+                let slug = string.toLowerCase();
+                slug = slug.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
+                slug = slug.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
+                slug = slug.replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i');
+                slug = slug.replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o');
+                slug = slug.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u');
+                slug = slug.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y');
+                slug = slug.replace(/đ/gi, 'd');
+                slug = slug.replace(/\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi, '');
+                slug = slug.replace(/ /gi, " - ");
+                slug = slug.replace(/\-\-\-\-\-/gi, '-');
+                slug = slug.replace(/\-\-\-\-/gi, '-');
+                slug = slug.replace(/\-\-\-/gi, '-');
+                slug = slug.replace(/\-\-/gi, '-');
+                slug = '@' + slug + '@';
+                slug = slug.replace(/\@\-|\-\@|\@/gi, '');
+                slug = slug.replace(/ /g,'');
+                return slug.trim();
             },
             async loadShop(type ,reload = false) {
                 this.modalName = type;

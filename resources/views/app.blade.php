@@ -43,7 +43,7 @@
 			auth: {{ Auth::check() ? 1 : 0 }},
 			bearer: "{{ str_random(50) }}",
 			bcrypt: "{{ bcrypt(str_random(50)) }}",
-			detect: {{ Auth::check() && Auth::user()->isAdmin ? 'false' : 'true' }}
+			detect: {{ Auth::check() && Auth::user()->isAdmin ? 'false' : 'true' }},
 		};
 	</script>
 	<noscript>
@@ -128,6 +128,7 @@
             new google.translate.TranslateElement({pageLanguage: 'vi', multilanguagePage: true}, 'gg-translate');
 		}
 	</script>
+	<script async src="{{ mix('js/bundle.min.js') }}"></script>
 	@stack('js')
 	@if(session('message'))
 		<script>

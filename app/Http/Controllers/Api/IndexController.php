@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Model\User;
 use App\Income\Helper;
+use App\Model\CateGear;
+use App\Model\Character;
 use App\Services\Crypto;
 use App\Services\RedisCache;
 use Illuminate\Http\Request;
@@ -12,6 +14,20 @@ use Illuminate\Support\Facades\Auth;
 
 class IndexController extends Controller
 {
+    public function initialApplication()
+    {
+        $cateGears = RedisCache::rememberForever('cateGears', function () {
+            return CateGear::all();
+        });
+        $characters = RedisCache::rememberForever('characters', function () {
+            return Character::where('id', '!=', env('NO_CHARACTER_ID'))->get();
+        });
+        return response()->json(Crypto::encrypt([
+            'cateGears' => $cateGears,
+            'characters' => $characters
+        ]), 200);
+    }
+
     public function userInfor($param)
     {
         $param = $param == 'profile' && Auth::check() ? Auth::id() : $param;
@@ -27,14 +43,16 @@ class IndexController extends Controller
             $helper = new Helper($findUser->id);
             $user = $helper->user();
             $userPower = $helper->power();
-            return RedisCache::remember("user-{$findUser->id}", $ttl, function () use($helper, $user, $userPower, $findUser){
+            $character = $helper->character();
+            return RedisCache::remember("user-{$findUser->id}", $ttl, function () use($helper, $user, $userPower, $findUser, $character){
                 return response()->json(Crypto::encrypt([
                     'infor' => [
                         'uid' => $user->id,
                         'name' => $user->name,
                         'character' => [
-                            'name' => $helper->character()->name,
-                            'avatar' => $helper->character()->avatar
+                            'id' => $character->id,
+                            'name' => $character->name,
+                            'avatar' => $character->avatar
                         ],
                         'exp' => (int)$user->exp,
                         'coins' => $helper->coins(),
