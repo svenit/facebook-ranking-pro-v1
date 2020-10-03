@@ -69,7 +69,7 @@
 				<img class="text-center footer-icon pixel" src="{{ asset('assets/images/icon/Dungeon.png') }}">
 				<p class="text-center">Boss</p>
 			</div>
-			<div data-step="7" data-intro="{{ $intro[6] }}" class="col">
+			<div data-toggle="modal" data-target=".modal-world-map" data-toggle-class="modal-open-aside" data-target="body" data-step="7" data-intro="{{ $intro[6] }}" class="col">
 				<img class="text-center footer-icon pixel" src="{{ asset('assets/images/icon/Blue-Gate.gif') }}">
 				<p class="text-center">Dungeon</p>
 			</div>

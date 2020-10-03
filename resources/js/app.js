@@ -4,6 +4,7 @@ window.axios = require('axios');
 import '~/components';
 import store from '~/store';
 import '~/mixin';
+import '~/plugins';
 import webData from '~/data/web';
 
 const DEFAULT_ERROR_MESSAGE = 'Đã có lỗi xảy ra, xin vui lòng tải lại trang';

@@ -17,17 +17,9 @@ class AdminAuth
      */
     public function handle($request, Closure $next)
     {
-        if(User::all()->count() == 0)
-        {
+        if (Auth::check() && Auth::user()->isAdmin) {
             return $next($request);
         }
-        else
-        {
-            if(Auth::check() && Auth::user()->isAdmin)
-            {
-                return $next($request);
-            }
-            abort(404);
-        }
+        abort(404);
     }
 }
