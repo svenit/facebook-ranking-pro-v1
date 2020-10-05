@@ -3,7 +3,6 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
-
 class GiftCode extends Model
 {
     public function user()

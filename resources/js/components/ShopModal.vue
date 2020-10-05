@@ -19,53 +19,7 @@
                 <div style="position: relative" class="modal-header">
                     <border></border>
                     <span class="modal-text">Cửa Hàng</span>
-                    <div style="position: absolute;top:55%;right:8%" class="row">
-                        <li class="shop-icon-badge icon-badge row justify-content-between mr-4">
-                            <div class="col-auto">
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <img style="width:17px" :src="$parent.asset('assets/images/icon-pack/pvp-point.png')">
-                                    </div>
-                                    <div class="col-auto">
-                                        <strong class="pixel-font small-font notranslate"> {{ $parent.numberFormat(data.infor.pvp_points) }}</strong>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-auto p-0">
-                                <img style="width:17px" :src="$parent.asset('assets/images/icon/Question.png')">
-                            </div>
-                        </li>
-                        <li class="shop-icon-badge icon-badge row justify-content-between mr-4">
-                            <div class="col-auto">
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <img style="width:17px" :src="$parent.asset('assets/images/icon-pack/gold.png')">
-                                    </div>
-                                    <div class="col-auto">
-                                        <strong class="pixel-font small-font notranslate"> {{ $parent.numberFormat(data.infor.coins) }}</strong>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-auto p-0">
-                                <img style="width:17px" :src="$parent.asset('assets/images/icon/Add.png')">
-                            </div>
-                        </li>
-                        <li class="shop-icon-badge icon-badge row justify-content-between">
-                            <div class="col-auto">
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <img style="width:17px" :src="$parent.asset('assets/images/icon-pack/diamond.png')">
-                                    </div>
-                                    <div class="col-auto">
-                                        <strong class="pixel-font small-font notranslate"> {{ $parent.numberFormat(data.infor.gold) }}</strong>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-auto p-0">
-                                <img style="width:17px" :src="$parent.asset('assets/images/icon/Add.png')">
-                            </div>
-                        </li>
-                    </div>
+                    <currency></currency>
                     <button class="close" data-dismiss="modal">
                         <img style="width:30px" :src="$parent.asset('assets/images/icon/Close-Light.png')">
                     </button>
@@ -334,6 +288,7 @@
 </template>
 <script>
 import Border from './Border';
+import Currency from './Currency';
 export default {
     components: {
         Border

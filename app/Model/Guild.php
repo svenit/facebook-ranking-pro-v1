@@ -3,10 +3,11 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Guild extends Model
 {
-    protected $fillable = [
-        'master_id','name', 'brand', 'noti_board', 'level', 'resources'
-    ];
+    use SoftDeletes;
+
+    protected $guarded = [];
 }

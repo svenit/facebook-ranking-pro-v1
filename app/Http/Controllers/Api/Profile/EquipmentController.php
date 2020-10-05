@@ -20,15 +20,12 @@ class EquipmentController extends Controller
     }
     public function __invoke()
     {
-        $inventories = Auth::user()->load('gears');
+        $gears = Auth::user()->gears;
         $cates = CateGear::all();
         $data = [];
-        foreach($inventories->gears as $key => $gear)
-        {
-            foreach($cates as $cate)
-            {
-                if($gear->cate_gear_id == $cate->id)
-                {
+        foreach($gears as $key => $gear) {
+            foreach($cates as $cate) {
+                if($gear->cate_gear_id == $cate->id) {
                     $gear->gems->load(['gems', 'gemItem']);
                     $data[Str::slug($cate->name)][$key] = $gear->load('cates', 'character');
                 }
@@ -43,29 +40,23 @@ class EquipmentController extends Controller
     public function delete(Request $request)
     {
         $find = UserGear::where([['user_id',Auth::id()],['id',$request->id],['gear_id',$request->gear_id]]);
-        if(isset($find))
-        {
+        if(isset($find)) {
             $removeGear = $find->delete();
-            if(isset($removeGear))
-            {
+            if(isset($removeGear)) {
                 $this->updatePower();
                 $response = [
                     'code' => 200,
                     'status' => 'success',
                     'message' => "Trang bị của bạn đã về với cõi hư vô"
                 ];
-            }
-            else
-            {
+            } else {
                 $response = [
                     'code' => 500,
                     'status' => 'error',
                     'message' => "Đã có lỗi xảy ra"
                 ];
             }
-        }
-        else
-        {
+        } else {
             $response = [
                 'code' => 500,
                 'status' => 'error',

@@ -5,6 +5,7 @@ namespace App\Model;
 use App\Income\Helper;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use HighIdeas\UsersOnline\Traits\UsersOnlineTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -13,6 +14,7 @@ class User extends Authenticatable
 {
     use Notifiable;
     use UsersOnlineTrait;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -64,7 +66,7 @@ class User extends Authenticatable
     }
     public function gears()
     {
-        return $this->belongsToMany('App\Model\Gear','user_gears','user_id','gear_id')->withPivot(['status','id']);
+        return $this->belongsToMany('App\Model\Gear','user_gears','user_id','gear_id')->withPivot(['status', 'id', 'deleted_at']);
     }
     public function pets()
     {

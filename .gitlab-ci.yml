@@ -1,0 +1,32 @@
+stages:
+  - building
+  - testing
+
+image: edbizarro/gitlab-ci-pipeline-php:7.4
+
+before_script:
+  - which php
+  - php -v
+  - sqlite3 --version
+  - sudo apt install php7.4-sqlite3
+
+cache:
+  paths:
+    - vendor/
+
+composer:
+  stage: building
+  script:
+    - php -v
+    - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+    - cp .env.example .env
+    - php artisan key:generate
+
+phpunit:
+  stage: testing
+  dependencies:
+    - composer
+  script:
+    - php -v
+    - ./vendor/bin/phpunit
+

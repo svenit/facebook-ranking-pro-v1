@@ -5,6 +5,8 @@
 <equipment-modal></equipment-modal>
 <profile-modal></profile-modal>
 <user-profile-modal></user-profile-modal>
+<profile-skill-modal></profile-skill-modal>
+<profile-pet-modal></profile-pet-modal>
 <world-map-modal></world-map-modal>
 <div id="gem" v-if="detailGem.data" class="modal fade gear top-off" data-backdrop="true" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">

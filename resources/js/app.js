@@ -61,7 +61,7 @@ const DEFAULT_ERROR_MESSAGE = 'Đã có lỗi xảy ra, xin vui lòng tải lạ
                 });
                 if (config.auth) {
                     await this.initialApplication();
-                    await this.index();
+                    await this.index(true);
                     this.globalSocket();
                     await this.listGlobalChat('global');
                     this.postLocation();
@@ -103,9 +103,9 @@ const DEFAULT_ERROR_MESSAGE = 'Đã có lỗi xảy ra, xin vui lòng tải lạ
                 this.app = res.data;
                 this.loading = false;
             },
-            async index() {
+            async index(loading = false) {
                 try {
-                    this.loading = true;
+                    this.loading = loading;
                     let res = await axios.get(`${config.apiUrl}/user/profile`);
                     if(this.socket == null) {
                         let tokenKey = this.AESEncrypt(this.token);
@@ -119,7 +119,7 @@ const DEFAULT_ERROR_MESSAGE = 'Đã có lỗi xảy ra, xin vui lòng tải lạ
                     this.data = res.data;
                     this.loading = false;
                 } catch (e) {
-                    this.loading = false;
+                    this.loading = !loading;
                     this.showError(e);
                 }
             },
@@ -416,6 +416,7 @@ const DEFAULT_ERROR_MESSAGE = 'Đã có lỗi xảy ra, xin vui lòng tải lạ
                     let res = await axios.post(`${config.apiUrl}/profile/skill/use`, {
                         id: id
                     });
+                    await this.loadProfile('skill', true);
                     this.index();
                     this.notify(res.data.message);
                 } catch (e) {
@@ -428,6 +429,7 @@ const DEFAULT_ERROR_MESSAGE = 'Đã có lỗi xảy ra, xin vui lòng tải lạ
                     let res = await axios.post(`${config.apiUrl}/profile/skill/remove`, {
                         id: id
                     });
+                    await this.loadProfile('skill', true);
                     this.index();
                     this.notify(res.data.message);
                 } catch (e) {
@@ -441,6 +443,7 @@ const DEFAULT_ERROR_MESSAGE = 'Đã có lỗi xảy ra, xin vui lòng tải lạ
                         let res = await axios.post(`${config.apiUrl}/profile/skill/delete`, {
                             id: id
                         });
+                        await this.loadProfile('skill', true);
                         this.index();
                         this.notify(res.data.message);
                     } catch (e) {
@@ -857,6 +860,7 @@ const DEFAULT_ERROR_MESSAGE = 'Đã có lỗi xảy ra, xin vui lòng tải lạ
                         pet_id: data.id
                     });
                     if (res.data.code == 200) {
+                        await this.loadProfile('pet',true);
                         this.index();
                     }
                     this.notify(res.data.message);
@@ -873,6 +877,7 @@ const DEFAULT_ERROR_MESSAGE = 'Đã có lỗi xảy ra, xin vui lòng tải lạ
                         pet_id: data.id
                     });
                     if (res.data.code == 200) {
+                        await this.loadProfile('pet', true);
                         this.index();
                     }
                     this.notify(res.data.message);
@@ -890,6 +895,7 @@ const DEFAULT_ERROR_MESSAGE = 'Đã có lỗi xảy ra, xin vui lòng tải lạ
                             pet_id: data.id
                         });
                         if (res.data.code == 200) {
+                            await this.loadProfile('pet', true);
                             this.index();
                         }
                         this.notify(res.data.message);
@@ -1078,49 +1084,6 @@ const DEFAULT_ERROR_MESSAGE = 'Đã có lỗi xảy ra, xin vui lòng tải lạ
                     return Math.floor(interval) + " phút trước";
                 }
                 return 'Vừa xong';
-            },
-            numberFormat(num) {
-                var si = [{
-                        value: 1,
-                        symbol: ""
-                    },
-                    {
-                        value: 1E3,
-                        symbol: "K"
-                    },
-                    {
-                        value: 1E6,
-                        symbol: "M"
-                    },
-                    {
-                        value: 1E9,
-                        symbol: "G"
-                    },
-                    {
-                        value: 1E12,
-                        symbol: "T"
-                    },
-                    {
-                        value: 1E15,
-                        symbol: "P"
-                    },
-                    {
-                        value: 1E18,
-                        symbol: "E"
-                    }
-                ];
-                var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-                var i;
-                for (i = si.length - 1; i > 0; i--) {
-                    if (num >= si[i].value) {
-                        break;
-                    }
-                }
-                return (num / si[i].value).toFixed(3).replace(rx, "$1") + si[i].symbol;
-            },
-            numberFormatDetail(num) {
-                num = parseInt(num);
-                return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
             },
             getCurrency(type) {
                 switch(type) {

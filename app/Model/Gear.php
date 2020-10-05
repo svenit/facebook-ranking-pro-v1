@@ -17,6 +17,7 @@ class Gear extends Model
         'armor_intelligent' => 'array',
         'health_points' => 'array',
     ];
+
     protected $hidden = [
         'character_id', 'cate_gear_id' ,'created_at','updated_at'
     ];

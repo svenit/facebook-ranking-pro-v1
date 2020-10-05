@@ -3,14 +3,16 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UserGearGem extends Model
 {
-    protected $fillable = [
-        'user_gear_id','user_gem_id','gem_id'
-    ];
+    use SoftDeletes;
+
+    protected $guarded = [];
+
     protected $hidden = [
-        
+
     ];
 
     public function gemItem()

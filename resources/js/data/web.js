@@ -1,12 +1,11 @@
 
-import { languages, statsBinding } from '~/config.js';
+import { languages } from '~/config.js';
 
 export default {
     app: {},
     showIntro: false,
     currentLang: sessionStorage.getItem('currentLang') || 'vie',
     languages,
-    statsBinding,
     moreMenu: false,
     firebase: null,
     userCount: 0,

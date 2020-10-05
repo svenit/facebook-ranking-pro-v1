@@ -88,6 +88,12 @@ return [
             'prefix_indexes' => true,
         ],
 
+        'sqlite_testing' => [
+            'driver' => 'sqlite',
+            'database' => storage_path() . '/testing.sqlite',
+            'prefix' => '',
+        ]
+
     ],
 
     /*

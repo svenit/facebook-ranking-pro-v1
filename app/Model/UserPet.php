@@ -3,15 +3,16 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UserPet extends Model
 {
+    use SoftDeletes;
+
     public $timestamps = false;
-    
-    protected $fillable = [
-        'status'
-    ];
-    
+
+    protected $guarded = [];
+
     public function users()
     {
         return $this->belongsToMany('App\Model\User','user_pets','pet_id','user_id');

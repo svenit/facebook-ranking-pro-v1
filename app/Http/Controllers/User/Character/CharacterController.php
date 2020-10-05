@@ -13,8 +13,7 @@ class CharacterController extends Controller
 {
     public function choose()
     {
-        if(Auth::check() && Auth::user()->character_id == env('NO_CHARACTER_ID'))
-        {
+        if(Auth::check() && Auth::user()->character_id == env('NO_CHARACTER_ID')) {
             $characters = Character::avaiable();
             return view('user.character.choose')->with([
                 'characters' => $characters
@@ -24,11 +23,9 @@ class CharacterController extends Controller
     }
     public function set()
     {
-        if(Auth::check() && Auth::user()->character_id == env('NO_CHARACTER_ID'))
-        {
+        if(Auth::check() && Auth::user()->character_id == env('NO_CHARACTER_ID')) {
             $character = Character::where('id', '!=', env('NO_CHARACTER_ID'))->inRandomOrder()->first();
-            $user = User::findOrFail(Auth::id());
-
+            $user = Auth::user();
             $user->character_id = $character->id;
             $user->strength = $character->strength;
             $user->intelligent = $character->intelligent;
@@ -46,7 +43,9 @@ class CharacterController extends Controller
                 'armor_strength' => 0,
                 'armor_intelligent' => 0
             ];
-            
+            $user->config = [
+                'canChatInGlobal' => true,
+            ];
             $user->save();
             return redirect()->route('user.index')->with([
                 'status' => '',

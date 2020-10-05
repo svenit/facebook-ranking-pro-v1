@@ -127,7 +127,7 @@ export default {
         mapGotoPosition(gate) {
             this.center = gate.position;
             gate.showPopup = true;
-            this.zoom = 15;
+            this.zoom = Math.floor(Math.random() * (15 - 13 + 1)) + 13;
         },
         gateMappingType(type) {
             let types = {

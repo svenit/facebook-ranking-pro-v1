@@ -17,11 +17,11 @@
     <video muted="muted" id="video1" autoplay style="height:100vh" width="100%">
         <source src="{{ asset('assets/video/gate.mp4') }}" type="video/mp4">
         Your browser does not support HTML video.
-    </video>   
+    </video>
     <video muted="muted" id="video2" autoplay loop style="height:100vh;display:none" width="100%">
         <source src="{{ asset('assets/video/gate-2.mp4') }}" type="video/mp4">
         Your browser does not support HTML video.
-    </video>   
+    </video>
     <div id="card" style="display:none;position: absolute;margin:0 auto;left:50%;top:10%;transform:translate(-50%, 0)" id="ajax-content" class="dark">
         <div style="border-radius:5px;width:550px;" class="mx-auto w-xl w-auto-xs animate fadeIn text-center">
             <div style="padding:40px 0px">

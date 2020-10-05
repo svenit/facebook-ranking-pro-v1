@@ -24,19 +24,16 @@ class Controller extends BaseController
             ':id' => Auth::id(),
             ':character_id' => Auth::user()->character->id
         ];
-        foreach($configs as $key => $config)
-        {
+        foreach ($configs as $key => $config) {
             $replace = str_replace($key,$config,$replace);
         }
         return $replace;
     }
     public function tracking($redirect)
     {
-        if(Auth::check())
-        {
+        if (Auth::check()) {
             $tracking = Tracking::whereUserId(Auth::id())->first();
-            if(empty($tracking))
-            {
+            if(empty($tracking)) {
                 $createTracking = Tracking::updateOrCreate([
                     'user_id' => Auth::id()
                 ],[
@@ -52,11 +49,8 @@ class Controller extends BaseController
                         'message' => 'Đã có lỗi xảy ra'
                     ]);
                 }
-            }
-            else
-            {
-                if($tracking->path != Request::path())
-                {
+            } else {
+                if($tracking->path != Request::path()) {
                     return redirect()->route('user.index')->with([
                         'status' => 'error',
                         'message' => 'Không thể thực hiện 2 hành động song song'

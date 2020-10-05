@@ -5,8 +5,8 @@
             <a data-toggle="modal" data-target=".modal-profile" data-toggle-class="modal-open-aside" data-target="body" @click="index()" class="dropdown-item" href="#"><img class="mr-1 pixel baw" width="17px" src="{{ asset('assets/images/icon/Infor.png') }}"> Thông Tin & Chỉ Số</a>
             <a @click="loadProfile('item', false)" data-toggle="modal" data-target=".modal-profile-item" data-toggle-class="modal-open-aside" data-target="body" class="dropdown-item" href="#"><img class="mr-1 pixel baw" width="17px" src="{{ asset('assets/images/icon/Item.png') }}"> Vật Phẩm</a>
             <a @click="loadProfile('equipment', true)" data-toggle="modal" data-target=".modal-profile-equipment" data-toggle-class="modal-open-aside" data-target="body" class="dropdown-item" href="#"><img class="mr-1 pixel baw" width="17px" src="{{ asset('assets/images/icon/Shop-Equipment.png') }}"> Trang Bị</a>
-            <a class="dropdown-item" href="#"><img class="mr-1 pixel baw" width="13px" src="{{ asset('assets/images/icon/Skill.png') }}"> Kỹ Năng</a>
-            <a class="dropdown-item" href="#"><img class="mr-1 pixel baw" width="17px" src="{{ asset('assets/images/icon/Pet.png') }}"> Pet</a>
+            <a @click="loadProfile('skill', true)" data-toggle="modal" data-target=".modal-profile-skill" data-toggle-class="modal-open-aside" data-target="body" class="dropdown-item" href="#"><img class="mr-1 pixel baw" width="13px" src="{{ asset('assets/images/icon/Skill.png') }}"> Kỹ Năng</a>
+            <a @click="loadProfile('pet', true)" data-toggle="modal" data-target=".modal-profile-pet" data-toggle-class="modal-open-aside" data-target="body" class="dropdown-item" href="#"><img class="mr-1 pixel baw" width="17px" src="{{ asset('assets/images/icon/Pet.png') }}"> Pet</a>
         </div>
         <img class="text-center footer-icon pixel dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" src="{{ asset('assets/images/icon/Character.png') }}">
         <p class="text-center mt-2">Nhân Vật</p>
