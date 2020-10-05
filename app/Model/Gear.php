@@ -41,6 +41,11 @@ class Gear extends Model
 
     public function gems()
     {
-        return $this->hasManyThrough('App\Model\UserGearGem','App\Model\UserGear','gear_id', 'user_gear_id', 'id');
+        return $this->hasManyThrough('App\Model\UserGearGem', 'App\Model\UserGear','gear_id', 'user_gear_id', 'id');
+    }
+
+    public function getGems()
+    {
+        return $this->belongsTo('App\Model\CateGear','user_gear_id', 'gem_id');
     }
 }

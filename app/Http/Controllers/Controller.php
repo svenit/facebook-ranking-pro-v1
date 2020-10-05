@@ -81,11 +81,11 @@ class Controller extends BaseController
     public function clearMyCache()
     {
         $userId = Auth::id();
-        $this->removeCache("user-{$userId}");
+        $this->removeCache("user.{$userId}.*");
     }
     public function removeCache($key)
     {
-        RedisCache::delete($key);
+        RedisCache::delete(RedisCache::keys($key));
     }
     public function removeAllCache()
     {

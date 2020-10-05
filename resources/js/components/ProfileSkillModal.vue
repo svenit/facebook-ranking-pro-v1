@@ -58,10 +58,10 @@
                                                                 <div class="p-1 col-12">
                                                                     <div style="background: rgb(199, 188, 152)" class="item-preview">
                                                                         <div style="max-height:400px;overflow:auto" class="row px-4 py-2">
-                                                                            <div v-for="(item, index) in $parent.profileInventory" :key="index" v-if="item.pivot.status == 1" @click="$parent.showSkillsDescription(item, 1)" style="position:relative; background: rgb(82, 74, 60);margin: 10px; border-radius:3px" class="p-0 col-auto">
+                                                                            <div v-for="(item, index) in $parent.profileInventory" :key="index" v-if="item.pivot && item.pivot.status == 1" @click="$parent.showSkillsDescription(item, 1)" style="position:relative; background: rgb(82, 74, 60);margin: 10px; border-radius:3px" class="p-0 col-auto">
                                                                                 <img class="w-56" :src="item.image" alt=".">
                                                                                 <span style="position: absolute;bottom: 5px; right: 5px" class="pixel-font small-font">
-                                                                                    <span :class="`avatar-status ${item.pivot.status == 1 ? 'on' : 'away'} b-white avatar-right`"></span>
+                                                                                    <span v-if="item.pivot" :class="`avatar-status ${item.pivot.status == 1 ? 'on' : 'away'} b-white avatar-right`"></span>
                                                                                 </span>
                                                                             </div>
                                                                         </div>
@@ -77,7 +77,7 @@
                                                                             <div v-for="(item, index) in $parent.profileInventory" :key="index" @click="$parent.showSkillsDescription(item, 1)" style="position:relative; background: rgb(82, 74, 60);margin: 10px; border-radius:3px" class="p-0 col-auto">
                                                                                 <img class="w-56" :src="item.image" alt=".">
                                                                                 <span style="position: absolute;bottom: 5px; right: 5px" class="pixel-font small-font">
-                                                                                    <span :class="`avatar-status ${item.pivot.status == 1 ? 'on' : 'away'} b-white avatar-right`"></span>
+                                                                                    <span v-if="item.pivot" :class="`avatar-status ${item.pivot.status == 1 ? 'on' : 'away'} b-white avatar-right`"></span>
                                                                                 </span>
                                                                             </div>
                                                                         </div>

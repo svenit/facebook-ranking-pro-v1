@@ -107,6 +107,7 @@ const DEFAULT_ERROR_MESSAGE = 'Đã có lỗi xảy ra, xin vui lòng tải lạ
                 try {
                     this.loading = loading;
                     let res = await axios.get(`${config.apiUrl}/user/profile`);
+                    this.isInitiedApp = true;
                     if(this.socket == null) {
                         let tokenKey = this.AESEncrypt(this.token);
                         let ref = this.AESEncrypt(res.headers.cookie);

@@ -32,19 +32,17 @@ class IndexController extends Controller
     {
         $param = $param == 'profile' && Auth::check() ? Auth::id() : $param;
         $findUser = User::whereId($param)
-            ->orWhere('id', $param)
             ->orWhere('provider_id', $param)
             ->orWhere('name', 'LIKE', "%$param%")
             ->first();
 
-        if(isset($findUser))
-        {
+        if (isset($findUser)) {
             $ttl = 60 * 24;
             $helper = new Helper($findUser->id);
             $user = $helper->user();
             $userPower = $helper->power();
             $character = $helper->character();
-            return RedisCache::remember("user-{$findUser->id}", $ttl, function () use($helper, $user, $userPower, $findUser, $character){
+            return RedisCache::remember("user.{$findUser->id}.info", $ttl, function () use($helper, $user, $userPower, $findUser, $character){
                 return response()->json(Crypto::encrypt([
                     'infor' => [
                         'uid' => $user->id,

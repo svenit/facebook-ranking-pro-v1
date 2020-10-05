@@ -7,6 +7,7 @@ use App\Model\CateGear;
 use App\Model\UserGear;
 use App\Services\Crypto;
 use Illuminate\Support\Str;
+use App\Services\RedisCache;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -20,18 +21,21 @@ class EquipmentController extends Controller
     }
     public function __invoke()
     {
-        $gears = Auth::user()->gears;
-        $cates = CateGear::all();
-        $data = [];
-        foreach($gears as $key => $gear) {
-            foreach($cates as $cate) {
-                if($gear->cate_gear_id == $cate->id) {
-                    $gear->gems->load(['gems', 'gemItem']);
-                    $data[Str::slug($cate->name)][$key] = $gear->load('cates', 'character');
+        $userId = Auth::id();
+        return RedisCache::rememberForever("user.{$userId}.profile-equipment", function () {
+            $gears = Auth::user()->gears;
+            $cates = CateGear::all();
+            $data = [];
+            foreach($gears as $key => $gear) {
+                foreach($cates as $cate) {
+                    if($gear->cate_gear_id == $cate->id) {
+                        $gear->gems->load(['gems', 'gemItem']);
+                        $data[Str::slug($cate->name)][$key] = $gear->load('cates', 'character');
+                    }
                 }
             }
-        }
-        return response()->json(Crypto::encrypt($data),200);
+            return response()->json(Crypto::encrypt($data),200);
+        });
     }
     public function available()
     {

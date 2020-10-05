@@ -10,6 +10,12 @@ class RedisCache extends Cache
 {
     private static $foreverTtl = 999999999 * 60 * 24;
 
+
+    public static function keys($key)
+    {
+        return Redis::keys($key);
+    }
+
     public static function remember($key, $ttl, $data)
     {
         if (Redis::exists($key)) {

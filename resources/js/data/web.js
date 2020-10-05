@@ -150,7 +150,13 @@ export default {
         block: true
     },
     shop: [],
-    profileInventory: [],
+    profileInventory: [
+        {
+            pivot: {
+                status: false
+            }
+        }
+    ],
     userUtil: [],
     inventory: {},
     gears: [],

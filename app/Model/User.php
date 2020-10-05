@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\Income\Helper;
+use App\Services\RedisCache;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -66,7 +67,7 @@ class User extends Authenticatable
     }
     public function gears()
     {
-        return $this->belongsToMany('App\Model\Gear','user_gears','user_id','gear_id')->withPivot(['status', 'id', 'deleted_at']);
+        return $this->belongsToMany('App\Model\Gear','user_gears','user_id','gear_id')->withPivot(['status', 'id']);
     }
     public function pets()
     {
@@ -102,16 +103,15 @@ class User extends Authenticatable
     }
     public function usingGears()
     {
-        $data = [];
-        foreach($this->gears as $key => $gear)
-        {
-            if($gear->pivot->status == 1)
-            {
+        return RedisCache::rememberForever("user.{$this->id}.using-gears", function () {
+            $data = [];
+            $gears = $this->gears()->wherePivot('status', 1)->get();
+            foreach ($gears as $key => $gear) {
                 $gear->gems->load(['gems', 'gemItem']);
-                $data[] = $gear->load(['character','cates']);;
+                $data[] = $gear->load(['character', 'cates']);
             }
-        }
-        return array_reverse($data);
+            return array_reverse($data);
+        });
     }
     public function usingPets()
     {
@@ -127,17 +127,18 @@ class User extends Authenticatable
 
     public function usingGems()
     {
-        $data = [];
-        $gears = collect($this->usingGears());
-        foreach($gears as $gear)
-        {
-            foreach($gear->gems as $gem)
-            {
-                $data[] = $gem->gems->gem;
+        return RedisCache::rememberForever("user.{$this->id}.using-gems", function () {
+            $data = [];
+            $gears = collect($this->usingGears());
+            foreach ($gears as $gear) {
+                foreach($gear->gems as $gem) {
+                    $data[] = $gem->gems->gem;
+                }
             }
-        }
-        return $data;
+            return $data;
+        });
     }
+
     public function power()
     {
         $gearPower = $this->getGearsPower();

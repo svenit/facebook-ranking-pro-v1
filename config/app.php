@@ -192,6 +192,7 @@ return [
          * Package Service Providers...
          */
         RenatoMarinho\LaravelPageSpeed\ServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
         /*
          * Application Service Providers...
          */
